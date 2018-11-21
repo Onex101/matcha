@@ -30,7 +30,7 @@ connection.runQuery = function (query,data,callback){
         data,
         function(err, results){
             debugger;
-            if (err)throw err;
+            if (err) throw err;
             callback(results);
         }
     );

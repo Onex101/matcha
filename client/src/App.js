@@ -19,17 +19,16 @@ class App extends Component {
 
   getUsers = _ => {
     fetch('/users')
-    .then(response => response.json())
-    .then(response  => this.setState({ users: response.data}))
-    .catch(err => console.error(err))
+      .then(response => response.json())
+        .then(response  => this.setState({ users: response.data}))
+          .catch(err => console.error(err))
   }
 
   addProductGet = _ => {
     const {product} = this.state;
     fetch(`/products/add?name=${product.name}&price=${product.price}`)
-    // .then(response => response.json())
-    .then(this.getProducts)
-    .catch(err => console.error(err))
+      .then(this.getProducts)
+        .catch(err => console.error(err))
   }
 
   addUserPost = _ => {
@@ -52,14 +51,14 @@ class App extends Component {
     .catch(err => console.error(err))
   }
 
-  renderProduct = ({id, first_name, email}) => <div key = {id} > {first_name} {email}</div>
+  renderUser = ({id, first_name, email}) => <div id = {id} > {first_name} {email}</div>
 
   render() {
     const {users, user} = this.state;
     console.log(users);
     return (
       <div className="App">
-        {users.map(this.renderProduct)}
+          {users.map(this.renderUser)}
         <div>
           <input 
             value = {user.first_name}

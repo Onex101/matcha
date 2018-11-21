@@ -23,37 +23,42 @@ User.prototype.clean = function (data) {
     return _.pick(_.defaults(data, schema), _.keys(schema)); 
 }
 
-User.prototype.save = function (callback) {
+User.prototype.save = function () {
     var self = this;
     this.data = this.clean(this.data);
-    db.get('users', {id: this.data.id}).update(JSON.stringify(this.data)).run(function (err, result) {
-        if (err) return callback(err);
-        callback(null, result); 
-    });
+    console.log(this.data);
+    tmp = [this.data['first_name'], this.data['last_name'], this.data['user_name'], this.data['email'], this.data['password'], this.data['last_name']];
+    console.log(tmp);
+    id = this.data['id'];
+    db.query(`UPDATE users SET first_name = ?, last_name = ?, user_name = ?, email = ?, password = ? WHERE id = ${id}`, tmp, function (err, result, rows){
+        if (err) throw(err)
+        console.log("Saved updated user");
+    })
 }
 
-User.prototype.findById = function (id, callback) {
-    // var newUser;
+User.prototype.search = function (id, name) {
+    var self = this;
     // return new Promise((resolve, reject) => {
-    //     db.query('SELECT * FROM users WHERE id = ?', id, function (err, result, rows) {
-    //         // if (err) throw (err);
-    //         if (err) { return reject(err) }
-    //         row = result[0];
-    //         tmp = {
-    //             first_name: row.first_name,
-    //             last_name: row.last_name,
-    //             user_name: row.user_name,
-    //             email: row.email,
-    //             password: row.password
-    //         }
-    //         newUser = new User(tmp);
-    //         // console.log("Try it: ", newUser);
-    //         return resolve(newUser)
-    //     });
+    db.query(`SELECT * FROM users WHERE ${name} = ?`, id, function (err, result, rows) {
+        // if (err) throw (err);
+        if (err) throw(err)
+        row = result[0];
+        // console.log(self);
+        self.data = {
+            id: row.id,
+            first_name: row.first_name,
+            last_name: row.last_name,
+            user_name: row.user_name,
+            email: row.email,
+            password: row.password
+        }
+        console.log("Try it: ", self);
+        return (self)
+    });
     // })
-    query = 'SELECT * FROM users WHERE id = ?';
-    info = id;
-    db.runQuery(query, info, callback);
+    // query = 'SELECT * FROM users WHERE id = ?';
+    // info = id;
+    // db.runQuery(query, info, callback);
 }
 
 module.exports = User;
