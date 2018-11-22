@@ -10,78 +10,43 @@ const SELECT_ALL_USERS_QUERY = 'SELECT * FROM users';
 
 app.use(bodyParser.json());
 app.use(cors());
-// app.use(bodyParser.urlencoded)
-
 
 app.get('/', (req, res) => {
     res.send('go to /users');
 });
 
-// var assignUser = function(data) {
 newUser = new User('');
 console.log('New User: ' + JSON.stringify(newUser));
 
-newUser.search(7, 'id', function(err){
-    newUser.data['first_name'] = 'BOEREWORS';
-    // newUser.set('first_name', 'CHARL');
+newUser.search(7, 'id', function (){
+    // newUser.data['first_name'] = 'BOEREWORS';
+    newUser.set('first_name', 'CHARL');
     newUser.set('last_name', 'BOEREWORS');
     newUser.save();
 });
 
-// var x = 20;
-// while (-x){
-//     newUser.delete(x);
-// }
-//     console.log('got data: ' + JSON.stringify(data));
-//     console.log('New User: ' + JSON.stringify(user));
-// };
+newUser.search(20, 'id', function (){
+    // newUser.data['first_name'] = 'BOEREWORS';
+    newUser.set('first_name', 'XENO');
+    newUser.set('last_name', 'BOEREWORS');
+    newUser.save();
+});
 
-// newUser.data = { id: 7,
-//   first_name: 'Harry',
-//   last_name: 'Patterson',
-//   user_name: 'TALPAT',
-//   email: 'tp@gmale.com',
-//   password: 'bruddah'
-// }
-// console.log(newUser.data['first_name']);
-
-// newUser.save();
-
-// setTimeout(function(){
-//     console.log(newUser);
-// }, 3000);
-
-// console.log('Print again: ' + JSON.stringify(user));
-
-
-
-
-// next.catch((err) => console.error(err)).then((newUser)=> console.log("NEXT:", newUser));
-// console.log("after");
-// // (async () => {
-// console.log("TEst: ", con.get())
-
-// })()
-
-
-// app.get('/users/add', (req, res) => {
-//     const { first_name, email, password } = req.query;
-//     console.log(first_name, email);
-//     const INSERT_USER_QUERY = `INSERT INTO users (first_name, email, password) VALUES('${first_name}', ${email}, ${password})`;
-//     con.query(INSERT_USER_QUERY, (err, results) => {
-//         if (err){
-//             return res.send(err)
-//         }
-//         else
-//             return res.send('Succesfully added product')
-//     });
-// });
+app.get('/users/add', (req, res) => {
+    const { first_name, email, password } = req.query;
+    console.log(first_name, email);
+    const INSERT_USER_QUERY = `INSERT INTO users (first_name, email, password) VALUES('${first_name}', ${email}, ${password})`;
+    con.query(INSERT_USER_QUERY, (err, results) => {
+        if (err){
+            return res.send(err)
+        }
+        else
+            return res.send('Succesfully added product')
+    });
+});
 
 app.post('/users/add', (req, res) => {
-    // const { name, price } = req.query;
-    // console.log(req.body);
     const { first_name, last_name, email, password } = req.body;
-    // console.log(name, price);
     const INSERT_USER_QUERY = `INSERT INTO users (first_name, last_name, email, password) VALUES('${first_name}', '${last_name}', '${email}', '${password}')`;
     con.query(INSERT_USER_QUERY, (err, results) => {
         if (err) {
@@ -96,7 +61,6 @@ app.post('/users/add', (req, res) => {
 });
 
 app.get('/users', (req, res) => {
-    // console.log('Got it')
     con.query(SELECT_ALL_USERS_QUERY, (err, results) => {
         if (err) {
             console.log('Database connection error...')

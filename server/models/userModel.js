@@ -43,9 +43,7 @@ User.prototype.delete = function (id) {
 User.prototype.save = function (callback) {
     var self = this;
     this.data = this.clean(this.data);
-    console.log(this.data);
     tmp = [this.data['first_name'], this.data['last_name'], this.data['user_name'], this.data['email'], this.data['password'], this.data['last_name']];
-    console.log(tmp);
     id = this.data['id'];
     db.query(`UPDATE users SET first_name = ?, last_name = ?, user_name = ?, email = ?, password = ? WHERE id = ${id}`, tmp, function (err, result, rows){
         if (err) throw(err)
@@ -60,12 +58,9 @@ User.prototype.save = function (callback) {
 
 User.prototype.search = function (id, column, callback) {
     var self = this;
-    // return new Promise((resolve, reject) => {
     db.query(`SELECT * FROM users WHERE ${column} = ?`, id, function (err, result, rows) {
-        // if (err) throw (err);
         if (err) throw(err)
         row = result[0];
-        // console.log(self);
         self.data = {
             id: row.id,
             first_name: row.first_name,
@@ -78,14 +73,10 @@ User.prototype.search = function (id, column, callback) {
             callback(self);
         }
         else {
-            console.log("Try it: ", self);
+            console.log("User updated", self);
             return (self);
         }
     });
-    // })
-    // query = 'SELECT * FROM users WHERE id = ?';
-    // info = id;
-    // db.runQuery(query, info, callback);
 }
 
 module.exports = User;
