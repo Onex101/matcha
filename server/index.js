@@ -17,10 +17,21 @@ app.get('/', (req, res) => {
     res.send('go to /users');
 });
 
-
 // var assignUser = function(data) {
 newUser = new User('');
-newUser.search(7, 'id');
+console.log('New User: ' + JSON.stringify(newUser));
+
+newUser.search(7, 'id', function(err){
+    newUser.data['first_name'] = 'BOEREWORS';
+    // newUser.set('first_name', 'CHARL');
+    newUser.set('last_name', 'BOEREWORS');
+    newUser.save();
+});
+
+// var x = 20;
+// while (-x){
+//     newUser.delete(x);
+// }
 //     console.log('got data: ' + JSON.stringify(data));
 //     console.log('New User: ' + JSON.stringify(user));
 // };
@@ -36,9 +47,9 @@ newUser.search(7, 'id');
 
 // newUser.save();
 
-setTimeout(function(){
-    console.log(newUser);
-}, 3000);
+// setTimeout(function(){
+//     console.log(newUser);
+// }, 3000);
 
 // console.log('Print again: ' + JSON.stringify(user));
 
