@@ -10,9 +10,10 @@ var connection = mysql.createConnection({
 connection.connect(function (err) {
   if (err) throw err
   console.log('You are now connected...')
-  match = getMatchScore('larman')
+  var user = 'larman'
+  match = getMatchScore(user)
   match.catch((err) => { console.error(err) })
-    .then(match => console.log("Match score: "+match))
+    .then(match => console.log("User: "+user))
   })
 
 //calculates the distance in km between 2 given gps coords
@@ -50,7 +51,11 @@ function getA_coff(age1, age2){
 }
 
 function getP_coff(gender1, pref1, gender2, pref2){
-      return(1 - (Math.sqrt(Math.pow((gender1 - pref2),2)+Math.pow((pref1 - gender2),2)))/Math.sqrt(2))
+      dx = Math.pow((gender1 - pref2),2)
+      // console.log("dx^2= " + dx)
+      dy = Math.pow((pref1 - gender2),2)
+      // console.log("dy^2= " + dy)
+      return(1 - (Math.sqrt((dx+dy)))/Math.sqrt(2))
 }
 
 function getL_coff(likes1, likes2){
@@ -68,29 +73,30 @@ function getL_coff(likes1, likes2){
       return(match/count)
 }
 
-//Calculates match coefficient between 2 given usernames
+//Calculates match coefficient between given username and all other users
 function getMatchScore(user1){
   return new Promise(async (resolve, reject) => {  
     connection.query("SELECT username, age, gender, pref, gps_lat, gps_lon, likes FROM people", function (err, results) {
     if (err) { return reject(err) }
-    var i = 0;
-    connection.query("CREATE TEMPORARY TABLE matchscores(username varchar(255), matchscore float)")
-    while(results[i]){
-      if (results[i].username != user){
-        dist = getD_coff(results[0].gps_lat, results[0].gps_lon, results[i].gps_lat, results[i].gps_lon)
-        age = getA_coff(results[0].age, results[i].age)
-        pref = getP_coff(results[0].gender, results[0].pref, results[i].gender, results[i].pref)
-        like = getL_coff(results[0].likes, results[i].likes)
-        var match =  (dist) +  (age) +  (5*pref) + (like)
-        var user = results[i].username
-        connection.query("INSERT INTO matchscores(username, matchscore) VALUES (?,?)",[user,match])
+      connection.query("SELECT username, age, gender, pref, gps_lat, gps_lon, likes FROM people WHERE username = ?",[user1], function (err, user0) {
+        if (err) { return reject(err) }
+      var array = [];
+      var i = 0;
+      connection.query("CREATE TEMPORARY TABLE matchscores(username varchar(255), matchscore float)")
+      while(results[i]){
+        if (results[i].username != user1){
+          dist = getD_coff(user0[0].gps_lat, results[0].gps_lon, results[i].gps_lat, results[i].gps_lon)
+          age = getA_coff(user0[0].age, results[i].age)
+          pref = getP_coff(user0[0].gender, user0[0].pref, results[i].gender, results[i].pref)
+          like = getL_coff(user0[0].likes, results[i].likes)
+          var match =  (dist) +  (age) +  (5*pref) + (like)
+          var user = results[i].username
+          array.push([user,match])
+        }
         i++;
       }
-    }
-    connection.query("SELECT * FROM matchscores", function (err, results) {
-    console.log(results)
-    })
-    resolve ("potato") 
+      })
+      resolve (array) 
     })
   })
 }
