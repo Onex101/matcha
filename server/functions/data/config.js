@@ -76,10 +76,11 @@ function getL_coff(likes1, likes2){
 
 //Calculates match coefficient between given username and all other users and returns an array containing all the scores
 function getMatchScore(user1){
-  return new Promise(async (resolve, reject) => {  
-    connection.query("SELECT username, age, gender, pref, gps_lat, gps_lon, likes FROM people WHERE NOT username = ?",[user1], function (err, results) {
+  return new Promise(async (resolve, reject) => {
+    var quser = mysql.escape(user1)
+    connection.query("SELECT username, age, gender, pref, gps_lat, gps_lon, likes FROM people WHERE NOT username = ?",[quser], function (err, results) {
     if (err) { return reject(err) }
-      connection.query("SELECT username, age, gender, pref, gps_lat, gps_lon, likes FROM people WHERE username = ?",[user1], function (err, user0) {
+      connection.query("SELECT username, age, gender, pref, gps_lat, gps_lon, likes FROM people WHERE username = ?",[quser], function (err, user0) {
         if (err) { return reject(err) }
       var array =[];
       var i = 0;
