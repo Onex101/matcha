@@ -23,27 +23,44 @@ User.prototype.clean = function (data) {
     return _.pick(_.defaults(data, schema), _.keys(schema)); 
 }
 
-User.prototype.save = function () {
+User.prototype.delete = function (id) {
+    var self = this;
+    if (id)
+        tmp_id = id;
+    else
+        tmp_id = self.data['id'];
+    db.query(`DELETE FROM users WHERE id = ${tmp_id}`, function (err){
+        if (err) 
+                throw(err)
+            else{
+                self.data = null;
+                console.log("Deleted user");
+            }
+    })
+    
+}
+
+User.prototype.save = function (callback) {
     var self = this;
     this.data = this.clean(this.data);
-    console.log(this.data);
     tmp = [this.data['first_name'], this.data['last_name'], this.data['user_name'], this.data['email'], this.data['password'], this.data['last_name']];
-    console.log(tmp);
     id = this.data['id'];
     db.query(`UPDATE users SET first_name = ?, last_name = ?, user_name = ?, email = ?, password = ? WHERE id = ${id}`, tmp, function (err, result, rows){
         if (err) throw(err)
-        console.log("Saved updated user");
+        if (typeof callback === "function"){
+            callback();
+        }
+        else{
+            console.log("Saved updated user");
+        }
     })
 }
 
-User.prototype.search = function (id, name) {
+User.prototype.search = function (id, column, callback) {
     var self = this;
-    // return new Promise((resolve, reject) => {
-    db.query(`SELECT * FROM users WHERE ${name} = ?`, id, function (err, result, rows) {
-        // if (err) throw (err);
+    db.query(`SELECT * FROM users WHERE ${column} = ?`, id, function (err, result, rows) {
         if (err) throw(err)
         row = result[0];
-        // console.log(self);
         self.data = {
             id: row.id,
             first_name: row.first_name,
@@ -52,13 +69,14 @@ User.prototype.search = function (id, name) {
             email: row.email,
             password: row.password
         }
-        console.log("Try it: ", self);
-        return (self)
+        if (typeof callback === "function"){
+            callback(self);
+        }
+        else {
+            console.log("User updated", self);
+            return (self);
+        }
     });
-    // })
-    // query = 'SELECT * FROM users WHERE id = ?';
-    // info = id;
-    // db.runQuery(query, info, callback);
 }
 
 module.exports = User;
