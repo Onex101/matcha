@@ -77,22 +77,20 @@ function getL_coff(likes1, likes2){
 //Calculates match coefficient between given username and all other users and returns an array containing all the scores
 function getMatchScore(user1){
   return new Promise(async (resolve, reject) => {  
-    connection.query("SELECT username, age, gender, pref, gps_lat, gps_lon, likes FROM people", function (err, results) {
+    connection.query("SELECT username, age, gender, pref, gps_lat, gps_lon, likes FROM people WHERE NOT username = ?",[user1], function (err, results) {
     if (err) { return reject(err) }
       connection.query("SELECT username, age, gender, pref, gps_lat, gps_lon, likes FROM people WHERE username = ?",[user1], function (err, user0) {
         if (err) { return reject(err) }
       var array =[];
       var i = 0;
       while(results[i]){
-        if (results[i].username != user1){
-          dist = getD_coff(user0[0].gps_lat, results[0].gps_lon, results[i].gps_lat, results[i].gps_lon)
-          age = getA_coff(user0[0].age, results[i].age)
-          pref = getP_coff(user0[0].gender, user0[0].pref, results[i].gender, results[i].pref)
-          like = getL_coff(user0[0].likes, results[i].likes)
-          var match =  (dist) +  (age) +  (5*pref) + (like)
-          var user = results[i].username
-          array.push([user,match])
-        }
+        dist = getD_coff(user0[0].gps_lat, results[0].gps_lon, results[i].gps_lat, results[i].gps_lon)
+        age = getA_coff(user0[0].age, results[i].age)
+        pref = getP_coff(user0[0].gender, user0[0].pref, results[i].gender, results[i].pref)
+        like = getL_coff(user0[0].likes, results[i].likes)
+        var match =  (dist) +  (age) +  (5*pref) + (like)
+        var user = results[i].username
+        array.push([user,match])
         i++;
       }
       resolve (array) 
