@@ -2,6 +2,7 @@
 var db = require("../db.js");
 var schemas = require("../schemas.js");
 var _ = require("lodash");
+var mysql = require('mysql');
 
 var User = function (data) {
     this.data = this.clean(data);
@@ -23,7 +24,8 @@ User.prototype.clean = function (data) {
     return _.pick(_.defaults(data, schema), _.keys(schema)); 
 }
 
-User.prototype.delete = function (id) {
+User.prototype.deleteById = function (id) {
+    id = mysql.escape(id);
     var self = this;
     if (id)
         tmp_id = id;
@@ -56,11 +58,12 @@ User.prototype.save = function (callback) {
     })
 }
 
-User.prototype.search = function (id, column, callback) {
+User.prototype.runQuery = function (query, callback){
     var self = this;
-    db.query(`SELECT * FROM users WHERE ${column} = ?`, id, function (err, result, rows) {
+    db.query(query, function (err, result, rows) {
         if (err) throw(err)
         row = result[0];
+        console.log(query, result);
         self.data = {
             id: row.id,
             first_name: row.first_name,
@@ -77,6 +80,24 @@ User.prototype.search = function (id, column, callback) {
             return (self);
         }
     });
+}
+
+User.prototype.getById = function (data, callback) {
+    data = mysql.escape(data);
+    var query = `SELECT * FROM users WHERE id = '${data}'`;
+    this.runQuery(query, callback);
+}
+
+User.prototype.getByUsername = function (data, callback) {
+    data = mysql.escape(data);
+    var query = `SELECT * FROM users WHERE user_name = '${data}'`;
+    this.runQuery(query, callback);
+}
+
+User.prototype.getByEmail = function (data, callback) {
+    data = mysql.escape(data);
+    var query = `SELECT * FROM users WHERE email = '${data}'`;
+    this.runQuery(query, callback);
 }
 
 module.exports = User;

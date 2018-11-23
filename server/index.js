@@ -18,16 +18,9 @@ app.get('/', (req, res) => {
 newUser = new User('');
 console.log('New User: ' + JSON.stringify(newUser));
 
-newUser.search(7, 'id', function (){
+newUser.getById(8, function (){
     // newUser.data['first_name'] = 'BOEREWORS';
     newUser.set('first_name', 'CHARL');
-    newUser.set('last_name', 'BOEREWORS');
-    newUser.save();
-});
-
-newUser.search(20, 'id', function (){
-    // newUser.data['first_name'] = 'BOEREWORS';
-    newUser.set('first_name', 'XENO');
     newUser.set('last_name', 'BOEREWORS');
     newUser.save();
 });
