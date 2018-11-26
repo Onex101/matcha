@@ -14,6 +14,8 @@ connection.connect(function (err) {
   console.log('You are now connected...')
   var user = 'larman'
   console.log('Match scores for '+user+':')
+  var array = ['username,'+' matchscore,'+" fame,"+" %like match,"+" distance,"+" age-gap"]
+  console.log(array)
   match = getMatchScore(user)
   match.catch((err) => { console.error(err) })
     .then(match => console.log(match))
@@ -82,7 +84,8 @@ function getL_coff(likes1, likes2){
 }
 
 //Calculates match coefficient between given username and all other users and returns an array containing all the scores
-//Array returned contains username, match_score, fame_rating, likes_overlap %
+//Array returned contains username[0], match_score[1], fame_rating,[2] likes_overlap %[3], distance(in km)[4], age_gap
+//only returns users with a overall match over 4 as any less implies that the user gender/pref ratings aren't a match
 function getMatchScore(user1){
   return new Promise(async (resolve, reject) => {
     var quser = mysql.escape(user1)
@@ -91,15 +94,18 @@ function getMatchScore(user1){
       connection.query("SELECT username, age, gender, pref, gps_lat, gps_lon, likes, fame FROM people WHERE username ="+quser, function (err, user0) {
         if (err) { return reject(err) }
       var array =[];
+      
       var i = 0;
       while(results[i]){
         dist = getD_coff(user0[0].gps_lat, user0[0].gps_lon, results[i].gps_lat, results[i].gps_lon)
+        dist_raw = getDistance(user0[0].gps_lat, user0[0].gps_lon, results[i].gps_lat, results[i].gps_lon)
         age = getA_coff(user0[0].age, results[i].age)
         pref = getP_coff(user0[0].gender, user0[0].pref, results[i].gender, results[i].pref)
         like = getL_coff(user0[0].likes, results[i].likes)
         var match =  (dist) +  (age) +  (5*pref) + (like)
         var user = results[i].username
-        array.push([user,match,results[i].fame,like*100])
+        if(match > 4){
+        array.push([user,match,results[i].fame,like*100, dist_raw,(Math.abs(user0[0].age - results[i].age))])}
         i++;
       }
       resolve (array) 
