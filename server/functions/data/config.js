@@ -7,6 +7,8 @@ var connection = mysql.createConnection({
   database: 'mysql'
 });
 
+//Example code of interacting with algorithm
+//////////////////////////////////////////////////
 connection.connect(function (err) {
   if (err) throw err
   console.log('You are now connected...')
@@ -16,6 +18,7 @@ connection.connect(function (err) {
   match.catch((err) => { console.error(err) })
     .then(match => console.log(match))
   })
+  /////////////////////////////////////////////////
 
 //calculates the distance in km between 2 given gps coords
 function getDistance(gps_lat1, gps_lon1, gps_lat2, gps_lon2) {
@@ -35,27 +38,31 @@ function getDistance(gps_lat1, gps_lon1, gps_lat2, gps_lon2) {
   return (Math.round(R * c * 100) / 100);
 }
 
+//converts degs to rads
 function toRads(deg) {
   return (deg * Math.PI / 180);
 }
 
+//calculates a value on how well 2 users match based on their GPS coordinates. return value is based on optimized simoidal curve
 function getD_coff(gps_lat1, gps_lon1, gps_lat2, gps_lon2) {
       var distance = getDistance(gps_lat1, gps_lon1, gps_lat2, gps_lon2)
       //sigmoidal function
       return ((1 / (1.05+Math.exp(0.3*(0.125*distance - 10))))+0.1)
 }
 
+
+//gives value betweer 0 and 1 to indicate how well two users match based on age
 function getA_coff(age1, age2){
       var ageDiff = Math.abs(age1 - age2)
       //linear drop in coff
       return (1 - (ageDiff/100))
 }
 
+//returns the distance between two given sets of gender + pref
+//maximum distance of 1 is deducted from 1 to give higher values for better matches
 function getP_coff(gender1, pref1, gender2, pref2){
       dx = Math.pow((gender1 - pref2),2)
-      // console.log("dx^2= " + dx)
       dy = Math.pow((pref1 - gender2),2)
-      // console.log("dy^2= " + dy)
       return(1 - (Math.sqrt((dx+dy)))/Math.sqrt(2))
 }
 
@@ -75,23 +82,24 @@ function getL_coff(likes1, likes2){
 }
 
 //Calculates match coefficient between given username and all other users and returns an array containing all the scores
+//Array returned contains username, match_score, fame_rating, likes_overlap %
 function getMatchScore(user1){
   return new Promise(async (resolve, reject) => {
     var quser = mysql.escape(user1)
-    connection.query("SELECT username, age, gender, pref, gps_lat, gps_lon, likes FROM people WHERE NOT username = ?",[quser], function (err, results) {
+    connection.query("SELECT username, age, gender, pref, gps_lat, gps_lon, likes FROM people WHERE NOT username ="+quser, function (err, results) {
     if (err) { return reject(err) }
-      connection.query("SELECT username, age, gender, pref, gps_lat, gps_lon, likes FROM people WHERE username = ?",[quser], function (err, user0) {
+      connection.query("SELECT username, age, gender, pref, gps_lat, gps_lon, likes, fame FROM people WHERE username ="+quser, function (err, user0) {
         if (err) { return reject(err) }
       var array =[];
       var i = 0;
       while(results[i]){
-        dist = getD_coff(user0[0].gps_lat, results[0].gps_lon, results[i].gps_lat, results[i].gps_lon)
+        dist = getD_coff(user0[0].gps_lat, user0[0].gps_lon, results[i].gps_lat, results[i].gps_lon)
         age = getA_coff(user0[0].age, results[i].age)
         pref = getP_coff(user0[0].gender, user0[0].pref, results[i].gender, results[i].pref)
         like = getL_coff(user0[0].likes, results[i].likes)
         var match =  (dist) +  (age) +  (5*pref) + (like)
         var user = results[i].username
-        array.push([user,match])
+        array.push([user,match,results[i].fame,like*100])
         i++;
       }
       resolve (array) 
