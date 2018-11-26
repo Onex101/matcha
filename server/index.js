@@ -16,14 +16,21 @@ app.get('/', (req, res) => {
 });
 
 newUser = new User('');
-console.log('New User: ' + JSON.stringify(newUser));
+// console.log('New User: ' + JSON.stringify(newUser));
 
 newUser.getById(8, function (){
-    // newUser.data['first_name'] = 'BOEREWORS';
-    newUser.set('first_name', 'CHARL');
-    newUser.set('last_name', 'BOEREWORS');
-    newUser.save();
+    newUser.data['first_name'] = 'yes';
+    // newUser.set('user_name', 'DIT WERK SO LEKKER');
+    // newUser.set('last_name', 'BOEREWORS');
+    // newUser.save();
 });
+
+setTimeout(function(){
+    console.log(newUser);
+}
+,3000);
+
+
 
 app.get('/users/add', (req, res) => {
     const { first_name, email, password } = req.query;
@@ -40,6 +47,15 @@ app.get('/users/add', (req, res) => {
 
 app.post('/users/add', (req, res) => {
     const { first_name, last_name, email, password } = req.body;
+    // user = new User();
+    // console.log(first_name, last_name, email, password);
+    // user.data['first_name'] = first_name;
+    // user.data['last_name'] = last_name;
+    // user.data['email'] = email;
+    // user.data['password'] = password;
+    // console.log(user);
+    // if (user.save())
+    //     res.send('Succesfully added product')
     const INSERT_USER_QUERY = `INSERT INTO users (first_name, last_name, email, password) VALUES('${first_name}', '${last_name}', '${email}', '${password}')`;
     con.query(INSERT_USER_QUERY, (err, results) => {
         if (err) {

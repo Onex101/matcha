@@ -24,80 +24,144 @@ User.prototype.clean = function (data) {
     return _.pick(_.defaults(data, schema), _.keys(schema)); 
 }
 
-User.prototype.deleteById = function (id) {
+User.prototype.deleteById = function (id, callback) {
     id = mysql.escape(id);
     var self = this;
     if (id)
         tmp_id = id;
     else
         tmp_id = self.data['id'];
-    db.query(`DELETE FROM users WHERE id = ${tmp_id}`, function (err){
-        if (err) 
-                throw(err)
-            else{
-                self.data = null;
-                console.log("Deleted user");
+    db.query(`DELETE FROM users WHERE id = ${tmp_id}`, function (err, result){
+        if (err){callback(null, err);}
+        else{
+            if (typeof callback === "function"){
+                callback(null, result);
             }
+        }
     })
     
-}
-
-User.prototype.save = function (callback) {
-    var self = this;
-    this.data = this.clean(this.data);
-    tmp = [this.data['first_name'], this.data['last_name'], this.data['user_name'], this.data['email'], this.data['password'], this.data['last_name']];
-    id = this.data['id'];
-    db.query(`UPDATE users SET first_name = ?, last_name = ?, user_name = ?, email = ?, password = ? WHERE id = ${id}`, tmp, function (err, result, rows){
-        if (err) throw(err)
-        if (typeof callback === "function"){
-            callback();
-        }
-        else{
-            console.log("Saved updated user");
-        }
-    })
-}
-
-User.prototype.runQuery = function (query, callback){
-    var self = this;
-    db.query(query, function (err, result, rows) {
-        if (err) throw(err)
-        row = result[0];
-        console.log(query, result);
-        self.data = {
-            id: row.id,
-            first_name: row.first_name,
-            last_name: row.last_name,
-            user_name: row.user_name,
-            email: row.email,
-            password: row.password
-        }
-        if (typeof callback === "function"){
-            callback(self);
-        }
-        else {
-            console.log("User updated", self);
-            return (self);
-        }
-    });
 }
 
 User.prototype.getById = function (data, callback) {
     data = mysql.escape(data);
     var query = `SELECT * FROM users WHERE id = '${data}'`;
-    this.runQuery(query, callback);
+    db.query(query, function (err, result, rows) {
+        if (err) {callback(err, null);}
+        // console.log(query, result);
+        else{
+            row = result[0];
+            self.data = {
+                id: row.id,
+                first_name: row.first_name,
+                last_name: row.last_name,
+                user_name: row.user_name,
+                email: row.email,
+                password: row.password
+            }
+            if (typeof callback === "function"){
+                // console.log("User updated", self);
+                callback(null, result);
+            }
+        }
+    });
 }
 
-User.prototype.getByUsername = function (data, callback) {
-    data = mysql.escape(data);
-    var query = `SELECT * FROM users WHERE user_name = '${data}'`;
-    this.runQuery(query, callback);
+User.prototype.update = function (callback) {
+    var self = this;
+    this.data = this.clean(this.data);
+    tmp = [this.data['first_name'], 
+            this.data['last_name'], 
+            this.data['user_name'], 
+            this.data['email'], 
+            this.data['password'], 
+            this.data['last_name']];
+    id = this.data['id'];
+    db.query(`UPDATE 
+               users 
+            SET 
+                first_name = ?,
+                last_name = ?, 
+                user_name = ?, 
+                email = ?, 
+                password = ? 
+            WHERE
+                id = ${id}`, tmp, function (err, result, rows){
+        if (err){callback(null, err);}
+        else{
+            if (typeof callback === "function"){
+                callback(null, result);
+            }
+        }
+    })
 }
 
-User.prototype.getByEmail = function (data, callback) {
-    data = mysql.escape(data);
-    var query = `SELECT * FROM users WHERE email = '${data}'`;
-    this.runQuery(query, callback);
+User.prototype.newSave = function (callback) {
+    var self = this;
+    this.data = this.clean(this.data);
+    tmp = [this.data['first_name'], 
+            this.data['last_name'], 
+            this.data['user_name'], 
+            this.data['email'], 
+            this.data['password']
+    db.query(`INSERT 
+               users 
+            ( 
+                first_name,
+                last_name, 
+                user_name, 
+                email, 
+                password
+            )
+            VALUES
+            (
+                ${tmp[0]},
+                ${tmp[1]},
+                ${tmp[2]},
+                ${tmp[3]},
+                ${tmp[4]},
+            )`, function (err, result, rows){
+                    if (err){callback(null, err);}
+                    else{
+                        if (typeof callback === "function"){
+                            callback(null, result);
+                        }
+                    }
+    })
 }
+
+// User.prototype.runQuery = function (query, callback){
+//     var self = this;
+//     db.query(query, function (err, result, rows) {
+//         if (err) {callback(null, err);}
+//         // console.log(query, result);
+//         else{
+//             row = result[0];
+//             self.data = {
+//                 id: row.id,
+//                 first_name: row.first_name,
+//                 last_name: row.last_name,
+//                 user_name: row.user_name,
+//                 email: row.email,
+//                 password: row.password
+//             }
+//             if (typeof callback === "function"){
+//                 // console.log("User updated", self);
+//                 callback(null, result);
+//             }
+//         }
+//     });
+// }
+
+// User.prototype.getByUsername = function (data, callback) {
+//     data = mysql.escape(data);
+//     var query = `SELECT * FROM users WHERE user_name = '${data}'`;
+//     this.runQuery(query, callback);
+// }
+
+// User.prototype.getByEmail = function (data, callback) {
+//     data = mysql.escape(data);
+//     var query = `SELECT * FROM users WHERE email = '${data}'`;
+//     this.runQuery(query, callback);
+// }
 
 module.exports = User;
