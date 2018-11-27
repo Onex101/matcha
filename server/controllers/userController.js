@@ -1,5 +1,10 @@
 var User = require('../models/userModel');
 
+// Display index user.
+exports.index = function(req, res) {
+    res.send('NOT IMPLEMENTED: User index');
+};
+
 // Display list of all Users.
 exports.user_list = function(req, res) {
     res.send('NOT IMPLEMENTED: User list');
@@ -18,8 +23,13 @@ exports.user_create_get = function(req, res) {
 // Handle User create on POST.
 exports.user_create_post = function(req, res) {
     var new_user = new User(req.body);
-    new_user.newSave()
-    res.send('NOT IMPLEMENTED: User create POST');
+    new_user.save(function(err, task){
+        if (err)
+            res.send(err);
+        else
+            res.json(task);
+    })
+    // res.send('NOT IMPLEMENTED: User create POST');
 };
 
 // Display User delete form on GET.

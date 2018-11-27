@@ -43,6 +43,7 @@ User.prototype.deleteById = function (id, callback) {
 }
 
 User.prototype.getById = function (data, callback) {
+    var self = this;
     data = mysql.escape(data);
     var query = `SELECT * FROM users WHERE id = '${data}'`;
     db.query(query, function (err, result, rows) {
@@ -67,7 +68,12 @@ User.prototype.getById = function (data, callback) {
 }
 
 User.prototype.update = function (callback) {
-    var self = this;
+    // var self = this;
+    for (var key in this.data) {
+        if (this.data.hasOwnProperty(key)) {
+            key = mysql.escape(key);
+        }
+    }
     this.data = this.clean(this.data);
     tmp = [this.data['first_name'], 
             this.data['last_name'], 
@@ -95,14 +101,20 @@ User.prototype.update = function (callback) {
     })
 }
 
-User.prototype.newSave = function (callback) {
+User.prototype.save = function (callback) {
     var self = this;
+    // console.log(this.data);
+
+    // this.data = mysql.escape(this.data);
+    for (var key in this.data) {
+        if (this.data.hasOwnProperty(key)) {
+            if (key != null)
+                key = mysql.escape(key);
+        }
+    }
     this.data = this.clean(this.data);
-    tmp = [this.data['first_name'], 
-            this.data['last_name'], 
-            this.data['user_name'], 
-            this.data['email'], 
-            this.data['password']
+    console.log("Tryin to save");
+    console.log(this.data);
     db.query(`INSERT 
                users 
             ( 
@@ -114,15 +126,19 @@ User.prototype.newSave = function (callback) {
             )
             VALUES
             (
-                ${tmp[0]},
-                ${tmp[1]},
-                ${tmp[2]},
-                ${tmp[3]},
-                ${tmp[4]},
-            )`, function (err, result, rows){
-                    if (err){callback(null, err);}
-                    else{
-                        if (typeof callback === "function"){
+                '${this.data['first_name']}',
+                '${this.data['last_name']}',
+                '${this.data['user_name']}',
+                '${this.data['email']}',
+                '${this.data['password']}'
+            )`, function (err, result){
+                    if (typeof callback === "function"){
+                        if (err){
+                            callback(err, null);
+                            throw(err);
+                        }
+                        else{
+                            self.data['id'] = result.insertId;
                             callback(null, result);
                         }
                     }

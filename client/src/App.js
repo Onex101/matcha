@@ -36,7 +36,7 @@ class App extends Component {
     const {user} = this.state;
     // fetch(`/products/add?name=${product.name}&price=${product.price}`)
     // .then(response => response.json())
-    fetch(`/users/add`, {
+    fetch(`/user/create`, {
       method: "POST",
       headers: {
           "Content-Type": "application/json; charset=utf-8",

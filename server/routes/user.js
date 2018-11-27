@@ -6,7 +6,7 @@ var user_controller = require('../controllers/userController');
 /// USER ROUTES ///
 
 // GET user home page.
-router.get('/', user_controller.index);
+// router.get('/', user_controller.index);
 
 // GET request for creating a user. NOTE This must come before routes that display user (uses id).
 router.get('/user/create', user_controller.user_create_get);
@@ -30,6 +30,6 @@ router.post('/user/:id/update', user_controller.user_update_post);
 router.get('/user/:id', user_controller.user_detail);
 
 // GET request for list of all user items.
-router.get('/users', user_controller.user_list);
+// router.get('/users', user_controller.user_list);
 
 module.exports = router;
