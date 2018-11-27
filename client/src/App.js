@@ -6,6 +6,7 @@ class App extends Component {
   state = {
     users: [],
     user: {
+      user_name: 'user_name',
       first_name: 'first_name',
       last_name: 'last_name',
       email: 'email@email.com',
@@ -51,7 +52,7 @@ class App extends Component {
     .catch(err => console.error(err))
   }
 
-  renderUser = ({id, first_name, email}) => <div id = {id} > {first_name} {email}</div>
+  renderUser = ({id, first_name, email, user_name}) => <div id = {id} > {user_name} {first_name} {email}</div>
 
   render() {
     const {users, user} = this.state;
