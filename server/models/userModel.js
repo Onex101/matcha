@@ -4,6 +4,8 @@ var schemas = require("../schemas.js");
 var _ = require("lodash");
 var mysql = require('mysql');
 
+const SELECT_ALL_USERS_QUERY = 'SELECT * FROM users';
+
 var User = function (data) {
     this.data = this.clean(data);
 }
@@ -45,20 +47,26 @@ User.prototype.deleteById = function (id, callback) {
 User.prototype.getById = function (data, callback) {
     var self = this;
     data = mysql.escape(data);
-    var query = `SELECT * FROM users WHERE id = '${data}'`;
-    db.query(query, function (err, result, rows) {
+    var query = `SELECT * FROM users WHERE id = ${data}`;
+    db.query(query, function (err, result) {
         if (err) {callback(err, null);}
         // console.log(query, result);
         else{
-            row = result[0];
-            self.data = {
-                id: row.id,
-                first_name: row.first_name,
-                last_name: row.last_name,
-                user_name: row.user_name,
-                email: row.email,
-                password: row.password
-            }
+            (typeof callback === "function")
+                // console.log("User updated", self);
+                callback(null, result);
+        }
+    });
+}
+
+User.prototype.getByUsername = function (data, callback) {
+    var self = this;
+    data = mysql.escape(data);
+    var query = `SELECT * FROM users WHERE user_name = '${data}'`;
+    db.query(query, function (err, result) {
+        if (err) {callback(err, null);}
+        // console.log(query, result);
+        else{
             if (typeof callback === "function"){
                 // console.log("User updated", self);
                 callback(null, result);
@@ -135,13 +143,33 @@ User.prototype.save = function (callback) {
                     if (typeof callback === "function"){
                         if (err){
                             callback(err, null);
-                            throw(err);
                         }
                         else{
                             self.data['id'] = result.insertId;
                             callback(null, result);
                         }
                     }
+    })
+}
+
+User.prototype.getAll = function (callback){
+    db.query(SELECT_ALL_USERS_QUERY, (err, result) => {
+        if (err) {
+            callback(err, null);
+            throw(err);
+        }
+        else {
+            callback(null, result);
+        }
+    });
+}
+
+User.prototype.login = function (callback){
+    this.getByUsername(this.data.user_name, function(err, results){
+        if (err)
+            callback(null, err);
+        else
+            callback(null, results);
     })
 }
 
