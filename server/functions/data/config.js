@@ -1,5 +1,7 @@
 var mysql = require('mysql');
 
+//Example code of interacting with algorithm
+//////////////////////////////////////////////////
 var connection = mysql.createConnection({
   host: 'localhost',
   user: 'root',
@@ -7,8 +9,6 @@ var connection = mysql.createConnection({
   database: 'mysql'
 });
 
-//Example code of interacting with algorithm
-//////////////////////////////////////////////////
 connection.connect(function (err) {
   if (err) throw err
   console.log('You are now connected...')
