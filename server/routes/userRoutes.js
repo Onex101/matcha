@@ -27,9 +27,13 @@ router.get('/user/:id/update', user_controller.user_update_get);
 router.post('/user/:id/update', user_controller.user_update_post);
 
 // GET request for one user.
-// router.get('/user/:id', user_controller.user_detail);
+router.get('/user/:id', user_controller.user_detail);
 
-router.get('/user/login', user_controller.user_login);
+// GET request to login user.
+router.get('/login', user_controller.user_login_get);
+
+// POST request to login user.
+router.post('/login', user_controller.user_login_post);
 
 // GET request for all users.
 router.get('/users', user_controller.user_list);

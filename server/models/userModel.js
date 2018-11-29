@@ -121,8 +121,8 @@ User.prototype.save = function (callback) {
         }
     }
     this.data = this.clean(this.data);
-    console.log("Tryin to save");
-    console.log(this.data);
+    // console.log("Tryin to save");
+    // console.log(this.data);
     db.query(`INSERT 
                users 
             ( 

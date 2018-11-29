@@ -71,6 +71,14 @@ exports.user_delete_get = function(req, res) {
 
 // Handle User delete on POST.
 exports.user_delete_post = function(req, res) {
+    let user = new User(req.body);
+    user.deleteById(user.data.id, function(err){
+        if (err)
+            res.send(err);
+        else{
+            res.send('Succesfully deleted user');
+        }
+    })
     res.send('NOT IMPLEMENTED: User delete POST');
 };
 
@@ -85,9 +93,9 @@ exports.user_update_post = function(req, res) {
 };
 
 // Verify User
-exports.user_login = function(req, res) {
+exports.user_login_post = function(req, res) {
     let user = new User(req.body);
-    user.login(user.data.user_name, function(err, results){
+    user.login(function(err, results){
         if (err) {
             res.send({
               "code":400,
@@ -96,7 +104,18 @@ exports.user_login = function(req, res) {
         }else{
             if(results.length >0){
                 if(results[0].password == password){ //need to use hash still
-                    res.send({
+                    row = result[0];
+                    if (row)
+                    user.data = {
+                        id: row.id,
+                        first_name: row.first_name,
+                        last_name: row.last_name,
+                        user_name: row.user_name,
+                        email: row.email,
+                        password: row.password
+                    }
+                    res.json({
+                        user, 
                         "code":200,
                         "success":"login sucessfull"
                     });
@@ -106,7 +125,7 @@ exports.user_login = function(req, res) {
                         "success":"Email and password does not match"
                     });
                 }
-            }else{
+            }else{ 
                 res.send({
                     "code":204,
                     "success":"Email does not exist"
@@ -114,5 +133,9 @@ exports.user_login = function(req, res) {
             }
         }
     })
-    res.send('NOT IMPLEMENTED: User verify GET');
+    // res.send('NOT IMPLEMENTED: User verify POST');
+};
+
+exports.user_login_get = function(req, res) {
+     res.send('NOT IMPLEMENTED: User verify GET');
 };
