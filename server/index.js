@@ -12,7 +12,7 @@ const app = express();
 
 app.use(bodyParser.json());
 app.use(cors());
-app.use(session())
+// app.use(session())
 
 app.get('/', (req, res) => {
     res.send('go to /users');

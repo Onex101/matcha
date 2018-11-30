@@ -38,4 +38,11 @@ router.post('/login', user_controller.user_login_post);
 // GET request for all users.
 router.get('/users', user_controller.user_list);
 
+// GET request for mtached users against userID
+router.get('/user/:id/match', user_controller.user_match_get);
+
+// POST request for mtached users against userID
+router.post('/user/:id/match', user_controller.user_match_post);
+
+
 module.exports = router;

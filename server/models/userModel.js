@@ -173,39 +173,30 @@ User.prototype.login = function (callback){
     })
 }
 
-// User.prototype.runQuery = function (query, callback){
-//     var self = this;
-//     db.query(query, function (err, result, rows) {
-//         if (err) {callback(null, err);}
-//         // console.log(query, result);
-//         else{
-//             row = result[0];
-//             self.data = {
-//                 id: row.id,
-//                 first_name: row.first_name,
-//                 last_name: row.last_name,
-//                 user_name: row.user_name,
-//                 email: row.email,
-//                 password: row.password
-//             }
-//             if (typeof callback === "function"){
-//                 // console.log("User updated", self);
-//                 callback(null, result);
-//             }
-//         }
-//     });
-// }
-
-// User.prototype.getByUsername = function (data, callback) {
-//     data = mysql.escape(data);
-//     var query = `SELECT * FROM users WHERE user_name = '${data}'`;
-//     this.runQuery(query, callback);
-// }
-
-// User.prototype.getByEmail = function (data, callback) {
-//     data = mysql.escape(data);
-//     var query = `SELECT * FROM users WHERE email = '${data}'`;
-//     this.runQuery(query, callback);
-// }
+User.prototype.match = function (callback){
+        connection.query("SELECT username, age, gender, pref, gps_lat, gps_lon, likes, fame FROM people WHERE username ="+quser, function (err, user0) {
+            if (err) { return reject(err) }
+        var array =[];
+        
+        var i = 0;
+        while(results[i]){
+            dist = getD_coff(user0[0].gps_lat, user0[0].gps_lon, results[i].gps_lat, results[i].gps_lon)
+            dist_raw = getDistance(user0[0].gps_lat, user0[0].gps_lon, results[i].gps_lat, results[i].gps_lon)
+            age = getA_coff(user0[0].age, results[i].age)
+            pref = getP_coff(user0[0].gender, user0[0].pref, results[i].gender, results[i].pref)
+            like = getL_coff(user0[0].likes, results[i].likes)
+            var match =  (dist) +  (age) +  (5*pref) + (like)
+            var user = results[i].username
+            if(match > 4){
+            array.push([user,match,results[i].fame,like*100, dist_raw,(Math.abs(user0[0].age - results[i].age))])}
+            i++;
+        }
+      resolve (array) 
+      },
+        if (err)
+            callback(null, err);
+        else
+            callback(null, results);
+}
 
 module.exports = User;

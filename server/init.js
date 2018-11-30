@@ -1,10 +1,10 @@
-var mysql = require('mysql');
+const mysql = require('mysql');
 
-var connection = mysql.createConnection({
+const connection = mysql.createConnection({
   host: 'localhost',
   user: 'root',
-  password: 'qweqwe',
-  database: 'mysql'
+  password: 'admin',
+  database: 'matcha_db'
 });
 
 connection.connect(function (err) {

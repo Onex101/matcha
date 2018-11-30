@@ -114,20 +114,20 @@ exports.user_login_post = function(req, res) {
                         email: row.email,
                         password: row.password
                     }
+                    res.code(200);
                     res.json({
-                        user, 
-                        "code":200,
+                        user,
                         "success":"login sucessfull"
                     });
                 }else{
+                    res.code(204);
                     res.send({
-                        "code":204,
                         "success":"Email and password does not match"
                     });
                 }
-            }else{ 
+            }else{
+                res.code(204);
                 res.send({
-                    "code":204,
                     "success":"Email does not exist"
                 });
             }
@@ -138,4 +138,14 @@ exports.user_login_post = function(req, res) {
 
 exports.user_login_get = function(req, res) {
      res.send('NOT IMPLEMENTED: User verify GET');
+};
+
+// Display User MATCHES on GET.
+exports.user_match_get = function(req, res) {
+    res.send('NOT IMPLEMENTED: User match GET');
+};
+
+// Displat User MATCHES on POST.
+exports.user_match_post = function(req, res) {
+    res.send('NOT IMPLEMENTED: User match POST');
 };
