@@ -85,17 +85,30 @@ User.prototype.update = function (callback) {
     this.data = this.clean(this.data);
     tmp = [this.data['first_name'], 
             this.data['last_name'], 
-            this.data['user_name'], 
+            this.data['user_name'],
+            this.data['age'],
+            this.data['gender'],
+            this.data['pref'],
+            this.data['gps_lat'],
+            this.data['gps_lon'],
+            this.data['likes'],
+            this.data['fame'],
             this.data['email'], 
-            this.data['password'], 
-            this.data['last_name']];
+            this.data['password']];
     id = this.data['id'];
     db.query(`UPDATE 
                users 
             SET 
                 first_name = ?,
                 last_name = ?, 
-                user_name = ?, 
+                user_name = ?,
+                age = ?,
+                gender = ?,
+                pref = ?,
+                gps_lat = ?,
+                gps_lon = ?,
+                likes = ?,
+                fame = ?,
                 email = ?, 
                 password = ? 
             WHERE
@@ -128,7 +141,14 @@ User.prototype.save = function (callback) {
             ( 
                 first_name,
                 last_name, 
-                user_name, 
+                user_name,
+                age,
+                gender,
+                pref,
+                gps_lat,
+                gps_lon,
+                likes,
+                fame,
                 email, 
                 password
             )
@@ -137,6 +157,13 @@ User.prototype.save = function (callback) {
                 '${this.data['first_name']}',
                 '${this.data['last_name']}',
                 '${this.data['user_name']}',
+                '${this.data['age']}',
+                '${this.data['gender']}',
+                '${this.data['pref']}',
+                '${this.data['gps_lat']}',
+                '${this.data['gps_lon']}',
+                '${this.data['likes']}',
+                '${this.data['fame']}',
                 '${this.data['email']}',
                 '${this.data['password']}'
             )`, function (err, result){
@@ -174,29 +201,18 @@ User.prototype.login = function (callback){
 }
 
 User.prototype.match = function (callback){
-        connection.query("SELECT username, age, gender, pref, gps_lat, gps_lon, likes, fame FROM people WHERE username ="+quser, function (err, user0) {
-            if (err) { return reject(err) }
-        var array =[];
-        
-        var i = 0;
-        while(results[i]){
-            dist = getD_coff(user0[0].gps_lat, user0[0].gps_lon, results[i].gps_lat, results[i].gps_lon)
-            dist_raw = getDistance(user0[0].gps_lat, user0[0].gps_lon, results[i].gps_lat, results[i].gps_lon)
-            age = getA_coff(user0[0].age, results[i].age)
-            pref = getP_coff(user0[0].gender, user0[0].pref, results[i].gender, results[i].pref)
-            like = getL_coff(user0[0].likes, results[i].likes)
-            var match =  (dist) +  (age) +  (5*pref) + (like)
-            var user = results[i].username
-            if(match > 4){
-            array.push([user,match,results[i].fame,like*100, dist_raw,(Math.abs(user0[0].age - results[i].age))])}
-            i++;
+    console.log("ID " + this.data.id);
+    let data = this.data;
+    db.query(`SELECT user_name, age, gender, pref, gps_lat, gps_lon, likes, fame FROM users WHERE NOT id = ${this.data.id}`, function (err, results) {
+        if (err){
+            console.log("asd");
+            callback(err, null);
         }
-      resolve (array) 
-      },
-        if (err)
-            callback(null, err);
-        else
+        else{
+            console.log("Hello");
             callback(null, results);
+        }
+    })
 }
 
 module.exports = User;

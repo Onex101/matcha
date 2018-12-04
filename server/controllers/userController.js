@@ -1,4 +1,5 @@
 var User = require('../models/userModel');
+var Match = require('../matchFunctions');
 
 // Display index user.
 exports.index = function(req, res) {
@@ -32,6 +33,13 @@ exports.user_detail = function(req, res) {
                     first_name: row.first_name,
                     last_name: row.last_name,
                     user_name: row.user_name,
+                    age: row.age,
+                    gender: row.gender,
+                    pref: row.pref,
+                    gps_lat: row.gps_lat,
+                    gps_lon: row.gps_lat,
+                    likes: row.likes,
+                    fame: row.fame,
                     email: row.email,
                     password: row.password}
             res.json(user);
@@ -98,11 +106,11 @@ exports.user_login_post = function(req, res) {
     user.login(function(err, results){
         if (err) {
             res.send({
-              "code":400,
+              "status":400,
               "failed":"error ocurred"
             })
         }else{
-            if(results.length >0){
+            if(results.length > 0){
                 if(results[0].password == password){ //need to use hash still
                     row = result[0];
                     if (row)
@@ -111,22 +119,29 @@ exports.user_login_post = function(req, res) {
                         first_name: row.first_name,
                         last_name: row.last_name,
                         user_name: row.user_name,
+                        age: row.age,
+                        gender: row.gender,
+                        pref: row.pref,
+                        gps_lat: row.gps_lat,
+                        gps_lon: row.gps_lat,
+                        likes: row.likes,
+                        fame: row.fame,
                         email: row.email,
                         password: row.password
                     }
-                    res.code(200);
+                    res.status(200);
                     res.json({
                         user,
                         "success":"login sucessfull"
                     });
                 }else{
-                    res.code(204);
+                    res.status(204);
                     res.send({
                         "success":"Email and password does not match"
                     });
                 }
             }else{
-                res.code(204);
+                res.status(204);
                 res.send({
                     "success":"Email does not exist"
                 });
@@ -142,7 +157,48 @@ exports.user_login_get = function(req, res) {
 
 // Display User MATCHES on GET.
 exports.user_match_get = function(req, res) {
-    res.send('NOT IMPLEMENTED: User match GET');
+    testData = {id: '4', user_name: 'brandon', first_name: 'Brandon',last_name: 'Feifer', email:'bran123456@hmail.com', age:'26', gender:'0.7', pref:'1', gps_lat:'-37.957',gps_lon:'19.517', likes:'#picnic#nature#photography'}
+    let user = new User(testData);
+    var test = "Hi";
+    // console.log(user);
+    // console.log(user.data.gps_lat);
+    user.match(function (err, results){
+        // console.log(results);
+        if (err){
+            res.status(400)
+            res.send({
+                "failed":"error ocurred"
+            })
+        }
+        else{
+            console.log(test)
+            console.log("potato")
+            var array =[];
+            var i = 0;
+            // console.log(results[0]);
+            // testData = {id: '4', user_name: 'brandon', first_name: 'Brandon',last_name: 'Feifer', email:'bran123456@hmail.com', age:'26', gender:'0.7', pref:'1', gps_lat:'-37.957',gps_lon:'19.517', likes:'#picnic#nature#photography'}
+            // let user = new User(testData);
+            while(results[i]){
+                console.log(i);
+                dist = Match.getD_coff(user.data.gps_lat, user.data.gps_lon, results[i].gps_lat, results[i].gps_lon)
+                dist_raw = Match.getDistance(user.data.gps_lat, user.data.gps_lon, results[i].gps_lat, results[i].gps_lon)
+                age = Match.getA_coff(user.data.age, results[i].age)
+                pref = Match.getP_coff(user.data.gender, user.data.pref, results[i].gender, results[i].pref)
+                like = Match.getL_coff(user.data.likes, results[i].likes)
+                var match =  (dist) +  (age) +  (5*pref) + (like)
+                let new_user = results[i]
+                if(match > 4){
+                    console.log(new_user);
+                array.push([new_user,match,results[i].fame,like*100, dist_raw,(Math.abs(new_user.age - results[i].age))])}
+                i++;
+            }
+            console.log("Results: " + results);
+            res.json(
+               array
+            )
+        }
+    })
+    // res.send('NOT IMPLEMENTED: User match GET');
 };
 
 // Displat User MATCHES on POST.
