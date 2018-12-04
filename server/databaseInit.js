@@ -16,7 +16,24 @@ connection.connect(function (err) {
     connection.query('DROP TABLE IF EXISTS history')
     connection.query('DROP TABLE IF EXISTS likes')
     connection.query('DROP TABLE IF EXISTS notifications')
-    connection.query('CREATE TABLE users(id int NOT NULL AUTO_INCREMENT, user_name varchar(255), password varchar(255), first_name varchar(255), last_name varchar(255), email varchar(255), age int, gender float, pref float, fame int, gps_lon float, gps_lat float, likes text, online int, PRIMARY KEY (id))')
+    connection.query("CREATE TABLE `people` (
+      `id` int(9) unsigned NOT NULL AUTO_INCREMENT,
+      `username` varchar(100) NOT NULL,
+      `password` varchar(255) NOT NULL,
+      `name` varchar(100) NOT NULL,
+      `surname` varchar(100) NOT NULL,
+      `email` varchar(100) NOT NULL,
+      `age` int(9) unsigned NOT NULL,
+      `gender` decimal(3,2) unsigned NOT NULL,
+      `pref` decimal(3,2) unsigned NOT NULL,
+      `gps_lon` decimal(5,3) NOT NULL,
+      `gps_lat` decimal(5,3) NOT NULL,
+      `likes` tinytext NOT NULL,
+      PRIMARY KEY (`id`),
+      KEY `username` (`username`),
+      KEY `email` (`email`)
+    ) ENGINE=InnoDB AUTO_INCREMENT=101 DEFAULT CHARSET=utf8;");
+    
     connection.query('CREATE TABLE pictures(id int NOT NULL AUTO_INCREMENT,pic longtext, user_name varchar(255),PRIMARY KEY (id))')
     connection.query('CREATE TABLE history(viewer_id int NOT NULL, viewed_id int NOT NULL)')
     connection.query('CREATE TABLE likes(user1_id int NOT NULL, user2_id int NOT NULL, link int)')
