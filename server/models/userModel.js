@@ -203,13 +203,11 @@ User.prototype.login = function (callback){
 User.prototype.match = function (callback){
     console.log("ID " + this.data.id);
     let data = this.data;
-    db.query(`SELECT user_name, age, gender, pref, gps_lat, gps_lon, likes, fame FROM users WHERE NOT id = ${this.data.id}`, function (err, results) {
+    db.query(`SELECT user_name, age, gender, pref, gps_lat, gps_lon, likes FROM users WHERE NOT id = ${this.data.id}`, function (err, results) {
         if (err){
-            console.log("asd");
             callback(err, null);
         }
         else{
-            console.log("Hello");
             callback(null, results);
         }
     })

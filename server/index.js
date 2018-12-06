@@ -13,10 +13,17 @@ const app = express();
 
 app.use(bodyParser.json());
 app.use(cookieParser());
-app.use(session({secret: 'matcha'}))
+app.use(session({   secret: 'matcha',
+                    saveUninitialized: true,
+                    resave: true}))
 app.use(cors());
 
+var sess;
 app.get('/', (req, res) => {
+    sess = req.session;
+    sess.id;
+    sess.email;
+    sess.user_name;
     res.send('go to /users');
 });
 

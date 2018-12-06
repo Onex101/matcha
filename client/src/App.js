@@ -52,7 +52,7 @@ class App extends Component {
     .catch(err => console.error(err))
   }
 
-  renderUser = ({id, first_name, email, user_name}) => <div id = {id} > {user_name} {first_name} {email}</div>
+  renderUser = ({id, first_name, user_name, age}) => <div id = {id} >{user_name} - {first_name} {age}</div>
 
   render() {
     const {users, user} = this.state;

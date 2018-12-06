@@ -165,34 +165,42 @@ exports.user_match_get = function(req, res) {
     user.match(function (err, results){
         // console.log(results);
         if (err){
+            throw err
             res.status(400)
             res.send({
                 "failed":"error ocurred"
             })
         }
         else{
-            console.log(test)
-            console.log("potato")
-            var array =[];
+            // console.log(test)
+            // console.log("potato")
+            var array = [];
             var i = 0;
             // console.log(results[0]);
             // testData = {id: '4', user_name: 'brandon', first_name: 'Brandon',last_name: 'Feifer', email:'bran123456@hmail.com', age:'26', gender:'0.7', pref:'1', gps_lat:'-37.957',gps_lon:'19.517', likes:'#picnic#nature#photography'}
             // let user = new User(testData);
             while(results[i]){
-                console.log(i);
+                // console.log(i);
                 dist = Match.getD_coff(user.data.gps_lat, user.data.gps_lon, results[i].gps_lat, results[i].gps_lon)
                 dist_raw = Match.getDistance(user.data.gps_lat, user.data.gps_lon, results[i].gps_lat, results[i].gps_lon)
                 age = Match.getA_coff(user.data.age, results[i].age)
                 pref = Match.getP_coff(user.data.gender, user.data.pref, results[i].gender, results[i].pref)
                 like = Match.getL_coff(user.data.likes, results[i].likes)
                 var match =  (dist) +  (age) +  (5*pref) + (like)
-                let new_user = results[i]
+                let new_data = results[i]
                 if(match > 4){
-                    console.log(new_user);
-                array.push([new_user,match,results[i].fame,like*100, dist_raw,(Math.abs(new_user.age - results[i].age))])}
+                    new_user = new User(new_data);
+                    // console.log(new_user);
+                    new_user.match = match;
+                    new_user.like = like  * 100;
+                    new_user.dist_raw = dist_raw;
+                    new_user.age_diff = Math.abs(new_user.age - results[i].age);
+                    // console.log(new_user);
+                    array.push(new_user);
+                }
                 i++;
             }
-            console.log("Results: " + results);
+            // console.log("Results: " + results);
             res.json(
                array
             )
