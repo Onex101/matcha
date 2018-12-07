@@ -10,18 +10,52 @@ const connection = mysql.createConnection({
 connection.connect(function (err) {
     if (err) throw err
     console.log('Initiating tables...')
-    connection.query('DROP TABLE IF EXISTS people');
+
     connection.query('DROP TABLE IF EXISTS users');
     connection.query('DROP TABLE IF EXISTS pictures');
     connection.query('DROP TABLE IF EXISTS history');
     connection.query('DROP TABLE IF EXISTS likes');
     connection.query('DROP TABLE IF EXISTS notifications');
-    connection.query("CREATE TABLE `users` (`id` int(9) unsigned NOT NULL AUTO_INCREMENT,`user_name` varchar(100) NOT NULL,`password` varchar(255) NOT NULL,`first_name` varchar(100) NOT NULL,`last_name` varchar(100) NOT NULL,`email` varchar(100) NOT NULL,`age` int(9) unsigned NOT NULL,`gender` decimal(3,2) unsigned NOT NULL,`pref` decimal(3,2) unsigned NOT NULL,`gps_lon` decimal(5,3) NOT NULL,`gps_lat` decimal(5,3) NOT NULL,`likes` tinytext NOT NULL,PRIMARY KEY (`id`)) ENGINE=InnoDB AUTO_INCREMENT=101 DEFAULT CHARSET=utf8;");
-    connection.query('CREATE TABLE pictures(id int NOT NULL AUTO_INCREMENT,pic longtext, user_name varchar(255),PRIMARY KEY (id))');
-    connection.query('CREATE TABLE history(viewer_id int NOT NULL, viewed_id int NOT NULL)');
-    connection.query('CREATE TABLE likes(user1_id int NOT NULL, user2_id int NOT NULL, link int)');
-    connection.query('CREATE TABLE notifications(user_id int NOT NULL, noti varchar(255), viewed_status int)');
+    connection.query('DROP TABLE IF EXISTS history');
+
+    connection.query("CREATE TABLE `users`\
+    (`id` int(9) unsigned NOT NULL AUTO_INCREMENT,\
+    `user_name` varchar(100) NOT NULL,\
+    `password` varchar(255) NOT NULL,\
+    `first_name` varchar(100) NOT NULL,\
+    `last_name` varchar(100) NOT NULL,\
+    `email` varchar(100) NOT NULL,\
+    `age` int(9) unsigned NOT NULL,\
+    `gender` decimal(3,2) unsigned NOT NULL,\
+    `pref` decimal(3,2) unsigned NOT NULL,\
+    `gps_lon` decimal(5,3) NOT NULL,\
+    `gps_lat` decimal(5,3) NOT NULL,\
+    `interests` tinytext NOT NULL,\
+    PRIMARY KEY (`id`))\
+    ENGINE=InnoDB AUTO_INCREMENT=101 DEFAULT CHARSET=utf8;");
+
+    connection.query('CREATE TABLE pictures\
+    (id int NOT NULL AUTO_INCREMENT,\
+    pic longtext,\
+    user_name varchar(255),\
+    PRIMARY KEY (id))');
+
+    connection.query('CREATE TABLE history\
+    (viewer_id int NOT NULL,\
+    viewed_id int NOT NULL)');
+
+    connection.query('CREATE TABLE likes\
+    (user1_id int NOT NULL,\
+    user2_id int NOT NULL,\
+    link int)');
+
+    connection.query('CREATE TABLE notifications\
+    (user_id int NOT NULL,\
+    noti varchar(255),\
+    viewed_status int)');
+
     console.log('Creating fake profiles...')
+
     connection.query("INSERT INTO `users` VALUES\
     ('1','goldner.floyd','ca94a20769d9e25b1165d397103435bbc185cd4e','Michelle','Baumbach','ike.marvin@example.net','115','0.06','0.02','86.575','-80.145','Quod rerum iste sint totam omnis eum nam eveniet. Et ut illo illo ut sint cum porro. Delectus temporibus aut repellendus aut corrupti et ut. Temporibus eum ipsam mollitia commodi nobis quia aut.'),\
     ('2','mcdermott.viola','44915654f856ad1180e4709c69de19b50167037a','Loraine','Douglas','oullrich@example.net','39','0.62','0.82','10.938','-80.012','Dolor possimus totam voluptas omnis vel. Fugiat qui iusto soluta beatae officiis. Eligendi doloribus rerum cupiditate illo doloremque tempora molestiae et.'),\
@@ -123,6 +157,12 @@ connection.connect(function (err) {
     ('98','maybelle20','c6e1e086c43ed6c7e8b64df1098639674e8f7c57','Desmond','Roberts','prunte@example.org','47','0.17','0.68','68.970','19.290','Error quos est ratione neque placeat et. Dolorem inventore harum et mollitia accusamus iste. Nostrum beatae optio odit sit. Nostrum neque sunt dolorum.'),\
     ('99','estel.stanton','aa0f960048302f6171b719bb97a9051634966302','Evert','Jacobs','umckenzie@example.com','79','0.93','0.00','-99.999','-54.162','Dignissimos autem magnam culpa quidem aperiam. Accusamus eveniet vitae et saepe.\nEaque sit quibusdam assumenda sit enim. Possimus autem amet dolor. Optio qui expedita dolor ullam.'),\
     ('100','cristian.botsford','a3ccbf161c1a2c25062bfe38e4384bb746b644bd','Madie','Volkman','schiller.ivah@example.com','118','0.72','0.98','-99.999','39.319','Voluptatem fugiat vero officiis nihil. Et architecto atque facere reiciendis voluptate facilis quibusdam. Quia dolores sint occaecati dolores. Aut beatae autem temporibus iure dolore recusandae.')");
+    
+    connection.query('ALTER TABLE `users`\
+    ADD COLUMN `bio` VARCHAR(255) AFTER password,\
+    ADD COLUMN `fame` int(9) unsigned AFTER `pref`,\
+    ADD COLUMN `online` int (2) AFTER `interests`');
+
     console.log('Sucess!');
     console.log('Exiting...');
     connection.end();
