@@ -46,13 +46,12 @@ User.prototype.deleteById = function (id, callback) {
 
 User.prototype.getById = function (data, callback) {
     var self = this;
-    data = mysql.escape(data);
     var query = `SELECT * FROM users WHERE id = ${data}`;
     db.query(query, function (err, result) {
         if (err) {callback(err, null);}
         // console.log(query, result);
         else{
-            (typeof callback === "function")
+            if (typeof callback === "function")
                 // console.log("User updated", self);
                 callback(null, result);
         }

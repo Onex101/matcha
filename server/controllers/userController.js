@@ -162,6 +162,8 @@ exports.user_match_get = function(req, res) {
     var test = "Hi";
     // console.log(user);
     // console.log(user.data.gps_lat);
+    if (!user.data.id)
+        return res.send("failed: user does not exist")
     user.match(function (err, results){
         // console.log(results);
         if (err){

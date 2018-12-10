@@ -13,6 +13,11 @@ var schemas = {
         fame: null,
         email: null,
         password: null
+    },
+    message: {
+        user1_id: null,
+        user2_id: null,
+        message: null
     }
 }
 
