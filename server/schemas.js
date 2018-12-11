@@ -15,9 +15,10 @@ var schemas = {
         password: null
     },
     message: {
+        id: null,
         user1_id: null,
         user2_id: null,
-        message: null
+        message: null,
     }
 }
 
