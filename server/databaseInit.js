@@ -4,19 +4,28 @@ const connection = mysql.createConnection({
   host: 'localhost',
   user: 'root',
   password: 'admin',
-  database: 'matcha_db'
 });
+
+
 
 connection.connect(function (err) {
     if (err) throw err
-    console.log('Initiating tables...')
 
+    console.log('Creating matcha_db database...')
+    connection.query('DROP DATABASE IF EXISTS matcha_db');
+    connection.query('CREATE DATABASE matcha_db');
+    connection.changeUser({database : 'matcha_db'}, function(err) {
+      if (err) throw err;
+    });
+
+    console.log('Initiating tables...')
     connection.query('DROP TABLE IF EXISTS users');
     connection.query('DROP TABLE IF EXISTS pictures');
     connection.query('DROP TABLE IF EXISTS history');
     connection.query('DROP TABLE IF EXISTS likes');
     connection.query('DROP TABLE IF EXISTS notifications');
     connection.query('DROP TABLE IF EXISTS history');
+    connection.query('DROP TABLE IF EXISTS msgs');
 
     connection.query("CREATE TABLE `users`\
     (`id` int(9) unsigned NOT NULL AUTO_INCREMENT,\
@@ -53,6 +62,13 @@ connection.connect(function (err) {
     (user_id int NOT NULL,\
     noti varchar(255),\
     viewed_status int)');
+
+    connection.query('CREATE TABLE msgs\
+    (id int NOT NULL AUTO_INCREMENT,\
+    user1_id int NOT NULL,\
+    user2_id int NOT NULL,\
+    msg varchar(1000),\
+    PRIMARY KEY (`id`))');
 
     console.log('Creating fake profiles...')
 
