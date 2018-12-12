@@ -2,6 +2,7 @@
   "name": "registration-setup",
   "version": "0.1.0",
   "private": true,
+  "proxy": "http://localhost:4000",
   "dependencies": {
     "ciqu-react-calendar": "^1.0.2",
     "react": "^16.6.3",

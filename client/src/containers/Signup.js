@@ -11,7 +11,7 @@ import Confirmation from "../containers/Confirmation";
 import Success from "../containers/Success";
 
 var fieldValues = {
-    user_name        : null,
+    user_name   : null,
     email       : null,
     password    : null,
     birthdate   : null,

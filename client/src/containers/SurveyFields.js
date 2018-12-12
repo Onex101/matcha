@@ -23,11 +23,35 @@ export default class SurveyFields extends Component {
         }
 
         this.props.saveValues(data)
+        this.props.addUserPost()
         this.props.nextStep()
+    }
+
+    addUserPost = _ => {
+        const {user} = this.props.fieldValues;
+        // fetch(`/products/add?name=${product.name}&price=${product.price}`)
+        // .then(response => response.json())
+        fetch(`/user/create`, {
+          method: "POST",
+          headers: {
+              "Content-Type": "application/json; charset=utf-8",
+          },
+          body: JSON.stringify({
+            // first_name: user.first_name,
+            // last_name: user.last_name,
+            user_name:  user.user_name,
+            email:      user.email,
+            password:   user.password,
+            birthdate:  user.birthdate,
+            gender:     user.gender,
+            pref:       user.pref
+          })
+        })
+        // .then(this.getUsers)
+        .catch(err => console.error(err))
     }
  
     render() {
-
         return (
             <div>
                 <ControlLabel>Your Preferences</ControlLabel>
