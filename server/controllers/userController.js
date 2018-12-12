@@ -55,14 +55,15 @@ exports.user_create_get = function(req, res) {
 
 // Handle User create on POST.
 exports.user_create_post = function(req, res) {
-    var new_user = new User(req.body);
-    new_user.save(function(err, results){
-        if (err)
-            res.send(err);
-        else
-            res.json(results);
-    })
-    // res.send('NOT IMPLEMENTED: User create POST');
+    console.log(req.body);
+    // var new_user = new User(req.body);
+    // new_user.save(function(err, results){
+    //     if (err)
+    //         res.send(err);
+    //     else
+    //         res.json(results);
+    // })
+    res.send('NOT IMPLEMENTED: User create POST');
 };
 
 // Display User delete form on GET.

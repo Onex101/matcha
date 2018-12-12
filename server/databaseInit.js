@@ -177,8 +177,14 @@ connection.connect(function (err) {
     connection.query('ALTER TABLE `users`\
     ADD COLUMN `bio` VARCHAR(255) AFTER password,\
     ADD COLUMN `fame` int(9) unsigned AFTER `pref`,\
+<<<<<<< HEAD
 	ADD COLUMN `online` int (2) AFTER `interests`\
 	ADD COLUMN `ver_code` int (2) AFTER `interests`');
+=======
+    ADD COLUMN `online` int (2) AFTER `interests`');
+
+    console.log('Creating Message table')
+>>>>>>> d10405cec7fa074eb5d19f5addc3c35f248a9763
 
     console.log('Sucess!');
     console.log('Exiting...');

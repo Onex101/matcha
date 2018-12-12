@@ -21,8 +21,8 @@ User.prototype.set = function (name, value) {
 }
 
 User.prototype.clean = function (data) {
-    data = data || {};
-    schema = schemas.user;
+	data = data || {};
+	var schema = schemas.user;
     return _.pick(_.defaults(data, schema), _.keys(schema)); 
 }
 
@@ -85,7 +85,7 @@ User.prototype.update = function (callback) {
     tmp = [this.data['first_name'], 
             this.data['last_name'], 
             this.data['user_name'],
-            this.data['age'],
+            this.data['birth_date'],
             this.data['gender'],
             this.data['pref'],
             this.data['gps_lat'],
@@ -101,7 +101,7 @@ User.prototype.update = function (callback) {
                 first_name = ?,
                 last_name = ?, 
                 user_name = ?,
-                age = ?,
+                birth_date = ?,
                 gender = ?,
                 pref = ?,
                 gps_lat = ?,
@@ -141,7 +141,7 @@ User.prototype.save = function (callback) {
                 first_name,
                 last_name, 
                 user_name,
-                age,
+                birth_date,
                 gender,
                 pref,
                 gps_lat,
@@ -156,7 +156,7 @@ User.prototype.save = function (callback) {
                 '${this.data['first_name']}',
                 '${this.data['last_name']}',
                 '${this.data['user_name']}',
-                '${this.data['age']}',
+                '${this.data['birth_date']}',
                 '${this.data['gender']}',
                 '${this.data['pref']}',
                 '${this.data['gps_lat']}',
@@ -202,7 +202,7 @@ User.prototype.login = function (callback){
 User.prototype.match = function (callback){
     console.log("ID " + this.data.id);
     let data = this.data;
-    db.query(`SELECT user_name, age, gender, pref, gps_lat, gps_lon, likes FROM users WHERE NOT id = ${this.data.id}`, function (err, results) {
+    db.query(`SELECT user_name, birth_date, gender, pref, gps_lat, gps_lon, likes FROM users WHERE NOT id = ${this.data.id}`, function (err, results) {
         if (err){
             callback(err, null);
         }
