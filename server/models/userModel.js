@@ -21,8 +21,8 @@ User.prototype.set = function (name, value) {
 }
 
 User.prototype.clean = function (data) {
-    data = data || {};
-    schema = schemas.user;
+	data = data || {};
+	var schema = schemas.user;
     return _.pick(_.defaults(data, schema), _.keys(schema)); 
 }
 
