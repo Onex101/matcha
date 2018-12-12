@@ -10,14 +10,14 @@ import SurveyFields from "../containers/SurveyFields";
 import Confirmation from "../containers/Confirmation";
 import Success from "../containers/Success";
 
-//To do birthdate->birth_date
+//To do birth_date->birth_date
 var fieldValues = {
     first_name   : null,
     last_name   : null,
     user_name   : null,
     email       : null,
     password    : null,
-    birthdate   : null,
+    birth_date   : null,
     gender      : null,
     pref        : null,
     gps_lat     : null,

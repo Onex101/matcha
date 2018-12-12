@@ -12,14 +12,14 @@ export default class AccountFields extends Component {
             user_name: props.fieldValues.user_name,
             password: props.fieldValues.password,
             email: props.fieldValues.email,
-            birthdate: props.fieldValues.birthdate
+            birth_date: props.fieldValues.birth_date
         }
         this.saveAndContinue = this.saveAndContinue.bind(this);
     }
 
     onChange = (value, inputValue) => {
         console.log(value.format('YYYY-MM-DD'))
-        this.setState({ birthdate: value })
+        this.setState({ birth_date: value })
     }
     onOpenChange = (status) => {
         console.log('open status: ' + status)
@@ -38,7 +38,7 @@ export default class AccountFields extends Component {
             user_name: this.state.user_name,
             password: this.state.password,
             email: this.state.email,
-            birthdate: this.state.birthdate
+            birth_date: this.state.birth_date
         }
 
         this.props.saveValues(data)
@@ -111,14 +111,14 @@ export default class AccountFields extends Component {
                         />
                     </FormGroup>
 
-                    <FormGroup controlId="birthdate" bsSize="large">
+                    <FormGroup controlId="birth_date" bsSize="large">
                         <ControlLabel>Birthdate</ControlLabel>
                         <div style={closedCal}>
                             <Calendar
                                 onChange={onChange}
                                 allowClear={true}
                                 disabled={false}
-                                defaultValue={this.props.fieldValues.birthdate}
+                                defaultValue={this.props.fieldValues.birth_date}
                                 format={'YYYY-MM-DD'}
                                 onOpenChange={onOpenChange}
                                 disabledDate={disabledDate}
