@@ -13,25 +13,22 @@ export default class SurveyFields extends Component {
         }
         this.submitStep = this.submitStep.bind(this);
         this.addUserPost = this.addUserPost.bind(this);
-        this.geoFindMe = this.geoFindMe.bind(this);
+        // this.geoFindMe = this.geoFindMe.bind(this);
     }
     
-    geoFindMe() {
-        var output = document.getElementById("out");
-      
+    geoFindMe = () => {     
         if (!navigator.geolocation){
           console.log("Geolocation is not supported by your browser");
-        //   output.innerHTML = "<p>Geolocation is not supported by your browser</p>";
           return;
         }
       
-        function success(position) {
+        const success = (position) => {
           var latitude  = position.coords.latitude;
           var longitude = position.coords.longitude;
       
           console.log("Latitude is " + latitude + "° Longitude is " + longitude + "°");
-          this.setState({gps_lat: latitude});
-          this.setState({gps_lon: longitude});
+        //   this.setState({gps_lat: latitude});
+        //   this.setState({gps_lon: longitude});
         }
       
         function error() {
@@ -42,8 +39,6 @@ export default class SurveyFields extends Component {
         console.log("Locating…");
         navigator.geolocation.getCurrentPosition(success, error);
     }
-
-    
 
     addUserPost() {
         const user = this.props.fieldValues;
@@ -60,11 +55,11 @@ export default class SurveyFields extends Component {
             user_name:  user.user_name,
             email:      user.email,
             password:   user.password,
-            birthdate:  user.birthdate,
+            birth_date:  user.birth_date,
             gender:     this.state.gender || '0.5',
             pref:       this.state.pref || '0.5',
-            gps_lat:    user.gps_lat,
-		    gps_lon:    user.gps_lon
+            gps_lat:    this.state.gps_lat,
+		    gps_lon:    this.state.gps_lon
           })
         })
         // .then(this.getUsers)
@@ -83,9 +78,7 @@ export default class SurveyFields extends Component {
         this.props.saveValues(data)
         this.addUserPost()
         this.props.nextStep()
-    }
-
-    
+	}
 
     componentWillMount() {
         this.geoFindMe()
