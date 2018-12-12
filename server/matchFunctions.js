@@ -46,7 +46,9 @@ Match.getD_coff = function (gps_lat1, gps_lon1, gps_lat2, gps_lon2) {
 
 
 //gives value betweer 0 and 1 to indicate how well two users match based on age
-Match.getA_coff = function (age1, age2){
+Match.getA_coff = function (birth_date1, birth_date2){
+  var age1 = getAge(birth_date1)
+  var age2 = getAge(birth_date2)
   var ageDiff = Math.abs(age1 - age2)
   //linear drop in coff
   return (1 - (ageDiff/100))
