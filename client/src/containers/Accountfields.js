@@ -11,6 +11,7 @@ export default class AccountFields extends Component {
             last_name: props.fieldValues.user_name,
             user_name: props.fieldValues.user_name,
             password: props.fieldValues.password,
+            confirmPassword: "",
             email: props.fieldValues.email,
             birth_date: props.fieldValues.birth_date
         }
@@ -46,13 +47,30 @@ export default class AccountFields extends Component {
     }
 
     validateForm(){
-        return (
-            this.state.email.length > 0 &&
-            this.state.password.length > 0 &&
-            this.state.password === this.state.confirmPassword
-        );
+        // if (this.state.email.length > 0) {
+            return (
+                // false
+                this.state.email != null &&
+                // this.state.email.length > 0 &&
+                this.state.password != null &&
+                // this.state.password.length > 0
+                this.state.first_name != null &&
+                this.state.last_name != null &&
+                this.state.user_name != null &&
+                this.state.birth_date != null &&
+                this.state.password === this.state.confirmPassword
+                // this.state.password === this.state.confirmPassword
+            );
+        // }
+        // else
+            // return (true);
     }
 
+    handleChange = event => {
+        this.setState({
+          [event.target.id]: event.target.value
+        });
+      }
     //Todo:
     // First Name, Last Name, UserName
     // Confirm Password
@@ -75,7 +93,8 @@ export default class AccountFields extends Component {
                         autoFocus
                         type="text"
                         defaultValue={this.props.fieldValues.first_name}
-                        onChange={({ target }) => this.setState({ first_name: target.value })}
+                        onChange={this.handleChange}
+                        // onChange={({ target }) => this.setState({ first_name: target.value })}
                     />
                 </FormGroup>
 
@@ -95,7 +114,8 @@ export default class AccountFields extends Component {
                             autoFocus
                             type="text"
                             defaultValue={this.props.fieldValues.user_name}
-                            onChange={({ target }) => this.setState({ user_name: target.value })}
+                            onChange={this.handleChange}
+                            // onChange={({ target }) => this.setState({ user_name: target.value })}
                         />
                     </FormGroup>
 
@@ -105,7 +125,19 @@ export default class AccountFields extends Component {
                             autoFocus
                             type="password"
                             defaultValue={this.props.fieldValues.password}
-                            onChange={({ target }) => this.setState({ password: target.value })}
+                            onChange={this.handleChange}
+                            // onChange={({ target }) => this.setState({ password: target.value })}
+                        />
+                    </FormGroup>
+
+                    <FormGroup controlId="confirmPassword" bsSize="large">
+                        <ControlLabel>Confirm Password</ControlLabel>
+                        <FormControl
+                            autoFocus
+                            type="password"
+                            defaultValue={this.props.fieldValues.confirmPassword}
+                            onChange={this.handleChange}
+                            // onChange={({ target }) => this.setState({ password: target.value })}
                         />
                     </FormGroup>
 
@@ -115,7 +147,8 @@ export default class AccountFields extends Component {
                             autoFocus
                             type="email"
                             defaultValue={this.props.fieldValues.email}
-                            onChange={({ target }) => this.setState({ email: target.value })}
+                            onChange={this.handleChange}
+                            // onChange={({ target }) => this.setState({ email: target.value })}
                         />
                     </FormGroup>
 

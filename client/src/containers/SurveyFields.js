@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { ButtonGroup, ButtonToolbar, Button, FormGroup, FormControl, ControlLabel } from "react-bootstrap";
+// require('../mail.js')
 
 export default class SurveyFields extends Component {
     constructor(props) {
