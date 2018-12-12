@@ -45,6 +45,14 @@ export default class AccountFields extends Component {
         this.props.nextStep()
     }
 
+    validateForm(){
+        return (
+            this.state.email.length > 0 &&
+            this.state.password.length > 0 &&
+            this.state.password === this.state.confirmPassword
+        );
+    }
+
     //Todo:
     // First Name, Last Name, UserName
     // Confirm Password
@@ -130,6 +138,7 @@ export default class AccountFields extends Component {
                         <ButtonGroup>
                             <Button
                                 bsSize="large"
+                                disabled={!this.validateForm()}
                                 onClick={this.saveAndContinue}
                             >
                                 Save &amp; Continue

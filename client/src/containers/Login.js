@@ -22,13 +22,39 @@ export default class Login extends Component {
     });
   }
 
+  addUserPost() {
+    const user = this.props.fieldValues;
+    // fetch(`/products/add?name=${product.name}&price=${product.price}`)
+    // .then(response => response.json())
+    fetch(`/user/create`, {
+      method: "POST",
+      headers: {
+          "Content-Type": "application/json; charset=utf-8",
+      },
+      body: JSON.stringify({
+        first_name: user.first_name,
+        last_name: user.last_name,
+        user_name:  user.user_name,
+        email:      user.email,
+        password:   user.password,
+        birth_date:  user.birth_date,
+        gender:     this.state.gender || '0.5',
+        pref:       this.state.pref || '0.5',
+        gps_lat:    this.state.gps_lat,
+    gps_lon:    this.state.gps_lon
+      })
+    })
+    // .then(this.getUsers)
+    .catch(err => console.error(err))
+  }
+
   handleSubmit = async event => {
     event.preventDefault();
   
     try {
       // await Auth.signIn(this.state.email, this.state.password);
       this.props.userHasAuthenticated(true);
-      // alert("Logged in");
+      alert("Logged in");
     } catch (e) {
       alert(e.message);
     }
