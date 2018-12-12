@@ -4,7 +4,7 @@ var schemas = {
 		first_name: null,
 		last_name: null,
 		user_name: null,
-		age: null,
+		birth_date: null,
 		gender: null,
 		pref: null,
 		gps_lat: null,

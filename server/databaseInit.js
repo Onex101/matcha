@@ -173,13 +173,13 @@ connection.connect(function (err) {
     ('98','maybelle20','c6e1e086c43ed6c7e8b64df1098639674e8f7c57','Desmond','Roberts','prunte@example.org','47','0.17','0.68','68.970','19.290','Error quos est ratione neque placeat et. Dolorem inventore harum et mollitia accusamus iste. Nostrum beatae optio odit sit. Nostrum neque sunt dolorum.'),\
     ('99','estel.stanton','aa0f960048302f6171b719bb97a9051634966302','Evert','Jacobs','umckenzie@example.com','79','0.93','0.00','-99.999','-54.162','Dignissimos autem magnam culpa quidem aperiam. Accusamus eveniet vitae et saepe.\nEaque sit quibusdam assumenda sit enim. Possimus autem amet dolor. Optio qui expedita dolor ullam.'),\
     ('100','cristian.botsford','a3ccbf161c1a2c25062bfe38e4384bb746b644bd','Madie','Volkman','schiller.ivah@example.com','118','0.72','0.98','-99.999','39.319','Voluptatem fugiat vero officiis nihil. Et architecto atque facere reiciendis voluptate facilis quibusdam. Quia dolores sint occaecati dolores. Aut beatae autem temporibus iure dolore recusandae.')");
-    
-    connection.query('ALTER TABLE `users`\
-    ADD COLUMN `bio` VARCHAR(255) AFTER password,\
-    ADD COLUMN `fame` int(9) unsigned AFTER `pref`,\
-    ADD COLUMN `online` int (2) AFTER `interests`');
 
-    console.log('Creating Message table')
+	connection.query('ALTER TABLE `users`\
+	ADD COLUMN `bio` VARCHAR(255) AFTER password,\
+	ADD COLUMN `fame` int(9) unsigned AFTER `pref`,\
+	ADD COLUMN `online` int (2) AFTER `interests`\
+	ADD COLUMN `ver_code` int (2) AFTER `interests`\
+	ADD COLUMN `verified` int (2) AFTER `ver_code`');
 
     console.log('Sucess!');
     console.log('Exiting...');
