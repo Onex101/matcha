@@ -1,12 +1,15 @@
 {
-  "name": "client",
+  "name": "registration-setup",
   "version": "0.1.0",
   "private": true,
-  "proxy": "http://localhost:4000",
   "dependencies": {
-    "@material-ui/core": "^3.5.1",
-    "react": "^16.6.1",
-    "react-dom": "^16.6.1",
+    "ciqu-react-calendar": "^1.0.2",
+    "react": "^16.6.3",
+    "react-bootstrap": "^0.32.4",
+    "react-dom": "^16.6.3",
+    "react-rangeslider": "^2.2.0",
+    "react-router-bootstrap": "^0.24.4",
+    "react-router-dom": "^4.3.1",
     "react-scripts": "2.1.1"
   },
   "scripts": {

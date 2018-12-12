@@ -1,83 +1,62 @@
-import React, { Component } from 'react';
-import './App.css';
+import React, { Component, Fragment } from "react";
+import { Link } from "react-router-dom";
+import { Nav, Navbar, NavItem } from "react-bootstrap";
+import "./App.css";
+import Routes from "./Routes";
+import { LinkContainer } from "react-router-bootstrap";
 
 class App extends Component {
+  constructor(props) {
+    super(props);
   
-  state = {
-    users: [],
-    user: {
-      user_name: 'user_name',
-      first_name: 'first_name',
-      last_name: 'last_name',
-      email: 'email@email.com',
-      password: 'password',
-    }
+    this.state = {
+      isAuthenticated: false
+    };
+  }
+  
+  userHasAuthenticated = authenticated => {
+    this.setState({ isAuthenticated: authenticated });
   }
 
-  componentDidMount() {
-    this.getUsers();
+  handleLogout = event => {
+    this.userHasAuthenticated(false);
   }
-
-  getUsers = _ => {
-    fetch('/users')
-      .then(response => response.json())
-        .then(response  => this.setState({ users: response.data}))
-          .catch(err => console.error(err))
-  }
-
-  addProductGet = _ => {
-    const {product} = this.state;
-    fetch(`/products/add?name=${product.name}&price=${product.price}`)
-      .then(this.getProducts)
-        .catch(err => console.error(err))
-  }
-
-  addUserPost = _ => {
-    const {user} = this.state;
-    // fetch(`/products/add?name=${product.name}&price=${product.price}`)
-    // .then(response => response.json())
-    fetch(`/user/create`, {
-      method: "POST",
-      headers: {
-          "Content-Type": "application/json; charset=utf-8",
-      },
-      body: JSON.stringify({
-        first_name: user.first_name,
-        last_name: user.last_name,
-        email: user.email,
-        password: user.password
-      })
-    })
-    .then(this.getUsers)
-    .catch(err => console.error(err))
-  }
-
-  renderUser = ({id, first_name, user_name, age}) => <div id = {id} >{user_name} - {first_name} {age}</div>
 
   render() {
-    const {users, user} = this.state;
-    console.log(users);
+    const childProps = {
+      isAuthenticated: this.state.isAuthenticated,
+      userHasAuthenticated: this.userHasAuthenticated
+    };
+    
     return (
-      <div className="App">
-          {users.map(this.renderUser)}
-        <div>
-          <input 
-            value = {user.first_name}
-            onChange = {e => this.setState({ user: {...user, first_name: e.target.value}})}/>
-          <input 
-            value = {user.last_name}
-            onChange = {e => this.setState({ user: {...user, last_name: e.target.value}})}/>
-          <input
-            value = {user.email}
-            onChange = {e => this.setState({ user: {...user, email: e.target.value}})}/>
-          <input
-            value = {user.password}
-            onChange = {e => this.setState({ user: {...user, password: e.target.value}})}/>
-          <button onClick={this.addUserPost}>Add user</button>
-        </div>
+      <div className="App container">
+        <Navbar fluid collapseOnSelect>
+          <Navbar.Header>
+            <Navbar.Brand>
+              <Link to="/">Matcha</Link>
+            </Navbar.Brand>
+            <Navbar.Toggle />
+          </Navbar.Header>
+          <Navbar.Collapse>
+            <Nav pullRight>
+              {this.state.isAuthenticated
+                ? <NavItem onClick={this.handleLogout}>Logout</NavItem>
+                : <Fragment>
+                    <LinkContainer to="/signup">
+                      <NavItem>Signup</NavItem>
+                    </LinkContainer>
+                    <LinkContainer to="/login">
+                      <NavItem>Login</NavItem>
+                    </LinkContainer>
+                  </Fragment>
+              }
+            </Nav>
+          </Navbar.Collapse>
+        </Navbar>
+        <Routes childProps={childProps} />
       </div>
     );
-  }
+  }  
 }
 
 export default App;
