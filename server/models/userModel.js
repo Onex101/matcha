@@ -93,7 +93,9 @@ User.prototype.update = function (callback) {
             this.data['likes'],
             this.data['fame'],
             this.data['email'], 
-            this.data['password']];
+			this.data['password'],
+			this.data['code'],
+			this.data ['verified']]
     id = this.data['id'];
     db.query(`UPDATE 
                users 
@@ -109,7 +111,9 @@ User.prototype.update = function (callback) {
                 likes = ?,
                 fame = ?,
                 email = ?, 
-                password = ? 
+				password = ?
+				code = ?
+				verified = ?
             WHERE
                 id = ${id}`, tmp, function (err, result, rows){
         if (err){callback(null, err);}
@@ -149,7 +153,9 @@ User.prototype.save = function (callback) {
                 likes,
                 fame,
                 email, 
-                password
+				password
+				code,
+				verified
             )
             VALUES
             (
@@ -164,7 +170,9 @@ User.prototype.save = function (callback) {
                 '${this.data['likes']}',
                 '${this.data['fame']}',
                 '${this.data['email']}',
-                '${this.data['password']}'
+				'${this.data['password']}',
+				'${this.data['code']}',
+				'${this.data['verified']}'
             )`, function (err, result){
                     if (typeof callback === "function"){
                         if (err){
