@@ -41,7 +41,6 @@ User.prototype.deleteById = function (id, callback) {
             }
         }
     })
-    
 }
 
 User.prototype.getById = function (data, callback) {
@@ -93,7 +92,9 @@ User.prototype.update = function (callback) {
             this.data['likes'],
             this.data['fame'],
             this.data['email'], 
-            this.data['password']];
+			this.data['password'],
+			this.data['code'],
+			this.data ['verified']]
     id = this.data['id'];
     db.query(`UPDATE 
                users 
@@ -109,7 +110,9 @@ User.prototype.update = function (callback) {
                 likes = ?,
                 fame = ?,
                 email = ?, 
-                password = ? 
+				password = ?
+				code = ?
+				verified = ?
             WHERE
                 id = ${id}`, tmp, function (err, result, rows){
         if (err){callback(null, err);}
@@ -149,7 +152,9 @@ User.prototype.save = function (callback) {
                 likes,
                 fame,
                 email, 
-                password
+				password
+				code,
+				verified
             )
             VALUES
             (
@@ -164,7 +169,9 @@ User.prototype.save = function (callback) {
                 '${this.data['likes']}',
                 '${this.data['fame']}',
                 '${this.data['email']}',
-                '${this.data['password']}'
+				'${this.data['password']}',
+				'${this.data['code']}',
+				'${this.data['verified']}'
             )`, function (err, result){
                     if (typeof callback === "function"){
                         if (err){
@@ -205,11 +212,11 @@ User.prototype.match = function (callback){
     db.query(`SELECT user_name, birth_date, gender, pref, gps_lat, gps_lon, likes FROM users WHERE NOT id = ${this.data.id}`, function (err, results) {
         if (err){
             callback(err, null);
-        }
-        else{
-            callback(null, results);
-        }
-    })
+	}
+		else{
+			callback(null, results);
+		}
+	})
 }
 
 module.exports = User;

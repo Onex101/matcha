@@ -27,8 +27,8 @@ export default class SurveyFields extends Component {
           var longitude = position.coords.longitude;
       
           console.log("Latitude is " + latitude + "° Longitude is " + longitude + "°");
-          this.setState({gps_lat: latitude});
-          this.setState({gps_lon: longitude});
+        //   this.setState({gps_lat: latitude});
+        //   this.setState({gps_lon: longitude});
         }
       
         function error() {
@@ -39,8 +39,6 @@ export default class SurveyFields extends Component {
         console.log("Locating…");
         navigator.geolocation.getCurrentPosition(success, error);
     }
-
-    
 
     addUserPost() {
         const user = this.props.fieldValues;
@@ -80,9 +78,7 @@ export default class SurveyFields extends Component {
         this.props.saveValues(data)
         this.addUserPost()
         this.props.nextStep()
-    }
-
-    
+	}
 
     componentWillMount() {
         this.geoFindMe()

@@ -12,7 +12,9 @@ var schemas = {
 		likes: null,
 		fame: null,
 		email: null,
-		password: null
+		password: null,
+		code: null,
+		verified: null
 	},
 	message: {
 		id: null,
