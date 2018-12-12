@@ -178,7 +178,7 @@ connection.connect(function (err) {
 	ADD COLUMN `bio` VARCHAR(255) AFTER password,\
 	ADD COLUMN `fame` int(9) unsigned AFTER `pref`,\
 	ADD COLUMN `online` int (2) AFTER `interests`,\
-	ADD COLUMN `ver_code` int (2) AFTER `interests`,\
+	ADD COLUMN `ver_code` VARCHAR(100) AFTER `interests`,\
 	ADD COLUMN `verified` int (2) AFTER `ver_code`');
 
     console.log('Sucess!');

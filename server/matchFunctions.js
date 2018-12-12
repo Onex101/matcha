@@ -63,8 +63,8 @@ Match.getP_coff = function (gender1, pref1, gender2, pref2){
 }
 
 Match.getL_coff = function (likes1, likes2){
-  var like_coff1 = likes1.replace(/\s/g,'').split("#")
-  var like_coff2 = likes2.replace(/\s/g,'').split("#")
+  var like_coff1 = likes1.replace(/\s/g,'#').split("#")
+  var like_coff2 = likes2.replace(/\s/g,'#').split("#")
   var count = 0;
   var match = 0;
   for (var val of like_coff1){
