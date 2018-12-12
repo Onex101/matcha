@@ -6,29 +6,15 @@ export default class SurveyFields extends Component {
         super(props);
 
         this.state = {
-            gender: "",
-            pref: ""
+            gender: props.fieldValues.gender,
+            pref: props.fieldValues.pref
         }
-        this.nextStep = this.nextStep.bind(this);
+        this.submitStep = this.submitStep.bind(this);
+        this.addUserPost = this.addUserPost.bind(this);
     }
 
-    // nextStep() {
-    nextStep(e) {
-        e.preventDefault()
-
-        //Get values via this.refs
-        var data = {
-            gender: this.state.gender,
-            pref: this.state.pref
-        }
-
-        this.props.saveValues(data)
-        this.props.addUserPost()
-        this.props.nextStep()
-    }
-
-    addUserPost = _ => {
-        const {user} = this.props.fieldValues;
+    addUserPost() {
+        const user = this.props.fieldValues;
         // fetch(`/products/add?name=${product.name}&price=${product.price}`)
         // .then(response => response.json())
         fetch(`/user/create`, {
@@ -37,18 +23,32 @@ export default class SurveyFields extends Component {
               "Content-Type": "application/json; charset=utf-8",
           },
           body: JSON.stringify({
-            // first_name: user.first_name,
-            // last_name: user.last_name,
+            first_name: user.first_name,
+            last_name: user.last_name,
             user_name:  user.user_name,
             email:      user.email,
             password:   user.password,
             birthdate:  user.birthdate,
-            gender:     user.gender,
-            pref:       user.pref
+            gender:     this.state.gender || '0.5',
+            pref:       this.state.pref || '0.5'
           })
         })
         // .then(this.getUsers)
         .catch(err => console.error(err))
+    }
+
+    submitStep(e) {
+        e.preventDefault()
+
+        //Get values via this.refs
+        var data = {
+            gender: this.state.gender || '0.5',
+            pref: this.state.pref || '0.5'
+        }
+
+        this.props.saveValues(data)
+        this.addUserPost()
+        this.props.nextStep()
     }
  
     render() {
@@ -93,7 +93,7 @@ export default class SurveyFields extends Component {
                         <ButtonGroup>
                             <Button
                                 bsSize="large"
-                                onClick={this.nextStep}
+                                onClick={this.submitStep}
                                 >
                                 Submit
                             </Button>
