@@ -10,6 +10,7 @@ import SurveyFields from "../containers/SurveyFields";
 import Confirmation from "../containers/Confirmation";
 import Success from "../containers/Success";
 
+//To do birthdate->birth_date
 var fieldValues = {
     first_name   : null,
     last_name   : null,
@@ -18,7 +19,9 @@ var fieldValues = {
     password    : null,
     birthdate   : null,
     gender      : null,
-    pref        : null
+    pref        : null,
+    gps_lat     : null,
+    gps_lon     : null,
 }
 
 export default class Signup extends Component {

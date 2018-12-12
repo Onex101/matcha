@@ -6,12 +6,44 @@ export default class SurveyFields extends Component {
         super(props);
 
         this.state = {
-            gender: props.fieldValues.gender,
-            pref: props.fieldValues.pref
+            gender      : props.fieldValues.gender,
+            pref        : props.fieldValues.pref,
+            gps_lat     : props.fieldValues.gps_lat,
+		    gps_lon     : props.fieldValues.gps_lon,
         }
         this.submitStep = this.submitStep.bind(this);
         this.addUserPost = this.addUserPost.bind(this);
+        this.geoFindMe = this.geoFindMe.bind(this);
     }
+    
+    geoFindMe() {
+        var output = document.getElementById("out");
+      
+        if (!navigator.geolocation){
+          console.log("Geolocation is not supported by your browser");
+        //   output.innerHTML = "<p>Geolocation is not supported by your browser</p>";
+          return;
+        }
+      
+        function success(position) {
+          var latitude  = position.coords.latitude;
+          var longitude = position.coords.longitude;
+      
+          console.log("Latitude is " + latitude + "° Longitude is " + longitude + "°");
+          this.setState({gps_lat: latitude});
+          this.setState({gps_lon: longitude});
+        }
+      
+        function error() {
+            console.log("Unable to retrieve your location");
+        //   output.innerHTML = "Unable to retrieve your location";
+        }
+      
+        console.log("Locating…");
+        navigator.geolocation.getCurrentPosition(success, error);
+    }
+
+    
 
     addUserPost() {
         const user = this.props.fieldValues;
@@ -30,7 +62,9 @@ export default class SurveyFields extends Component {
             password:   user.password,
             birthdate:  user.birthdate,
             gender:     this.state.gender || '0.5',
-            pref:       this.state.pref || '0.5'
+            pref:       this.state.pref || '0.5',
+            gps_lat:    user.gps_lat,
+		    gps_lon:    user.gps_lon
           })
         })
         // .then(this.getUsers)
@@ -49,6 +83,12 @@ export default class SurveyFields extends Component {
         this.props.saveValues(data)
         this.addUserPost()
         this.props.nextStep()
+    }
+
+    
+
+    componentWillMount() {
+        this.geoFindMe()
     }
  
     render() {
@@ -78,6 +118,8 @@ export default class SurveyFields extends Component {
                         onChange={({target}) => this.setState({pref: target.value})}
                         />
                     </FormGroup>
+
+
                     <ButtonToolbar>
                         <div className="btn -default pull-left">
                         <ButtonGroup>
