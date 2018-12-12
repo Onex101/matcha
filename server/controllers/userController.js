@@ -19,7 +19,7 @@ exports.user_list = function(req, res) {
     })
 };
 
-// Display detail page for a specific User.
+// Display detail pbirth_date for a specific User.
 exports.user_detail = function(req, res) {
     let user = new User('');
     user.getById(req.params.id, function(err, result){
@@ -33,7 +33,7 @@ exports.user_detail = function(req, res) {
                     first_name: row.first_name,
                     last_name: row.last_name,
                     user_name: row.user_name,
-                    age: row.age,
+                    birth_date: row.birth_date,
                     gender: row.gender,
                     pref: row.pref,
                     gps_lat: row.gps_lat,
@@ -119,7 +119,7 @@ exports.user_login_post = function(req, res) {
                         first_name: row.first_name,
                         last_name: row.last_name,
                         user_name: row.user_name,
-                        age: row.age,
+                        birth_date: row.birth_date,
                         gender: row.gender,
                         pref: row.pref,
                         gps_lat: row.gps_lat,
@@ -157,7 +157,7 @@ exports.user_login_get = function(req, res) {
 
 // Display User MATCHES on GET.
 exports.user_match_get = function(req, res) {
-    testData = {id: '4', user_name: 'brandon', first_name: 'Brandon',last_name: 'Feifer', email:'bran123456@hmail.com', age:'26', gender:'0.7', pref:'1', gps_lat:'-37.957',gps_lon:'19.517', likes:'#picnic#nature#photography'}
+    testData = {id: '4', user_name: 'brandon', first_name: 'Brandon',last_name: 'Feifer', email:'bran123456@hmail.com', birth_date:'26', gender:'0.7', pref:'1', gps_lat:'-37.957',gps_lon:'19.517', likes:'#picnic#nature#photography'}
     let user = new User(testData);
     var test = "Hi";
     // console.log(user);
@@ -179,24 +179,24 @@ exports.user_match_get = function(req, res) {
             var array = [];
             var i = 0;
             // console.log(results[0]);
-            // testData = {id: '4', user_name: 'brandon', first_name: 'Brandon',last_name: 'Feifer', email:'bran123456@hmail.com', age:'26', gender:'0.7', pref:'1', gps_lat:'-37.957',gps_lon:'19.517', likes:'#picnic#nature#photography'}
+            // testData = {id: '4', user_name: 'brandon', first_name: 'Brandon',last_name: 'Feifer', email:'bran123456@hmail.com', birth_date:'26', gender:'0.7', pref:'1', gps_lat:'-37.957',gps_lon:'19.517', likes:'#picnic#nature#photography'}
             // let user = new User(testData);
             while(results[i]){
                 // console.log(i);
                 dist = Match.getD_coff(user.data.gps_lat, user.data.gps_lon, results[i].gps_lat, results[i].gps_lon)
                 dist_raw = Match.getDistance(user.data.gps_lat, user.data.gps_lon, results[i].gps_lat, results[i].gps_lon)
-                age = Match.getA_coff(user.data.age, results[i].age)
+                birth_date = Match.getA_coff(user.data.birth_date, results[i].birth_date)
                 pref = Match.getP_coff(user.data.gender, user.data.pref, results[i].gender, results[i].pref)
                 like = Match.getL_coff(user.data.likes, results[i].likes)
-                var match =  (dist) +  (age) +  (5*pref) + (like)
+                var match =  (dist) +  (birth_date) +  (5*pref) + (like)
                 let new_data = results[i]
-                if(match > 4){
+                if(match > 4){ //4 is an arb number to exclude any matches that fall too far because of gender/pref differential
                     new_user = new User(new_data);
                     // console.log(new_user);
                     new_user.match = match;
                     new_user.like = like  * 100;
                     new_user.dist_raw = dist_raw;
-                    new_user.age_diff = Math.abs(new_user.age - results[i].age);
+                    new_user.birth_date_diff = Math.abs(new_user.birth_date - results[i].birth_date);
                     // console.log(new_user);
                     array.push(new_user);
                 }

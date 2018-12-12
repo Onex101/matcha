@@ -177,17 +177,8 @@ connection.connect(function (err) {
     connection.query('ALTER TABLE `users`\
     ADD COLUMN `bio` VARCHAR(255) AFTER password,\
     ADD COLUMN `fame` int(9) unsigned AFTER `pref`,\
-    ADD COLUMN `online` int (2) AFTER `interests`');
-
-    console.log('Creating Message table')
-
-    connection.query(`CREATE TABLE 'message' (
-      'id' int(11) NOT NULL AUTO_INCREMENT,
-      'user1_id' varchar(45) DEFAULT NULL,
-      'user2_id' varchar(45) DEFAULT NULL,
-      'message' text,
-      PRIMARY KEY ('id')
-    ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8`);
+	ADD COLUMN `online` int (2) AFTER `interests`\
+	ADD COLUMN `ver_code` int (2) AFTER `interests`');
 
     console.log('Sucess!');
     console.log('Exiting...');

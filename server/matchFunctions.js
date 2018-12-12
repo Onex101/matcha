@@ -25,6 +25,18 @@ Match.toRads = function (deg) {
   return (deg * Math.PI / 180);
 }
 
+//convert birthdate to age in years
+function getAge(dateString) {
+    var today = new Date();
+    var birthDate = new Date(dateString);
+    var age = today.getFullYear() - birthDate.getFullYear();
+    var m = today.getMonth() - birthDate.getMonth();
+    if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+        age--;
+    }
+    return age;
+}
+
 //calculates a value on how well 2 users match based on their GPS coordinates. return value is based on optimized simoidal curve
 Match.getD_coff = function (gps_lat1, gps_lon1, gps_lat2, gps_lon2) {
   var distance = this.getDistance(gps_lat1, gps_lon1, gps_lat2, gps_lon2)
