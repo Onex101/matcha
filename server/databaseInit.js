@@ -179,6 +179,8 @@ connection.connect(function (err) {
     ADD COLUMN `fame` int(9) unsigned AFTER `pref`,\
     ADD COLUMN `online` int (2) AFTER `interests`');
 
+    console.log('Creating Message table')
+
     console.log('Sucess!');
     console.log('Exiting...');
     connection.end();

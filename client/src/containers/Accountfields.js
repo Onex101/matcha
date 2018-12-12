@@ -7,10 +7,12 @@ export default class AccountFields extends Component {
         super(props);
 
         this.state = {
-            user_name: "",
-            password: "",
-            email: "",
-            birthdate: ""
+            first_name: props.fieldValues.user_name,
+            last_name: props.fieldValues.user_name,
+            user_name: props.fieldValues.user_name,
+            password: props.fieldValues.password,
+            email: props.fieldValues.email,
+            birthdate: props.fieldValues.birthdate
         }
         this.saveAndContinue = this.saveAndContinue.bind(this);
     }
@@ -31,6 +33,8 @@ export default class AccountFields extends Component {
 
         //Get values via this.refs
         var data = {
+            first_name: this.state.first_name,
+            last_name: this.state.last_name,
             user_name: this.state.user_name,
             password: this.state.password,
             email: this.state.email,
@@ -57,8 +61,28 @@ export default class AccountFields extends Component {
             <div>
                 <ControlLabel>Account Details</ControlLabel>
                 <ul className="form-fields">
+                <FormGroup controlId="first_name" bsSize="large">
+                    <ControlLabel>First Name</ControlLabel>
+                    <FormControl
+                        autoFocus
+                        type="text"
+                        defaultValue={this.props.fieldValues.first_name}
+                        onChange={({ target }) => this.setState({ first_name: target.value })}
+                    />
+                </FormGroup>
+
+                <FormGroup controlId="last_name" bsSize="large">
+                    <ControlLabel>Surname</ControlLabel>
+                    <FormControl
+                        autoFocus
+                        type="text"
+                        defaultValue={this.props.fieldValues.last_name}
+                        onChange={({ target }) => this.setState({ last_name: target.value })}
+                    />
+                </FormGroup>
+                    
                     <FormGroup controlId="user_name" bsSize="large">
-                        <ControlLabel>Name</ControlLabel>
+                        <ControlLabel>Userame</ControlLabel>
                         <FormControl
                             autoFocus
                             type="text"
