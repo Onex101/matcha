@@ -41,7 +41,6 @@ User.prototype.deleteById = function (id, callback) {
             }
         }
     })
-    
 }
 
 User.prototype.getById = function (data, callback) {
@@ -213,11 +212,11 @@ User.prototype.match = function (callback){
     db.query(`SELECT user_name, birth_date, gender, pref, gps_lat, gps_lon, likes FROM users WHERE NOT id = ${this.data.id}`, function (err, results) {
         if (err){
             callback(err, null);
-        }
-        else{
-            callback(null, results);
-        }
-    })
+	}
+		else{
+			callback(null, results);
+		}
+	})
 }
 
 module.exports = User;
