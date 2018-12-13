@@ -28,8 +28,8 @@ export default class SurveyFields extends Component {
           var longitude = position.coords.longitude;
       
           console.log("Latitude is " + latitude + "° Longitude is " + longitude + "°");
-        //   this.setState({gps_lat: latitude});
-        //   this.setState({gps_lon: longitude});
+          this.setState({gps_lat: latitude});
+          this.setState({gps_lon: longitude});
         }
       
         function error() {
