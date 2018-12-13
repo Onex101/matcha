@@ -1,5 +1,4 @@
 var nodemailer = require('nodemailer');
-var db = require("db.js");
 const bcrypt = require('bcrypt');
 
 function sendVeriCode(user_name, email){
@@ -25,7 +24,8 @@ function sendVeriCode(user_name, email){
         } else {
             console.log('Email sent: ' + info.response);
         }
-    });
+	});
+	return (vericode); 
 }
 
 function encrypt(user_name) {

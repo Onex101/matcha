@@ -44,5 +44,8 @@ router.get('/user/:id/match', user_controller.user_match_get);
 // POST request for mtached users against userID
 router.post('/user/:id/match', user_controller.user_match_post);
 
+// POST request for checking if a user exists
+router.post('/signup', user_controller.user_exists);
+
 
 module.exports = router;

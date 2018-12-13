@@ -19,7 +19,7 @@ exports.user_list = function(req, res) {
     })
 };
 
-// Display detail pbirth_date for a specific User.
+// Display detail for a specific User.
 exports.user_detail = function(req, res) {
     let user = new User('');
     user.getById(req.params.id, function(err, result){
@@ -46,6 +46,25 @@ exports.user_detail = function(req, res) {
         }
     })
     // res.send('NOT IMPLEMENTED: User detail: ' + req.params.id);
+};
+
+// Check if a user exists based on username and email.
+exports.user_exists = function(req, res) {
+	let user = new User(req.body);
+	user.exists(function(err, result){
+		if (err)
+			res.send(err);
+		else{
+			row = result[0];
+            if (row.user_name)
+				res.send("exists: user_name");
+			else if (row.email)
+				res.send("exists: email");
+			else
+				res.send("exists: null");
+		}
+	})
+	// res.send('NOT IMPLEMENTED: User detail: ' + req.params.id);
 };
 
 // Display User create form on GET.
@@ -93,12 +112,12 @@ exports.user_delete_post = function(req, res) {
 
 // Display User update form on GET.
 exports.user_update_get = function(req, res) {
-    res.send('NOT IMPLEMENTED: User update GET');
+	res.send('NOT IMPLEMENTED: User update GET');
 };
 
 // Handle User update on POST.
 exports.user_update_post = function(req, res) {
-    res.send('NOT IMPLEMENTED: User update POST');
+	res.send('NOT IMPLEMENTED: User update POST');
 };
 
 // Verify User
@@ -153,14 +172,13 @@ exports.user_login_post = function(req, res) {
 };
 
 exports.user_login_get = function(req, res) {
-     res.send('NOT IMPLEMENTED: User verify GET');
+	res.send('NOT IMPLEMENTED: User verify GET');
 };
 
 // Display User MATCHES on GET.
 exports.user_match_get = function(req, res) {
     testData = {id: '4', user_name: 'brandon', first_name: 'Brandon',last_name: 'Feifer', email:'bran123456@hmail.com', birth_date:'26', gender:'0.7', pref:'1', gps_lat:'-37.957',gps_lon:'19.517', likes:'#picnic#nature#photography'}
     let user = new User(testData);
-    var test = "Hi";
     // console.log(user);
     // console.log(user.data.gps_lat);
     if (!user.data.id)

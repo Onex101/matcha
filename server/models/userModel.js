@@ -3,6 +3,7 @@ var db = require("../db.js");
 var schemas = require("../schemas.js");
 var _ = require("lodash");
 var mysql = require('mysql');
+var mail = require('../mail.js');
 
 const SELECT_ALL_USERS_QUERY = 'SELECT * FROM users';
 
@@ -93,7 +94,7 @@ User.prototype.update = function (callback) {
             this.data['fame'],
             this.data['email'], 
 			this.data['password'],
-			this.data['code'],
+			this.data['veri_code'],
 			this.data ['verified']]
     id = this.data['id'];
     db.query(`UPDATE 
@@ -111,7 +112,7 @@ User.prototype.update = function (callback) {
                 fame = ?,
                 email = ?, 
 				password = ?
-				code = ?
+				veri_code = ?
 				verified = ?
             WHERE
                 id = ${id}`, tmp, function (err, result, rows){
@@ -153,7 +154,7 @@ User.prototype.save = function (callback) {
                 fame,
                 email, 
 				password
-				code,
+				veri_code,
 				verified
             )
             VALUES
@@ -170,7 +171,7 @@ User.prototype.save = function (callback) {
                 '${this.data['fame']}',
                 '${this.data['email']}',
 				'${this.data['password']}',
-				'${this.data['code']}',
+				'${this.data['veri_code']}',
 				'${this.data['verified']}'
             )`, function (err, result){
                     if (typeof callback === "function"){
@@ -178,6 +179,7 @@ User.prototype.save = function (callback) {
                             callback(err, null);
                         }
                         else{
+							self.datasendVeriCode(user_name, email);
                             self.data['id'] = result.insertId;
                             callback(null, result);
                         }
@@ -213,6 +215,17 @@ User.prototype.match = function (callback){
         if (err){
             callback(err, null);
 	}
+		else{
+			callback(null, results);
+		}
+	})
+}
+
+User.prototype.exists = function (callback){
+	db.query(`SELECT user_name, email FROM users WHERE user_name = ${this.data.user_name} OR email = ${this.data.email}`, function (err, results) {
+		if (err){
+			callback(err, null);
+		}
 		else{
 			callback(null, results);
 		}
