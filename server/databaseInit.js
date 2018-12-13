@@ -39,7 +39,7 @@ connection.connect(function (err) {
     `pref` decimal(3,2) unsigned NOT NULL,\
     `gps_lon` decimal(5,3) NOT NULL,\
     `gps_lat` decimal(5,3) NOT NULL,\
-    `interests` tinytext NOT NULL,\
+    `likes` tinytext NOT NULL,\
     PRIMARY KEY (`id`))\
     ENGINE=InnoDB AUTO_INCREMENT=101 DEFAULT CHARSET=utf8;");
 
@@ -177,10 +177,10 @@ connection.connect(function (err) {
 
 	connection.query('ALTER TABLE `users`\
 	ADD COLUMN `bio` VARCHAR(255) AFTER password,\
-	ADD COLUMN `fame` int(9) unsigned AFTER `pref`,\
-	ADD COLUMN `online` int (2) AFTER `interests`,\
-	ADD COLUMN `ver_code` VARCHAR(100) AFTER `interests`,\
-	ADD COLUMN `verified` int (2) AFTER `ver_code`');
+	ADD COLUMN `fame` int(9) unsigned NULL AFTER `pref`,\
+	ADD COLUMN `online` int (2) AFTER `likes`,\
+	ADD COLUMN `veri_code` VARCHAR(100) AFTER `likes`,\
+	ADD COLUMN `verified` int (2) NULL AFTER `veri_code`');
 
     console.log('Sucess!');
     console.log('Exiting...');
