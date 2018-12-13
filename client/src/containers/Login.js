@@ -7,7 +7,7 @@ export default class Login extends Component {
     super(props);
 
     this.state = {
-      email: "",
+      user_name: "",
       password: ""
     };
   }
@@ -23,7 +23,21 @@ export default class Login extends Component {
   }
 
   loginPost() {
-    
+    const user = this.state;
+    // fetch(`/products/add?name=${product.name}&price=${product.price}`)
+    // .then(response => response.json())
+    fetch(`/user/create`, {
+      method: "POST",
+      headers: {
+          "Content-Type": "application/json; charset=utf-8",
+      },
+      body: JSON.stringify({
+        user_name:  user.user_name,
+        password:   user.password,
+      })
+    })
+    // .then(this.getUsers)
+    .catch(err => console.error(err))    
   }
 
   handleSubmit = async event => {
@@ -43,11 +57,11 @@ export default class Login extends Component {
       <div className="Login">
         <form onSubmit={this.handleSubmit}>
           <FormGroup controlId="email" bsSize="large">
-            <ControlLabel>Email</ControlLabel>
+            <ControlLabel>Username</ControlLabel>
             <FormControl
               autoFocus
-              type="email"
-              value={this.state.email}
+              type="text"
+              value={this.state.user_name}
               onChange={this.handleChange}
             />
           </FormGroup>

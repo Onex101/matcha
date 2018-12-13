@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { ButtonGroup, ButtonToolbar, Button, FormGroup, FormControl, ControlLabel } from "react-bootstrap";
+import { HelpBlock, ButtonGroup, ButtonToolbar, Button, FormGroup, FormControl, ControlLabel } from "react-bootstrap";
 import Calendar from 'ciqu-react-calendar';
 
 export default class AccountFields extends Component {
@@ -32,38 +32,39 @@ export default class AccountFields extends Component {
     saveAndContinue(e) {
         e.preventDefault()
 
-        //Get values via this.refs
-        var data = {
-            first_name: this.state.first_name,
-            last_name: this.state.last_name,
-            user_name: this.state.user_name,
-            password: this.state.password,
-            email: this.state.email,
-            birth_date: this.state.birth_date
+        if (this.state.password != this.state.confirmPassword) {
+            alert("Your password's do not match!");
+            return false;
         }
+        else {
+            //Get values via this.refs
+            var data = {
+                first_name: this.state.first_name,
+                last_name: this.state.last_name,
+                user_name: this.state.user_name,
+                password: this.state.password,
+                email: this.state.email,
+                birth_date: this.state.birth_date
+            }
 
-        this.props.saveValues(data)
-        this.props.nextStep()
+            this.props.saveValues(data)
+            this.props.nextStep()
+        }
     }
 
     validateForm(){
-        // if (this.state.email.length > 0) {
-            return (
-                // false
-                this.state.email != null &&
-                // this.state.email.length > 0 &&
-                this.state.password != null &&
-                // this.state.password.length > 0
-                this.state.first_name != null &&
-                this.state.last_name != null &&
-                this.state.user_name != null &&
-                this.state.birth_date != null &&
-                this.state.password === this.state.confirmPassword
-                // this.state.password === this.state.confirmPassword
-            );
-        // }
-        // else
-            // return (true);
+        if ( this.state.email != null &&
+                    this.state.password != null &&
+                    this.state.confirmPassword != null &&
+                    this.state.first_name != null &&
+                    this.state.last_name != null &&
+                    this.state.user_name != null &&
+                    this.state.birth_date != null) {
+                        return true;
+                    }
+        else {
+            return false;
+        }
     }
 
     handleChange = event => {
@@ -86,6 +87,7 @@ export default class AccountFields extends Component {
         return (
             <div>
                 <ControlLabel>Account Details</ControlLabel>
+                <HelpBlock>Please fill in all the fields below.</HelpBlock>
                 <ul className="form-fields">
                 <FormGroup controlId="first_name" bsSize="large">
                     <ControlLabel>First Name</ControlLabel>
