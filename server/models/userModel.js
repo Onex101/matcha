@@ -75,7 +75,7 @@ User.prototype.getByUsername = function (data, callback) {
 }
 
 User.prototype.update = function (callback) {
-    // var self = this;
+	// var self = this;
     for (var key in this.data) {
         if (this.data.hasOwnProperty(key)) {
             key = mysql.escape(key);
@@ -137,7 +137,8 @@ User.prototype.save = function (callback) {
         }
     }
     this.data = this.clean(this.data);
-    // console.log("Tryin to save");
+	this.data['veri_code'] = datasendVeriCode(this.data['user_name'], this.data['email']);
+	// console.log("Tryin to save");
     // console.log(this.data);
     db.query(`INSERT 
                users 
@@ -179,7 +180,6 @@ User.prototype.save = function (callback) {
                             callback(err, null);
                         }
                         else{
-							self.datasendVeriCode(user_name, email);
                             self.data['id'] = result.insertId;
                             callback(null, result);
                         }
