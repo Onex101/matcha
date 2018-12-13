@@ -48,7 +48,7 @@ export default class AccountFields extends Component {
             .then(response => response.json())
             .then((responseJSON) => {
                 if (responseJSON["exists"]) {
-                    if (responseJSON["exists"] === null) {
+                    if (responseJSON["exists"] === "null") {
                         if (this.state.password !== this.state.confirmPassword) {
                             alert("Your password's do not match!");
                             return false;
