@@ -177,17 +177,10 @@ connection.connect(function (err) {
 
 	connection.query('ALTER TABLE `users`\
 	ADD COLUMN `bio` VARCHAR(255) AFTER password,\
-<<<<<<< HEAD
-	ADD COLUMN `fame` int(9) unsigned DEFAULT (0) AFTER `pref`,\
-	ADD COLUMN `online` int (2) AFTER `interests`,\
-	ADD COLUMN `ver_code` VARCHAR(100) AFTER `interests`,\
-	ADD COLUMN `verified` int (2) DEFAULT (0) AFTER `ver_code`');
-=======
-	ADD COLUMN `fame` int(9) unsigned AFTER `pref`,\
+	ADD COLUMN `fame` int(9) unsigned NULL AFTER `pref`,\
 	ADD COLUMN `online` int (2) AFTER `likes`,\
 	ADD COLUMN `veri_code` VARCHAR(100) AFTER `likes`,\
-	ADD COLUMN `verified` int (2) AFTER `veri_code`');
->>>>>>> d56bb60b45d679fc46a39910a265c843f7c19f67
+	ADD COLUMN `verified` int (2) NULL AFTER `veri_code`');
 
     console.log('Sucess!');
     console.log('Exiting...');
