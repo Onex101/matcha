@@ -13,7 +13,7 @@ var schemas = {
 		fame: null,
 		email: null,
 		password: null,
-		code: null,
+		veri_code: null,
 		verified: null
 	},
 	message: {
