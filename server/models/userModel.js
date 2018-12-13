@@ -137,7 +137,6 @@ User.prototype.save = function (callback) {
         }
     }
     this.data = this.clean(this.data);
-	this.data['veri_code'] = datasendVeriCode(this.data['user_name'], this.data['email']);
 	// console.log("Tryin to save");
     // console.log(this.data);
     db.query(`INSERT 
@@ -154,7 +153,7 @@ User.prototype.save = function (callback) {
                 likes,
                 fame,
                 email, 
-				password
+				password,
 				veri_code,
 				verified
             )
@@ -177,6 +176,7 @@ User.prototype.save = function (callback) {
             )`, function (err, result){
                     if (typeof callback === "function"){
                         if (err){
+							throw err;
                             callback(err, null);
                         }
                         else{
@@ -225,7 +225,7 @@ User.prototype.exists = function (callback){
     console.log(this.data);
 	db.query(`SELECT user_name, email FROM users WHERE user_name = '${this.data.user_name}' OR email = '${this.data.email}'`, function (err, results) {
 		if (err){
-            throw err;
+			throw err;
 			callback(err, null);
 		}
 		else{

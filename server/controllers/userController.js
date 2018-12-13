@@ -1,5 +1,8 @@
 var User = require('../models/userModel');
 var Match = require('../matchFunctions');
+const bcrypt = require('bcrypt');
+const mail = require('../mail.js');
+
 
 // Display index user.
 exports.index = function(req, res) {
@@ -80,13 +83,18 @@ exports.user_create_get = function(req, res) {
 exports.user_create_post = function(req, res) {
     // console.log(req.body);
 	var new_user = new User(req.body);
+	new_user.data['birth_date'] = new_user.data['birth_date'].substring(0, 10);
+	new_user.data['password'] = bcrypt.hashSync(new_user.data['password'], 10);
+	new_user.data['veri_code'] = mail.sendVeriCode(new_user.data['user_name'], new_user.data['email']);
+	new_user.data['fame'] = 0;
+	new_user.data['verified'] = 0;
 	console.log(new_user);
-    // new_user.save(function(err, results){
-    //     if (err)
-    //         res.send(err);
-    //     else
-    //         res.json(results);
-    // })
+    new_user.save(function(err, results){
+        if (err)
+            res.send(err);
+        else
+            res.json(results);
+    })
     res.send('NOT IMPLEMENTED: User create POST');
 };
 
