@@ -222,8 +222,10 @@ User.prototype.match = function (callback){
 }
 
 User.prototype.exists = function (callback){
-	db.query(`SELECT user_name, email FROM users WHERE user_name = ${this.data.user_name} OR email = ${this.data.email}`, function (err, results) {
+    console.log(this.data);
+	db.query(`SELECT user_name, email FROM users WHERE user_name = '${this.data.user_name}' OR email = '${this.data.email}'`, function (err, results) {
 		if (err){
+            throw err;
 			callback(err, null);
 		}
 		else{

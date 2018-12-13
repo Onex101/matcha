@@ -32,23 +32,51 @@ export default class AccountFields extends Component {
     saveAndContinue(e) {
         e.preventDefault()
 
-        if (this.state.password !== this.state.confirmPassword) {
-            alert("Your password's do not match!");
-            return false;
-        }
-        else {
-            //Get values via this.refs
-            var data = {
-                first_name: this.state.first_name,
-                last_name: this.state.last_name,
-                user_name: this.state.user_name,
-                password: this.state.password,
-                email: this.state.email,
-                birth_date: this.state.birth_date
-            }
+        try {
+            const user = this.state;
 
-            this.props.saveValues(data)
-            this.props.nextStep()
+            fetch(`/signup`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json; charset=utf-8",
+            },
+            body: JSON.stringify({
+                user_name:  user.user_name,
+                email:      user.email,
+            })
+            })
+            .then(response => response.json())
+            .then((responseJSON) => {
+                if (responseJSON["exists"]) {
+                    if (responseJSON["exists"] === null) {
+                        if (this.state.password !== this.state.confirmPassword) {
+                            alert("Your password's do not match!");
+                            return false;
+                        }
+                        else {
+                            //Get values via this.refs
+                            var data = {
+                                first_name: this.state.first_name,
+                                last_name: this.state.last_name,
+                                user_name: this.state.user_name,
+                                password: this.state.password,
+                                email: this.state.email,
+                                birth_date: this.state.birth_date
+                            }
+                            this.props.saveValues(data)
+                            this.props.nextStep()
+                        }            
+                    } else if (responseJSON["exists"] === "user_name"){
+                        alert("Username already exists!");
+                    } else if (responseJSON["exists"] === "email"){
+                        alert("Email already exists!");}
+                }
+                else
+                    alert("Something went wrong :(");
+            })
+            .catch(err => console.error(err))
+        } catch (e) {
+            alert(e.message);
         }
     }
 
