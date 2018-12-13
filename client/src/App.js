@@ -21,8 +21,13 @@ class App extends Component {
 
   setUser = user => {
     this.setState({ userInfo: user });
-    console.log(user.data);
-    console.log(user.data.user_name);
+    window.localStorage.setItem('user', user.data.user_name);
+    // window.localStorage.setItem('user', "Test");
+    console.log("User_data = " + user.data);
+    console.log("User_data = " + user.data.user_name);
+    console.log("User_data = " + user.data.email);
+    const test = window.localStorage.getItem('user');
+    console.log("Test = " + test);
   }
 
   handleLogout = event => {
@@ -36,6 +41,7 @@ class App extends Component {
       userInfo                  : this.state.userInfo,
       setUser               : this.setUser
     };
+    const user = this.state.userInfo;
     
     return (
       <div className="App container">
@@ -52,8 +58,15 @@ class App extends Component {
                 // ? <NavItem onClick={this.handleLogout}>Logout</NavItem>
                 ? <Fragment>
                     <LinkContainer to="/signup">
-                      <NavItem>{this.state.user.data.user_name}</NavItem>
+                      {/* <NavItem>{render(window.localStorage.getItem('user'))}</NavItem> */}
+                      {/* <NavItem>{function MyComponent ({ name }) {
+                        return <div className='message-box'>
+                          Hello {window.localStorage.getItem('user')}
+                        </div>
+                      }}</NavItem> */}
                       <NavItem>Username</NavItem>
+                      
+                      <NavItem>{console.log(user)}</NavItem>
                     </LinkContainer>
                     {/* <LinkContainer to="/login"> */}
                     <NavItem onClick={this.handleLogout}>Logout</NavItem>
