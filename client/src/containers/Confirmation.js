@@ -45,6 +45,58 @@ export default class Confirmation extends Component {
         event.preventDefault();
 
         this.setState({ isLoading: true });
+        // 
+        const user = this.state;
+        fetch(`/login`, {
+          method: "POST",
+          headers: {
+              "Content-Type": "application/json; charset=utf-8",
+          },
+          body: JSON.stringify({
+            user_name           : user.user_name,
+            confirmationCode    : user.confirmationCode,
+          })
+        })
+        .then(result => {
+          console.log(result);
+        })
+        .catch(err => console.error(err))
+      }
+    
+      handleSubmit = async event => {
+        event.preventDefault();
+      
+        try {
+          const user = this.state;
+          fetch(`/login`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json; charset=utf-8",
+            },
+            body: JSON.stringify({
+              user_name:  user.user_name,
+              password:   user.password,
+            })
+          })
+          .then(response => response.json())
+          .then((responseJSON) => {
+              console.log(responseJSON);
+              // console.log(responseJSON);
+              if (responseJSON["success"]) {
+                if (responseJSON["success"] === "login sucessfull") {
+                  //Do the success things
+                } else if (responseJSON["success"] === "Email and password does not match"){
+                  alert("Invalid Confirmation Code!");
+                } 
+              }
+              else
+              alert("Something went wrong :(");
+          })
+          .catch(err => console.error(err))
+          } catch (e) {
+            alert(e.message);
+          }
+        // 
     }
 
     render() {
@@ -75,17 +127,16 @@ export default class Confirmation extends Component {
 
                 {/* Temporary for test */}
                 <ButtonToolbar>
-                        <ButtonGroup>
-                            <Button
-                                bsSize="large"
-                                onClick={this.props.previousStep}
-                                >
-                                Back
-                            </Button>
-                        </ButtonGroup>
-                       
-                    </ButtonToolbar>
-                    </form>
+                    <ButtonGroup>
+                        <Button
+                            bsSize="large"
+                            onClick={this.props.previousStep}
+                            >
+                            Back
+                        </Button>
+                    </ButtonGroup>
+                </ButtonToolbar>
+                </form>
         </div>
         )
     }

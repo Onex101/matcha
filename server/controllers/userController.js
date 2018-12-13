@@ -85,17 +85,21 @@ exports.user_create_post = function(req, res) {
 	var new_user = new User(req.body);
 	new_user.data['birth_date'] = new_user.data['birth_date'].substring(0, 10);
 	new_user.data['password'] = bcrypt.hashSync(new_user.data['password'], 10);
-	new_user.data['veri_code'] = mail.sendVeriCode(new_user.data['user_name'], new_user.data['email']);
 	new_user.data['fame'] = 0;
 	new_user.data['verified'] = 0;
+	new_user.data['veri_code'] = mail.sendVeriCode(new_user.data['user_name'], new_user.data['email']);
 	console.log(new_user);
-    new_user.save(function(err, results){
-        if (err)
-            res.send(err);
-        else
-            res.json(results);
-    })
-    res.send('NOT IMPLEMENTED: User create POST');
+	new_user.save(function(err, results){
+		if (err){
+			// throw err;
+			res.send(err);
+			return;
+		}else{
+			res.send(results);
+			res.end();
+		}
+	})
+    // res.send('NOT IMPLEMENTED: User create POST');
 };
 
 // Display User delete form on GET.
@@ -247,3 +251,24 @@ exports.user_match_get = function(req, res) {
 exports.user_match_post = function(req, res) {
     res.send('NOT IMPLEMENTED: User match POST');
 };
+
+// Verify user
+exports.user_verify = function(req, res){
+	let user = new User('');
+	user.getByUsername(req.body['user_name'], function(err, results){
+		if (err){
+			res.send(err)
+		}
+		else{
+			bcrypt.compare(req.body['password'], user.data[password], function(err, result){
+				if (err){
+					res.send(err)
+				}
+				else{
+					console.log(result);
+					res.send(result);
+				}
+			})
+		}
+	})
+}
