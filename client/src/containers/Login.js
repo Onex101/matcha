@@ -75,9 +75,9 @@ export default class Login extends Component {
           alert("Something went wrong :(");
       })
       .catch(err => console.error(err))
-    } catch (e) {
-      alert(e.message);
-    }
+      } catch (e) {
+        alert(e.message);
+      }
   }
 
   render() {

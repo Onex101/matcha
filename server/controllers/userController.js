@@ -52,16 +52,17 @@ exports.user_detail = function(req, res) {
 exports.user_exists = function(req, res) {
 	let user = new User(req.body);
 	user.exists(function(err, result){
-		if (err)
-			res.send(err);
+		if (err) {
+            res.send(err);
+        }
 		else{
-			row = result[0];
-            if (row.user_name)
-				res.send("exists: user_name");
-			else if (row.email)
-				res.send("exists: email");
+            row = result[0];
+            if (row["user_name"] === user.data.user_name)
+				res.json({exists: 'user_name'});
+			else if (row["email"] === user.data.email)
+				res.json({exists: 'email'});
 			else
-				res.send("exists: null");
+				res.json({exists: 'null'});
 		}
 	})
 	// res.send('NOT IMPLEMENTED: User detail: ' + req.params.id);
