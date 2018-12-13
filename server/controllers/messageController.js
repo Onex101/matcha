@@ -10,11 +10,11 @@ exports.msg_send_post = function(req, res) {
 			return res.send(err)
 		else
 			return res.json({
-				data: results
+				results
 			})
 	})
 }
 
 exports.msg_rec_get = function(req, res) {
-    
+	
 }
