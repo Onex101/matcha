@@ -251,3 +251,24 @@ exports.user_match_get = function(req, res) {
 exports.user_match_post = function(req, res) {
     res.send('NOT IMPLEMENTED: User match POST');
 };
+
+// Verify user
+exports.user_verify = function(req, res){
+	let user = new User('');
+	user.getByUsername(req.body['user_name'], function(err, results){
+		if (err){
+			res.send(err)
+		}
+		else{
+			bcrypt.compare(req.body['password'], user.data[password], function(err, result){
+				if (err){
+					res.send(err)
+				}
+				else{
+					console.log(result);
+					res.send(result);
+				}
+			})
+		}
+	})
+}
