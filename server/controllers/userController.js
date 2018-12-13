@@ -78,8 +78,9 @@ exports.user_create_get = function(req, res) {
 
 // Handle User create on POST.
 exports.user_create_post = function(req, res) {
-    console.log(req.body);
-    // var new_user = new User(req.body);
+    // console.log(req.body);
+	var new_user = new User(req.body);
+	console.log(new_user);
     // new_user.save(function(err, results){
     //     if (err)
     //         res.send(err);
