@@ -1,7 +1,7 @@
 var nodemailer = require('nodemailer');
 const bcrypt = require('bcrypt');
 
-exports.sendVeriCode = function(user_name, email){
+exports.sendVeriCode = function(user_name, email, callback){
 
     var vericode = (this.encrypt(user_name));
     var transporter = nodemailer.createTransport({
@@ -22,7 +22,8 @@ exports.sendVeriCode = function(user_name, email){
         if (error) {
             console.log(error);
         } else {
-            console.log('Email sent: ' + info.response);
+			console.log('Email sent: ' + info.response);
+			callback();
         }
 	});
 	return (vericode); 
