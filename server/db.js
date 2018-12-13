@@ -5,7 +5,6 @@ const connection = mysql.createConnection({
     user: 'root',
     password: 'admin',
     database: 'matcha_db',
-
 })
 
 // connection.get = function () {
