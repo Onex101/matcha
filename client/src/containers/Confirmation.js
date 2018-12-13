@@ -68,7 +68,7 @@ export default class Confirmation extends Component {
       
         try {
           const user = this.state;
-          fetch(`/login`, {
+          fetch(`/signup`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json; charset=utf-8",
