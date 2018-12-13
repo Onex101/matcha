@@ -112,8 +112,8 @@ exports.user_login_post = function(req, res) {
             })
         }else{
             if(results.length > 0){
-                if(results[0].password == password){ //need to use hash still
-                    row = result[0];
+                if(results[0].password == user.data.password){ //need to use hash still
+                    row = results[0];
                     if (row)
                     user.data = {
                         id: row.id,
@@ -130,21 +130,21 @@ exports.user_login_post = function(req, res) {
                         email: row.email,
                         password: row.password
                     }
-                    res.status(200);
+                    // res.status(200);
                     res.json({
                         user,
                         "success":"login sucessfull"
                     });
                 }else{
-                    res.status(204);
+                    // res.status(204);
                     res.send({
-                        "success":"Email and password does not match"
+                        "success":"Username and password does not match"
                     });
                 }
             }else{
-                res.status(204);
+                // res.status(204);
                 res.send({
-                    "success":"Email does not exist"
+                    "success":"Username does not exist"
                 });
             }
         }

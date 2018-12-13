@@ -10,12 +10,19 @@ class App extends Component {
     super(props);
   
     this.state = {
-      isAuthenticated: false
+      isAuthenticated   : false,
+      userInfo              : null
     };
   }
   
   userHasAuthenticated = authenticated => {
     this.setState({ isAuthenticated: authenticated });
+  }
+
+  setUser = user => {
+    this.setState({ userInfo: user });
+    console.log(user.data);
+    console.log(user.data.user_name);
   }
 
   handleLogout = event => {
@@ -24,8 +31,10 @@ class App extends Component {
 
   render() {
     const childProps = {
-      isAuthenticated: this.state.isAuthenticated,
-      userHasAuthenticated: this.userHasAuthenticated
+      isAuthenticated       : this.state.isAuthenticated,
+      userHasAuthenticated  : this.userHasAuthenticated,
+      userInfo                  : this.state.userInfo,
+      setUser               : this.setUser
     };
     
     return (
@@ -40,7 +49,16 @@ class App extends Component {
           <Navbar.Collapse>
             <Nav pullRight>
               {this.state.isAuthenticated
-                ? <NavItem onClick={this.handleLogout}>Logout</NavItem>
+                // ? <NavItem onClick={this.handleLogout}>Logout</NavItem>
+                ? <Fragment>
+                    <LinkContainer to="/signup">
+                      <NavItem>{this.state.user.data.user_name}</NavItem>
+                      <NavItem>Username</NavItem>
+                    </LinkContainer>
+                    {/* <LinkContainer to="/login"> */}
+                    <NavItem onClick={this.handleLogout}>Logout</NavItem>
+                    {/* </LinkContainer> */}
+                  </Fragment>
                 : <Fragment>
                     <LinkContainer to="/signup">
                       <NavItem>Signup</NavItem>

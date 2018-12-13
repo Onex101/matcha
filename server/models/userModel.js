@@ -60,7 +60,7 @@ User.prototype.getById = function (data, callback) {
 User.prototype.getByUsername = function (data, callback) {
     var self = this;
     data = mysql.escape(data);
-    var query = `SELECT * FROM users WHERE user_name = '${data}'`;
+    var query = `SELECT * FROM users WHERE user_name = ${data}`;
     db.query(query, function (err, result) {
         if (err) {callback(err, null);}
         // console.log(query, result);
@@ -200,7 +200,7 @@ User.prototype.getAll = function (callback){
 User.prototype.login = function (callback){
     this.getByUsername(this.data.user_name, function(err, results){
         if (err)
-            callback(null, err);
+            callback(err, null);
         else
             callback(null, results);
     })

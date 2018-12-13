@@ -32,7 +32,7 @@ export default class AccountFields extends Component {
     saveAndContinue(e) {
         e.preventDefault()
 
-        if (this.state.password != this.state.confirmPassword) {
+        if (this.state.password !== this.state.confirmPassword) {
             alert("Your password's do not match!");
             return false;
         }
@@ -96,7 +96,6 @@ export default class AccountFields extends Component {
                         type="text"
                         defaultValue={this.props.fieldValues.first_name}
                         onChange={this.handleChange}
-                        // onChange={({ target }) => this.setState({ first_name: target.value })}
                     />
                 </FormGroup>
 
@@ -117,7 +116,6 @@ export default class AccountFields extends Component {
                             type="text"
                             defaultValue={this.props.fieldValues.user_name}
                             onChange={this.handleChange}
-                            // onChange={({ target }) => this.setState({ user_name: target.value })}
                         />
                     </FormGroup>
 
@@ -128,7 +126,6 @@ export default class AccountFields extends Component {
                             type="password"
                             defaultValue={this.props.fieldValues.password}
                             onChange={this.handleChange}
-                            // onChange={({ target }) => this.setState({ password: target.value })}
                         />
                     </FormGroup>
 
@@ -139,7 +136,6 @@ export default class AccountFields extends Component {
                             type="password"
                             defaultValue={this.props.fieldValues.confirmPassword}
                             onChange={this.handleChange}
-                            // onChange={({ target }) => this.setState({ password: target.value })}
                         />
                     </FormGroup>
 
@@ -150,7 +146,6 @@ export default class AccountFields extends Component {
                             type="email"
                             defaultValue={this.props.fieldValues.email}
                             onChange={this.handleChange}
-                            // onChange={({ target }) => this.setState({ email: target.value })}
                         />
                     </FormGroup>
 

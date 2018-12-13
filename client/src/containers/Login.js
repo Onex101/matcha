@@ -13,7 +13,7 @@ export default class Login extends Component {
   }
 
   validateForm() {
-    return this.state.email.length > 0 && this.state.password.length > 0;
+    return this.state.user_name.length > 0 && this.state.password.length > 0;
   }
 
   handleChange = event => {
@@ -26,7 +26,7 @@ export default class Login extends Component {
     const user = this.state;
     // fetch(`/products/add?name=${product.name}&price=${product.price}`)
     // .then(response => response.json())
-    fetch(`/user/create`, {
+    fetch(`/login`, {
       method: "POST",
       headers: {
           "Content-Type": "application/json; charset=utf-8",
@@ -36,17 +36,45 @@ export default class Login extends Component {
         password:   user.password,
       })
     })
-    // .then(this.getUsers)
-    .catch(err => console.error(err))    
+    .then(result => {
+      console.log(result);
+    })
+    .catch(err => console.error(err))
   }
 
   handleSubmit = async event => {
     event.preventDefault();
   
     try {
-      // await Auth.signIn(this.state.email, this.state.password);
-      this.props.userHasAuthenticated(true);
-      alert("Logged in");
+      const user = this.state;
+      fetch(`/login`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json; charset=utf-8",
+        },
+        body: JSON.stringify({
+          user_name:  user.user_name,
+          password:   user.password,
+        })
+      })
+      .then(response => response.json())
+      .then((responseJSON) => {
+          console.log(responseJSON);
+          // console.log(responseJSON);
+          if (responseJSON["success"]) {
+            if (responseJSON["success"] === "login sucessfull") {
+              this.props.userHasAuthenticated(true);
+              this.props.setUser(responseJSON["user"]);
+              alert("Logged in");
+            } else if (responseJSON["success"] === "Email and password does not match"){
+              alert(responseJSON["success"]);
+            } else if (responseJSON["success"] === "Email does not exist"){
+              alert(responseJSON["success"]);}
+          }
+          else
+          alert("Something went wrong :(");
+      })
+      .catch(err => console.error(err))
     } catch (e) {
       alert(e.message);
     }
@@ -56,7 +84,7 @@ export default class Login extends Component {
     return (
       <div className="Login">
         <form onSubmit={this.handleSubmit}>
-          <FormGroup controlId="email" bsSize="large">
+          <FormGroup controlId="user_name" bsSize="large">
             <ControlLabel>Username</ControlLabel>
             <FormControl
               autoFocus
