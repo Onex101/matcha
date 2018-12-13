@@ -56,11 +56,14 @@ exports.user_exists = function(req, res) {
             res.send(err);
         }
 		else{
-            row = result[0];
-            if (row["user_name"] === user.data.user_name)
-				res.json({exists: 'user_name'});
-			else if (row["email"] === user.data.email)
-				res.json({exists: 'email'});
+			if(result.length > 0){
+				row = result[0];
+				console.log(row);
+				if (row["user_name"] === user.data.user_name)
+					res.json({exists: 'user_name'});
+				else if (row["email"] === user.data.email)
+					res.json({exists: 'email'});
+			}
 			else
 				res.json({exists: 'null'});
 		}
