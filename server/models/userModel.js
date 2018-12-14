@@ -234,4 +234,17 @@ User.prototype.exists = function (callback){
 	})
 }
 
+User.prototype.getAllPics = function (callback){
+    console.log(this.data);
+	db.query(`SELECT pic FROM pictures WHERE user = '$(this.data.user_name)'`, function (err, results) {
+		if (err){
+			throw err;
+			callback(err, null);
+		}
+		else{
+			callback(null, results);
+		}
+	})
+}
+
 module.exports = User;
