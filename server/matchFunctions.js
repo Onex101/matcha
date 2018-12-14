@@ -62,6 +62,8 @@ Match.getP_coff = function (gender1, pref1, gender2, pref2){
   return(1 - (Math.sqrt((dx+dy)))/Math.sqrt(2))
 }
 
+
+//returns a value between 0 and 1 representing the % overlap in likes between the 2 users
 Match.getL_coff = function (likes1, likes2){
   var like_coff1 = likes1.replace(/\s/g,'#').split("#")
   var like_coff2 = likes2.replace(/\s/g,'#').split("#")
