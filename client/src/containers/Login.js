@@ -22,25 +22,25 @@ export default class Login extends Component {
     });
   }
 
-  loginPost() {
-    const user = this.state;
-    // fetch(`/products/add?name=${product.name}&price=${product.price}`)
-    // .then(response => response.json())
-    fetch(`/login`, {
-      method: "POST",
-      headers: {
-          "Content-Type": "application/json; charset=utf-8",
-      },
-      body: JSON.stringify({
-        user_name:  user.user_name,
-        password:   user.password,
-      })
-    })
-    .then(result => {
-      console.log(result);
-    })
-    .catch(err => console.error(err))
-  }
+  // loginPost() {
+  //   const user = this.state;
+  //   // fetch(`/products/add?name=${product.name}&price=${product.price}`)
+  //   // .then(response => response.json())
+  //   fetch(`/login`, {
+  //     method: "POST",
+  //     headers: {
+  //         "Content-Type": "application/json; charset=utf-8",
+  //     },
+  //     body: JSON.stringify({
+  //       user_name:  user.user_name,
+  //       password:   user.password,
+  //     })
+  //   })
+  //   .then(result => {
+  //     console.log(result);
+  //   })
+  //   .catch(err => console.error(err))
+  // }
 
   handleSubmit = async event => {
     event.preventDefault();
@@ -66,9 +66,9 @@ export default class Login extends Component {
               this.props.userHasAuthenticated(true);
               this.props.setUser(responseJSON["user"]);
               alert("Logged in");
-            } else if (responseJSON["success"] === "Email and password does not match"){
+            } else if (responseJSON["success"] === "Username and password does not match"){
               alert(responseJSON["success"]);
-            } else if (responseJSON["success"] === "Email does not exist"){
+            } else if (responseJSON["success"] === "Username does not exist"){
               alert(responseJSON["success"]);}
           }
           else
