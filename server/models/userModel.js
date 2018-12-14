@@ -14,11 +14,11 @@ var User = function (data) {
 User.prototype.data = {}
 
 User.prototype.get = function (name) {
-    return this.data[name];
+	return this.data[name];
 }
 
 User.prototype.set = function (name, value) {
-    this.data[name] = value;
+	this.data[name] = value;
 }
 
 User.prototype.clean = function (data) {
@@ -224,6 +224,19 @@ User.prototype.match = function (callback){
 User.prototype.exists = function (callback){
     console.log(this.data);
 	db.query(`SELECT user_name, email FROM users WHERE user_name = '${this.data.user_name}' OR email = '${this.data.email}'`, function (err, results) {
+		if (err){
+			throw err;
+			callback(err, null);
+		}
+		else{
+			callback(null, results);
+		}
+	})
+}
+
+User.prototype.getAllPics = function (callback){
+    console.log(this.data);
+	db.query(`SELECT pic FROM pictures WHERE user = '$(this.data.user_name)'`, function (err, results) {
 		if (err){
 			throw err;
 			callback(err, null);
