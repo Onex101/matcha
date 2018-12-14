@@ -272,3 +272,15 @@ exports.user_verify = function(req, res){
 		}
 	})
 }
+
+exports.user_notification = function(req, res){
+	let user = new User('');
+	user.getById(this.data.id, function(err, results){
+		if (err){
+			
+		}
+		else{
+			
+		}
+	})
+}
