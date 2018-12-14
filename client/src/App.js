@@ -22,13 +22,7 @@ class App extends Component {
 
   setUser = user => {
     this.setState({ userInfo: user });
-    // window.localStorage.setItem('user', user.data.user_name);
     localStorage.setItem('user', user.data.user_name);
-    // console.log("User_data = " + user.data);
-    // console.log("User_data = " + user.data.user_name);
-    // console.log("User_data = " + user.data.email);
-    const test = localStorage.getItem('user');
-    console.log("Test = " + test);
   }
 
   handleLogout = event => {

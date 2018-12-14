@@ -46,7 +46,8 @@ export default class Confirmation extends Component {
 
         this.setState({ isLoading: true });
         // 
-        const user = this.state;
+        const confirm = this.state;
+        const user = this.props.fieldValues;
         fetch(`/login`, {
           method: "POST",
           headers: {
@@ -54,7 +55,7 @@ export default class Confirmation extends Component {
           },
           body: JSON.stringify({
             user_name           : user.user_name,
-            confirmationCode    : user.confirmationCode,
+            confirmationCode    : confirm.confirmationCode,
           })
         })
         .then(result => {
@@ -75,7 +76,7 @@ export default class Confirmation extends Component {
             },
             body: JSON.stringify({
               user_name:  user.user_name,
-              password:   user.password,
+              confirmationCode:   user.password,
             })
           })
           .then(response => response.json())
@@ -83,9 +84,9 @@ export default class Confirmation extends Component {
               console.log(responseJSON);
               // console.log(responseJSON);
               if (responseJSON["success"]) {
-                if (responseJSON["success"] === "login sucessfull") {
+                if (responseJSON["success"] === "verify sucessfull") {
                   //Do the success things
-                } else if (responseJSON["success"] === "Email and password does not match"){
+                } else if (responseJSON["success"] === "verify faiil"){
                   alert("Invalid Confirmation Code!");
                 } 
               }
