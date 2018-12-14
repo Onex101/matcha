@@ -46,7 +46,8 @@ connection.connect(function (err) {
     connection.query('CREATE TABLE pictures\
     (id int NOT NULL AUTO_INCREMENT,\
     pic longtext,\
-    user_name varchar(255),\
+	user_name varchar(255),\
+	profile_pic int(2),\
     PRIMARY KEY (id))');
 
     connection.query('CREATE TABLE history\

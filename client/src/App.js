@@ -22,26 +22,29 @@ class App extends Component {
 
   setUser = user => {
     this.setState({ userInfo: user });
-    window.localStorage.setItem('user', user.data.user_name);
-    console.log("User_data = " + user.data);
-    console.log("User_data = " + user.data.user_name);
-    console.log("User_data = " + user.data.email);
-    const test = window.localStorage.getItem('user');
+    // window.localStorage.setItem('user', user.data.user_name);
+    localStorage.setItem('user', user.data.user_name);
+    // console.log("User_data = " + user.data);
+    // console.log("User_data = " + user.data.user_name);
+    // console.log("User_data = " + user.data.email);
+    const test = localStorage.getItem('user');
     console.log("Test = " + test);
   }
 
   handleLogout = event => {
     this.userHasAuthenticated(false);
+    localStorage.removeItem('user');
   }
 
   renderUser() {
-    if (this.state.userInfo != null){
-      console.log("Getting username = " + this.state.userInfo.data.user_name);
+    const session = localStorage.getItem('user');
+    if (session != null){
+      console.log("Getting username = " + session);
     }
     return(<Fragment>
         <LinkContainer to="/signup">
-      {this.state.userInfo
-        ? <NavItem>{(this.state.userInfo.data.user_name)}</NavItem>
+      {session
+        ? <NavItem>{(session)}</NavItem>
         : <NavItem>Username</NavItem>
       }
       </LinkContainer>
@@ -56,7 +59,7 @@ class App extends Component {
     const childProps = {
       isAuthenticated       : this.state.isAuthenticated,
       userHasAuthenticated  : this.userHasAuthenticated,
-      userInfo                  : this.state.userInfo,
+      userInfo              : this.state.userInfo,
       setUser               : this.setUser
     };
     
@@ -71,7 +74,7 @@ class App extends Component {
           </Navbar.Header>
           <Navbar.Collapse>
             <Nav pullRight>
-              {this.state.isAuthenticated
+              {localStorage.getItem('user')
                 ? this.renderUser()
                 : <Fragment>
                     <LinkContainer to="/signup">
