@@ -14,11 +14,11 @@ var User = function (data) {
 User.prototype.data = {}
 
 User.prototype.get = function (name) {
-    return this.data[name];
+	return this.data[name];
 }
 
 User.prototype.set = function (name, value) {
-    this.data[name] = value;
+	this.data[name] = value;
 }
 
 User.prototype.clean = function (data) {
