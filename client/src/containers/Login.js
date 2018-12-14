@@ -22,26 +22,6 @@ export default class Login extends Component {
     });
   }
 
-  // loginPost() {
-  //   const user = this.state;
-  //   // fetch(`/products/add?name=${product.name}&price=${product.price}`)
-  //   // .then(response => response.json())
-  //   fetch(`/login`, {
-  //     method: "POST",
-  //     headers: {
-  //         "Content-Type": "application/json; charset=utf-8",
-  //     },
-  //     body: JSON.stringify({
-  //       user_name:  user.user_name,
-  //       password:   user.password,
-  //     })
-  //   })
-  //   .then(result => {
-  //     console.log(result);
-  //   })
-  //   .catch(err => console.error(err))
-  // }
-
   handleSubmit = async event => {
     event.preventDefault();
   
@@ -60,12 +40,11 @@ export default class Login extends Component {
       .then(response => response.json())
       .then((responseJSON) => {
           console.log(responseJSON);
-          // console.log(responseJSON);
           if (responseJSON["success"]) {
             if (responseJSON["success"] === "login sucessfull") {
               this.props.userHasAuthenticated(true);
               this.props.setUser(responseJSON["user"]);
-              alert("Logged in");
+              this.props.history.push("/");
             } else if (responseJSON["success"] === "Username and password does not match"){
               alert(responseJSON["success"]);
             } else if (responseJSON["success"] === "Username does not exist"){

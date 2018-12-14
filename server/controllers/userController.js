@@ -252,21 +252,43 @@ exports.user_match_post = function(req, res) {
     res.send('NOT IMPLEMENTED: User match POST');
 };
 
-// Verify user
-exports.user_verify = function(req, res){
+// Check if user is verified
+exports.user_checkVerify = function(req, res){
 	let user = new User('');
 	user.getByUsername(req.body['user_name'], function(err, results){
 		if (err){
 			res.send(err)
 		}
 		else{
-			bcrypt.compare(req.body['password'], user.data[password], function(err, result){
+			if (user.data.verified){
+				res.send('User verified')
+			}
+			else{
+				res.send('User not verified')
+			}
+		}
+	})
+}
+
+// Verify user
+exports.user_verify = function(req, res){
+	let user = new User('');
+    console.log("Verification test1");
+	user.getByUsername(req.body['user_name'], function(err, results){
+		if (err){
+            console.log("Verification test2");
+            res.send(err)
+		}
+		else{
+            console.log("Verification test3");
+			bcrypt.compare(user.veri_code, user.data['veri_code'], function(err, results){
 				if (err){
-					res.send(err)
+                    console.log("Verification error = " + err);
+					res.send(err);
 				}
 				else{
-					console.log(result);
-					res.send(result);
+                    console.log("Verification results = " + results);
+                    res.send(results);
 				}
 			})
 		}
@@ -277,7 +299,7 @@ exports.user_notification = function(req, res){
 	let user = new User('');
 	user.getById(this.data.id, function(err, results){
 		if (err){
-			
+
 		}
 		else{
 			
