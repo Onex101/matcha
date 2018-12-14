@@ -273,17 +273,22 @@ exports.user_checkVerify = function(req, res){
 // Verify user
 exports.user_verify = function(req, res){
 	let user = new User('');
+    console.log("Verification test1");
 	user.getByUsername(req.body['user_name'], function(err, results){
 		if (err){
-			res.send(err)
+            console.log("Verification test2");
+            res.send(err)
 		}
 		else{
+            console.log("Verification test3");
 			bcrypt.compare(user.veri_code, user.data['veri_code'], function(err, results){
 				if (err){
+                    console.log("Verification error = " + err);
 					res.send(err);
 				}
 				else{
-					res.send(results);
+                    console.log("Verification results = " + results);
+                    res.send(results);
 				}
 			})
 		}
