@@ -169,18 +169,18 @@ exports.user_login_post = function(req, res) {
                     // res.status(200);
                     res.json({
                         user,
-                        "success":"login sucessfull"
+                        success:"login sucessfull"
                     });
                 }else{
                     // res.status(204);
-                    res.send({
-                        "success":"Username and password does not match"
+                    res.json({
+                        success:"Username and password does not match"
                     });
                 }
             }else{
                 // res.status(204);
-                res.send({
-                    "success":"Username does not exist"
+                res.json({
+                    success:"Username does not exist"
                 });
             }
         }

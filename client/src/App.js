@@ -13,6 +13,7 @@ class App extends Component {
       isAuthenticated   : false,
       userInfo              : null
     };
+    this.renderUser = this.renderUser.bind(this);
   }
   
   userHasAuthenticated = authenticated => {
@@ -33,6 +34,24 @@ class App extends Component {
     this.userHasAuthenticated(false);
   }
 
+  renderUser() {
+    if (this.state.userInfo != null){
+      console.log("Getting username = " + this.state.userInfo.data.user_name);
+    }
+    return(<Fragment>
+        <LinkContainer to="/signup">
+      {this.state.userInfo
+        ? <NavItem>{(this.state.userInfo.data.user_name)}</NavItem>
+        : <NavItem>Username</NavItem>
+      }
+      </LinkContainer>
+      <LinkContainer to="/login">
+      <NavItem onClick={this.handleLogout}>Logout</NavItem>
+      </LinkContainer>
+    </Fragment>
+    )
+  }
+
   render() {
     const childProps = {
       isAuthenticated       : this.state.isAuthenticated,
@@ -40,9 +59,6 @@ class App extends Component {
       userInfo                  : this.state.userInfo,
       setUser               : this.setUser
     };
-    // const user = this.state.userInfo;
-
-    // console.log("User Info = " + this.state.userInfo.data.user_name)
     
     return (
       <div className="App container">
@@ -55,26 +71,8 @@ class App extends Component {
           </Navbar.Header>
           <Navbar.Collapse>
             <Nav pullRight>
-              {/* {this.state.isAuthenticated
-                // ? <NavItem onClick={this.handleLogout}>Logout</NavItem> */}
               {this.state.isAuthenticated
-                ? <Fragment>
-                    {/* <LinkContainer to="/signup"> */}
-                    {/* <NavItem>{user.user_name}</NavItem> */}
-                      {/* <NavItem>{Parser(window.localStorage.getItem('user'))}</NavItem> */}
-                      {/* <NavItem>{function MyComponent ({ name }) {
-                        return <div className='message-box'>
-                          Hello {window.localStorage.getItem('user')}
-                        </div>
-                      }}</NavItem> */}
-                      <NavItem>Username</NavItem>
-                      
-                      {/* <NavItem>{console.log(user)}</NavItem> */}
-                    {/* </LinkContainer> */}
-                    {/* <LinkContainer to="/login"> */}
-                    <NavItem onClick={this.handleLogout}>Logout</NavItem>
-                    {/* </LinkContainer> */}
-                  </Fragment>
+                ? this.renderUser()
                 : <Fragment>
                     <LinkContainer to="/signup">
                       <NavItem>Signup</NavItem>
