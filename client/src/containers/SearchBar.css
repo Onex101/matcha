@@ -1,0 +1,14 @@
+@media all and (min-width: 480px) {
+    .filter-list {
+      margin: 0 auto;        
+      padding:  5px 60px 0;
+      max-width: 500px;
+    }
+  
+    .list-group form {
+      margin: 0 auto;
+      max-width: 320px;
+      visibility: hidden;
+    }
+  }
+  

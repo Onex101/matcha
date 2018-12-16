@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { Nav, Navbar, NavItem } from "react-bootstrap";
 import "./App.css";
 import Routes from "./Routes";
+import SearchBar from "./containers/SearchBar";
 import { LinkContainer } from "react-router-bootstrap";
 
 class App extends Component {
@@ -66,6 +67,7 @@ class App extends Component {
             </Navbar.Brand>
             <Navbar.Toggle />
           </Navbar.Header>
+          {/* <SearchBar/> */}
           <Navbar.Collapse>
             <Nav pullRight>
               {localStorage.getItem('user')
