@@ -59,10 +59,13 @@ connection.connect(function (err) {
     user2_id int NOT NULL,\
     link int)');
 
-    connection.query('CREATE TABLE notifications\
-    (user_id int NOT NULL,\
+	connection.query('CREATE TABLE notifications(\
+	id int NOT NULL AUTO_INCREMENT,\
+	user_id int NOT NULL,\
     noti varchar(255),\
-    viewed_status int)');
+	viewed_status int\
+	PRIMARY KEY (`id`)\
+	)');
 
     connection.query('CREATE TABLE msgs\
     (id int NOT NULL AUTO_INCREMENT,\
