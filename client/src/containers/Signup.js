@@ -78,7 +78,7 @@ export default class Signup extends Component {
             case 2:
                 return <SurveyFields  fieldValues={fieldValues} nextStep={this.nextStep} previousStep={this.previousStep} saveValues={this.saveValues} />
             case 3:
-                return <Confirmation fieldValues={fieldValues} previousStep={this.previousStep} submitRegistration={this.submitRegistration} />
+                return <Confirmation fieldValues={fieldValues} nextStep={this.nextStep} previousStep={this.previousStep} submitRegistration={this.submitRegistration} />
             case 4:
                 return <Success fieldValues={fieldValues} />
         }

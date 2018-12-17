@@ -41,57 +41,63 @@ export default class Confirmation extends Component {
         this.setState({ isLoading: false });
     }
 
-    handleConfirmationSubmit = async event => {
-        event.preventDefault();
+    // handleConfirmationSubmit = async event => {
+    //     event.preventDefault();
 
-        this.setState({ isLoading: true });
-        // 
-        const confirm = this.state;
-        const user = this.props.fieldValues;
-        fetch(`/login`, {
-          method: "POST",
-          headers: {
-              "Content-Type": "application/json; charset=utf-8",
-          },
-          body: JSON.stringify({
-            user_name           : user.user_name,
-            confirmationCode    : confirm.confirmationCode,
-          })
-        })
-        .then(result => {
-          console.log(result);
-        })
-        .catch(err => console.error(err))
-      }
+    //     this.setState({ isLoading: true });
+    //     // 
+    //     const confirm = this.state;
+    //     const user = this.props.fieldValues;
+    //     fetch(`/login`, {
+    //       method: "POST",
+    //       headers: {
+    //           "Content-Type": "application/json; charset=utf-8",
+    //       },
+    //       body: JSON.stringify({
+    //         user_name           : user.user_name,
+    //         confirmationCode    : confirm.confirmationCode,
+    //       })
+    //     })
+    //     .then(result => {
+    //       console.log(result);
+    //     })
+    //     .catch(err => console.error(err))
+    //   }
     
-      handleSubmit = async event => {
+    handleConfirmationSubmit = async event => {
         event.preventDefault();
       
         try {
-          const user = this.state;
-          fetch(`/signup`, {
+          const user = this.props.fieldValues;
+          console.log(user.user_name);
+            console.log(this.state.confirmationCode);
+          fetch(`/signup/verify`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json; charset=utf-8",
             },
             body: JSON.stringify({
-              user_name:  user.user_name,
-              confirmationCode:   user.password,
+              user_name         :  user.user_name,
+              veri_code         :  this.state.confirmationCode,
             })
           })
           .then(response => response.json())
           .then((responseJSON) => {
               console.log(responseJSON);
               // console.log(responseJSON);
-              if (responseJSON["success"]) {
-                if (responseJSON["success"] === "verify sucessfull") {
-                  //Do the success things
-                } else if (responseJSON["success"] === "verify faiil"){
-                  alert("Invalid Confirmation Code!");
+            if (responseJSON["success"] || responseJSON["error"]) {
+                if (responseJSON["error"] === null && responseJSON["success"] === "veri-code is correct") {
+                    //Do the success things
+                    this.props.nextStep();
+                } else if (responseJSON["error"] === "verification update fail" && responseJSON["success"] === null){
+                    alert("Invalid Confirmation Code!");
+                    this.setState({ isLoading: false });
                 } 
-              }
-              else
-              alert("Something went wrong :(");
+            }
+            else {
+                alert("Something went wrong :(");
+                this.setState({ isLoading: false });
+            }
           })
           .catch(err => console.error(err))
           } catch (e) {
