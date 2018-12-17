@@ -67,8 +67,10 @@ class App extends Component {
             </Navbar.Brand>
             <Navbar.Toggle />
           </Navbar.Header>
-          {/* <SearchBar/> */}
           <Navbar.Collapse>
+          {/* <Nav width="1000px"> */}
+            <SearchBar/>
+          {/* </Nav> */}
             <Nav pullRight>
               {localStorage.getItem('user')
                 ? this.renderUser()

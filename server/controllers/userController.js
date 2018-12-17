@@ -277,22 +277,32 @@ exports.user_verify = function(req, res){
 	let user = new User('');
     console.log("Verification test1");
 	user.getByUsername(req.body['user_name'], function(err, results){
+        user = new User(results[0]);
+        console.log(user);
 		if (err){
             console.log("Verification test2");
             res.send(err)
 		}
 		else{
             console.log("Verification test3");
-			bcrypt.compare(user.veri_code, user.data['veri_code'], function(err, results){
-				if (err){
-                    console.log("Verification error = " + err);
-					res.send(err);
-				}
-				else{
-                    console.log("Verification results = " + results);
-                    res.send(results);
-				}
-			})
+            // console.log(req.body['veri_code'] + "    "+ results[0].veri_code);
+			if(req.body['veri_code'] != results[0].veri_code){
+                console.log('Not Verified');
+				res.send({error: 'veri-code is incorrect', success: null});
+            }
+            else{
+                console.log('Verified');
+                user.data['verified'] = 1;
+                console.log(user.data['verified'] + "HELLO")
+                user.update(function(err, result){
+                    if (err){
+                        res.send({error:'verification update fail', success: null});
+                        throw err
+                    }
+                    else
+                        res.send({error: null, success: 'veri-code is correct'});
+                })
+            }
 		}
 	})
 }

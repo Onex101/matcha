@@ -82,7 +82,8 @@ User.prototype.update = function (callback) {
         }
     }
     this.data = this.clean(this.data);
-    tmp = [this.data['first_name'], 
+    console.log(this.data ['verified']);
+    var tmp = [this.data['first_name'], 
             this.data['last_name'], 
             this.data['user_name'],
             this.data['birth_date'],
@@ -96,7 +97,7 @@ User.prototype.update = function (callback) {
 			this.data['password'],
 			this.data['veri_code'],
 			this.data ['verified']]
-    id = this.data['id'];
+    var id = this.data['id'];
     db.query(`UPDATE 
                users 
             SET 
@@ -111,14 +112,18 @@ User.prototype.update = function (callback) {
                 likes = ?,
                 fame = ?,
                 email = ?, 
-				password = ?
-				veri_code = ?
+				password = ?,
+				veri_code = ?,
 				verified = ?
             WHERE
                 id = ${id}`, tmp, function (err, result, rows){
-        if (err){callback(null, err);}
+        if (err){
+            throw err
+            callback(err, null);
+        }
         else{
             if (typeof callback === "function"){
+                // console.log(result);
                 callback(null, result);
             }
         }
