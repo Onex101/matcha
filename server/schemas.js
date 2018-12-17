@@ -20,12 +20,18 @@ var schemas = {
 		id: null,
 		user1_id: null,
 		user2_id: null,
-		message: null,
+		message: null
 	},
 	image: {
 		id: null,
 		user_id: null,
 		data: null
+	},
+	notification:{
+		id: null,
+		user_id: null,
+		noti: null,
+		viewed: null
 	}
 }
 
