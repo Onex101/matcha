@@ -45,6 +45,22 @@ exports.image_delete_post = function(req, res){
 }
 
 exports.image_update_get = function(req, res){
+	let data = req.params.id;
+	let image = new Image(data);
+	image.setProfilePic(function (err, result){
+		if (err){
+			res.send({
+				error: 'failed to set profile pic',
+				sucess: null
+			})
+		}
+		else{
+			res.send({
+				error: null,
+				sucess: 'set profile pic'
+			})
+		}
+	})
 	res.send('NOT IMPLEMENTED: image update get');
 }
 

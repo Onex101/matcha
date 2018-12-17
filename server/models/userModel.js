@@ -24,7 +24,7 @@ User.prototype.set = function (name, value) {
 User.prototype.clean = function (data) {
 	data = data || {};
 	var schema = schemas.user;
-    return _.pick(_.defaults(data, schema), _.keys(schema)); 
+	return _.pick(_.defaults(data, schema), _.keys(schema)); 
 }
 
 User.prototype.deleteById = function (id, callback) {
