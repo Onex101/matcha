@@ -148,9 +148,9 @@ exports.user_login_post = function(req, res) {
             })
         }else{
             if(results.length > 0){
-				bcrypt.compare(results[0].password, user.data.password, function (err, res){
-					if (res == false){
-						res.json({
+				bcrypt.compare(user.data.password, results[0].password, function (err, check){
+					if (check == false){
+						res.send({
 							success:"Username and password does not match"
 						});
 					}
@@ -173,7 +173,7 @@ exports.user_login_post = function(req, res) {
 							password: row.password
 						}
 						// res.status(200);
-						res.json({
+						res.send({
 							user,
 							success:"login sucessfull"
 						});
@@ -181,7 +181,7 @@ exports.user_login_post = function(req, res) {
 				})
             }else{
                 // res.status(204);
-                res.json({
+                res.send({
                     success:"Username does not exist"
                 });
             }
