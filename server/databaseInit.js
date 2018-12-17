@@ -63,7 +63,7 @@ connection.connect(function (err) {
 	id int NOT NULL AUTO_INCREMENT,\
 	user_id int NOT NULL,\
     noti varchar(255),\
-	viewed_status int\
+	viewed_status int,\
 	PRIMARY KEY (`id`)\
 	)');
 

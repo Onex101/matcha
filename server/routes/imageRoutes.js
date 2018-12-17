@@ -18,10 +18,10 @@ router.get('/image/:id/delete', image_controller.image_delete_get);
 router.post('/image/:id/delete', image_controller.image_delete_post);
 
 // GET request to update image.
-router.get('/image/:id/update', image_controller.image_update_get);
+router.get('/image/update/:user_id/:id', image_controller.image_update_get);
 
 // POST request to update image.
-router.post('/image/:id/update', image_controller.image_update_post);
+router.post('/image/update/user_id/:id', image_controller.image_update_post);
 
 // GET request for getting images by id
 router.get('/images/:id', image_controller.images_fetch_get);

@@ -86,7 +86,7 @@ Image.prototype.setProfilePic = function (callback){
 			callback(err, null);
 		}
 		else{
-			db.query(`UPDATE TABLE pictures SET profile_pic = '1' WHERE user = '${this.data.user_id}' AND id = '${this.data.pic_num}'`, function (err, results) {
+			db.query(`UPDATE TABLE pictures SET profile_pic = '1' WHERE id = '${this.data.pic_num}'`, function (err, results) {
 				if (err){
 					throw err;
 					callback(err, null);
