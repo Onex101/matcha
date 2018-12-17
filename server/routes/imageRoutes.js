@@ -27,4 +27,7 @@ router.post('/image/:id/update', image_controller.image_update_post);
 router.get('/images/:id', image_controller.images_fetch_get);
 
 // GET request for getting image by id.
-router.get('/image/:id', image_controller.image_fetch_post);
+router.get('/image/:id', image_controller.image_fetch_get);
+
+// GET request for getting profile image by user_id.
+router.get('/profile_pic/:user_id', image_controller.profle_image_get);

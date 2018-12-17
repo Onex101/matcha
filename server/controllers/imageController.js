@@ -53,12 +53,12 @@ exports.image_update_post = function(req, res){
 }
 
 exports.images_fetch_get = function(req, res){
-	let id = req.params.id;
-	let image = new Image(data = {id: null, user_id: id, data: null})
-	image.getPicById(function(err, result){
+	let user_id = req.params.id;
+	let image = new Image(data = {id: null, user_id: user_id, data: null})
+	image.getAllPics(function(err, result){
 		if (err){
 			res.send({
-						error: 'failed to get pic',
+						error: 'failed to get pics',
 						sucess: null
 					})
 		}
@@ -74,13 +74,9 @@ exports.images_fetch_post = function(req, res){
 }
 
 exports.image_fetch_get = function(req, res){
-	res.send('NOT IMPLEMENTED: image fetch get');
-}
-
-exports.image_fetch_post = function(req, res){
-	data = req.body;
+	data = req.params;
 	let image = new Image(data)
-	image.getProfilePic(function(err, result){
+	image.getPicById(function(err, result){
 		if (err){
 			res.send({
 						error: 'failed to get pic',
@@ -91,5 +87,25 @@ exports.image_fetch_post = function(req, res){
 			res.json(result)
 		}
 	})
+	// res.send('NOT IMPLEMENTED: image fetch get');
+}
+
+exports.image_fetch_post = function(req, res){
 	res.send('NOT IMPLEMENTED: image fetch post');
+}
+
+exports.profle_image_get = function(req, res){
+	data = req.params;
+	let image = new Image(data);
+	image.getProfilePic(function(err, result){
+		if (err){
+			res.send({
+						error: 'failed to get profile pic',
+						sucess: null
+					})
+		}
+		else{
+			res.json(result)
+		}
+	})
 }

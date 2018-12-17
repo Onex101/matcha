@@ -16,7 +16,7 @@ Image.prototype.clean = function (data) {
 
 Image.prototype.getAllPics = function (callback){
 	console.log(this.data);
-	db.query(`SELECT pic FROM pictures WHERE user = '${this.data.user_name}'`, function (err, results) {
+	db.query(`SELECT pic FROM pictures WHERE user = '${this.data.user_id}'`, function (err, results) {
 		if (err){
 			throw err;
 			callback(err, null);
@@ -67,7 +67,7 @@ Image.prototype.getProfilePic = function (callback){
 }
 
 Image.prototype.getPicById = function (callback){
-    console.log(this.data);
+	console.log(this.data);
 	db.query(`SELECT pic FROM pictures WHERE id = '${this.data.pic_id}'`, function (err, results) {
 		if (err){
 			throw err;
@@ -80,13 +80,13 @@ Image.prototype.getPicById = function (callback){
 }
 
 Image.prototype.setProfilePic = function (callback){
-	db.query(`UPDATE TABLE pictures SET profile_pic = '0' WHERE user = '${this.data.user_name}' AND profile_pic = '1'`, function (err, results) {
+	db.query(`UPDATE TABLE pictures SET profile_pic = '0' WHERE user = '${this.data.user_id}' AND profile_pic = '1'`, function (err, results) {
 		if (err){
 			throw err;
 			callback(err, null);
 		}
 		else{
-			db.query(`UPDATE TABLE pictures SET profile_pic = '1' WHERE user = '${this.data.user_name}' AND id = '${this.data.pic_num}'`, function (err, results) {
+			db.query(`UPDATE TABLE pictures SET profile_pic = '1' WHERE user = '${this.data.user_id}' AND id = '${this.data.pic_num}'`, function (err, results) {
 				if (err){
 					throw err;
 					callback(err, null);
