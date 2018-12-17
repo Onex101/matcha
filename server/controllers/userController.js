@@ -148,35 +148,37 @@ exports.user_login_post = function(req, res) {
             })
         }else{
             if(results.length > 0){
-                if(results[0].password == user.data.password){ //need to use hash still
-                    row = results[0];
-                    if (row)
-                    user.data = {
-                        id: row.id,
-                        first_name: row.first_name,
-                        last_name: row.last_name,
-                        user_name: row.user_name,
-                        birth_date: row.birth_date,
-                        gender: row.gender,
-                        pref: row.pref,
-                        gps_lat: row.gps_lat,
-                        gps_lon: row.gps_lat,
-                        likes: row.likes,
-                        fame: row.fame,
-                        email: row.email,
-                        password: row.password
-                    }
-                    // res.status(200);
-                    res.json({
-                        user,
-                        success:"login sucessfull"
-                    });
-                }else{
-                    // res.status(204);
-                    res.json({
-                        success:"Username and password does not match"
-                    });
-                }
+				bcrypt.compare(results[0].password, user.data.password, function (err, res){
+					if (res == false){
+						res.json({
+							success:"Username and password does not match"
+						});
+					}
+					else{
+						row = results[0];
+						if (row)
+						user.data = {
+							id: row.id,
+							first_name: row.first_name,
+							last_name: row.last_name,
+							user_name: row.user_name,
+							birth_date: row.birth_date,
+							gender: row.gender,
+							pref: row.pref,
+							gps_lat: row.gps_lat,
+							gps_lon: row.gps_lat,
+							likes: row.likes,
+							fame: row.fame,
+							email: row.email,
+							password: row.password
+						}
+						// res.status(200);
+						res.json({
+							user,
+							success:"login sucessfull"
+						});
+					}
+				})
             }else{
                 // res.status(204);
                 res.json({
