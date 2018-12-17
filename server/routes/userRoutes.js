@@ -39,10 +39,10 @@ router.post('/login', user_controller.user_login_post);
 router.get('/users', user_controller.user_list);
 
 // GET request for mtached users against userID
-router.get('/user/:id/match', user_controller.user_match_get);
+router.get('/user/match/:id', user_controller.user_match_get);
 
 // POST request for mtached users against userID
-router.post('/user/:id/match', user_controller.user_match_post);
+router.post('/user/match', user_controller.user_match_post);
 
 // POST request for checking if a user exists
 router.post('/signup', user_controller.user_exists);
