@@ -18,9 +18,15 @@ var schemas = {
 	},
 	message: {
 		id: null,
-		user1_id: null,
-		user2_id: null,
+		conversation_id: null,
+		sender: null,
+		reciever: null,
 		message: null
+	},
+	conversation: {
+		id: null,
+		user1: null,
+		user2: null
 	},
 	image: {
 		id: null,

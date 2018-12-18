@@ -6,6 +6,12 @@ var Notification = function (data) {
     this.data = this.clean(data);
 }
 
+Notification.prototype.clean = function (data) {
+	data = data || {};
+	var schema = schemas.notification;
+	return _.pick(_.defaults(data, schema), _.keys(schema)); 
+}
+
 Notification.prototype.data = {}
 
 Notification.prototype.setNoti = function (user_id, msg, callback) {
@@ -40,3 +46,5 @@ Notification.prototype.getUnread = function (user_id, callback) {
 		}
 	})
 }
+
+module.export = Notification;
