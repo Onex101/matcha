@@ -12,7 +12,9 @@ class App extends Component {
   
     this.state = {
       isAuthenticated       : false,
-      userInfo              : null
+      userInfo              : null,
+      userProfile           : null,
+      userMatches           : null
     };
     this.renderUser = this.renderUser.bind(this);
   }
@@ -37,7 +39,24 @@ class App extends Component {
           alert(e.message);
         }
     }
+    // Get profile info
     // Get Matches
+    try {
+      fetch('/user/match/' + localStorage.getItem('id'), {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json; charset=utf-8",
+        },
+      })
+      .then(response => response.json())
+      .then((responseJSON) => {
+        this.setState({ userMatches: responseJSON["data"] });
+        console.log("Matches = " + JSON.stringify(this.state.userMatches));
+      })
+      .catch(err => console.error(err))
+      } catch (e) {
+        alert(e.message);
+      }
   }
 
   userHasAuthenticated = authenticated => {
