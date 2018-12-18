@@ -33,23 +33,31 @@ class App extends Component {
 
   renderUser() {
     const session = localStorage.getItem('user');
+
     if (session != null){
       console.log("Getting username = " + session);
     }
-    return(<Fragment>
-        <LinkContainer to="/signup">
-      {session
-        ? <NavItem>{(session)}</NavItem>
-        : <NavItem>Username</NavItem>
-      }
-      </LinkContainer>
-      <LinkContainer to="/login">
-      <NavItem onClick={this.handleLogout}>Logout</NavItem>
-      </LinkContainer>
-    </Fragment>
+    return(<Navbar.Collapse><Nav pullRight>
+            <Fragment>
+              <LinkContainer to="/settings">
+              {session
+                ? <NavItem>{(session)}</NavItem>
+                : <NavItem>Username</NavItem>
+              }
+              </LinkContainer>
+              <LinkContainer to="/login">
+              <NavItem onClick={this.handleLogout}>Logout</NavItem>
+              </LinkContainer>
+            </Fragment>
+          </Nav>
+          </Navbar.Collapse>
     )
   }
 
+  searchCheck(){
+    if (localStorage.getItem('user'))
+      return(<SearchBar/>)
+  }
   render() {
     const childProps = {
       isAuthenticated       : this.state.isAuthenticated,
@@ -57,7 +65,9 @@ class App extends Component {
       userInfo              : this.state.userInfo,
       setUser               : this.setUser
     };
-    
+    var style = {
+      display: 'flex',
+    }
     return (
       <div className="App container">
         <Navbar fluid collapseOnSelect>
@@ -65,26 +75,24 @@ class App extends Component {
             <Navbar.Brand>
               <Link to="/">Matcha</Link>
             </Navbar.Brand>
+            <div style={style}>
+            {this.searchCheck()}
             <Navbar.Toggle />
+            </div>
           </Navbar.Header>
-          <Navbar.Collapse>
-          {/* <Nav width="1000px"> */}
-            <SearchBar/>
-          {/* </Nav> */}
-            <Nav pullRight>
               {localStorage.getItem('user')
                 ? this.renderUser()
-                : <Fragment>
-                    <LinkContainer to="/signup">
-                      <NavItem>Signup</NavItem>
-                    </LinkContainer>
-                    <LinkContainer to="/login">
-                      <NavItem>Login</NavItem>
-                    </LinkContainer>
-                  </Fragment>
+                : <Navbar.Collapse><Nav pullRight>
+                    <Fragment>
+                      <LinkContainer to="/signup">
+                        <NavItem>Signup</NavItem>
+                      </LinkContainer>
+                      <LinkContainer to="/login">
+                        <NavItem>Login</NavItem>
+                      </LinkContainer>
+                    </Fragment>
+                  </Nav></Navbar.Collapse>
               }
-            </Nav>
-          </Navbar.Collapse>
         </Navbar>
         <Routes childProps={childProps} />
       </div>
