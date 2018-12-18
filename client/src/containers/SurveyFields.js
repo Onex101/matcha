@@ -1,6 +1,9 @@
 import React, { Component } from "react";
 import { ButtonGroup, ButtonToolbar, Button, FormGroup, FormControl, ControlLabel } from "react-bootstrap";
 // require('../mail.js')
+import female from './imgs/female_logo/favicon-32x32.png';
+import male from './imgs/male_logo/favicon-32x32.png';
+import "./SurveyFields.css";
 
 export default class SurveyFields extends Component {
     constructor(props) {
@@ -91,26 +94,37 @@ export default class SurveyFields extends Component {
                 <ControlLabel>Your Preferences</ControlLabel>
                 <ul className="form-fields">
 
-                    <FormGroup controlId="gender" bsSize="large">
+                    <FormGroup controlId="gender" bsSize="small">
                         <ControlLabel>Your gender</ControlLabel>
-                        <FormControl
-                        autoFocus
-                        type="range"
-                        min="0" max="1" step="0.01" 
-                        defaultValue={ this.props.fieldValues.gender } 
-                        onChange={({target}) => this.setState({gender: target.value})}
-                        />
+                        <br/>
+                        <div className="slider-grp">
+                            <img src={female} alt="Female" />
+                            <FormControl
+                            className="slider"
+                            autoFocus
+                            type="range"
+                            min="0" max="1" step="0.01" 
+                            defaultValue={ this.props.fieldValues.gender } 
+                            onChange={({target}) => this.setState({gender: target.value})}
+                            />
+                            <img src={male} alt="Male" />
+                        </div>
                     </FormGroup>
 
-                    <FormGroup controlId="pref" bsSize="large">
+                    <FormGroup controlId="pref" bsSize="small">
                         <ControlLabel>Your Interest</ControlLabel>
-                        <FormControl
-                        autoFocus
-                        type="range"
-                        min="0" max="1" step="0.01"
-                        defaultValue={this.props.fieldValues.pref} 
-                        onChange={({target}) => this.setState({pref: target.value})}
-                        />
+                        <br/>
+                        <div className="slider-grp">
+                            <img src={female} alt="Female" />
+                            <FormControl
+                            autoFocus
+                            type="range"
+                            min="0" max="1" step="0.01"
+                            defaultValue={this.props.fieldValues.pref} 
+                            onChange={({target}) => this.setState({pref: target.value})}
+                            />
+                            <img src={male} alt="Male" />
+                        </div>
                     </FormGroup>
 
 
