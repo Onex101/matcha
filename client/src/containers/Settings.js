@@ -86,7 +86,7 @@ export default class Settings extends Component {
                 <ControlLabel>Settings</ControlLabel>
                 {/* <HelpBlock>Please fill in all the fields below.</HelpBlock> */}
                 <ul className="form-fields">
-                    <FormGroup controlId="profile" bsSize="large">
+                    <FormGroup bsSize="large">
                         <ControlLabel>Upload Images</ControlLabel>
                         <FormControl
                             autoFocus
@@ -94,7 +94,7 @@ export default class Settings extends Component {
                             // defaultValue={this.props.fieldValues.first_name}
                             onChange={this.handleImageChange}
                         />
-                        <div controlId="propilePic"></div>
+                        <div ></div>
                     </FormGroup>
 
                     <FormGroup controlId="biography" bsSize="small">

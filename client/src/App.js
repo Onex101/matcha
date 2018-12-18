@@ -48,6 +48,11 @@ class App extends Component {
     }
     // Get profile info
     // Get Matches
+    this.getMatches();
+  }
+
+  getMatches() {
+    // Get Matches
     try {
       fetch('/user/match/' + localStorage.getItem('id'), {
         method: "GET",
@@ -65,7 +70,7 @@ class App extends Component {
         alert(e.message);
       }
   }
-
+  
   userHasAuthenticated = authenticated => {
     this.setState({ isAuthenticated: authenticated });
   }
@@ -74,13 +79,18 @@ class App extends Component {
     this.setState({ userInfo: user });
     localStorage.setItem('user', user.data.user_name);
     localStorage.setItem('id', user.data.id);
-    console.log("ID = " + localStorage.getItem('id'))
+    console.log("ID = " + localStorage.getItem('id'));
+    // Get Matches
+    this.getMatches();
   }
 
   handleLogout = event => {
     this.userHasAuthenticated(false);
     localStorage.removeItem('user');
     localStorage.removeItem('id');
+    this.setState({ userInfo: null });
+    this.setState({ userMatches: null });
+    this.setState({ userProfile: null });
     console.log("ID = " + localStorage.getItem('id'))
   }
 
