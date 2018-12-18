@@ -196,8 +196,9 @@ exports.user_login_get = function(req, res) {
 
 // Display User MATCHES on GET.
 exports.user_match_get = function(req, res) {
-    testData = {id: '4', user_name: 'brandon', first_name: 'Brandon',last_name: 'Feifer', email:'bran123456@hmail.com', birth_date:'26', gender:'0.7', pref:'1', gps_lat:'-37.957',gps_lon:'19.517', likes:'#picnic#nature#photography'}
-    let user = new User(testData);
+    // testData = {id: '4', user_name: 'brandon', first_name: 'Brandon',last_name: 'Feifer', email:'bran123456@hmail.com', birth_date:'26', gender:'0.7', pref:'1', gps_lat:'-37.957',gps_lon:'19.517', likes:'#picnic#nature#photography'}
+	testData = req.params;
+	let user = new User(testData);
     // console.log(user);
     // console.log(user.data.gps_lat);
     if (!user.data.id)

@@ -5,6 +5,7 @@ import "./App.css";
 import Routes from "./Routes";
 import SearchBar from "./containers/SearchBar";
 import { LinkContainer } from "react-router-bootstrap";
+import socketIOClient from 'socket.io-client';
 
 class App extends Component {
   constructor(props) {
@@ -12,9 +13,15 @@ class App extends Component {
   
     this.state = {
       isAuthenticated       : false,
-      userInfo              : null
+	  userInfo              : null,
+	  endpoint: "http://localhost:4000"
     };
     this.renderUser = this.renderUser.bind(this);
+  }
+
+  send = () => {
+	  const socket = socketIOClient(this.state.endpoint)
+	  socket.emit('change color', 'red') 
   }
 
   componentWillMount(){
@@ -86,6 +93,11 @@ class App extends Component {
       return(<SearchBar/>)
   }
   render() {
+	const socket = socketIOClient(this.state.endpoint)
+	socket.on('change color', (color) => {
+		// setting the color of our button
+		document.body.style.backgroundColor = color
+	})
     const childProps = {
       isAuthenticated       : this.state.isAuthenticated,
       userHasAuthenticated  : this.userHasAuthenticated,
