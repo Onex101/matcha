@@ -58,7 +58,7 @@ export default class SearchBar extends Component {
   }
 
 list() {
-  console.log("Items = " + this.state.items);
+  // console.log("Items = " + this.state.items);
   var itemList = this.state.items;
   for(let item in this.state.items) {
     itemList += <li>{item}</li>;

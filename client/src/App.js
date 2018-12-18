@@ -11,12 +11,35 @@ class App extends Component {
     super(props);
   
     this.state = {
-      isAuthenticated   : false,
+      isAuthenticated       : false,
       userInfo              : null
     };
     this.renderUser = this.renderUser.bind(this);
   }
-  
+
+  componentWillMount(){
+    // Get User
+    if (localStorage.getItem('user') && this.state.userInfo === null){
+      try {
+        fetch('/user/' + localStorage.getItem('id'), {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json; charset=utf-8",
+          },
+        })
+        .then(response => response.json())
+        .then((responseJSON) => {
+          this.setState({ userInfo: responseJSON["data"] });
+          console.log("User = " + JSON.stringify(this.state.userInfo));
+        })
+        .catch(err => console.error(err))
+        } catch (e) {
+          alert(e.message);
+        }
+    }
+    // Get Matches
+  }
+
   userHasAuthenticated = authenticated => {
     this.setState({ isAuthenticated: authenticated });
   }
@@ -24,11 +47,15 @@ class App extends Component {
   setUser = user => {
     this.setState({ userInfo: user });
     localStorage.setItem('user', user.data.user_name);
+    localStorage.setItem('id', user.data.id);
+    console.log("ID = " + localStorage.getItem('id'))
   }
 
   handleLogout = event => {
     this.userHasAuthenticated(false);
     localStorage.removeItem('user');
+    localStorage.removeItem('id');
+    console.log("ID = " + localStorage.getItem('id'))
   }
 
   renderUser() {
