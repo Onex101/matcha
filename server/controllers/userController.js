@@ -197,54 +197,76 @@ exports.user_login_get = function(req, res) {
 // Display User MATCHES on GET.
 exports.user_match_get = function(req, res) {
     // testData = {id: '4', user_name: 'brandon', first_name: 'Brandon',last_name: 'Feifer', email:'bran123456@hmail.com', birth_date:'26', gender:'0.7', pref:'1', gps_lat:'-37.957',gps_lon:'19.517', likes:'#picnic#nature#photography'}
-	testData = req.params;
-	let user = new User(testData);
+    console.log('match get');
+    testData = req.params;
+    let user = new User(data = {id: testData.id});
     // console.log(user);
     // console.log(user.data.gps_lat);
     if (!user.data.id)
         return res.send("failed: user does not exist")
-    user.match(function (err, results){
-        // console.log(results);
-        if (err){
-            throw err
-            res.status(400)
-            res.send({
-                "failed":"error ocurred"
-            })
-        }
+    console.log(user);
+    user.getById(this.data['id'], function(err, result){
+        if (err)
+            res.send(err);
         else{
-            // console.log(test)
-            // console.log("potato")
-            var array = [];
-            var i = 0;
-            // console.log(results[0]);
-            // testData = {id: '4', user_name: 'brandon', first_name: 'Brandon',last_name: 'Feifer', email:'bran123456@hmail.com', birth_date:'26', gender:'0.7', pref:'1', gps_lat:'-37.957',gps_lon:'19.517', likes:'#picnic#nature#photography'}
-            // let user = new User(testData);
-            while(results[i]){
-                // console.log(i);
-                dist = Match.getD_coff(user.data.gps_lat, user.data.gps_lon, results[i].gps_lat, results[i].gps_lon)
-                dist_raw = Match.getDistance(user.data.gps_lat, user.data.gps_lon, results[i].gps_lat, results[i].gps_lon)
-                birth_date = Match.getA_coff(user.data.birth_date, results[i].birth_date)
-                pref = Match.getP_coff(user.data.gender, user.data.pref, results[i].gender, results[i].pref)
-                like = Match.getL_coff(user.data.likes, results[i].likes)
-                var match =  (dist) +  (birth_date) +  (5*pref) + (like)
-                let new_data = results[i]
-                if(match > 4){ //4 is an arb number to exclude any matches that fall too far because of gender/pref differential
-                    new_user = new User(new_data);
-                    // console.log(new_user);
-                    new_user.match = match;
-                    new_user.like = like  * 100;
-                    new_user.dist_raw = dist_raw;
-                    new_user.birth_date_diff = Math.abs(new_user.birth_date - results[i].birth_date);
-                    // console.log(new_user);
-                    array.push(new_user);
-                }
-                i++;
-            }
-            // console.log("Results: " + results);
-            res.json(
-               array
-            )
+            row = result[0];
+            if (row){
+                console.log('row');
+                user.data = {
+                    id: row.id,
+                    first_name: row.first_name,
+                    last_name: row.last_name,
+                    user_name: row.user_name,
+                    birth_date: row.birth_date,
+                    gender: row.gender,
+                    pref: row.pref,
+                    gps_lat: row.gps_lat,
+                    gps_lon: row.gps_lat,
+                    likes: row.likes,
+                    fame: row.fame}
+                    user.match(function (err, results){
+                        if (err){
+                            res.status(400)
+                            res.send({
+                                "failed":"error ocurred"
+                            })
+                            throw err;
+                        }
+                        else {
+                            console.log('Match algo');
+                            var array = [];
+                            var i = 0;
+                            // console.log(user);
+                            while(results[i]){
+                                dist = Match.getD_coff(user.data.gps_lat, user.data.gps_lon, results[i].gps_lat, results[i].gps_lon)
+                                dist_raw = Match.getDistance(user.data.gps_lat, user.data.gps_lon, results[i].gps_lat, results[i].gps_lon)
+                                birth_date = Match.getA_coff(user.data.birth_date, results[i].birth_date)
+                                pref = Match.getP_coff(user.data.gender, user.data.pref, results[i].gender, results[i].pref)
+                                // console.log(user.data.likes + "   " + results[i].likes);
+                                like = Match.getL_coff(user.data.likes, results[i].likes)
+                                var match =  (dist) +  (birth_date) +  (5*pref) + (like)
+                                let new_data = results[i]
+                                if(match > 4){ //4 is an arb number to exclude any matches that fall too far because of gender/pref differential
+                                    new_user = new User(new_data);
+                                    new_user.match = match;
+                                    new_user.like = like  * 100;
+                                    new_user.dist_raw = dist_raw;
+                                    new_user.birth_date_diff = Math.abs(new_user.birth_date - results[i].birth_date);
+                                    array.push(new_user);
+                                }
+                                i++;
+                            }
+                            obj = {};
+                            for (var key in array) {
+                                obj[key] = array[key]
+                            }
+                            console.log(obj);
+                            res.json(
+                                obj
+                            )
+                        }
+                    })
+            }    
         }
     })
     // res.send('NOT IMPLEMENTED: User match GET');

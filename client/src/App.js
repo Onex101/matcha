@@ -57,7 +57,7 @@ class App extends Component {
       })
       .then(response => response.json())
       .then((responseJSON) => {
-        this.setState({ userMatches: responseJSON["data"] });
+        this.setState({ userMatches: responseJSON });
         console.log("Matches = " + JSON.stringify(this.state.userMatches));
       })
       .catch(err => console.error(err))
@@ -121,6 +121,8 @@ class App extends Component {
       isAuthenticated       : this.state.isAuthenticated,
       userHasAuthenticated  : this.userHasAuthenticated,
       userInfo              : this.state.userInfo,
+      userProfile           : this.state.userProfile,
+      userMatches           : this.state.userMatches,
       setUser               : this.setUser
     };
     var style = {
