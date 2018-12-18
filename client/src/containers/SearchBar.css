@@ -1,14 +1,24 @@
-@media all and (min-width: 480px) {
+@media all and (min-width: 590px) {
     .filter-list {
-      margin: 0 auto;        
-      padding:  5px 60px 0;
-      max-width: 800px;
+      margin: auto;
     }
-  
-    .list-group form {
-      margin: 0 auto;
-      max-width: 320px;
-      visibility: hidden;
+    
+    .form-control {
+      /* form-control-lg, */
+      
+      min-width: 400px;
+      max-width: 560px;
+      /* width: 500px; */
     }
+
+  }
+  .filter-list {
+    margin: 0 auto;
+  }
+  .form {
+    padding-top:  6px;
+    padding-right:  6px;
+    padding-left:  6px;
+    margin: auto;
   }
   

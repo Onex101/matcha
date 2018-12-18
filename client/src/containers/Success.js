@@ -1,11 +1,16 @@
 import React, { Component } from "react";
+import "./Success.css";
 
 export default class Success extends Component {
   render() {
     return (
       <div>
-        <h2>Successfully Registered!</h2>
-        {/* <p>Please check your email <b>{this.props.fieldValues.email}</b> for a confirmation link to activate your account.</p> */}
+        <div className="Success">
+          <div className="lander">
+            <h1>Successfully Registered!</h1>
+            <p>Now head to the login page and let the magic happen!</p>
+          </div>
+        </div>
       </div>
     )
   }

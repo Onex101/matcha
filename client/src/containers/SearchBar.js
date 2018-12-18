@@ -43,11 +43,6 @@ export default class SearchBar extends Component {
       // search all the things
       this.setState({items: null});
     }
-    // updatedList = updatedList.filter(function(item){
-    //   return item.toLowerCase().search(
-    //     event.target.value.toLowerCase()) !== -1;
-    // });
-    // this.setState({items: updatedList});
   }
 
   componentWillMount(){
@@ -63,33 +58,22 @@ export default class SearchBar extends Component {
   }
 
 list() {
-  console.log("Items = " + this.state.items);
+  // console.log("Items = " + this.state.items);
   var itemList = this.state.items;
   for(let item in this.state.items) {
     itemList += <li>{item}</li>;
   }
-  // var item = this.state.items;
-  // var itemList = item.map(function(it){
-  //                 return <li>{it}</li>;
-  //               })
 
   return  <ul>{ itemList }</ul>
 }
-// render: function() {
-//   var names = ['Jake', 'Jon', 'Thruster'];
-//   var namesList = names.map(function(name){
-//                   return <li>{name}</li>;
-//                 })
-
-//   return  <ul>{ namesList }</ul>
-// }
 
   render(){
     return (
       <div className="filter-list">
-        <form>
+        <form className="form">
         <fieldset className="form-group">
         <input type="text" className="form-control form-control-lg" placeholder="Search" onChange={this.filterList}/>
+        {/* <input type="text" className="searchBar" placeholder="Search" onChange={this.filterList}/> */}
         </fieldset>
         </form>
         <div className="list">{this.list()}</div>
