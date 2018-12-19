@@ -181,10 +181,10 @@ connection.connect(function (err) {
 
 	connection.query('ALTER TABLE `users`\
 	ADD COLUMN `bio` VARCHAR(255) AFTER password,\
-	ADD COLUMN `fame` int(9) unsigned NULL AFTER `pref`,\
-	ADD COLUMN `online` int (2) AFTER `likes`,\
+	ADD COLUMN `fame` INT(9) unsigned NULL AFTER `pref`,\
+	ADD COLUMN `online` DATETIME AFTER `likes`,\
 	ADD COLUMN `veri_code` VARCHAR(100) AFTER `likes`,\
-	ADD COLUMN `verified` int (2) NULL AFTER `veri_code`');
+	ADD COLUMN `verified` INT(2) NULL AFTER `veri_code`');
 
     console.log('Sucess!');
     console.log('Exiting...');
