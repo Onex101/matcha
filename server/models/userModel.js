@@ -214,7 +214,6 @@ User.prototype.login = function (callback){
 }
 
 User.prototype.match = function (callback){
-    console.log("ID " + this.data.id);
     let data = this.data;
     db.query(`SELECT id, user_name, birth_date, gender, pref, gps_lat, gps_lon, likes FROM users WHERE NOT id = ${this.data.id}`, function (err, results) {
         if (err){
