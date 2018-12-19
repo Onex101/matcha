@@ -14,30 +14,21 @@ export default class Home extends Component {
 
 
   sort_by(field, reverse, primer) {
-    console.log("Sort by test 1");
+    // console.log("Sort by test 1");
     var key = primer ? 
        function(x) {return primer(x[field])} : 
        function(x) {return x[field]};
-    console.log("Sort by test 2");
+    // console.log("Sort by test 2");
 
     reverse = !reverse ? 1 : -1;
-    console.log("Sort by test 3");
+    // console.log("Sort by test 3");
 
     return function (a, b) {
-      console.log("Sort by test 4");
-      console.log("a = " + key(a));
-      console.log("b = " + key(b));
+      // console.log("Sort by test 4");
+      // console.log("a = " + key(a));
+      // console.log("b = " + key(b));
       return a = key(a), b = key(b), reverse * ((a > b) - (b > a));
     } 
-    // console.log("Sort by test 1");
-    // var key = function (x) {console.log("Key Test 1"); return primer ? primer(x[field]) : x[field]};
-
-    // return function (a,b) {
-    //   var A = key(primer, field, a), B = key(primer, field, b);
-    //   console.log("A = " + A);
-    //   console.log("B = " + B);
-    //   return ( (A < B) ? -1 : ((A > B) ? 1 : 0) ) * [-1,1][+!!reverse];                  
-    // }
   }
 
   sortByAge = (e) => {
@@ -71,10 +62,11 @@ export default class Home extends Component {
             }
             result.push(temp);
         }
-        console.log("Result =");
-        console.info(result[0]);
-        result.sort(this.sort_by('dist_raw', true, false));
-        console.log("GPSSort = " + result);
+        // console.log("Result =");
+        // console.info(result[0]);
+        result.sort(this.sort_by('dist_raw', false, false));
+        // console.log("GPSSort = ");
+        // console.info(result);
         this.setState({matches: result});
       }
     }  catch (e) {
@@ -85,20 +77,21 @@ export default class Home extends Component {
   componentDidUpdate(){
     if (this.state.matches === null){
       this.getMatches();
-    console.log("State Matches 3 = " + JSON.stringify(this.state.matches));
-    console.log("Props Matches 3 = " + JSON.stringify(this.props.userMatches));}
+    // console.log("State Matches 3 = " + JSON.stringify(this.state.matches));
+    // console.log("Props Matches 3 = " + JSON.stringify(this.props.userMatches));
+    }
   }
 
   getMatchCards() {
     if (this.state.matches !== null) {
-      console.log("State = " + this.state.matches);
+      // console.log("State = " + this.state.matches);
       var ret = '<div className="lander">';
       for (var elem in this.state.matches) {
-        console.log("elem = " + JSON.stringify(this.state.matches[elem].data.user_name));
+        // console.log("elem = " + JSON.stringify(this.state.matches[elem].data.user_name));
         ret += '<div>' + this.state.matches[elem].data.user_name + '</div>'
       };
       ret += '</div>';
-      console.log("RET = " + ret);
+      // console.log("RET = " + ret);
       return ret;
     }
   }
@@ -107,8 +100,8 @@ export default class Home extends Component {
     if (localStorage.getItem('user') !== null) {
       if (this.state.matches !== null){
         return (
-          <div>
-            <ButtonToolbar><ButtonGroup>
+          <div className='button-fix'>
+            <ButtonToolbar className='buttons'><ButtonGroup>
                 <Button
                     bsSize="large"
                     onClick={this.sortByAge}
