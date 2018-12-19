@@ -204,14 +204,14 @@ exports.user_match_get = function(req, res) {
     // console.log(user.data.gps_lat);
     if (!user.data.id)
         return res.send("failed: user does not exist")
-    console.log(user);
+    // console.log(user);
     user.getById(this.data['id'], function(err, result){
         if (err)
             res.send(err);
         else{
             row = result[0];
             if (row){
-                console.log('row');
+                // console.log('row');
                 user.data = {
                     id: row.id,
                     first_name: row.first_name,
@@ -251,7 +251,7 @@ exports.user_match_get = function(req, res) {
                                     new_user.match = match;
                                     new_user.like = like  * 100;
                                     new_user.dist_raw = dist_raw;
-                                    new_user.birth_date_diff = Math.abs(new_user.birth_date - results[i].birth_date);
+                                    new_user.birth_date_diff = Math.abs(getAge(new_user.birth_date) - getAge(results[i].birth_date));
                                     array.push(new_user);
                                 }
                                 i++;
@@ -260,7 +260,7 @@ exports.user_match_get = function(req, res) {
                             for (var key in array) {
                                 obj[key] = array[key]
                             }
-                            console.log(obj);
+                            // console.log(obj);
                             res.json(
                                 obj
                             )
