@@ -9,72 +9,76 @@ const connection = mysql.createConnection({
 
 
 connection.connect(function (err) {
-    if (err) throw err
+	if (err) throw err
 
-    console.log('Creating matcha_db database...')
-    connection.query('DROP DATABASE IF EXISTS matcha_db');
-    connection.query('CREATE DATABASE matcha_db');
-    connection.changeUser({database : 'matcha_db'}, function(err) {
-      if (err) throw err;
-    });
+	console.log('Creating matcha_db database...')
+	connection.query('DROP DATABASE IF EXISTS matcha_db');
+	connection.query('CREATE DATABASE matcha_db');
+	connection.changeUser({database : 'matcha_db'}, function(err) {
+		if (err) throw err;
+	});
 
-    console.log('Initiating tables...')
-    connection.query('DROP TABLE IF EXISTS users');
-    connection.query('DROP TABLE IF EXISTS pictures');
-    connection.query('DROP TABLE IF EXISTS history');
-    connection.query('DROP TABLE IF EXISTS likes');
-    connection.query('DROP TABLE IF EXISTS notifications');
-    connection.query('DROP TABLE IF EXISTS history');
-    connection.query('DROP TABLE IF EXISTS msgs');
+	console.log('Initiating tables...')
+	connection.query('DROP TABLE IF EXISTS users');
+	connection.query('DROP TABLE IF EXISTS pictures');
+	connection.query('DROP TABLE IF EXISTS history');
+	connection.query('DROP TABLE IF EXISTS likes');
+	connection.query('DROP TABLE IF EXISTS notifications');
+	connection.query('DROP TABLE IF EXISTS history');
+	connection.query('DROP TABLE IF EXISTS msgs');
 
-    connection.query("CREATE TABLE `users`\
-    (`id` int(9) unsigned NOT NULL AUTO_INCREMENT,\
-    `user_name` varchar(100) NOT NULL,\
-    `password` varchar(255) NOT NULL,\
-    `first_name` varchar(100) NOT NULL,\
-    `last_name` varchar(100) NOT NULL,\
-    `email` varchar(100) NOT NULL,\
-    `birth_date` date NOT NULL,\
-    `gender` decimal(3,2) unsigned NOT NULL,\
-    `pref` decimal(3,2) unsigned NOT NULL,\
-    `gps_lon` decimal(5,3) NOT NULL,\
-    `gps_lat` decimal(5,3) NOT NULL,\
-    `likes` tinytext NOT NULL,\
-    PRIMARY KEY (`id`))\
-    ENGINE=InnoDB AUTO_INCREMENT=101 DEFAULT CHARSET=utf8;");
+	connection.query("CREATE TABLE `users`\
+	(`id` int(9) unsigned NOT NULL AUTO_INCREMENT,\
+	`user_name` varchar(100) NOT NULL,\
+	`password` varchar(255) NOT NULL,\
+	`first_name` varchar(100) NOT NULL,\
+	`last_name` varchar(100) NOT NULL,\
+	`email` varchar(100) NOT NULL,\
+	`birth_date` date NOT NULL,\
+	`gender` decimal(3,2) unsigned NOT NULL,\
+	`pref` decimal(3,2) unsigned NOT NULL,\
+	`gps_lon` decimal(5,3) NOT NULL,\
+	`gps_lat` decimal(5,3) NOT NULL,\
+	`bio` tinytext NOT NULL,\
+	PRIMARY KEY (`id`))\
+	ENGINE=InnoDB AUTO_INCREMENT=101 DEFAULT CHARSET=utf8;");
 
-    connection.query('CREATE TABLE pictures\
-    (id int NOT NULL AUTO_INCREMENT,\
-    pic longtext,\
-	user_name varchar(255),\
-	profile_pic int(2),\
-    PRIMARY KEY (id))');
+	connection.query('CREATE TABLE pictures\
+	(id int NOT NULL AUTO_INCREMENT,\
+	pic longtext,\
+	user_id int(9),\
+	PRIMARY KEY (id))');
 
-    connection.query('CREATE TABLE history\
-    (viewer_id int NOT NULL,\
-    viewed_id int NOT NULL)');
+	connection.query('CREATE TABLE history\
+	(viewer_id int NOT NULL,\
+	viewed_id int NOT NULL)');
 
-    connection.query('CREATE TABLE likes\
-    (user1_id int NOT NULL,\
-    user2_id int NOT NULL,\
-    link int)');
+	connection.query('CREATE TABLE likes\
+	(user1_id int NOT NULL,\
+	user2_id int NOT NULL,\
+	link int)');
+
+	connection.query('CREATE TABLE user_interests\
+	(user_id int NOT NULL,\
+	interest_id int NOT NULL\
+	)');
 
 	connection.query('CREATE TABLE notifications(\
 	id int NOT NULL AUTO_INCREMENT,\
 	user_id int NOT NULL,\
-    noti varchar(255),\
+	noti varchar(255),\
 	viewed_status int,\
 	PRIMARY KEY (`id`)\
 	)');
 
-    connection.query('CREATE TABLE msgs\
-    (id int NOT NULL AUTO_INCREMENT,\
-    user1_id int NOT NULL,\
-    user2_id int NOT NULL,\
-    msg varchar(1000),\
-    PRIMARY KEY (`id`))');
+	connection.query('CREATE TABLE msgs\
+	(id int NOT NULL AUTO_INCREMENT,\
+	user1_id int NOT NULL,\
+	user2_id int NOT NULL,\
+	msg varchar(1000),\
+	PRIMARY KEY (`id`))');
 
-    console.log('Creating fake profiles...')
+	console.log('Creating fake profiles...')
 
 	connection.query("\
 	INSERT INTO `users` VALUES ('101','lamar91','7e7d7c2297a619a23d825031c91ce38e7a339e6a','Deron','Rolfson','freeda81@example.com','1983-02-12','1.00','0.57','-99.999','17.973','Ut animi eveniet optio fugit eum dolores ut consectetur molestiae quo aspernatur quo magni.'),\
@@ -180,13 +184,14 @@ connection.connect(function (err) {
 	");
 
 	connection.query('ALTER TABLE `users`\
-	ADD COLUMN `bio` VARCHAR(255) AFTER password,\
 	ADD COLUMN `fame` INT(9) unsigned NULL AFTER `pref`,\
-	ADD COLUMN `online` DATETIME AFTER `likes`,\
-	ADD COLUMN `veri_code` VARCHAR(100) AFTER `likes`,\
-	ADD COLUMN `verified` INT(2) NULL AFTER `veri_code`');
+	ADD COLUMN `online` DATETIME AFTER `bio`,\
+	ADD COLUMN `veri_code` VARCHAR(100) AFTER `bio`,\
+	ADD COLUMN `verified` INT(2) NULL AFTER `veri_code`,\
+	ADD COLUMN `profile_pic_id` INT AFTER `birth_date`\
+	');
 
-    console.log('Sucess!');
-    console.log('Exiting...');
-    connection.end();
+	console.log('Sucess!');
+	console.log('Exiting...');
+	connection.end();
 })
