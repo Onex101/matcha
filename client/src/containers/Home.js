@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { HelpBlock, ButtonGroup, ButtonToolbar, Button, FormGroup, FormControl, ControlLabel } from "react-bootstrap";
 import "./Home.css";
 
-// Renders the homepafe given that the user is not currently signed in
+// Renders the homepage given that the user is not currently signed in
 export default class Home extends Component {
   constructor(props) {
     super(props);
@@ -12,22 +12,85 @@ export default class Home extends Component {
     }
   }
 
+
   sort_by(field, reverse, primer) {
+    console.log("Sort by test 1");
     var key = primer ? 
        function(x) {return primer(x[field])} : 
        function(x) {return x[field]};
+    console.log("Sort by test 2");
 
     reverse = !reverse ? 1 : -1;
+    console.log("Sort by test 3");
 
     return function (a, b) {
-       return a = key(a), b = key(b), reverse * ((a > b) - (b > a));
+      console.log("Sort by test 4");
+      console.log("a = " + key(a));
+      console.log("b = " + key(b));
+      return a = key(a), b = key(b), reverse * ((a > b) - (b > a));
     } 
+    // console.log("Sort by test 1");
+    // var key = function (x) {console.log("Key Test 1"); return primer ? primer(x[field]) : x[field]};
+
+    // return function (a,b) {
+    //   var A = key(primer, field, a), B = key(primer, field, b);
+    //   console.log("A = " + A);
+    //   console.log("B = " + B);
+    //   return ( (A < B) ? -1 : ((A > B) ? 1 : 0) ) * [-1,1][+!!reverse];                  
+    // }
+  }
+
+  sortByAge = (e) => {
+    e.preventDefault()
+    
+    try {
+      var ageSort = this.state.matches;
+      if (ageSort) {
+        [].slice.call(ageSort).sort(this.sort_by('birth_date_diff', true, false));
+        console.log("GPSSort = " + JSON.stringify(ageSort));
+        this.setState({matches: ageSort});
+      }
+    } catch (e) {
+      alert(e.message);
+    }
+  }
+
+  sortByLocation = (e) => {
+    e.preventDefault()
+    try {
+      // Make obj into array to sort
+      var gpsSort = this.state.matches;
+      if (gpsSort) {
+        var result = [];
+        for(var i in gpsSort){
+            var keys = Object.keys(gpsSort[i]);
+            var values = Object.values(gpsSort[i]);
+            var temp = [];
+            for(var i in keys){
+              temp[keys[i]] = values[i];
+            }
+            result.push(temp);
+        }
+        console.log("Result =");
+        console.info(result[0]);
+        result.sort(this.sort_by('dist_raw', true, false));
+        console.log("GPSSort = " + result);
+        this.setState({matches: result});
+      }
+    }  catch (e) {
+      alert(e.message);
+    }
+  }
+
+  componentDidUpdate(){
+    if (this.state.matches === null){
+      this.getMatches();
+    console.log("State Matches 3 = " + JSON.stringify(this.state.matches));
+    console.log("Props Matches 3 = " + JSON.stringify(this.props.userMatches));}
   }
 
   getMatchCards() {
-    if (this.props.userMatches !== null) {
-      if (this.state.matches === null)
-        this.getMatches()
+    if (this.state.matches !== null) {
       console.log("State = " + this.state.matches);
       var ret = '<div className="lander">';
       for (var elem in this.state.matches) {
@@ -42,36 +105,34 @@ export default class Home extends Component {
   
   landerCheck() {
     if (localStorage.getItem('user') !== null) {
-      if (this.props.userMatches !== null){
-        if (this.state.matches === null)
-          this.getMatches();
+      if (this.state.matches !== null){
         return (
           <div>
-          <ButtonToolbar><ButtonGroup>
-              <Button
-                  bsSize="large"
-                  onClick={this.sortByAge}
-              >Age</Button>
-          </ButtonGroup>
-          <ButtonGroup>
-              <Button
-                  bsSize="large"
-                  onClick={this.sortByLocation}
-              >Location</Button>
-          </ButtonGroup>
-          <ButtonGroup>
-              <Button
-                  bsSize="large"
-                  onClick={this.sortByFame}
-              >Fame</Button>
-          </ButtonGroup>
-          <ButtonGroup>
-              <Button
-                  bsSize="large"
-                  onClick={this.sortByTags}
-              >Tags</Button>
-          </ButtonGroup>
-          </ButtonToolbar>
+            <ButtonToolbar><ButtonGroup>
+                <Button
+                    bsSize="large"
+                    onClick={this.sortByAge}
+                >Age</Button>
+            </ButtonGroup>
+            <ButtonGroup>
+                <Button
+                    bsSize="large"
+                    onClick={this.sortByLocation}
+                >Location</Button>
+            </ButtonGroup>
+            <ButtonGroup>
+                <Button
+                    bsSize="large"
+                    onClick={this.sortByFame}
+                >Fame</Button>
+            </ButtonGroup>
+            <ButtonGroup>
+                <Button
+                    bsSize="large"
+                    onClick={this.sortByTags}
+                >Tags</Button>
+            </ButtonGroup>
+            </ButtonToolbar>
           </div>
         )
       } 
@@ -87,9 +148,11 @@ export default class Home extends Component {
       this.setState({matches: this.props.userMatches});
       console.log("State = " + this.state.matches);
   }
-}
+  }
 
   render() {
+    // if (this.state.matches === null)
+    //   this.getMatches()
     return (
       <div className="Home">
         <div className="lander">
