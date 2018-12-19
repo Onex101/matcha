@@ -204,14 +204,14 @@ exports.user_match_get = function(req, res) {
     // console.log(user.data.gps_lat);
     if (!user.data.id)
         return res.send("failed: user does not exist")
-    console.log(user);
+    // console.log(user);
     user.getById(this.data['id'], function(err, result){
         if (err)
             res.send(err);
         else{
             row = result[0];
             if (row){
-                console.log('row');
+                // console.log('row');
                 user.data = {
                     id: row.id,
                     first_name: row.first_name,
@@ -260,7 +260,7 @@ exports.user_match_get = function(req, res) {
                             for (var key in array) {
                                 obj[key] = array[key]
                             }
-                            console.log(obj);
+                            // console.log(obj);
                             res.json(
                                 obj
                             )
