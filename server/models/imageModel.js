@@ -91,26 +91,6 @@ Image.prototype.getPicById = function (callback){
 	})
 }
 
-// Image.prototype.setProfilePic = function (callback){
-// 	db.query(`UPDATE TABLE pictures SET profile_pic = '0' WHERE user = '${this.data.user_id}' AND profile_pic = '1'`, function (err, results) {
-// 		if (err){
-// 			throw err;
-// 			callback(err, null);
-// 		}
-// 		else{
-// 			db.query(`UPDATE TABLE pictures SET profile_pic = '1' WHERE id = '${this.data.pic_num}'`, function (err, results) {
-// 				if (err){
-// 					throw err;
-// 					callback(err, null);
-// 				}
-// 				else{
-// 					callback(null, results);
-// 				}
-// 			})
-// 		}
-// 	})
-// }
-
 Image.prototype.setProfilePic = function (callback){
 	db.query(`UPDATE TABLE users SET profile_pic_id = '${this.data.pic_id}' WHERE user = '${this.data.user_id}'`, function (err, results) {
 	if (err){
