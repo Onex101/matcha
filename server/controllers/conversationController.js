@@ -27,7 +27,7 @@ exports.sendMessage = function(req, res) {
 exports.getConversation = function(req, res) {
 	data = req.params;
 	let conversation = new Conversation(data);
-	conversation.getByUsers(this.data.user1, this.data.user, function (err, results){
+	conversation.getByUsers(this.data.user1, this.data.user2, function (err, results){
 		if (err){
 			res.send(err);
 		}

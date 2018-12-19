@@ -20,7 +20,7 @@ var schemas = {
 		id: null,
 		conversation_id: null,
 		sender: null,
-		reciever: null,
+		receiver: null,
 		message: null
 	},
 	conversation: {

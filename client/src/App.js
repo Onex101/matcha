@@ -16,14 +16,14 @@ class App extends Component {
       userInfo              : null,
       userProfile           : null,
       userMatches           : null,
-	    endpoint: "http://localhost:4000"
+	  endpoint: "http://localhost:4000"
     };
     this.renderUser = this.renderUser.bind(this);
   }
 
   send = () => {
 	  const socket = socketIOClient(this.state.endpoint)
-	  socket.emit('change color', 'red') 
+	  socket.emit(this.state.userInfo) 
   }
 
   componentWillMount(){
@@ -123,10 +123,10 @@ class App extends Component {
   }
   render() {
 	const socket = socketIOClient(this.state.endpoint)
-	socket.on('change color', (color) => {
-		// setting the color of our button
-		document.body.style.backgroundColor = color
-	})
+	// socket.on('change color', (color) => {
+	// 	// setting the color of our button
+	// 	document.body.style.backgroundColor = color
+	// })
     const childProps = {
       isAuthenticated       : this.state.isAuthenticated,
       userHasAuthenticated  : this.userHasAuthenticated,

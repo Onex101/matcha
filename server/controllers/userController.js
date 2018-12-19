@@ -197,7 +197,7 @@ exports.user_login_get = function(req, res) {
 // Display User MATCHES on GET.
 exports.user_match_get = function(req, res) {
     // testData = {id: '4', user_name: 'brandon', first_name: 'Brandon',last_name: 'Feifer', email:'bran123456@hmail.com', birth_date:'26', gender:'0.7', pref:'1', gps_lat:'-37.957',gps_lon:'19.517', likes:'#picnic#nature#photography'}
-    console.log('match get');
+    // console.log('match get');
     testData = req.params;
     let user = new User(data = {id: testData.id});
     // console.log(user);
@@ -228,12 +228,12 @@ exports.user_match_get = function(req, res) {
                         if (err){
                             res.status(400)
                             res.send({
-                                "failed":"error ocurred"
+								"failed":"error ocurred"
                             })
                             throw err;
                         }
                         else {
-                            console.log('Match algo');
+                            // console.log('Match algo');
                             var array = [];
                             var i = 0;
                             // console.log(user);
