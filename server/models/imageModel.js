@@ -42,20 +42,32 @@ Image.prototype.deletePic = function (callback){
 
 Image.prototype.savePic = function (callback){
 	console.log(this.data);
-	db.query(`INSERT INTO pictures (pic, user) VALUES '${this.data.pic_data}','${this.data.user_id}')`, function (err, results) {
+	db.query(`INSERT INTO pictures(pic, user_id) VALUES('${this.data.pic}','${this.data.user_id}')`, function (err, results) {
 		if (err){
 			throw err;
 			callback(err, null);
 		}
 		else{
-			callback(null, results);
+			db.query(`DELETE pictures FROM pictures LEFT JOIN users ON pictures.id = users.profile_pic_id
+			WHERE pictures.user_id = ${this.data.user_id} AND pictures.id NOT IN
+			(SELECT id FROM( SELECT id FROM pictures WHERE user_id = ${this.data.user_id} ORDER BY id DESC LIMIT 4) x ) 
+			AND user_name IS NULL`, function (err, results) {
+				if (err){
+					throw err;
+					callback(err, null);
+				}
+				else{
+					callback(null, results);
+				}
+			})
 		}
 	})
 }
 
 Image.prototype.getProfilePic = function (callback){
 	console.log(this.data);
-	db.query(`SELECT pic FROM pictures WHERE user = '${this.data.user_name}' AND profile_pic = '1'`, function (err, results) {
+	//db.query(`SELECT pic FROM pictures WHERE user = '${this.data.user_name}' AND profile_pic = '1'`, function (err, results) {
+	db.query(`SELECT pic FROM pictures JOIN users ON pictures.id = user.profile_pic_id WHERE user = '${this.data.user_id}'`, function (err, results) {
 		if (err){
 			throw err;
 			callback(err, null);
@@ -79,22 +91,34 @@ Image.prototype.getPicById = function (callback){
 	})
 }
 
+// Image.prototype.setProfilePic = function (callback){
+// 	db.query(`UPDATE TABLE pictures SET profile_pic = '0' WHERE user = '${this.data.user_id}' AND profile_pic = '1'`, function (err, results) {
+// 		if (err){
+// 			throw err;
+// 			callback(err, null);
+// 		}
+// 		else{
+// 			db.query(`UPDATE TABLE pictures SET profile_pic = '1' WHERE id = '${this.data.pic_num}'`, function (err, results) {
+// 				if (err){
+// 					throw err;
+// 					callback(err, null);
+// 				}
+// 				else{
+// 					callback(null, results);
+// 				}
+// 			})
+// 		}
+// 	})
+// }
+
 Image.prototype.setProfilePic = function (callback){
-	db.query(`UPDATE TABLE pictures SET profile_pic = '0' WHERE user = '${this.data.user_id}' AND profile_pic = '1'`, function (err, results) {
-		if (err){
-			throw err;
-			callback(err, null);
-		}
-		else{
-			db.query(`UPDATE TABLE pictures SET profile_pic = '1' WHERE id = '${this.data.pic_num}'`, function (err, results) {
-				if (err){
-					throw err;
-					callback(err, null);
-				}
-				else{
-					callback(null, results);
-				}
-			})
+	db.query(`UPDATE TABLE users SET profile_pic_id = '${this.data.pic_id}' WHERE user = '${this.data.user_id}'`, function (err, results) {
+	if (err){
+		throw err;
+		callback(err, null);
+	}
+	else{
+			callback(null, results);
 		}
 	})
 }
