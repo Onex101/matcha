@@ -39,6 +39,7 @@ export default class Home extends Component {
       return ret;
     }
   }
+  
   landerCheck() {
     if (localStorage.getItem('user') !== null) {
       if (this.props.userMatches !== null){

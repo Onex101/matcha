@@ -102,6 +102,9 @@ class App extends Component {
     }
     return(<Navbar.Collapse><Nav pullRight>
             <Fragment>
+              <LinkContainer to="/Chat">
+                <NavItem>Chat</NavItem>
+              </LinkContainer>
               <LinkContainer to="/settings">
               {session
                 ? <NavItem>{(session)}</NavItem>
@@ -122,11 +125,11 @@ class App extends Component {
       return(<SearchBar/>)
   }
   render() {
-	const socket = socketIOClient(this.state.endpoint)
-	socket.on('change color', (color) => {
-		// setting the color of our button
-		document.body.style.backgroundColor = color
-	})
+	// const socket = socketIOClient(this.state.endpoint)
+	// socket.on('change color', (color) => {
+	// 	// setting the color of our button
+	// 	document.body.style.backgroundColor = color
+	// })
     const childProps = {
       isAuthenticated       : this.state.isAuthenticated,
       userHasAuthenticated  : this.userHasAuthenticated,

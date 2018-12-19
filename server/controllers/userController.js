@@ -251,7 +251,7 @@ exports.user_match_get = function(req, res) {
                                     new_user.match = match;
                                     new_user.like = like  * 100;
                                     new_user.dist_raw = dist_raw;
-                                    new_user.birth_date_diff = Math.abs(getAge(new_user.birth_date) - getAge(results[i].birth_date));
+                                    new_user.birth_date_diff = Math.abs(Match.getAge(new_user.birth_date) - Match.getAge(results[i].birth_date));
                                     array.push(new_user);
                                 }
                                 i++;
