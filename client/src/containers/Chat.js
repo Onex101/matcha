@@ -1,6 +1,12 @@
 import React, { Component } from "react";
 import { HelpBlock, ButtonGroup, ButtonToolbar, Button, FormGroup, FormControl, ControlLabel } from "react-bootstrap";
 import "./Chat.css";
+import io from 'socket.io-client';
+import {USER_CONNECTED, LOGOUT} from '../Events';
+import LoginForm from './LoginForm';
+import ChatContainer from './chat/ChatContainer'
+
+const socektUrl = "http://localhost:4000"
 
 export default class Chat extends Component {
   constructor(props) {
@@ -8,8 +14,34 @@ export default class Chat extends Component {
 
     this.state = {
       chatId: "",
-      chat: null
-    };
+      chat: null,
+	  socket: null,
+	  user: null
+	};
+  }
+
+  componentWillMount(){
+	  this.initSocket()
+  }
+
+  initSocket = ()=>{
+	const socket = io(socektUrl)
+	socket.on('connect', ()=>{
+		console.log("Connected");
+	})
+	this.setState({socket})
+  }
+
+  setUser = (user)=>{
+	  const {socket} = this.state;
+	  socket.emit(USER_CONNECTED, user);
+	  this.setState({user})
+  }
+
+  logout = ()=>{
+	  const {socket}=this.state
+	  socket.emit(LOGOUT)
+	  this.setState({user:null})
   }
 
   getChats() {
@@ -41,14 +73,20 @@ export default class Chat extends Component {
       }
   }
   render() {
-      console.log(this.props.userMatches);
+	// console.log(this.props.userMatches);
+	const {title} = this.props
+	const {socket, user} = this.state
     return (
-      <div className="chat">
-        {/* <div> */}
-            <div dangerouslySetInnerHTML={{__html: this.getChats()}}></div>
-            <div className="chatroom">{this.chatRoom()}</div>
-        {/* </div> */}
-      </div>
+	<div className="chat">
+		<div className="container">
+			{
+				!user ?
+				<LoginForm socket={socket} setUser={this.setUser}/>
+				:
+				<ChatContainer socket={socket} user={user} logout={this.logout}/>
+			}
+		</div>
+	</div>
     );
   }
 }
