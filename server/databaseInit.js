@@ -39,7 +39,7 @@ connection.connect(function (err) {
 	`pref` decimal(3,2) unsigned NOT NULL,\
 	`gps_lon` decimal(5,3) NOT NULL,\
 	`gps_lat` decimal(5,3) NOT NULL,\
-	`bio` tinytext NOT NULL,\
+	`likes` tinytext NOT NULL,\
 	PRIMARY KEY (`id`))\
 	ENGINE=InnoDB AUTO_INCREMENT=101 DEFAULT CHARSET=utf8;");
 
@@ -185,8 +185,8 @@ connection.connect(function (err) {
 
 	connection.query('ALTER TABLE `users`\
 	ADD COLUMN `fame` INT(9) unsigned NULL AFTER `pref`,\
-	ADD COLUMN `online` DATETIME AFTER `bio`,\
-	ADD COLUMN `veri_code` VARCHAR(100) AFTER `bio`,\
+	ADD COLUMN `online` DATETIME AFTER `likes`,\
+	ADD COLUMN `veri_code` VARCHAR(100) AFTER `likes`,\
 	ADD COLUMN `verified` INT(2) NULL AFTER `veri_code`,\
 	ADD COLUMN `profile_pic_id` INT AFTER `birth_date`\
 	');
