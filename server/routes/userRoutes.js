@@ -53,4 +53,7 @@ router.all('/notification', user_controller.user_notification);
 // POST request for checking if a user confirmation code is valid
 router.post('/signup/verify', user_controller.user_verify);
 
+//GET request to logout user
+router.get('/logout/:id',user_controller.user_logout);
+
 module.exports = router;
