@@ -78,7 +78,7 @@ export default class Chat extends Component {
 	const {socket, user} = this.state
     return (
 	<div className="chat">
-		<div className="container">
+		<div className="chat-container">
 			{
 				!user ?
 				<LoginForm socket={socket} setUser={this.setUser}/>
