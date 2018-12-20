@@ -30,18 +30,13 @@ export default class Chat extends Component {
 		console.log("Connected");
 	})
 	this.setState({socket})
-  }
-
-  setUser = (user)=>{
-	  const {socket} = this.state;
-	  socket.emit(USER_CONNECTED, user);
-	  this.setState({user})
+	socket.emit(USER_CONNECTED, this.state.user);
   }
 
   logout = ()=>{
-	  const {socket}=this.state
-	  socket.emit(LOGOUT)
-	  this.setState({user:null})
+		const {socket}=this.state
+		socket.emit(LOGOUT)
+		this.setState({user:null})
   }
 
   getChats() {
@@ -74,15 +69,16 @@ export default class Chat extends Component {
   }
 
   componentDidUpdate(){
-    if (this.state.user === null){
-      this.setState({user: this.props.userInfo});
-    }
+    if (this.state.user === null && this.props.userInfo !== null){
+		this.setState({user: this.props.userInfo.user_name});
+	}
+	// this.setUser(this.state.user);
   }
 
   render() {
 	// console.log(this.props.userMatches);
 	const {title} = this.props
-  const {socket, user} = this.state
+	const {socket, user} = this.state
     return (
 	<div className="chat">
 		<div className="chat-container">

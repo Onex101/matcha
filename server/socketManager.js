@@ -1,6 +1,6 @@
 const socketIO = require('./index.js');
 const {VERIFY_USER, USER_CONNECTED, USER_DISCONNECTED, LOGOUT, COMMUNITY_CHAT, MESSAGE_RECIEVED, MESSAGE_SENT, TYPING} = require('../client/src/Events')
-const {createUser, creatMessage, createChat} = require('../client/src/Factories')
+const {createUser, createMessage, createChat} = require('../client/src/Factories')
 
 let connectedUsers = {}
 
@@ -8,6 +8,10 @@ let communityChat = createChat()
 
 module.exports = function(socket){
 	console.log("Socket Id: " + socket.id);
+
+	let sendMessageToChatFromUser;
+
+	let sendTypingFromUser;
 
 	socket.on(VERIFY_USER, (nickname, callback)=>{
 		if (isUser(connectedUsers, nickname)){
@@ -19,15 +23,19 @@ module.exports = function(socket){
 	})
 
 	socket.on(USER_CONNECTED, (user)=>{
+		console.log('hi' + user)
 		connectedUsers = addUser(connectedUsers, user)
 		socket.user = user
+		sendMessageToChatFromUser = sendMessageToChat(user)
+		sendTypingFromUser = sendTypingToChat(user)
 		socketIO.io.emit(USER_CONNECTED, connectedUsers)
 		console.log(connectedUsers);
 	})
 
 	socket.on('disconnect', ()=>{
 		if("user" in socket){
-			connectedUsers = removeUser(connectedUsers, socket.user.name)
+			console.log(socket.user)
+			connectedUsers = removeUser(connectedUsers, socket.user)
 
 			socketIO.io.emit(USER_DISCONNECTED, connectedUsers)
 			console.log("Disconnect", connectedUsers);
@@ -56,20 +64,21 @@ module.exports = function(socket){
 }
 
 function sendTypingToChat(user){
-	return (chatId, isTyping)=>{
+	return ((chatId, isTyping)=>{
 		socketIO.io.emit(`${TYPING}-${chatId}`, {user, isTyping})
-	}
+	})
 }
 
 function sendMessageToChat(sender){
-	return (chatId, message)=>{
+	return ((chatId, message)=>{
 		socketIO.io.emit(`${MESSAGE_RECIEVED}-${chatId}`, createMessage({message, sender}))
-	}
+	})
 }
 
 function addUser(userList, user){
+	// console.log("Add user: ", user)
 	let newList = Object. assign({}, userList)
-	newList [user.name] = user
+	newList[user.user_name] = user['user_name']
 	return newList
 }
 
