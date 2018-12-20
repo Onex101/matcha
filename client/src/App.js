@@ -142,6 +142,7 @@ class App extends Component {
       display: 'flex',
     }
     return (
+      <div className="App-setup">
       <div className="App container">
         <Navbar fluid collapseOnSelect>
           <Navbar.Header>
@@ -168,6 +169,7 @@ class App extends Component {
               }
         </Navbar>
         <Routes childProps={childProps} />
+      </div>
       </div>
     );
   }  
