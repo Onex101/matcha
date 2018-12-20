@@ -16,7 +16,7 @@ export default class Chat extends Component {
       chatId: "",
       chat: null,
 	  socket: null,
-	  user: null,
+	  user: props.userInfo,
 	};
   }
 
@@ -75,7 +75,7 @@ export default class Chat extends Component {
 
   componentDidUpdate(){
     if (this.state.user === null){
-      this.setState({user: this.props.userInfo.user_name});
+      this.setState({user: this.props.userInfo});
     }
   }
 
