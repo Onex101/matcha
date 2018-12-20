@@ -7,13 +7,13 @@ export default class AccountFields extends Component {
         super(props);
 
         this.state = {
-            first_name: props.fieldValues.user_name,
-            last_name: props.fieldValues.user_name,
-            user_name: props.fieldValues.user_name,
-            password: props.fieldValues.password,
-            confirmPassword: "",
-            email: props.fieldValues.email,
-            birth_date: props.fieldValues.birth_date
+            first_name          : props.fieldValues.user_name,
+            last_name           : props.fieldValues.user_name,
+            user_name           : props.fieldValues.user_name,
+            password            : props.fieldValues.password,
+            confirmPassword     : "",
+            email               : props.fieldValues.email,
+            birth_date          : props.fieldValues.birth_date
         }
         this.saveAndContinue = this.saveAndContinue.bind(this);
     }
@@ -56,12 +56,12 @@ export default class AccountFields extends Component {
                         else {
                             //Get values via this.refs
                             var data = {
-                                first_name: this.state.first_name,
-                                last_name: this.state.last_name,
-                                user_name: this.state.user_name,
-                                password: this.state.password,
-                                email: this.state.email,
-                                birth_date: this.state.birth_date
+                                first_name      : this.state.first_name,
+                                last_name       : this.state.last_name,
+                                user_name       : this.state.user_name,
+                                password        : this.state.password,
+                                email           : this.state.email,
+                                birth_date      : this.state.birth_date
                             }
                             this.props.saveValues(data)
                             this.props.nextStep()
