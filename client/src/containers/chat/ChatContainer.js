@@ -25,6 +25,7 @@ export default class ChatContainer extends Component{
 	}
 
 	addChat = (chat, reset) => {
+		console.log(chat);
 		const {socket} = this.props
 		const {chats} = this.state
 

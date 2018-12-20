@@ -1,22 +1,38 @@
-import React, {Component} from 'react';
 
-export default class Messages extends Component{
+import React, { Component } from 'react';
+
+export default class Messages extends Component {
 	constructor(props) {
-		super(props);
+	  super(props);
+		
+		this.scrollDown = this.scrollDown.bind(this)
+	}
+
+	scrollDown(){
+		const { container } = this.refs
+		container.scrollTop = container.scrollHeight
+	}
+
+	componentDidMount() {
+		this.scrollDown()
+	}
+
+	componentDidUpdate(prevProps, prevState) {
+		this.scrollDown()
 	}
 	
-	render(){
-		const {messages, user, typingUser} = this.props
+	render() {
+		const { messages, user, typingUser } = this.props
 		return (
 			<div ref='container'
 				className="thread-container">
 				<div className="thread">
 					{
-						messages.map((mes, i)=>{
+						messages.map((mes)=>{
 							return (
 								<div
 									key={mes.id}
-									className={`message-container ${mes.sender === user.name} && 'right'`}
+									className={`message-container ${mes.sender === user.name && 'right'}`}
 								>
 									<div className="time">{mes.time}</div>
 									<div className="data">
@@ -24,7 +40,8 @@ export default class Messages extends Component{
 										<div className="name">{mes.sender}</div>
 									</div>
 								</div>
-							)
+
+								)
 						})
 					}
 					{
@@ -37,7 +54,9 @@ export default class Messages extends Component{
 						})
 					}
 				</div>
+
+
 			</div>
-		)
+		);
 	}
 }
