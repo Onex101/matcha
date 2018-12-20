@@ -8,7 +8,7 @@ export default class Home extends Component {
     super(props);
 
     this.state = {
-        matches: null,
+        matches: props.userMatches,
     }
   }
 
