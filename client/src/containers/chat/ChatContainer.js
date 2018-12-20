@@ -68,7 +68,7 @@ export default class ChatContainer extends Component{
 		const {user, logout} = this.props;
 		const {chats, activeChat} = this.state;
 		return(
-			<div className="container">
+			<div className="chat-container">
 				<SideBar
 					logout={logout}
 					chats={chats}
