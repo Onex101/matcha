@@ -107,7 +107,7 @@ export default class Home extends Component {
     if (localStorage.getItem('user') !== null) {
       if (this.state.matches !== null){
         return (
-          <div>
+          <div className="buttons">
             <ButtonToolbar><ButtonGroup>
                 <Button
                     bsSize="large"
