@@ -16,7 +16,7 @@ export default class Chat extends Component {
       chatId: "",
       chat: null,
 	  socket: null,
-	  user: null
+	  user: null,
 	};
   }
 
@@ -72,13 +72,21 @@ export default class Chat extends Component {
         //write what's in the chat
       }
   }
+
+  componentDidUpdate(){
+    if (this.state.user === null){
+      this.setState({user: this.props.userInfo.user_name});
+    }
+  }
+
   render() {
 	// console.log(this.props.userMatches);
 	const {title} = this.props
-	const {socket, user} = this.state
+  const {socket, user} = this.state
     return (
 	<div className="chat">
 		<div className="chat-container">
+    {console.log("User=" + this.props.userInfo)}
 			{
 				!user ?
 				<LoginForm socket={socket} setUser={this.setUser}/>
