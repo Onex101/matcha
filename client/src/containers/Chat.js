@@ -30,7 +30,9 @@ export default class Chat extends Component {
 		console.log("Connected");
 	})
 	this.setState({socket})
-	socket.emit(USER_CONNECTED, this.state.user);
+  console.log("SOCK User: " + this.props.userInfo);
+  if (this.state.user)
+    socket.emit(USER_CONNECTED, this.props.userInfo);
   }
 
   logout = ()=>{

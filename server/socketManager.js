@@ -23,13 +23,14 @@ module.exports = function(socket){
 	})
 
 	socket.on(USER_CONNECTED, (user)=>{
-		console.log('hi' + user)
+		console.log('This User Connected: ' + JSON.stringify(user.user_name))
 		connectedUsers = addUser(connectedUsers, user)
+		console.log("Connected Users: " + JSON.stringify(connectedUsers));
 		socket.user = user
 		sendMessageToChatFromUser = sendMessageToChat(user)
 		sendTypingFromUser = sendTypingToChat(user)
 		socketIO.io.emit(USER_CONNECTED, connectedUsers)
-		console.log(connectedUsers);
+		console.log("Connected Users: " + JSON.stringify(connectedUsers));
 	})
 
 	socket.on('disconnect', ()=>{

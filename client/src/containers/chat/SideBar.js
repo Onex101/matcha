@@ -3,11 +3,33 @@ import React, {Component} from 'react';
 export default class SideBar extends Component{
 	constructor(props){
 		super(props)
+
+		this.state = {
+			user: null
+		};
+	}
+
+	componentWillUpdate(){
+			console.log("PROPS 1: " + JSON.stringify(this.props.user))
+			console.log("PROPS 1 User: " + this.state.user)
+		if (this.state.user === null && this.props.user !== null){
+			console.log("PROPS: " + this.props.user)
+			this.setState({user: this.props.user})
+			console.log("PROPS User: " + this.state.user)
+			// this.setState({user: this.props.userInfo.user_name})
+		}
+	}
+
+	test(){
+		return(this.props.user);
 	}
 
 	render() {
-		const {chats, activeChat, user, setActiveChat, logout} = this.props
-		console.log(this.props);
+		const {chats, activeChat, setActiveChat} = this.props
+		// const {user} = this.state.user
+		const user = this.test()
+		console.log("SIDE Test: " + JSON.stringify(this.props));
+		console.log("SIDE User Test: " + JSON.stringify(user));
 		return(
 			<div id="side-bar">
 				<div className="heading">
@@ -55,10 +77,10 @@ export default class SideBar extends Component{
 					</div>
 				</div>
 				<div className="current-user">
-						<span>{user}</span>
-						<div onClick={()=>{logout()}} title="Logout" className="logout">
-							Logout
-						</div>
+						{/* {!user ? user = this.props.user : user = user} */}
+						{!user ?
+							<span>{user}</span>
+							: <span>{this.test()}</span>}
 				</div>
 			</div>
 		)
