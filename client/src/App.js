@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from "react";
 import { Link } from "react-router-dom";
-import { Nav, Navbar, NavItem } from "react-bootstrap";
+import { Nav, Navbar, NavItem, NavDropdown, MenuItem } from "react-bootstrap";
 import "./App.css";
 import Routes from "./Routes";
 import SearchBar from "./containers/SearchBar";
@@ -105,15 +105,18 @@ class App extends Component {
               <LinkContainer to="/Chat">
                 <NavItem>Chat</NavItem>
               </LinkContainer>
-              <LinkContainer to="/settings">
-              {session
-                ? <NavItem>{(session)}</NavItem>
-                : <NavItem>Username</NavItem>
-              }
-              </LinkContainer>
-              <LinkContainer to="/login">
-              <NavItem onClick={this.handleLogout}>Logout</NavItem>
-              </LinkContainer>
+              <NavDropdown eventKey={3} title={(session)} id="basic-nav-dropdown">
+                <LinkContainer to="/settings">
+                    <NavItem>Profile</NavItem>
+                </LinkContainer>  
+                <MenuItem eventKey={3.2}>
+                  
+                </MenuItem>
+                <MenuItem divider />
+                <LinkContainer to="/login">
+                  <NavItem onClick={this.handleLogout}>Logout</NavItem>
+                </LinkContainer>
+              </NavDropdown>
             </Fragment>
           </Nav>
           </Navbar.Collapse>
