@@ -73,7 +73,7 @@ export default class ChatContainer extends Component{
 				<SideBar
 					logout={logout}
 					chats={chats}
-					user={user.user_name}
+					user={user}
 					activeChat={activeChat}
 					setActiveChat={this.setActiveChat}
 				/>
@@ -84,7 +84,7 @@ export default class ChatContainer extends Component{
 								<ChatHeading name={activeChat.name} />
 								<Messages
 									messages={activeChat.messages}
-									user={user.user_name}
+									user={user}
 									typingUser={activeChat.typingUsers}
 								/>
 								<MessageInput

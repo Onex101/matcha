@@ -78,7 +78,8 @@ function sendMessageToChat(sender){
 function addUser(userList, user){
 	// console.log("Add user: ", user)
 	let newList = Object. assign({}, userList)
-	newList[user.user_name] = user['user_name']
+	if (user)
+		newList[user.user_name] = user['user_name']
 	return newList
 }
 

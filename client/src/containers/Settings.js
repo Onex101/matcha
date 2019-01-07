@@ -113,7 +113,6 @@ export default class Settings extends Component {
                 // </div>
                 <div className="settings">
                 <ControlLabel>Settings</ControlLabel>
-                {/* <HelpBlock>Please fill in all the fields below.</HelpBlock> */}
                 <ul className="form-fields">
                     <FormGroup bsSize="large">
                         <ControlLabel>Upload Images</ControlLabel>
@@ -127,17 +126,13 @@ export default class Settings extends Component {
                             <div className="imgPreview">
                                 {this.preview()}
                             </div>
-                            <ButtonToolbar>
-                                <ButtonGroup>
-                                    <Button
-                                        bsSize="large"
-                                        type="submit" 
-                                        className="submitButton"
-                                        // disabled={!this.validateForm()}
-                                        // onClick={this.saveAndContinue}
-                                        onClick={(e)=>this._handleSubmit(e)}>Upload Image</Button>
-                                </ButtonGroup>
-                            </ButtonToolbar>
+                            <Button
+                                bsSize="large"
+                                type="submit" 
+                                className="submitButton"
+                                // disabled={!this.validateForm()}
+                                // onClick={this.saveAndContinue}
+                                onClick={(e)=>this._handleSubmit(e)}>Upload Image</Button>
                             <div className="imgBar">
                                 <div className="img-thumbnail">{/* {this.pictures.1} */}</div>
                                 <div className="img-thumbnail">{/* {this.pictures.2} */}</div>
@@ -147,18 +142,15 @@ export default class Settings extends Component {
                             </div>
                         </div>
                     </FormGroup>
-
-                    <FormGroup controlId="biography" bsSize="small">
-                        <ControlLabel>Biography</ControlLabel>
-                        <FormControl
-                            autoFocus
-                            type="text"
-                            placeholder="Tell us about yourself!"
-                            // defaultValue={this.props.profile.biography}
-                            // onChange={this.handleChange()}
+                    <FormGroup controlId="formControlsTextarea" controlId="biography" bsSize="small">
+                    <ControlLabel>Biography</ControlLabel>
+                    <FormControl 
+                        componentClass="textarea" 
+                        placeholder="Tell us about yourself!"
+                        // defaultValue={this.props.profile.biography}
+                        // onChange={this.handleChange()} 
                         />
                     </FormGroup>
-
                     <FormGroup controlId="gender" bsSize="small">
                         <ControlLabel>Your gender</ControlLabel>
                         <br/>
