@@ -23,7 +23,7 @@ module.exports = function(socket){
 	})
 
 	socket.on(USER_CONNECTED, (user)=>{
-		console.log('This User Connected: ' + JSON.stringify(user.user_name))
+		console.log('This user has connected: ' + user)
 		connectedUsers = addUser(connectedUsers, user)
 		console.log("Connected Users: " + JSON.stringify(connectedUsers));
 		socket.user = user

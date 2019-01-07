@@ -330,6 +330,13 @@ exports.user_verify = function(req, res){
 	})
 }
 
+//GETs all interests for a given user
+exports.user_interests_get = function(req, res){
+
+}
+
+
+//Logout the current user
 exports.user_logout = function(req, res){
 	let user = new User('');
 	user.logout(this.data.id, function(err, results){
