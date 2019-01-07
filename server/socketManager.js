@@ -23,7 +23,7 @@ module.exports = function(socket){
 	})
 
 	socket.on(USER_CONNECTED, (user)=>{
-		console.log('hi' + user)
+		console.log('This user has connected: ' + user)
 		connectedUsers = addUser(connectedUsers, user)
 		socket.user = user
 		sendMessageToChatFromUser = sendMessageToChat(user)
@@ -78,7 +78,8 @@ function sendMessageToChat(sender){
 function addUser(userList, user){
 	// console.log("Add user: ", user)
 	let newList = Object. assign({}, userList)
-	newList[user.user_name] = user['user_name']
+	if (user)
+		newList[user.user_name] = user['user_name']
 	return newList
 }
 
