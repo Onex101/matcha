@@ -18,7 +18,7 @@ connection.connect(function (err) {
 		if (err) throw err;
 	});
 
-	console.log('Initiating tables...')
+	console.log('Deleting old tables...')
 	connection.query('DROP TABLE IF EXISTS users');
 	connection.query('DROP TABLE IF EXISTS pictures');
 	connection.query('DROP TABLE IF EXISTS history');
@@ -26,7 +26,10 @@ connection.connect(function (err) {
 	connection.query('DROP TABLE IF EXISTS notifications');
 	connection.query('DROP TABLE IF EXISTS history');
 	connection.query('DROP TABLE IF EXISTS msgs');
+	connection.query('DROP TABLE IF EXISTS interests');
+	connection.query('DROP TABLE IF EXISTS user_interests');
 
+	console.log('Initiating tables...')
 	connection.query("CREATE TABLE `users`\
 	(`id` int(9) unsigned NOT NULL AUTO_INCREMENT,\
 	`user_name` varchar(100) NOT NULL,\
@@ -47,7 +50,7 @@ connection.connect(function (err) {
 	(id int NOT NULL AUTO_INCREMENT,\
 	pic longtext,\
 	user_id int(9),\
-	PRIMARY KEY (id))');
+	PRIMARY KEY (`id`))');
 
 	connection.query('CREATE TABLE history\
 	(viewer_id int NOT NULL,\
@@ -62,6 +65,12 @@ connection.connect(function (err) {
 	(user_id int NOT NULL,\
 	interest_id int NOT NULL\
 	)');
+
+	connection.query('CREATE TABLE interests\
+	(id int NOT NULL AUTO_INCREMENT,\
+	interest varchar(255) NOT NULL,\
+	PRIMARY KEY (`id`))');
+
 
 	connection.query('CREATE TABLE notifications(\
 	id int NOT NULL AUTO_INCREMENT,\
@@ -81,7 +90,8 @@ connection.connect(function (err) {
 	console.log('Creating fake profiles...')
 
 	connection.query("\
-	INSERT INTO `users` VALUES ('101','lamar91','7e7d7c2297a619a23d825031c91ce38e7a339e6a','Deron','Rolfson','freeda81@example.com','1983-02-12','1.00','0.57','-99.999','17.973','Ut animi eveniet optio fugit eum dolores ut consectetur molestiae quo aspernatur quo magni.'),\
+	INSERT INTO `users` VALUES\
+	('101','lamar91','7e7d7c2297a619a23d825031c91ce38e7a339e6a','Deron','Rolfson','freeda81@example.com','1983-02-12','1.00','0.57','-99.999','17.973','Ut animi eveniet optio fugit eum dolores ut consectetur molestiae quo aspernatur quo magni.'),\
 	('102','judd.boyle','f09aa819ce0e17a5b24449dd7af0556371f8f2a0','Otis','Reichert','kutch.jerel@example.net','2008-01-20','0.91','0.58','99.999','-64.400','Ea enim quis consequatur dolorem animi facilis itaque porro cupiditate aut suscipit ut aut.'),\
 	('103','mschuppe','f3cb025343868739492b5b2517028f20758a2994','Lesly','Eichmann','dhyatt@example.com','1992-03-29','0.80','0.75','-99.999','-37.593','Repudiandae et accusamus atque a laboriosam deserunt molestias excepturi nihil quasi.'),\
 	('104','hackett.aaliyah','93ff39592cc6636e04a8e3023c1a6337b6c5ac14','Kara','Howell','zhessel@example.net','2009-07-01','0.56','0.15','-99.999','-26.120','Dicta dignissimos sed dolor nam nostrum doloremque temporibus.'),\
@@ -190,6 +200,13 @@ connection.connect(function (err) {
 	ADD COLUMN `verified` INT(2) NULL AFTER `veri_code`,\
 	ADD COLUMN `profile_pic_id` INT AFTER `birth_date`\
 	');
+
+	connection.query("\
+	INSERT INTO `interests` VALUES\
+	('1','potatoes'),\
+	('2','horses'),\
+	('3','picnics')\
+	");
 
 	console.log('Sucess!');
 	console.log('Exiting...');
