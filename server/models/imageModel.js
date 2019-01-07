@@ -14,6 +14,7 @@ Image.prototype.clean = function (data) {
 	return _.pick(_.defaults(data, schema), _.keys(schema)); 
 }
 
+//returns a table of base64 values of pictures that belong to the given user_id
 Image.prototype.getAllPics = function (callback){
 	console.log(this.data);
 	db.query(`SELECT pic FROM pictures WHERE user = '${this.data.user_id}'`, function (err, results) {
@@ -27,6 +28,7 @@ Image.prototype.getAllPics = function (callback){
 	})
 }
 
+//deletes pic of the given picId
 Image.prototype.deletePic = function (callback){
 	console.log(this.data);
 	db.query(`DELETE FROM pictures WHERE id = '${this.data.id}')`, function (err, results) {
@@ -40,6 +42,9 @@ Image.prototype.deletePic = function (callback){
 	})
 }
 
+
+//saves the given picture, if after adding the picture more than 5 images exist for this user the oldest, non profile pic will be deleted
+//add warning to let user know about this action
 Image.prototype.savePic = function (callback){
 	console.log(this.data);
 	db.query(`INSERT INTO pictures(pic, user_id) VALUES('${this.data.pic}','${this.data.user_id}')`, function (err, results) {
@@ -64,9 +69,9 @@ Image.prototype.savePic = function (callback){
 	})
 }
 
+//function returns the base64 of the given user's profile picture
 Image.prototype.getProfilePic = function (callback){
 	console.log(this.data);
-	//db.query(`SELECT pic FROM pictures WHERE user = '${this.data.user_name}' AND profile_pic = '1'`, function (err, results) {
 	db.query(`SELECT pic FROM pictures JOIN users ON pictures.id = user.profile_pic_id WHERE user = '${this.data.user_id}'`, function (err, results) {
 		if (err){
 			throw err;
@@ -78,6 +83,7 @@ Image.prototype.getProfilePic = function (callback){
 	})
 }
 
+//returns base64 value of picture of the given pic_id
 Image.prototype.getPicById = function (callback){
 	console.log(this.data);
 	db.query(`SELECT pic FROM pictures WHERE id = '${this.data.pic_id}'`, function (err, results) {
