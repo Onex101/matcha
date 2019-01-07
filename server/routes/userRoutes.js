@@ -47,9 +47,6 @@ router.post('/user/match', user_controller.user_match_post);
 // POST request for checking if a user exists
 router.post('/signup', user_controller.user_exists);
 
-// ALL request for getting notifications of a user
-router.all('/notification', user_controller.user_notification);
-
 // POST request for checking if a user confirmation code is valid
 router.post('/signup/verify', user_controller.user_verify);
 

@@ -1,6 +1,12 @@
 import React, { Component } from "react";
 import { HelpBlock, ButtonGroup, ButtonToolbar, Button, FormGroup, FormControl, ControlLabel } from "react-bootstrap";
 import "./Chat.css";
+import io from 'socket.io-client';
+import {USER_CONNECTED, LOGOUT} from '../Events';
+import LoginForm from './LoginForm';
+import ChatContainer from './chat/ChatContainer'
+
+const socektUrl = "http://localhost:4000"
 
 export default class Chat extends Component {
   constructor(props) {
@@ -8,8 +14,29 @@ export default class Chat extends Component {
 
     this.state = {
       chatId: "",
-      chat: null
-    };
+      chat: null,
+	  socket: null,
+	  user: props.userInfo,
+	};
+  }
+
+  componentWillMount(){
+	  this.initSocket()
+  }
+
+  initSocket = ()=>{
+	const socket = io(socektUrl)
+	socket.on('connect', ()=>{
+		console.log("Connected");
+	})
+	this.setState({socket})
+	socket.emit(USER_CONNECTED, this.state.user);
+  }
+
+  logout = ()=>{
+		const {socket}=this.state
+		socket.emit(LOGOUT)
+		this.setState({user:null})
   }
 
   getChats() {
@@ -40,15 +67,30 @@ export default class Chat extends Component {
         //write what's in the chat
       }
   }
+
+  componentDidUpdate(){
+    if (this.state.user === null && this.props.userInfo !== null){
+		this.setState({user: this.props.userInfo.user_name});
+	}
+	// this.setUser(this.state.user);
+  }
+
   render() {
-      console.log(this.props.userMatches);
+	// console.log(this.props.userMatches);
+	const {title} = this.props
+	const {socket, user} = this.state
     return (
-      <div className="chat">
-        {/* <div> */}
-            <div dangerouslySetInnerHTML={{__html: this.getChats()}}></div>
-            <div className="chatroom">{this.chatRoom()}</div>
-        {/* </div> */}
-      </div>
+	<div className="chat">
+		<div className="chat-container">
+    {console.log("User=" + this.props.userInfo)}
+			{
+				!user ?
+				<LoginForm socket={socket} setUser={this.setUser}/>
+				:
+				<ChatContainer socket={socket} user={user} logout={this.logout}/>
+			}
+		</div>
+	</div>
     );
   }
 }

@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from "react";
 import { Link } from "react-router-dom";
-import { Nav, Navbar, NavItem } from "react-bootstrap";
+import { Nav, Navbar, NavItem, NavDropdown, MenuItem } from "react-bootstrap";
 import "./App.css";
 import Routes from "./Routes";
 import SearchBar from "./containers/SearchBar";
@@ -39,7 +39,7 @@ class App extends Component {
         .then(response => response.json())
         .then((responseJSON) => {
           this.setState({ userInfo: responseJSON["data"] });
-          console.log("User = " + JSON.stringify(this.state.userInfo));
+        //   console.log("User = " + JSON.stringify(this.state.userInfo));
         })
         .catch(err => console.error(err))
         } catch (e) {
@@ -105,15 +105,18 @@ class App extends Component {
               <LinkContainer to="/Chat">
                 <NavItem>Chat</NavItem>
               </LinkContainer>
-              <LinkContainer to="/settings">
-              {session
-                ? <NavItem>{(session)}</NavItem>
-                : <NavItem>Username</NavItem>
-              }
-              </LinkContainer>
-              <LinkContainer to="/login">
-              <NavItem onClick={this.handleLogout}>Logout</NavItem>
-              </LinkContainer>
+              <NavDropdown eventKey={3} title={(session)} id="basic-nav-dropdown">
+                <LinkContainer to="/settings">
+                    <NavItem>Profile</NavItem>
+                </LinkContainer>  
+                <MenuItem eventKey={3.2}>
+                  
+                </MenuItem>
+                <MenuItem divider />
+                <LinkContainer to="/login">
+                  <NavItem onClick={this.handleLogout}>Logout</NavItem>
+                </LinkContainer>
+              </NavDropdown>
             </Fragment>
           </Nav>
           </Navbar.Collapse>
@@ -142,6 +145,7 @@ class App extends Component {
       display: 'flex',
     }
     return (
+      <div className="App-setup">
       <div className="App container">
         <Navbar fluid collapseOnSelect>
           <Navbar.Header>
@@ -168,6 +172,7 @@ class App extends Component {
               }
         </Navbar>
         <Routes childProps={childProps} />
+      </div>
       </div>
     );
   }  

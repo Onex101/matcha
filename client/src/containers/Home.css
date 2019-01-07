@@ -11,4 +11,7 @@
   .Home .lander p {
     color: #999;
   }
-  
+.button-fix{
+  max-width: 360px;
+  margin: auto;
+}
