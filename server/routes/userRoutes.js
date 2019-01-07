@@ -44,6 +44,9 @@ router.get('/user/match/:id', user_controller.user_match_get);
 // POST request for mtached users against userID
 router.post('/user/match', user_controller.user_match_post);
 
+//GET a users interests
+router.post('/user/:id/interests',user_controller.user_interests_get);
+
 // POST request for checking if a user exists
 router.post('/signup', user_controller.user_exists);
 
