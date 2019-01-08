@@ -46,7 +46,12 @@ User.prototype.deleteById = function (id, callback) {
 
 User.prototype.getById = function (data, callback) {
     var self = this;
-    var query = `SELECT * FROM users WHERE id = ${data}`;
+	// var query = `SELECT * FROM users WHERE id = ${data}`;
+	var query = `SELECT id, password,user_name, birth_date, gender, pref, gps_lat, gps_lon,bio, GROUP_CONCAT(interest) AS interests FROM\
+	(SELECT users.id, user_name, password,interest, birth_date, gender, pref, gps_lat, gps_lon, bio FROM user_interests\
+	JOIN users ON user_interests.user_id = users.id\
+	JOIN interests ON user_interests.interest_id = interests.id) x\
+	WHERE id = ${data} GROUP BY user_name, id;`;
     db.query(query, function (err, result) {
         if (err) {callback(err, null);}
         else{
@@ -75,13 +80,16 @@ User.prototype.getById = function (data, callback) {
 User.prototype.getByUsername = function (data, callback) {
     var self = this;
     data = mysql.escape(data);
-    var query = `SELECT * FROM users WHERE user_name = ${data}`;
+	// var query = `SELECT * FROM users WHERE user_name = ${data}`;
+	var query = `SELECT id, user_name, password, birth_date, gender, pref, gps_lat, gps_lon,bio, GROUP_CONCAT(interest) AS interests FROM\
+	(SELECT users.id, user_name, password, interest, birth_date, gender, pref, gps_lat, gps_lon, bio FROM user_interests\
+	JOIN users ON user_interests.user_id = users.id\
+	JOIN interests ON user_interests.interest_id = interests.id) x\
+	WHERE user_name = ${data} GROUP BY user_name, id;`;
     db.query(query, function (err, result) {
         if (err) {callback(err, null);}
-        // console.log(query, result);
         else{
             if (typeof callback === "function"){
-                // console.log("User updated", self);
                 callback(null, result);
             }
         }
@@ -245,7 +253,11 @@ User.prototype.login = function (callback){
 User.prototype.match = function (callback){
     let data = this.data;
 	// db.query(`SELECT id, user_name, birth_date, gender, pref, gps_lat, gps_lon, bio FROM users WHERE NOT id = ${this.data.id}`, function (err, results) {
-	db.query(`SELECT id, user_name, birth_date, gender, pref, gps_lat, gps_lon,bio, GROUP_CONCAT(interest) AS interests  FROM (SELECT users.id, user_name, interest, birth_date, gender, pref, gps_lat, gps_lon, bio FROM user_interests JOIN users ON user_interests.user_id = users.id JOIN interests ON user_interests.interest_id = interests.id) x WHERE NOT id = ${this.data.id} GROUP BY user_name, id;`, function (err, results) {
+	db.query(`SELECT id, user_name, birth_date, gender, pref, gps_lat, gps_lon,bio, GROUP_CONCAT(interest) AS interests FROM\
+		(SELECT users.id, user_name,interest, birth_date, gender, pref, gps_lat, gps_lon, bio FROM user_interests\
+		JOIN users ON user_interests.user_id = users.id\
+		JOIN interests ON user_interests.interest_id = interests.id) x\
+		WHERE NOT id = ${this.data.id} GROUP BY user_name, id;`, function (err, results) {
         if (err){
             callback(err, null);
 		}
@@ -260,6 +272,28 @@ User.prototype.exists = function (callback){
 	db.query(`SELECT user_name, email FROM users WHERE user_name = '${this.data.user_name}' OR email = '${this.data.email}'`, function (err, results) {
 		if (err){
 			throw err;
+			callback(err, null);
+		}
+		else{
+			callback(null, results);
+		}
+	})
+}
+
+User.prototype.getEmailById = function (callback){
+	db.query(`SELECT email FROM users WHERE id = '${this.data.id}'`, function (err, results) {
+		if (err){
+			callback(err, null);
+		}
+		else{
+			callback(null, results);
+		}
+	})
+}
+
+User.prototype.getEmailByUserName = function (callback){
+	db.query(`SELECT email FROM users WHERE user_name = '${this.data.user_name}'`, function (err, results) {
+		if (err){
 			callback(err, null);
 		}
 		else{
