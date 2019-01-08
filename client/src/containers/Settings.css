@@ -38,12 +38,18 @@ h3{
 .imgPreview{
   text-align: center;
   margin: auto;
-  height: 200px;
-  width: 300px;
-  border-left: 1px solid gray;
+  max-height: 200px;
+  width: 50%;
+  /* border-left: 1px solid gray;
   border-right: 1px solid gray;
   border-top: 5px solid gray;
-  border-bottom: 5px solid gray;
+  border-bottom: 5px solid gray; */
+  margin-bottom: 5px;
+}
+
+.preview{
+  height: auto;
+  width: 60%;
 }
 
 img {
@@ -76,3 +82,17 @@ img {
   text-align: center;
   width: 500px;
 }
+
+
+/* //from 0 - 320 px in width */
+@media only screen and (max-width : 500px) {
+  .submitButton { font-size:13% }    
+}
+
+@media only screen and (max-width : 1000px) {
+  .submitButton { font-size:60% }    
+}
+/* //from 321 - 480 px in width */
+/* @media only screen and (max-width : 990px) {
+  .submitButton { font-size:50% }    
+} */
