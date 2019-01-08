@@ -47,8 +47,8 @@ User.prototype.deleteById = function (id, callback) {
 User.prototype.getById = function (data, callback) {
     var self = this;
 	// var query = `SELECT * FROM users WHERE id = ${data}`;
-	var query = `SELECT id, user_name, birth_date, gender, pref, gps_lat, gps_lon,bio, GROUP_CONCAT(interest) AS interests FROM\
-	(SELECT users.id, user_name,interest, birth_date, gender, pref, gps_lat, gps_lon, bio FROM user_interests\
+	var query = `SELECT id, password,user_name, birth_date, gender, pref, gps_lat, gps_lon,bio, GROUP_CONCAT(interest) AS interests FROM\
+	(SELECT users.id, user_name, password,interest, birth_date, gender, pref, gps_lat, gps_lon, bio FROM user_interests\
 	JOIN users ON user_interests.user_id = users.id\
 	JOIN interests ON user_interests.interest_id = interests.id) x\
 	WHERE id = ${data} GROUP BY user_name, id;`;
@@ -81,8 +81,8 @@ User.prototype.getByUsername = function (data, callback) {
     var self = this;
     data = mysql.escape(data);
 	// var query = `SELECT * FROM users WHERE user_name = ${data}`;
-	var query = `SELECT id, user_name, birth_date, gender, pref, gps_lat, gps_lon,bio, GROUP_CONCAT(interest) AS interests FROM\
-	(SELECT users.id, user_name,interest, birth_date, gender, pref, gps_lat, gps_lon, bio FROM user_interests\
+	var query = `SELECT id, user_name, password, birth_date, gender, pref, gps_lat, gps_lon,bio, GROUP_CONCAT(interest) AS interests FROM\
+	(SELECT users.id, user_name, password, interest, birth_date, gender, pref, gps_lat, gps_lon, bio FROM user_interests\
 	JOIN users ON user_interests.user_id = users.id\
 	JOIN interests ON user_interests.interest_id = interests.id) x\
 	WHERE user_name = ${data} GROUP BY user_name, id;`;
