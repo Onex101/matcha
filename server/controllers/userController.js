@@ -234,7 +234,7 @@ exports.user_match_get = function(req, res) {
                                 dist_raw = Match.getDistance(user.data.gps_lat, user.data.gps_lon, results[i].gps_lat, results[i].gps_lon)
                                 birth_date = Match.getA_coff(user.data.birth_date, results[i].birth_date)
                                 pref = Match.getP_coff(user.data.gender, user.data.pref, results[i].gender, results[i].pref)
-                                like = 1;
+                                like = Match.getL_coff(user.data.interests, results[i].interests);
                                 var match =  (dist) +  (birth_date) +  (5*pref) + (like)
                                 let new_data = results[i]
                                 if(match > 4){ //4 is an arb number to exclude any matches that fall too far because of gender/pref differential
@@ -328,7 +328,7 @@ exports.user_interests_get = function(req, res){
 			res.send(err)
 		}
 		else{
-
+			res.send(results);
 		}
 	})
 }

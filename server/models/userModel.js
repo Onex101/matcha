@@ -280,4 +280,26 @@ User.prototype.exists = function (callback){
 	})
 }
 
+User.prototype.getEmailById = function (callback){
+	db.query(`SELECT email FROM users WHERE id = '${this.data.id}'`, function (err, results) {
+		if (err){
+			callback(err, null);
+		}
+		else{
+			callback(null, results);
+		}
+	})
+}
+
+User.prototype.getEmailByUserName = function (callback){
+	db.query(`SELECT email FROM users WHERE user_name = '${this.data.user_name}'`, function (err, results) {
+		if (err){
+			callback(err, null);
+		}
+		else{
+			callback(null, results);
+		}
+	})
+}
+
 module.exports = User;
