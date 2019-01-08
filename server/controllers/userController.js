@@ -41,7 +41,7 @@ exports.user_detail = function(req, res) {
                     pref: row.pref,
                     gps_lat: row.gps_lat,
                     gps_lon: row.gps_lat,
-                    likes: row.likes,
+                    bio: row.bio,
                     fame: row.fame,
                     email: row.email,
                     password: row.password}
@@ -167,7 +167,7 @@ exports.user_login_post = function(req, res) {
 							pref: row.pref,
 							gps_lat: row.gps_lat,
 							gps_lon: row.gps_lat,
-							likes: row.likes,
+							bio: row.bio,
 							fame: row.fame,
 							email: row.email,
 							password: row.password
@@ -216,7 +216,7 @@ exports.user_match_get = function(req, res) {
                     pref: row.pref,
                     gps_lat: row.gps_lat,
                     gps_lon: row.gps_lat,
-                    likes: row.likes,
+                    bio: row.bio,
                     fame: row.fame}
                     user.match(function (err, results){
                         if (err){
