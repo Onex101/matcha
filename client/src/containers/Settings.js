@@ -15,7 +15,8 @@ export default class Settings extends Component {
             imagePreviewUrl: '',
             gps_lat: null,
             gps_lon: null,
-            pictures: []
+            pictures: [],
+            profile: null
         }
     }
 
@@ -45,15 +46,28 @@ export default class Settings extends Component {
         var imagePreviewUrl = this.state.imagePreviewUrl;
 
         if (imagePreviewUrl) {
-            return( <img src={imagePreviewUrl}/>);
+            return( <img src={imagePreviewUrl} className="preview"/>);
         } else {
             return(<div className="previewText">Please select an Image for Preview</div>);
         }
     }
 
-    pics(){
-        var pic1, pic2, pic3, pic4;
+    profileCheck(){
+        if (this.state.profile === null)
+            return false
+        else
+            return true
 
+    }
+
+    pics(){
+        var profile, pic1, pic2, pic3, pic4;
+
+        if(this.state.profile)
+            profile = this.state.profile;
+        else
+            profile = temp;
+        
         if(this.state.pictures[1])
             pic1 = this.state.pictures[1];
         else
@@ -75,10 +89,46 @@ export default class Settings extends Component {
             pic4 = temp;
 
         return(<div className="imgBar">
-            <div className="img-thumbnail" style={{width:'15%'}}><img src={pic1} style={{width:'100%'}}/></div>
-            <div className="img-thumbnail" style={{width:'15%'}}><img src={pic2} style={{width:'100%'}}/></div>
-            <div className="img-thumbnail" style={{width:'15%'}}><img src={pic3} style={{width:'100%'}}/></div>
-            <div className="img-thumbnail" style={{width:'15%'}}><img src={pic4} style={{width:'100%'}}/></div>
+            <div className="img-thumbnail" style={{width:'20%'}}><img src={profile} style={{width:'100%'}}/>
+            <Button
+                bsSize="large"
+                type="submit" 
+                className="submitButton"
+                // disabled={!this.profileCheck()}
+                // onClick={this.saveAndContinue}
+                onClick={(e)=>this._handleSubmit(e)}>Upload Image</Button></div>
+            <div className="img-thumbnail" style={{width:'16%'}}><img src={pic1} style={{width:'100%'}}/>
+            <Button
+                bsSize="large"
+                type="submit" 
+                className="submitButton"
+                disabled={!this.profileCheck()}
+                // onClick={this.saveAndContinue}
+                onClick={(e)=>this._handleSubmit(e)}>Upload Image</Button></div>
+            <div className="img-thumbnail" style={{width:'16%'}}><img src={pic2} style={{width:'100%'}}/>
+            <Button
+                bsSize="large"
+                type="submit" 
+                className="submitButton"
+                disabled={!this.profileCheck()}
+                // onClick={this.saveAndContinue}
+                onClick={(e)=>this._handleSubmit(e)}>Upload Image</Button></div>
+            <div className="img-thumbnail" style={{width:'16%'}}><img src={pic3} style={{width:'100%'}}/>
+            <Button
+                bsSize="large"
+                type="submit" 
+                className="submitButton"
+                disabled={!this.profileCheck()}
+                // onClick={this.saveAndContinue}
+                onClick={(e)=>this._handleSubmit(e)}>Upload Image</Button></div>
+            <div className="img-thumbnail" style={{width:'16%'}}><img src={pic4} style={{width:'100%'}}/>
+            <Button
+                bsSize="large"
+                type="submit" 
+                className="submitButton"
+                disabled={!this.profileCheck()}
+                // onClick={this.saveAndContinue}
+                onClick={(e)=>this._handleSubmit(e)}>Upload Image</Button></div>
             </div>
         )
     }
@@ -157,16 +207,8 @@ export default class Settings extends Component {
                                 // defaultValue={this.props.fieldValues.first_name}
                                 onChange={(e)=>this._handleImageChange(e)}
                             />
-                            <div className="imgPreview">
-                                {this.preview()}
-                            </div>
-                            <Button
-                                bsSize="large"
-                                type="submit" 
-                                className="submitButton"
-                                // disabled={!this.validateForm()}
-                                // onClick={this.saveAndContinue}
-                                onClick={(e)=>this._handleSubmit(e)}>Upload Image</Button>
+                            <div className="imgPreview">{this.preview()}</div>
+                            <br/>
                             {this.pics()}
                         </div>
                     </FormGroup>

@@ -51,6 +51,10 @@ class App extends Component {
     this.getMatches();
   }
 
+  componentDidUpdate(){
+	  console.log("SAD " + this.state.userInfo)
+  }
+
   getMatches() {
     // Get Matches
     try {

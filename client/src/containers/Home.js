@@ -97,8 +97,7 @@ export default class Home extends Component {
   }
   
   landerCheck() {
-    if (localStorage.getItem('user') !== null) {
-      if (this.state.matches !== null){
+    if (localStorage.getItem('user') !== null && this.state.matches !== null) {
         return (
           <div className='button-fix'>
             <ButtonToolbar className='buttons'><ButtonGroup>
@@ -128,11 +127,10 @@ export default class Home extends Component {
             </ButtonToolbar>
           </div>
         )
-      } 
-      else {
-        var ret = '<div><h1>Matcha</h1><p>Find your Match and let Sparks fly!</p></div>';
-        return ret;
-      }
+    }
+    else {
+      var ret = '<div><h1>Matcha</h1><p>Find your Match and let Sparks fly!</p></div>';
+      return ret;
     }
   }
 

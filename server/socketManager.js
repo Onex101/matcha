@@ -25,9 +25,10 @@ module.exports = function(socket){
 	socket.on(USER_CONNECTED, (user)=>{
 		console.log('This user has connected: ' + user)
 		connectedUsers = addUser(connectedUsers, user)
+		// console.log("Connected Users: " + JSON.stringify(connectedUsers));
 		console.log("Connected Users: " + JSON.stringify(connectedUsers));
 		socket.user = user
-		sendMessageToChatFromUser = sendMessageToChat(user)
+		sendMessageToChatFromUser = sendMessageToChat(user);
 		sendTypingFromUser = sendTypingToChat(user)
 		socketIO.io.emit(USER_CONNECTED, connectedUsers)
 		console.log("Connected Users: " + JSON.stringify(connectedUsers));
@@ -60,7 +61,8 @@ module.exports = function(socket){
 	})
 
 	socket.on(TYPING, ({chatId, isTyping})=>{
-		sendTypingFromUser(chatId, isTyping)
+		if (sendTypingFromUser === 'function')
+			sendTypingFromUser(chatId, isTyping)
 	})
 }
 
@@ -80,7 +82,7 @@ function addUser(userList, user){
 	// console.log("Add user: ", user)
 	let newList = Object. assign({}, userList)
 	if (user)
-		newList[user.user_name] = user['user_name']
+		newList[user] = user
 	return newList
 }
 
