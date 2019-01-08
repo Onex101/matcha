@@ -15,13 +15,16 @@ export default class Chat extends Component {
     this.state = {
       chatId: "",
       chat: null,
-	  socket: null,
-	  user: props.userInfo,
-	};
+      socket: null,
+      user: null,
+    };
   }
 
   componentWillMount(){
-	  this.initSocket()
+    this.initSocket()
+    if (this.state.user === null && this.props.userInfo !== null){
+      this.setState({user: this.props.userInfo.user_name})
+    }
   }
 
   initSocket = ()=>{
@@ -44,7 +47,6 @@ export default class Chat extends Component {
   getChats() {
       if (this.props.userMatches)
       {
-        // console.log("State = " + this.state.matches);
         var ret = '<div className="lander">';
         for (var elem in this.props.userMatches) {
             console.log("elem = " + JSON.stringify(this.props.userMatches[elem].data.user_name));
@@ -56,41 +58,23 @@ export default class Chat extends Component {
     }
   }
 
-  openChat(id) {
-      this.setState({chatId: id});
-      //get chat with ID
-  }
-
-  chatRoom() {
-      if (this.state.chat === null) {
-          return <HelpBlock>Select a chat to open</HelpBlock>
-      }
-      else {
-        //write what's in the chat
-      }
-  }
-
-  componentDidUpdate(){
+componentDidUpdate(){
     if (this.state.user === null && this.props.userInfo !== null){
 		this.setState({user: this.props.userInfo.user_name});
-	}
-	// this.setUser(this.state.user);
-  }
+  	}
+}
 
-  render() {
-	// console.log(this.props.userMatches);
+render() {
 	const {title} = this.props
 	const {socket, user} = this.state
     return (
 	<div className="chat">
 		<div className="chat-container">
     {console.log("User=" + this.props.userInfo)}
-			{
-				!user ?
+			{!user ?
 				<LoginForm socket={socket} setUser={this.setUser}/>
 				:
-				<ChatContainer socket={socket} user={user} logout={this.logout}/>
-			}
+				<ChatContainer socket={socket} user={user} logout={this.logout}/>}
 		</div>
 	</div>
     );
