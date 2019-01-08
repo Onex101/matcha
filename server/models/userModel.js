@@ -51,7 +51,7 @@ User.prototype.getById = function (data, callback) {
 	(SELECT users.id, user_name, password,interest, birth_date, gender, pref, gps_lat, gps_lon, bio FROM user_interests\
 	JOIN users ON user_interests.user_id = users.id\
 	JOIN interests ON user_interests.interest_id = interests.id) x\
-	WHERE id = ${data} GROUP BY user_name, id;`;
+	WHERE id = ${data} GROUP BY user_name, id`;
     db.query(query, function (err, result) {
         if (err) {callback(err, null);}
         else{
@@ -85,7 +85,7 @@ User.prototype.getByUsername = function (data, callback) {
 	(SELECT users.id, user_name, password, interest, birth_date, gender, pref, gps_lat, gps_lon, bio FROM user_interests\
 	JOIN users ON user_interests.user_id = users.id\
 	JOIN interests ON user_interests.interest_id = interests.id) x\
-	WHERE user_name = ${data} GROUP BY user_name, id;`;
+	WHERE user_name = ${data} GROUP BY user_name, id`;
     db.query(query, function (err, result) {
         if (err) {callback(err, null);}
         else{
@@ -257,7 +257,7 @@ User.prototype.match = function (callback){
 		(SELECT users.id, user_name,interest, birth_date, gender, pref, gps_lat, gps_lon, bio FROM user_interests\
 		JOIN users ON user_interests.user_id = users.id\
 		JOIN interests ON user_interests.interest_id = interests.id) x\
-		WHERE NOT id = ${this.data.id} GROUP BY user_name, id;`, function (err, results) {
+		WHERE NOT id = ${this.data.id} GROUP BY user_name, id`, function (err, results) {
         if (err){
             callback(err, null);
 		}
