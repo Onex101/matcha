@@ -41,7 +41,7 @@ exports.user_detail = function(req, res) {
                     pref: row.pref,
                     gps_lat: row.gps_lat,
                     gps_lon: row.gps_lat,
-                    likes: row.likes,
+                    bio: row.bio,
                     fame: row.fame,
                     email: row.email,
                     password: row.password}
@@ -167,7 +167,7 @@ exports.user_login_post = function(req, res) {
 							pref: row.pref,
 							gps_lat: row.gps_lat,
 							gps_lon: row.gps_lat,
-							likes: row.likes,
+							bio: row.bio,
 							fame: row.fame,
 							email: row.email,
 							password: row.password
@@ -216,7 +216,7 @@ exports.user_match_get = function(req, res) {
                     pref: row.pref,
                     gps_lat: row.gps_lat,
                     gps_lon: row.gps_lat,
-                    likes: row.likes,
+                    bio: row.bio,
                     fame: row.fame}
                     user.match(function (err, results){
                         if (err){
@@ -229,14 +229,12 @@ exports.user_match_get = function(req, res) {
                         else {
                             var array = [];
 							var i = 0;
-							user_interest = User.getInterestsById(user.data.id);
                             while(results[i]){
-								match_interests = User.getInterestsById(results[i].data.id);
                                 dist = Match.getD_coff(user.data.gps_lat, user.data.gps_lon, results[i].gps_lat, results[i].gps_lon)
                                 dist_raw = Match.getDistance(user.data.gps_lat, user.data.gps_lon, results[i].gps_lat, results[i].gps_lon)
                                 birth_date = Match.getA_coff(user.data.birth_date, results[i].birth_date)
                                 pref = Match.getP_coff(user.data.gender, user.data.pref, results[i].gender, results[i].pref)
-                                like = Match.getL_coff(user_interests, match_interests);
+                                like = 1;
                                 var match =  (dist) +  (birth_date) +  (5*pref) + (like)
                                 let new_data = results[i]
                                 if(match > 4){ //4 is an arb number to exclude any matches that fall too far because of gender/pref differential
