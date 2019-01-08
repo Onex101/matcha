@@ -9,7 +9,7 @@ const connection = mysql.createConnection({
 
 
 connection.connect(function (err) {
-	if (err) throw err
+	if (err) throw err;
 
 	console.log('Creating matcha_db database...')
 	connection.query('DROP DATABASE IF EXISTS matcha_db');
@@ -205,14 +205,16 @@ connection.connect(function (err) {
 	INSERT INTO `interests` VALUES\
 	('1','potatoes'),\
 	('2','horses'),\
-	('3','picnics')\
+	('3','picnics'),\
+	('4','surfing')\
 	");
 
 	connection.query("\
 	INSERT INTO `user_interests` VALUES\
 	('101','1'),\
 	('101','2'),\
-	('101','3')\
+	('101','3'),\
+	('102','4')\
 	");
 
 	console.log('Sucess!');

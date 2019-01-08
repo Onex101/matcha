@@ -196,22 +196,16 @@ exports.user_login_get = function(req, res) {
 
 // Display User MATCHES on GET.
 exports.user_match_get = function(req, res) {
-    // testData = {id: '4', user_name: 'brandon', first_name: 'Brandon',last_name: 'Feifer', email:'bran123456@hmail.com', birth_date:'26', gender:'0.7', pref:'1', gps_lat:'-37.957',gps_lon:'19.517', likes:'#picnic#nature#photography'}
-    // console.log('match get');
     testData = req.params;
     let user = new User(data = {id: testData.id});
-    // console.log(user);
-    // console.log(user.data.gps_lat);
     if (!user.data.id)
         return res.send("failed: user does not exist")
-    // console.log(user);
     user.getById(this.data['id'], function(err, result){
         if (err)
             res.send(err);
         else{
             row = result[0];
             if (row){
-                // console.log('row');
                 user.data = {
                     id: row.id,
                     first_name: row.first_name,
@@ -233,17 +227,16 @@ exports.user_match_get = function(req, res) {
                             throw err;
                         }
                         else {
-                            // console.log('Match algo');
                             var array = [];
-                            var i = 0;
-                            // console.log(user);
+							var i = 0;
+							user_interest = User.getInterestsById(user.data.id);
                             while(results[i]){
+								match_interests = User.getInterestsById(results[i].data.id);
                                 dist = Match.getD_coff(user.data.gps_lat, user.data.gps_lon, results[i].gps_lat, results[i].gps_lon)
                                 dist_raw = Match.getDistance(user.data.gps_lat, user.data.gps_lon, results[i].gps_lat, results[i].gps_lon)
                                 birth_date = Match.getA_coff(user.data.birth_date, results[i].birth_date)
                                 pref = Match.getP_coff(user.data.gender, user.data.pref, results[i].gender, results[i].pref)
-                                // console.log(user.data.likes + "   " + results[i].likes);
-                                like = Match.getL_coff(user.data.likes, results[i].likes)
+                                like = Match.getL_coff(user_interests, match_interests);
                                 var match =  (dist) +  (birth_date) +  (5*pref) + (like)
                                 let new_data = results[i]
                                 if(match > 4){ //4 is an arb number to exclude any matches that fall too far because of gender/pref differential
@@ -260,7 +253,6 @@ exports.user_match_get = function(req, res) {
                             for (var key in array) {
                                 obj[key] = array[key]
                             }
-                            // console.log(obj);
                             res.json(
                                 obj
                             )
@@ -332,7 +324,15 @@ exports.user_verify = function(req, res){
 
 //GETs all interests for a given user
 exports.user_interests_get = function(req, res){
+	let user = new User('');
+	user.getInterestsById(user.data.id, function(err, results){
+		if(err){
+			res.send(err)
+		}
+		else{
 
+		}
+	})
 }
 
 
@@ -341,7 +341,7 @@ exports.user_logout = function(req, res){
 	let user = new User('');
 	user.logout(this.data.id, function(err, results){
 		if (err){
-
+			res.send(err)
 		}
 		else{
 			

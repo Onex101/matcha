@@ -74,6 +74,21 @@ User.prototype.getByUsername = function (data, callback) {
     });
 }
 
+//Retrieves a list interests of a given users user_id
+User.prototype.getInterestsById = function (data, callback) {
+	var self = this;
+	data = mysql.escape(data);
+	var query = `SELECT interest FROM interests JOIN user_interests ON interests.id=user_interests.interest_id WHERE user_id = ${data}`;
+	db.query(query, function (err, result) {
+		if (err) {callback(err, null);}
+		else{
+			if (typeof callback === "function"){
+				callback(null, result);
+			}
+		}
+	});
+}
+
 User.prototype.update = function (callback) {
 	// var self = this;
     for (var key in this.data) {
@@ -91,7 +106,7 @@ User.prototype.update = function (callback) {
             this.data['pref'],
             this.data['gps_lat'],
             this.data['gps_lon'],
-            this.data['likes'],
+            this.data['bio'],
             this.data['fame'],
             this.data['email'], 
 			this.data['password'],
@@ -109,7 +124,7 @@ User.prototype.update = function (callback) {
                 pref = ?,
                 gps_lat = ?,
                 gps_lon = ?,
-                likes = ?,
+                bio = ?,
                 fame = ?,
                 email = ?, 
 				password = ?,
@@ -155,7 +170,7 @@ User.prototype.save = function (callback) {
                 pref,
                 gps_lat,
                 gps_lon,
-                likes,
+                bio,
                 fame,
                 email, 
 				password,
@@ -172,7 +187,7 @@ User.prototype.save = function (callback) {
                 '${this.data['pref']}',
                 '${this.data['gps_lat']}',
                 '${this.data['gps_lon']}',
-                '${this.data['likes']}',
+                '${this.data['bio']}',
                 '${this.data['fame']}',
                 '${this.data['email']}',
 				'${this.data['password']}',
@@ -215,7 +230,7 @@ User.prototype.login = function (callback){
 
 User.prototype.match = function (callback){
     let data = this.data;
-    db.query(`SELECT id, user_name, birth_date, gender, pref, gps_lat, gps_lon, likes FROM users WHERE NOT id = ${this.data.id}`, function (err, results) {
+    db.query(`SELECT id, user_name, birth_date, gender, pref, gps_lat, gps_lon, bio FROM users WHERE NOT id = ${this.data.id}`, function (err, results) {
         if (err){
             callback(err, null);
 	}
