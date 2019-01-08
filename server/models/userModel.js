@@ -49,11 +49,25 @@ User.prototype.getById = function (data, callback) {
     var query = `SELECT * FROM users WHERE id = ${data}`;
     db.query(query, function (err, result) {
         if (err) {callback(err, null);}
-        // console.log(query, result);
         else{
-            if (typeof callback === "function")
-                // console.log("User updated", self);
-                callback(null, result);
+			// this.getInterestsById(this.data.id, function (err, res){
+			// 	if (err){
+			// 		callback(err, null);
+			// 	}
+			// 	else{
+			// 		if (typeof callback === "function")
+			// 		var interests = [];
+			// 		i = 0;
+			// 		while (res[i]){
+			// 			interests.push(res[i]);
+			// 			i++;
+			// 		}
+			// 		result[0].interests = interests;
+			// 		// console.log("User updated", self);
+			// 		callback(null, result);
+			// 	}
+			callback(null, result); 
+			// });
         }
     });
 }
@@ -234,7 +248,7 @@ User.prototype.match = function (callback){
 	db.query(`SELECT id, user_name, birth_date, gender, pref, gps_lat, gps_lon,bio, GROUP_CONCAT(interest) AS interests  FROM (SELECT users.id, user_name, interest, birth_date, gender, pref, gps_lat, gps_lon, bio FROM user_interests JOIN users ON user_interests.user_id = users.id JOIN interests ON user_interests.interest_id = interests.id) x WHERE NOT id = ${this.data.id} GROUP BY user_name, id;`, function (err, results) {
         if (err){
             callback(err, null);
-	}
+		}
 		else{
 			callback(null, results);
 		}

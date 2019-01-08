@@ -4,6 +4,7 @@ import { HelpBlock, ButtonGroup, ButtonToolbar, Button, FormGroup, FormControl, 
 import "./Settings.css";
 import female from './imgs/female_logo/favicon-32x32.png';
 import male from './imgs/male_logo/favicon-32x32.png';
+import temp from './imgs/profile-placeholder.png';
 
 export default class Settings extends Component {
     constructor(props) {
@@ -14,6 +15,7 @@ export default class Settings extends Component {
             imagePreviewUrl: '',
             gps_lat: null,
             gps_lon: null,
+            pictures: []
         }
     }
 
@@ -47,6 +49,38 @@ export default class Settings extends Component {
         } else {
             return(<div className="previewText">Please select an Image for Preview</div>);
         }
+    }
+
+    pics(){
+        var pic1, pic2, pic3, pic4;
+
+        if(this.state.pictures[1])
+            pic1 = this.state.pictures[1];
+        else
+            pic1 = temp;
+
+        if(this.state.pictures[2])
+            pic2 = this.state.pictures[2];
+        else
+            pic2 = temp;
+        
+        if(this.state.pictures[3])
+            pic3 = this.state.pictures[3];
+        else
+            pic3 = temp;
+        
+        if(this.state.pictures[4])
+            pic4 = this.state.pictures[4];
+        else
+            pic4 = temp;
+
+        return(<div className="imgBar">
+            <div className="img-thumbnail" style={{width:'15%'}}><img src={pic1} style={{width:'100%'}}/></div>
+            <div className="img-thumbnail" style={{width:'15%'}}><img src={pic2} style={{width:'100%'}}/></div>
+            <div className="img-thumbnail" style={{width:'15%'}}><img src={pic3} style={{width:'100%'}}/></div>
+            <div className="img-thumbnail" style={{width:'15%'}}><img src={pic4} style={{width:'100%'}}/></div>
+            </div>
+        )
     }
 
     gallery() {
@@ -133,13 +167,7 @@ export default class Settings extends Component {
                                 // disabled={!this.validateForm()}
                                 // onClick={this.saveAndContinue}
                                 onClick={(e)=>this._handleSubmit(e)}>Upload Image</Button>
-                            <div className="imgBar">
-                                <div className="img-thumbnail">{/* {this.pictures.1} */}</div>
-                                <div className="img-thumbnail">{/* {this.pictures.2} */}</div>
-                                <div className="img-thumbnail">{/* {this.pictures.3} */}</div>
-                                <div className="img-thumbnail">{/* {this.pictures.4} */}</div>
-                                <div className="img-thumbnail">{/* {this.pictures.5} */}</div>
-                            </div>
+                            {this.pics()}
                         </div>
                     </FormGroup>
                     <FormGroup controlId="formControlsTextarea" controlId="biography" bsSize="small">

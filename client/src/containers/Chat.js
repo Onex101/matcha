@@ -64,17 +64,25 @@ componentDidUpdate(){
   	}
 }
 
+loadContainer(){
+	const {title} = this.props
+  const {socket, user} = this.state
+  
+  if (this.state.user === null && this.props.userInfo)
+    return (<ChatContainer socket={socket} user={this.props.userInfo.user_name} logout={this.logout}/>)
+  else
+    return (<ChatContainer socket={socket} user={user} logout={this.logout}/>)
+}
+
 render() {
 	const {title} = this.props
 	const {socket, user} = this.state
-    return (
+  console.log("User TEST A= " + this.state.user)
+  
+  return (
 	<div className="chat">
 		<div className="chat-container">
-    {console.log("User=" + this.props.userInfo)}
-			{!user ?
-				<LoginForm socket={socket} setUser={this.setUser}/>
-				:
-				<ChatContainer socket={socket} user={user} logout={this.logout}/>}
+      {this.loadContainer()}
 		</div>
 	</div>
     );
