@@ -230,7 +230,8 @@ User.prototype.login = function (callback){
 
 User.prototype.match = function (callback){
     let data = this.data;
-    db.query(`SELECT id, user_name, birth_date, gender, pref, gps_lat, gps_lon, bio FROM users WHERE NOT id = ${this.data.id}`, function (err, results) {
+	// db.query(`SELECT id, user_name, birth_date, gender, pref, gps_lat, gps_lon, bio FROM users WHERE NOT id = ${this.data.id}`, function (err, results) {
+	db.query(`SELECT id, user_name, birth_date, gender, pref, gps_lat, gps_lon,bio, GROUP_CONCAT(interest) AS interests  FROM (SELECT users.id, user_name, interest, birth_date, gender, pref, gps_lat, gps_lon, bio FROM user_interests JOIN users ON user_interests.user_id = users.id JOIN interests ON user_interests.interest_id = interests.id) x WHERE NOT id = ${this.data.id} GROUP BY user_name, id;`, function (err, results) {
         if (err){
             callback(err, null);
 	}
