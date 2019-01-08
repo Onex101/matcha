@@ -9,7 +9,7 @@ var schemas = {
 		pref: null,
 		gps_lat: null,
 		gps_lon: null,
-		likes: null,
+		bio: null,
 		fame: null,
 		email: null,
 		password: null,
