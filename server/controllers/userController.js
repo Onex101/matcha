@@ -206,6 +206,7 @@ exports.user_match_get = function(req, res) {
         else{
             row = result[0];
             if (row){
+				console.log(row);
                 user.data = {
                     id: row.id,
                     first_name: row.first_name,
@@ -217,8 +218,10 @@ exports.user_match_get = function(req, res) {
                     gps_lat: row.gps_lat,
                     gps_lon: row.gps_lat,
                     bio: row.bio,
-                    fame: row.fame}
+					fame: row.fame,
+					interests: row.interests}
                     user.match(function (err, results){
+						console.log(results);
                         if (err){
                             res.status(400)
                             res.send({
@@ -235,11 +238,11 @@ exports.user_match_get = function(req, res) {
                                 birth_date = Match.getA_coff(user.data.birth_date, results[i].birth_date)
                                 pref = Match.getP_coff(user.data.gender, user.data.pref, results[i].gender, results[i].pref)
                                 like = Match.getL_coff(user.data.interests, results[i].interests);
-                                var match =  (dist) +  (birth_date) +  (5*pref) + (like)
+                                var matchC =  (dist) +  (birth_date) +  (5*pref) + (like)
                                 let new_data = results[i]
-                                if(match > 4){ //4 is an arb number to exclude any matches that fall too far because of gender/pref differential
+                                if(matchC > 4){ //4 is an arb number to exclude any matches that fall too far because of gender/pref differential
                                     new_user = new User(new_data);
-                                    new_user.match = match;
+                                    new_user.match = matchC;
                                     new_user.like = like  * 100;
                                     new_user.dist_raw = dist_raw;
                                     new_user.birth_date_diff = Math.abs(Match.getAge(new_user.birth_date) - Match.getAge(results[i].birth_date));
