@@ -31,9 +31,9 @@ User.prototype.deleteById = function (id, callback) {
 	id = mysql.escape(id);
 	var self = this;
 	if (id)
-		tmp_id = id;
+		var tmp_id = id;
 	else
-		tmp_id = self.data['id'];
+		var tmp_id = self.data['id'];
 	db.query(`DELETE FROM users WHERE id = ${tmp_id}`, function (err, result){
 		if (err){callback(null, err);}
 		else{
