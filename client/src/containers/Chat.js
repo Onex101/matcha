@@ -28,16 +28,15 @@ export default class Chat extends Component {
 			this.setState({user: this.props.userInfo.user_name}, this.initSocket())
 		}
 		// if (this.state.socket === null && this.props.userInfo)
-		if (this.state.socket === null)
+		if (this.state.socket === null && localStorage.getItem('user') )
 			this.initSocket();
 	}
 
 	componentDidUpdate(){
 		
-		if (this.state.user === null && this.props.userInfo !== null){
-			this.setState({user: this.props.userInfo.user_name});
+		if (this.state.user === null && localStorage.getItem('user') !== null){
+			this.setState({user: localStorage.getItem('user')});
 			// this.initSocket();
-			
 		}
 		console.log("SOCK Test 2: " + this.state.socket);
 		if (this.state.socket === null && this.props.userInfo)
@@ -59,7 +58,10 @@ export default class Chat extends Component {
 		console.log("User test 1 LOCAL: " + localStorage.getItem('user'));
 		// if (this.props.userInfo) {
 			console.log("Test E");
-			socket.emit(USER_CONNECTED, localStorage.getItem('user'));
+			let user = {};
+			user.name = localStorage.getItem('user');
+			console.log(user);
+			socket.emit(USER_CONNECTED, user);
 		// }
 	}
 

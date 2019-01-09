@@ -76,9 +76,9 @@ Match.getL_coff = function (interests1, interests2){
 		match++;
 	}}
 	}
-	console.log("Div count = " + match/count)
-	// return(match/count)
-	return(1)
+	// console.log("Div count = " + match/count)
+	return(match/count)
+	// return(1)
 
 }
 
