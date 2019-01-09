@@ -49,8 +49,8 @@ User.prototype.getById = function (data, callback) {
 	// var query = `SELECT * FROM users WHERE id = ${data}`;
 	var query = `SELECT id, password,user_name, birth_date, gender, pref, gps_lat, gps_lon,bio, GROUP_CONCAT(interest) AS interests FROM\
 	(SELECT users.id, user_name, password,interest, birth_date, gender, pref, gps_lat, gps_lon, bio FROM user_interests\
-	JOIN users ON user_interests.user_id = users.id\
-	JOIN interests ON user_interests.interest_id = interests.id) x\
+	RIGHT JOIN users ON user_interests.user_id = users.id\
+	LEFT JOIN interests ON user_interests.interest_id = interests.id) x\
 	WHERE id = ${data} GROUP BY user_name, id`;
     db.query(query, function (err, result) {
         if (err) {callback(err, null);}
@@ -236,11 +236,11 @@ User.prototype.login = function (callback){
 User.prototype.match = function (callback){
 	var query = `SELECT id, user_name, birth_date, gender, pref, gps_lat, gps_lon, bio, GROUP_CONCAT(interest) AS interests FROM\
 	(SELECT users.id, user_name,interest, birth_date, gender, pref, gps_lat, gps_lon, bio FROM user_interests\
-	JOIN users ON user_interests.user_id = users.id\
-	JOIN interests ON user_interests.interest_id = interests.id\
+	RIGHT JOIN users ON user_interests.user_id = users.id\
+	LEFT JOIN interests ON user_interests.interest_id = interests.id\
 	LEFT JOIN likes ON users.id = user2_id\
 	WHERE likes.link_code IS NULL) x\
-	WHERE NOT id = ${this.data.id} GROUP BY user_name, id ORDER BY id`;
+	WHERE NOT id = 102 GROUP BY user_name, id ORDER BY id`;
 	db.query(query,function (err, results) {
 		console.log("MATCH FUNCTION")
 		console.log(results)

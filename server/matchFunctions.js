@@ -67,19 +67,20 @@ Match.getP_coff = function (gender1, pref1, gender2, pref2){
 Match.getL_coff = function (interests1, interests2){
 	var count = 0;
 	var match = 0;
-	var user = interests1.split(",");
-	var match2 = interests2.split(",");
-	for (var val of user){
-	if (val != ''){
-		count++;
-		if(match2.includes(val)){
-		match++;
-	}}
+	if(!interests1 || !interests2)
+		return 0;
+	else{
+		var user = interests1.split(",");
+		var match2 = interests2.split(",");
+		for (var val of user){
+		if (val != ''){
+			count++;
+			if(match2.includes(val)){
+			match++;
+		}}
+		}
+		return(match/count)
 	}
-	// console.log("Div count = " + match/count)
-	return(match/count)
-	// return(1)
-
 }
 
 module.exports = Match;
