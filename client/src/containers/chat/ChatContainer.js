@@ -30,10 +30,10 @@ export default class ChatContainer extends Component{
 		const {chats} = this.state
 
 		const newChats = reset ? [chat]:[...chats, chat]
-		this.setState({chats:newChats})
+		this.setState({chats:newChats, activeChat:reset ? chat : this.state.activeChat})
 		const messageEvent = `${MESSAGE_RECEIVED}-${chat.id}`
 		const typingEvent = `${TYPING}-${chat.id}`
-		socket.on(typingEvent)
+		socket.on(typingEvent, this.updateTypingInChat(chat.id))
 		socket.on(messageEvent, this.addMessageToChat(chat.id))
 	}
 
@@ -45,15 +45,35 @@ export default class ChatContainer extends Component{
 					chat.messages.push(message)
 				return chat
 			})
+			this.setState({chats:newChats})
 		}
 	}
 
 	updateTypingInChat = (chatId)=>{
+		return ({isTyping, user})=>{
+			if(user !== this.props.user.name){
 
+				const { chats } = this.state
+
+				let newChats = chats.map((chat)=>{
+					if(chat.id === chatId){
+						if(isTyping && !chat.typingUsers.includes(user)){
+							chat.typingUsers.push(user)
+						}else if(!isTyping && chat.typingUsers.includes(user)){
+							chat.typingUsers = chat.typingUsers.filter(u => u !== user)
+						}
+					}
+					return chat
+				})
+				this.setState({chats:newChats})
+			}
+		}
 	}
 
 	sendMessage = (chatId, message)=>{
 		const {socket} = this.props
+		console.log(socket)
+		console.log(message)
 		socket.emit(MESSAGE_SENT, {chatId, message})
 	}
 
@@ -65,6 +85,7 @@ export default class ChatContainer extends Component{
 	setActiveChat = (activeChat)=>{
 		this.setState({activeChat})
 	}
+
 	render() {
 		const {user, logout} = this.props;
 		const {chats, activeChat} = this.state;
