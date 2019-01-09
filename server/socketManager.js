@@ -23,13 +23,11 @@ module.exports = function(socket){
 	})
 
 	socket.on(USER_CONNECTED, (user)=>{
-		console.log('This user has connected: ' + user)
 		connectedUsers = addUser(connectedUsers, user)
 		// console.log("Connected Users: " + JSON.stringify(connectedUsers));
-		console.log("Connected Users: " + JSON.stringify(connectedUsers));
 		socket.user = user
-		sendMessageToChatFromUser = sendMessageToChat(user);
-		sendTypingFromUser = sendTypingToChat(user)
+		sendMessageToChatFromUser = sendMessageToChat(user.name);
+		sendTypingFromUser = sendTypingToChat(user.name)
 		socketIO.io.emit(USER_CONNECTED, connectedUsers)
 		console.log("Connected Users: " + JSON.stringify(connectedUsers));
 	})
@@ -37,7 +35,7 @@ module.exports = function(socket){
 	socket.on('disconnect', ()=>{
 		if("user" in socket){
 			console.log(socket.user)
-			connectedUsers = removeUser(connectedUsers, socket.user)
+			connectedUsers = removeUser(connectedUsers, socket.user.name)
 
 			socketIO.io.emit(USER_DISCONNECTED, connectedUsers)
 			console.log("Disconnect", connectedUsers);
@@ -61,8 +59,7 @@ module.exports = function(socket){
 	})
 
 	socket.on(TYPING, ({chatId, isTyping})=>{
-		if (sendTypingFromUser === 'function')
-			sendTypingFromUser(chatId, isTyping)
+		sendTypingFromUser(chatId, isTyping)
 	})
 }
 
@@ -79,10 +76,10 @@ function sendMessageToChat(sender){
 }
 
 function addUser(userList, user){
-	// console.log("Add user: ", user)
+	console.log("Add user: ", user)
 	let newList = Object. assign({}, userList)
 	if (user)
-		newList[user] = user
+		newList[user.name] = user.name
 	return newList
 }
 

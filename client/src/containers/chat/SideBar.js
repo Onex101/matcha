@@ -9,19 +9,8 @@ export default class SideBar extends Component{
 		};
 	}
 
-	componentWillUpdate(){
-		if (this.state.user === null && this.props.user !== null){
-			this.setState({user: this.props.user})
-		}
-	}
-
-	test(){
-		return(this.props.user);
-	}
-
 	render() {
-		const {chats, activeChat, setActiveChat} = this.props
-		const user = this.test()
+		const {chats, activeChat, user, setActiveChat} = this.props
 		return(
 			<div id="side-bar">
 				<div className="heading">
@@ -69,9 +58,7 @@ export default class SideBar extends Component{
 					</div>
 				</div>
 				<div className="current-user">
-						{!user ?
-							<span>{user}</span>
-							: <span>{this.test()}</span>}
+						<span>{user}</span>
 				</div>
 			</div>
 		)

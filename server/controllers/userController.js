@@ -206,7 +206,6 @@ exports.user_match_get = function(req, res) {
         else{
             row = result[0];
             if (row){
-				console.log(row);
                 user.data = {
                     id: row.id,
                     first_name: row.first_name,
@@ -221,7 +220,6 @@ exports.user_match_get = function(req, res) {
 					fame: row.fame,
 					interests: row.interests}
                     user.match(function (err, results){
-						console.log(results);
                         if (err){
                             res.status(400)
                             res.send({
@@ -291,18 +289,22 @@ exports.user_checkVerify = function(req, res){
 // Verify user
 exports.user_verify = function(req, res){
 	let user = new User('');
-    console.log("Verification test1");
+	console.log("Verification test1");
+	console.log(req.body);
 	user.getByUsername(req.body['user_name'], function(err, results){
+		console.log(results);
         user = new User(results[0]);
-        console.log(user);
 		if (err){
             console.log("Verification test2");
             res.send(err)
 		}
 		else{
-            console.log("Verification test3");
-            // console.log(req.body['veri_code'] + "    "+ results[0].veri_code);
-			if(req.body['veri_code'] != results[0].veri_code){
+			console.log("Verification test3");
+			// console.log(req.body['veri_code'] + "    "+ results[0].veri_code);
+			if (results[0] === null){
+				res.send({error:'no results'})
+			}
+			else if(req.body['veri_code'] != results[0].veri_code){
                 console.log('Not Verified');
 				res.send({error: 'veri-code is incorrect', success: null});
             }
