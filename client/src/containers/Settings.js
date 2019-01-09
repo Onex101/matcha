@@ -13,10 +13,13 @@ export default class Settings extends Component {
         this.state = {
             file: '',
             imagePreviewUrl: '',
+            profile: null,
+            pictures: [],
+            bio: null,
+            gender: null,
+            pref: null,
             gps_lat: null,
             gps_lon: null,
-            pictures: [],
-            profile: null
         }
     }
 
@@ -26,19 +29,19 @@ export default class Settings extends Component {
         console.log('handle uploading-', this.state.file);
     }
     
-      _handleImageChange(e) {
+    _handleImageChange(e) {
         e.preventDefault();
-    
+
         let reader = new FileReader();
         let file = e.target.files[0];
-    
+
         reader.onloadend = () => {
-          this.setState({
+            this.setState({
             file: file,
             imagePreviewUrl: reader.result
-          });
+            });
         }
-    
+
         reader.readAsDataURL(file)
     }
 
@@ -89,15 +92,20 @@ export default class Settings extends Component {
             pic4 = temp;
 
         return(<div className="imgBar">
-            <div className="img-thumbnail" style={{width:'20%'}}><img src={profile} style={{width:'100%'}}/>
+            <div className="img-thumbnail" id="profile" ref="profile" style={{width:'20%', minWidth: "50px"}}><img src={profile} style={{width:'100%'}}/>
             <Button
                 bsSize="large"
                 type="submit" 
                 className="submitButton"
                 // disabled={!this.profileCheck()}
                 // onClick={this.saveAndContinue}
-                onClick={(e)=>this._handleSubmit(e)}>Upload Image</Button></div>
-            <div className="img-thumbnail" style={{width:'16%'}}><img src={pic1} style={{width:'100%'}}/>
+                // controlid="profile"
+                // onClick={(e)=>this._handleSubmit(e)}
+                onClick={this.handleImgChange} 
+                // onClick={({target}) => this.setState({pic[1]: target.value})}
+                // onClick={this.handleChange} 
+                >Upload Image</Button></div>
+            <div className="img-thumbnail" style={{width:'16%', minWidth: "33px"}}><img src={pic1} style={{width:'100%'}}/>
             <Button
                 bsSize="large"
                 type="submit" 
@@ -105,7 +113,7 @@ export default class Settings extends Component {
                 disabled={!this.profileCheck()}
                 // onClick={this.saveAndContinue}
                 onClick={(e)=>this._handleSubmit(e)}>Upload Image</Button></div>
-            <div className="img-thumbnail" style={{width:'16%'}}><img src={pic2} style={{width:'100%'}}/>
+            <div className="img-thumbnail" style={{width:'16%', minWidth: "33px"}}><img src={pic2} style={{width:'100%'}}/>
             <Button
                 bsSize="large"
                 type="submit" 
@@ -113,7 +121,7 @@ export default class Settings extends Component {
                 disabled={!this.profileCheck()}
                 // onClick={this.saveAndContinue}
                 onClick={(e)=>this._handleSubmit(e)}>Upload Image</Button></div>
-            <div className="img-thumbnail" style={{width:'16%'}}><img src={pic3} style={{width:'100%'}}/>
+            <div className="img-thumbnail" style={{width:'16%', minWidth: "33px"}}><img src={pic3} style={{width:'100%'}}/>
             <Button
                 bsSize="large"
                 type="submit" 
@@ -121,7 +129,7 @@ export default class Settings extends Component {
                 disabled={!this.profileCheck()}
                 // onClick={this.saveAndContinue}
                 onClick={(e)=>this._handleSubmit(e)}>Upload Image</Button></div>
-            <div className="img-thumbnail" style={{width:'16%'}}><img src={pic4} style={{width:'100%'}}/>
+            <div className="img-thumbnail" style={{width:'16%', minWidth: "33px"}}><img src={pic4} style={{width:'100%'}}/>
             <Button
                 bsSize="large"
                 type="submit" 
@@ -167,6 +175,23 @@ export default class Settings extends Component {
         navigator.geolocation.getCurrentPosition(success, error);
     }
 
+    handleChange = event => {
+        this.setState({
+            [event.target.id]: event.target.value
+        });
+    }
+
+    handleImgChange = event => {
+    event.preventDefault();
+    console.log("Image Test")
+    // console.log(this.refs.profile)
+    // this.refs.profile
+    
+        this.setState({
+            [event.target.id]: event.target.src
+        });
+    }
+
     render() {
         var style = {
             display: 'flex',
@@ -201,24 +226,25 @@ export default class Settings extends Component {
                     <FormGroup bsSize="large">
                         <ControlLabel>Upload Images</ControlLabel>
                         <div className="settings-pictures">
+                            {this.pics()}
+                            <br/>
                             <FormControl
                                 autoFocus
                                 type="file"
                                 // defaultValue={this.props.fieldValues.first_name}
                                 onChange={(e)=>this._handleImageChange(e)}
                             />
-                            <div className="imgPreview">{this.preview()}</div>
-                            <br/>
-                            {this.pics()}
+                            <div className="imgPreview">{this.preview()}</div> 
                         </div>
                     </FormGroup>
-                    <FormGroup controlId="formControlsTextarea" controlId="biography" bsSize="small">
+                    <FormGroup controlId="bio" bsSize="small">
                     <ControlLabel>Biography</ControlLabel>
                     <FormControl 
                         componentClass="textarea" 
                         placeholder="Tell us about yourself!"
+                        // id="bio"
                         // defaultValue={this.props.profile.biography}
-                        // onChange={this.handleChange()} 
+                        onChange={this.handleChange} 
                         />
                     </FormGroup>
                     <FormGroup controlId="gender" bsSize="small">
@@ -232,7 +258,8 @@ export default class Settings extends Component {
                             type="range"
                             min="0" max="1" step="0.01" 
                             // defaultValue={ this.props.fieldValues.gender } 
-                            // onChange={({target}) => this.setState({gender: target.value})}
+                            onChange={this.handleChange} 
+                        // onChange={({target}) => this.setState({gender: target.value})}
                             />
                             <img src={male} alt="Male" />
                         </div>
@@ -248,6 +275,7 @@ export default class Settings extends Component {
                             type="range"
                             min="0" max="1" step="0.01"
                             // defaultValue={this.props.fieldValues.pref} 
+                            onChange={this.handleChange} 
                             // onChange={({target}) => this.setState({pref: target.value})}
                             />
                             <img src={male} alt="Male" />
@@ -258,6 +286,7 @@ export default class Settings extends Component {
                         <ButtonGroup>
                             <Button
                                 bsSize="large"
+                                className="submit_btn"
                                 // disabled={!this.validateForm()}
                                 onClick={this.geoFindMe}
                             >Update Location!
@@ -269,6 +298,7 @@ export default class Settings extends Component {
                         <ButtonGroup>
                             <Button
                                 bsSize="large"
+                                className="submit_btn"
                                 // disabled={!this.validateForm()}
                                 // onClick={this.saveAndContinue}
                             >Save Changes</Button>
