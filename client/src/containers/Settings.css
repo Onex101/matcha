@@ -84,15 +84,21 @@ img {
 }
 
 
-/* //from 0 - 320 px in width */
-@media only screen and (max-width : 500px) {
+@media only screen and (max-width : 350px) {
+  .submitButton { font-size:8% }    
+}
+@media only screen and (min-width : 351px) and (max-width : 500px) {
   .submitButton { font-size:13% }    
 }
-
-@media only screen and (max-width : 1000px) {
+@media only screen and (min-width : 501px) and (max-width : 745px) {
+  .submitButton { font-size:25% }    
+}
+@media only screen and (min-width : 746px) and (max-width : 1000px) {
   .submitButton { font-size:60% }    
 }
-/* //from 321 - 480 px in width */
-/* @media only screen and (max-width : 990px) {
-  .submitButton { font-size:50% }    
-} */
+
+
+#gender{
+  width: 80%;
+  /* padding: 10px; */
+}
