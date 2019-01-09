@@ -236,25 +236,27 @@ exports.user_match_get = function(req, res) {
                                 birth_date = Match.getA_coff(user.data.birth_date, results[i].birth_date)
                                 pref = Match.getP_coff(user.data.gender, user.data.pref, results[i].gender, results[i].pref)
                                 like = Match.getL_coff(user.data.interests, results[i].interests);
-                                var matchC =  (dist) +  (birth_date) +  (5*pref) + (like)
+                                var matchC =  (dist) +  (birth_date) +  (5*pref) + (like) //weightings can be adjusted as needed here
                                 let new_data = results[i]
                                 if(matchC > 4){ //4 is an arb number to exclude any matches that fall too far because of gender/pref differential
-                                    new_user = new User(new_data);
+									new_user = new User(new_data);
+									new_user.data.gps_lat = 0;
+									new_user.data.gps_lon = 0;
                                     new_user.match = matchC;
                                     new_user.like = like  * 100;
                                     new_user.dist_raw = dist_raw;
-                                    new_user.birth_date_diff = Math.abs(Match.getAge(new_user.birth_date) - Match.getAge(results[i].birth_date));
+                                    new_user.birth_date_diff = Math.abs(Match.getAge(user.data.birth_date) - Match.getAge(results[i].birth_date));
                                     array.push(new_user);
                                 }
                                 i++;
-                            }
+							}
+							array.sort(sortFunction);
+							console.log(array);
                             obj = {};
                             for (var key in array) {
                                 obj[key] = array[key]
                             }
-                            res.json(
-                                obj
-                            )
+                            res.json(obj);
                         }
                     })
             }    
@@ -350,4 +352,14 @@ exports.user_logout = function(req, res){
 			
 		}
 	})
+}
+
+//sorting function to sort by match score
+function sortFunction(a, b) {
+    if (a['match'] === b['match']) {
+        return 0;
+    }
+    else {
+        return (a['match'] > b['match']) ? -1 : 1;
+    }
 }
