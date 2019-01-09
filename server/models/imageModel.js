@@ -70,11 +70,9 @@ Image.prototype.savePic = function (callback){
 }
 
 //function returns the base64 of the given user's profile picture
-Image.prototype.getProfilePic = function (callback){
-	console.log(this.data);
-	db.query(`SELECT pic FROM pictures JOIN users ON pictures.id = user.profile_pic_id WHERE user = '${this.data.user_id}'`, function (err, results) {
+Image.prototype.getProfilePic = function (user_id, callback){
+	db.query(`SELECT pic FROM pictures JOIN users ON pictures.id = user.profile_pic_id WHERE user = '${user_id}'`, function (err, results) {
 		if (err){
-			throw err;
 			callback(err, null);
 		}
 		else{
@@ -84,23 +82,19 @@ Image.prototype.getProfilePic = function (callback){
 }
 
 //returns base64 value of picture of the given pic_id
-Image.prototype.getPicById = function (callback){
-	console.log(this.data);
-	db.query(`SELECT pic FROM pictures WHERE id = '${this.data.pic_id}'`, function (err, results) {
-		if (err){
-			throw err;
+Image.prototype.getPicById = function (id, callback){
+	id = mysql.escape(id);
+	db.query(`SELECT pic FROM pictures WHERE id = ${id}`, function (err, results) {
+		if (err)
 			callback(err, null);
-		}
-		else{
+		else
 			callback(null, results);
-		}
 	})
 }
 
 Image.prototype.setProfilePic = function (callback){
 	db.query(`UPDATE TABLE users SET profile_pic_id = '${this.data.pic_id}' WHERE user = '${this.data.user_id}'`, function (err, results) {
 	if (err){
-		throw err;
 		callback(err, null);
 	}
 	else{

@@ -13,6 +13,7 @@ io.on('connection', socketManager);
 const cors = require('cors');
 const bodyParser = require('body-parser');
 var userRoutes = require('./routes/userRoutes.js');
+var imgRoutes = require('./routes/imageRoutes.js');
 
 app.use(bodyParser.json());
 app.use(cors());
@@ -22,6 +23,7 @@ app.get('/', (req, res) => {
 });
 
 app.use(userRoutes);
+app.use(imgRoutes);
 
 // io.on('connection', socket => {
 // 	console.log('User connected')

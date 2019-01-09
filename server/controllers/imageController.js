@@ -90,9 +90,9 @@ exports.images_fetch_post = function(req, res){
 }
 
 exports.image_fetch_get = function(req, res){
-	data = req.params;
-	let image = new Image(data)
-	image.getPicById(function(err, result){
+	id = req.params.id;
+	let image = new Image('')
+	image.getPicById(id, function(err, result){
 		if (err){
 			res.send({
 						error: 'failed to get pic',
