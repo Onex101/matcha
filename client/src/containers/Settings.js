@@ -16,6 +16,10 @@ export default class Settings extends Component {
             imagePreviewUrl: '',
             profile: null,
             pictures: [],
+            pic1: null,
+            pic2: null,
+            pic3: null,
+            pic4: null,
             bio: null,
             gender: null,
             pref: null,
@@ -47,13 +51,13 @@ export default class Settings extends Component {
     }
 
     preview(){
-        // var imagePreviewUrl = this.state.imagePreviewUrl;
+        var imagePreviewUrl = this.state.imagePreviewUrl;
 
-        // if (imagePreviewUrl) {
-        //     return( <img src={imagePreviewUrl} className="preview"/>);
-        // } else {
-        //     return(<div className="previewText">Please select an Image for Preview</div>);
-        // }
+        if (imagePreviewUrl) {
+            return( <img src={imagePreviewUrl} className="preview" alt="Preview"/>);
+        } else {
+            return(<div className="previewText">Please select an Image for Preview</div>);
+        }
     }
 
     profileCheck(){
@@ -65,80 +69,90 @@ export default class Settings extends Component {
     }
 
     pics(){
-        // var profile, pic1, pic2, pic3, pic4;
+        var profile, pic1, pic2, pic3, pic4;
 
-        // if(this.state.profile)
-        //     profile = this.state.profile;
-        // else
-        //     profile = temp;
+        if(this.state.profile)
+            profile = this.state.profile;
+        else
+            profile = temp;
         
-        // if(this.state.pictures[1])
-        //     pic1 = this.state.pictures[1];
-        // else
-        //     pic1 = temp;
+        if(this.state.pictures[1])
+            pic1 = this.state.pictures[1];
+        else
+            pic1 = temp;
 
-        // if(this.state.pictures[2])
-        //     pic2 = this.state.pictures[2];
-        // else
-        //     pic2 = temp;
+        if(this.state.pictures[2])
+            pic2 = this.state.pictures[2];
+        else
+            pic2 = temp;
         
-        // if(this.state.pictures[3])
-        //     pic3 = this.state.pictures[3];
-        // else
-        //     pic3 = temp;
+        if(this.state.pictures[3])
+            pic3 = this.state.pictures[3];
+        else
+            pic3 = temp;
         
-        // if(this.state.pictures[4])
-        //     pic4 = this.state.pictures[4];
-        // else
-        //     pic4 = temp;
+        if(this.state.pictures[4])
+            pic4 = this.state.pictures[4];
+        else
+            pic4 = temp;
 
         return(<div className="imgBar">
-            {/* <div className="img-thumbnail" id="profile" ref="profile" style={{width:'20%', minWidth: "50px"}}><img src={profile} style={{width:'100%'}}/>
-            <Button
-                bsSize="large"
-                type="submit" 
-                className="submitButton"
-                // disabled={!this.profileCheck()}
-                // onClick={this.saveAndContinue}
-                // controlid="profile"
-                // onClick={(e)=>this._handleSubmit(e)}
-                onClick={this.handleImgChange} 
-                // onClick={({target}) => this.setState({pic[1]: target.value})}
-                // onClick={this.handleChange} 
-                >Upload Image</Button></div>
-            <div className="img-thumbnail" style={{width:'16%', minWidth: "33px"}}><img src={pic1} style={{width:'100%'}}/>
-            <Button
-                bsSize="large"
-                type="submit" 
-                className="submitButton"
-                disabled={!this.profileCheck()}
-                // onClick={this.saveAndContinue}
-                onClick={(e)=>this._handleSubmit(e)}>Upload Image</Button>
+            <div className="img-thumbnail" id="profile" ref="profile" style={{width:'20%', minWidth: "50px"}}>
+                {this.state.profile ? <img src={this.state.profile} style={{width:'100%', height:"auto", maxHeight: "109px", maxWidth: "109px"}} alt="Profile pic"/>
+                                    : <img src={temp} style={{width:'100%'}} alt="Profile pic"/>}
+                <Button
+                    bsSize="large"
+                    type="submit" 
+                    className="submitButton"
+                    // disabled={!this.profileCheck()}
+                    // onClick={this.saveAndContinue}
+                    // controlid="profile"
+                    // onClick={(e)=>this._handleSubmit(e)}
+                    onClick={this.handleImgChange} 
+                    // onClick={({target}) => this.setState({pic[1]: target.value})}
+                    // onClick={this.handleChange} 
+                    >Upload Image</Button>
+            </div><br />
+            <div className="img-thumbnail" style={{width:'16%', minWidth: "33px", minHeight: "40px"}}>
+                <img src={pic1} style={{width:'100%'}} alt="IMG 1"/>
+                <Button
+                    bsSize="large"
+                    type="submit" 
+                    className="submitButton"
+                    disabled={!this.profileCheck()}
+                    // onClick={this.saveAndContinue}
+                    onClick={(e)=>this._handleSubmit(e)}>Upload Image</Button>
+            </div>
+            <div className="img-thumbnail" style={{width:'16%', minWidth: "33px"}}>
+                <img src={pic2} style={{width:'100%'}} alt="IMG 2"/>
+                <Button
+                    bsSize="large"
+                    type="submit" 
+                    className="submitButton"
+                    disabled={!this.profileCheck()}
+                    // onClick={this.saveAndContinue}
+                    onClick={(e)=>this._handleSubmit(e)}>Upload Image</Button>
+            </div>
+            <div className="img-thumbnail" style={{width:'16%', minWidth: "33px"}}>
+                <img src={pic3} style={{width:'100%'}} alt="IMG 3"/>
+                <Button
+                    bsSize="large"
+                    type="submit" 
+                    className="submitButton"
+                    disabled={!this.profileCheck()}
+                    // onClick={this.saveAndContinue}
+                    onClick={(e)=>this._handleSubmit(e)}>Upload Image</Button>
+            </div>
+            <div className="img-thumbnail" style={{width:'16%', minWidth: "33px"}}>
+                <img src={pic4} style={{width:'100%'}} alt="IMG 4"/>
+                <Button
+                    bsSize="large"
+                    type="submit" 
+                    className="submitButton"
+                    disabled={!this.profileCheck()}
+                    // onClick={this.saveAndContinue}
+                    onClick={(e)=>this._handleSubmit(e)}>Upload Image</Button>
                 </div>
-            <div className="img-thumbnail" style={{width:'16%', minWidth: "33px"}}><img src={pic2} style={{width:'100%'}}/>
-            <Button
-                bsSize="large"
-                type="submit" 
-                className="submitButton"
-                disabled={!this.profileCheck()}
-                // onClick={this.saveAndContinue}
-                onClick={(e)=>this._handleSubmit(e)}>Upload Image</Button></div>
-            <div className="img-thumbnail" style={{width:'16%', minWidth: "33px"}}><img src={pic3} style={{width:'100%'}}/>
-            <Button
-                bsSize="large"
-                type="submit" 
-                className="submitButton"
-                disabled={!this.profileCheck()}
-                // onClick={this.saveAndContinue}
-                onClick={(e)=>this._handleSubmit(e)}>Upload Image</Button></div>
-            <div className="img-thumbnail" style={{width:'16%', minWidth: "33px"}}><img src={pic4} style={{width:'100%'}}/>
-            <Button
-                bsSize="large"
-                type="submit" 
-                className="submitButton"
-                disabled={!this.profileCheck()}
-                // onClick={this.saveAndContinue}
-                onClick={(e)=>this._handleSubmit(e)}>Upload Image</Button></div> */}
             </div>
         )
     }
@@ -147,7 +161,7 @@ export default class Settings extends Component {
         var imagePreviewUrl = this.state.imagePreviewUrl;
 
         if (imagePreviewUrl) {
-            return( <img src={imagePreviewUrl}/>);
+            return( <img src={imagePreviewUrl} alt="Preview"/>);
         } else {
             return(<div className="previewText">Oops, looks like you don't have a profile pic!</div>);
         }
@@ -188,16 +202,18 @@ export default class Settings extends Component {
     console.log("Image Test")
     // console.log(this.refs.profile)
     // this.refs.profile
-    
-        this.setState({
-            [event.target.id]: event.target.src
-        });
+    this.setState({
+        profile: this.state.imagePreviewUrl
+    });
+        // this.setState({
+        //     [event.target.id]: event.target.src
+        // });
     }
 
     render() {
-        var style = {
-            display: 'flex',
-          }
+        // var style = {
+        //     display: 'flex',
+        //   }
         return (
                 // <div className="previewComponent">
                 //     <ControlLabel>Upload Images</ControlLabel>
