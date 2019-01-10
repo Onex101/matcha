@@ -14,7 +14,7 @@ router.post('/image/create', image_controller.image_create_post);
 // GET request to delete image. - working
 router.get('/image/:id/delete', image_controller.image_delete_get);
 
-// GET request for getting images by id - working
+// GET request for getting all images by user id - working
 router.get('/images/:user_id', image_controller.images_fetch_get);
 
 // GET request for getting image by id. - working
