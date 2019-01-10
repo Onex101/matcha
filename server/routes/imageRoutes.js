@@ -23,7 +23,7 @@ router.get('/image/:id', image_controller.image_fetch_get);
 // GET request for getting profile image by user_id. -working
 router.get('/image/:user_name/profilepic', image_controller.profile_image_get);
 
-//GET request to set image as profile pic by pic_id
+//GET request to set image as profile pic by pic_id - working
 router.get('/image/setProfilePic/:user_name/:pic_id', image_controller.profile_image_set);
 
 module.exports = router;
