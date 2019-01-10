@@ -42,6 +42,7 @@ export default class Chat extends Component {
 		console.info(this.props);
 		let user = {};
 		user.name = localStorage.getItem('user');
+		socket.user = user;
 		console.log("SOCK USR 1: " + user.name)
 		console.log(user);
 		socket.emit(USER_CONNECTED, user);
