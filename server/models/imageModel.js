@@ -28,11 +28,9 @@ Image.prototype.getAllPics = function (user_id, callback){
 }
 
 //deletes pic of the given picId
-Image.prototype.deletePic = function (callback){
-	console.log(this.data);
-	db.query(`DELETE FROM pictures WHERE id = '${this.data.id}')`, function (err, results) {
+Image.prototype.deletePic = function (id, callback){
+	db.query(`DELETE FROM pictures WHERE id = ${id}`, function (err, results) {
 		if (err){
-			throw err;
 			callback(err, null);
 		}
 		else{
@@ -46,9 +44,8 @@ Image.prototype.deletePic = function (callback){
 //add warning to let user know about this action
 Image.prototype.savePic = function (callback){
 	console.log(this.data);
-	db.query(`INSERT INTO pictures(pic, user_id) VALUES('${this.data.pic}','${this.data.user_id}')`, function (err, results) {
+	db.query(`INSERT INTO pictures(pic, user_id) VALUES('${this.data.pic}', ${this.data.user_id})`, function (err, results) {
 		if (err){
-			throw err;
 			callback(err, null);
 		}
 		else{
@@ -57,7 +54,6 @@ Image.prototype.savePic = function (callback){
 			(SELECT id FROM( SELECT id FROM pictures WHERE user_id = ${this.data.user_id} ORDER BY id DESC LIMIT 4) x ) 
 			AND user_name IS NULL`, function (err, results) {
 				if (err){
-					throw err;
 					callback(err, null);
 				}
 				else{
@@ -69,7 +65,7 @@ Image.prototype.savePic = function (callback){
 }
 
 //function returns the base64 of the given user's profile picture
-Image.prototype.getProfilePic = function (user_id, callback){
+Image.prototype.getProfilePic = function (user_name, callback){
 	user_name = mysql.escape(user_name);
 	db.query(`SELECT pic FROM users JOIN pictures ON profile_pic_id = pictures.id WHERE user_name = ${user_name}`, function (err, results) {
 		if (err){
@@ -92,8 +88,10 @@ Image.prototype.getPicById = function (id, callback){
 	})
 }
 
-Image.prototype.setProfilePic = function (callback){
-	db.query(`UPDATE TABLE users SET profile_pic_id = '${this.data.pic_id}' WHERE user = '${this.data.user_id}'`, function (err, results) {
+Image.prototype.setProfilePic = function (user_name, pic_id, callback){
+	console.log("Username: " + user_name);
+	console.log("Pic ID: " + pic_id);
+	db.query(`UPDATE users SET profile_pic_id = ${pic_id} WHERE user_name = '${user_name}'`, function (err, results) {
 	if (err){
 		callback(err, null);
 	}

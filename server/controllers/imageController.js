@@ -21,56 +21,23 @@ exports.image_create_post = function(req, res){
 }
 
 exports.image_delete_get = function(req, res){
-	res.send('NOT IMPLEMENTED: image delete get');
-}
-
-exports.image_delete_post = function(req, res){
-	data = req.body;
-	let image = new Image(data);
-	image.deletePic(function(err, results){
+	id = req.params.id;
+	let image = new Image('');
+	image.deletePic(id, function(err, result){
 		if (err){
 			res.send({
-						error: 'failed to deleted pic',
-						sucess: null
+						error: 'failed to delete pic',
+						sucess: err
 					})
 		}
 		else{
-			res.send({
-						error : null,
-						success: 'Succesfully deleted pic'
-					})
+			res.send("Pic id:"+ id +" has been deleted sucessfully")
 		}
 	})
-	// res.send('NOT IMPLEMENTED: image delete post');
-}
-
-exports.image_update_get = function(req, res){
-	let data = req.params.id;
-	let image = new Image(data);
-	image.setProfilePic(function (err, result){
-		if (err){
-			res.send({
-				error: 'failed to set profile pic',
-				sucess: null
-			})
-		}
-		else{
-			res.send({
-				error: null,
-				sucess: 'set profile pic'
-			})
-		}
-	})
-	res.send('NOT IMPLEMENTED: image update get');
-}
-
-exports.image_update_post = function(req, res){
-	res.send('NOT IMPLEMENTED: image update post');
 }
 
 exports.images_fetch_get = function(req, res){
 	user_id = req.params.user_id;
-	console.log(user_id);
 	let image = new Image('')
 	image.getAllPics(user_id, function(err, result){
 		console.log(result);
@@ -129,18 +96,19 @@ exports.image_fetch_post = function(req, res){
 	res.send('NOT IMPLEMENTED: image fetch post');
 }
 
-exports.profle_image_get = function(req, res){
-	data = req.params;
-	let image = new Image(data);
-	image.getProfilePic(function(err, result){
+exports.profile_image_set = function(req, res){
+	user_name = req.params.user_name;
+	image_id = req.params.pic_id;
+	let image = new Image();
+	image.setProfilePic(user_name, image_id, function(err, result){
 		if (err){
 			res.send({
-						error: 'failed to get profile pic',
+						error: 'failed to set profile pic',
 						sucess: null
 					})
 		}
 		else{
-			res.json(result)
+			res.send("Profile pic updated");
 		}
 	})
 }
