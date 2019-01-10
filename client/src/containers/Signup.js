@@ -1,9 +1,9 @@
 import React, { Component } from "react";
-import { FormGroup, FormControl, ControlLabel } from "react-bootstrap";
+// import { FormGroup, FormControl, ControlLabel } from "react-bootstrap";
 import "./Signup.css";
-import { Route, Switch } from "react-router-dom";
-import AppliedRoute from "../components/AppliedRoute";
-import Routes from "../Routes";
+// import { Route, Switch } from "react-router-dom";
+// import AppliedRoute from "../components/AppliedRoute";
+// import Routes from "../Routes";
 
 import AccountFields from "../containers/Accountfields";
 import SurveyFields from "../containers/SurveyFields";

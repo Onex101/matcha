@@ -67,7 +67,7 @@ class App extends Component {
       .then(response => response.json())
       .then((responseJSON) => {
         this.setState({ userMatches: responseJSON });
-        console.log("Matches = " + JSON.stringify(this.state.userMatches));
+        // console.log("Matches = " + JSON.stringify(this.state.userMatches));
       })
       .catch(err => console.error(err))
       } catch (e) {
@@ -102,7 +102,7 @@ class App extends Component {
     const session = localStorage.getItem('user');
 
     if (session != null){
-      console.log("Getting username = " + session);
+      // console.log("Getting username = " + session);
     }
     return(<Navbar.Collapse><Nav pullRight>
             <Fragment>
@@ -175,6 +175,8 @@ class App extends Component {
                   </Nav></Navbar.Collapse>
               }
         </Navbar>
+        {console.log("Childprops: ")}
+        {console.info(childProps)}
         <Routes childProps={childProps} />
       </div>
       </div>

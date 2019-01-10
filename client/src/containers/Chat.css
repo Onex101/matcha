@@ -160,7 +160,9 @@
         display:flex;
         justify-content:center;
         font-size:2em
-    }.chat-header{
+    }
+    
+    .chat-header{
         background:#5d5d8a;
         box-shadow:0px 6px 5px -2px rgba(225,225,225,0.7);
         box-sizing:border-box;
@@ -170,32 +172,47 @@
         height:12vh;
         max-height:65px;
         padding:18px 16px
-    }.chat-header .user-info{
+    }
+    
+    .chat-header .user-info{
         align-items:center;
         display:flex
-    }.chat-header .user-info .user-name{
+    }
+    
+    .chat-header .user-info .user-name{
         margin-right:10px
-        }.chat-header .user-info .status{
-            align-items:center;
+    }
+        
+    .chat-header .user-info .status{
+        align-items:center;
         display:flex
-    }.chat-header .options{
+    }
+    
+    .chat-header .options{
         display:flex;
         align-items:center;
         flex-direction:row;
         justify-content:space-around;
         height:100%;
         width:15%
-    }.chat-header .options svg{
+    }
+    
+    .chat-header .options svg{
         cursor:pointer
-        }.chat-room-container{
-            height:100%;
+    }
+
+    .chat-room-container{
+        height:100%;
         width:76.25%
     }
+    
     @media screen and (max-width: 510px){
         #side-bar{
         position:absolute;
         left:-100%
-    }.chat-room-container{
+    }
+    
+    .chat-room-container{
         width:100%;
         }
     }
@@ -204,13 +221,16 @@
         flex-direction:column;
         justify-content:space-between;
         height:100%;
-        max-height: 600px;
+        max-height: 646px;
         width:100%
-    }.chat-room.choose{
+    }
+    
+    .chat-room.choose{
         align-items:center;
         justify-content:center;
         font-size:2em
-    }.thread-container{
+    }
+    .thread-container{
         flex-grow:1;
         overflow-y:scroll;
         position:relative

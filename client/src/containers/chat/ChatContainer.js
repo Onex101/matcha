@@ -99,33 +99,23 @@ export default class ChatContainer extends Component{
 					setActiveChat={this.setActiveChat}
 				/>
 				<div className="chat-room-container">
-					{
-						activeChat !== null ? (
-							<div className="chat-room">
-								<ChatHeading name={activeChat.name} />
-								<Messages
-									messages={activeChat.messages}
-									user={user}
-									typingUser={activeChat.typingUsers}
-								/>
-								<MessageInput
-									sendMessage={
-										(message)=>{
-											this.sendMessage(activeChat.id, message)
-										}
-									}
-									sendTyping={
-										(isTyping)=>{
-											this.sendTyping(activeChat.id, isTyping)
-										}
-									}
-								/>
-							</div>
-						) :
-						<div className="chat-room choose">
-							<h3>Choose a chat</h3>
+					{activeChat !== null ? (
+						<div className="chat-room">
+							<ChatHeading name={activeChat.name} />
+							<Messages
+								messages={activeChat.messages}
+								user={user}
+								typingUser={activeChat.typingUsers}
+							/>
+							<MessageInput
+								sendMessage={(message)=>{this.sendMessage(activeChat.id, message)}}
+								sendTyping={(isTyping)=>{this.sendTyping(activeChat.id, isTyping)}}
+							/>
 						</div>
-					}
+					) :
+					<div className="chat-room choose">
+						<h3>Choose a chat</h3>
+					</div>}
 				</div>
 			</div>
 		)

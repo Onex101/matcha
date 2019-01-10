@@ -25,7 +25,11 @@ module.exports = function(socket){
 	socket.on(USER_CONNECTED, (user)=>{
 		connectedUsers = addUser(connectedUsers, user)
 		// console.log("Connected Users: " + JSON.stringify(connectedUsers));
+		console.log("IN SOCK TEST A: " + user.name)
 		socket.user = user
+		console.log("IN SOCK TEST B: " + socket.user.name)
+		console.log("IN SOCK TEST c: " + socket)
+		console.info(socket.user)
 		sendMessageToChatFromUser = sendMessageToChat(user.name);
 		sendTypingFromUser = sendTypingToChat(user.name)
 		socketIO.io.emit(USER_CONNECTED, connectedUsers)

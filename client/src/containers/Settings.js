@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 // import { ButtonGroup, ButtonToolbar, Button, FormGroup, FormControl, ControlLabel } from "react-bootstrap";
-import { HelpBlock, ButtonGroup, ButtonToolbar, Button, FormGroup, FormControl, ControlLabel } from "react-bootstrap";
+// import { HelpBlock, ButtonGroup, ButtonToolbar, Button, FormGroup, FormControl, ControlLabel } from "react-bootstrap";
+import { ButtonGroup, ButtonToolbar, Button, FormGroup, FormControl, ControlLabel } from "react-bootstrap";
 import "./Settings.css";
 import female from './imgs/female_logo/favicon-32x32.png';
 import male from './imgs/male_logo/favicon-32x32.png';
@@ -46,13 +47,13 @@ export default class Settings extends Component {
     }
 
     preview(){
-        var imagePreviewUrl = this.state.imagePreviewUrl;
+        // var imagePreviewUrl = this.state.imagePreviewUrl;
 
-        if (imagePreviewUrl) {
-            return( <img src={imagePreviewUrl} className="preview"/>);
-        } else {
-            return(<div className="previewText">Please select an Image for Preview</div>);
-        }
+        // if (imagePreviewUrl) {
+        //     return( <img src={imagePreviewUrl} className="preview"/>);
+        // } else {
+        //     return(<div className="previewText">Please select an Image for Preview</div>);
+        // }
     }
 
     profileCheck(){
@@ -64,35 +65,35 @@ export default class Settings extends Component {
     }
 
     pics(){
-        var profile, pic1, pic2, pic3, pic4;
+        // var profile, pic1, pic2, pic3, pic4;
 
-        if(this.state.profile)
-            profile = this.state.profile;
-        else
-            profile = temp;
+        // if(this.state.profile)
+        //     profile = this.state.profile;
+        // else
+        //     profile = temp;
         
-        if(this.state.pictures[1])
-            pic1 = this.state.pictures[1];
-        else
-            pic1 = temp;
+        // if(this.state.pictures[1])
+        //     pic1 = this.state.pictures[1];
+        // else
+        //     pic1 = temp;
 
-        if(this.state.pictures[2])
-            pic2 = this.state.pictures[2];
-        else
-            pic2 = temp;
+        // if(this.state.pictures[2])
+        //     pic2 = this.state.pictures[2];
+        // else
+        //     pic2 = temp;
         
-        if(this.state.pictures[3])
-            pic3 = this.state.pictures[3];
-        else
-            pic3 = temp;
+        // if(this.state.pictures[3])
+        //     pic3 = this.state.pictures[3];
+        // else
+        //     pic3 = temp;
         
-        if(this.state.pictures[4])
-            pic4 = this.state.pictures[4];
-        else
-            pic4 = temp;
+        // if(this.state.pictures[4])
+        //     pic4 = this.state.pictures[4];
+        // else
+        //     pic4 = temp;
 
         return(<div className="imgBar">
-            <div className="img-thumbnail" id="profile" ref="profile" style={{width:'20%', minWidth: "50px"}}><img src={profile} style={{width:'100%'}}/>
+            {/* <div className="img-thumbnail" id="profile" ref="profile" style={{width:'20%', minWidth: "50px"}}><img src={profile} style={{width:'100%'}}/>
             <Button
                 bsSize="large"
                 type="submit" 
@@ -112,7 +113,8 @@ export default class Settings extends Component {
                 className="submitButton"
                 disabled={!this.profileCheck()}
                 // onClick={this.saveAndContinue}
-                onClick={(e)=>this._handleSubmit(e)}>Upload Image</Button></div>
+                onClick={(e)=>this._handleSubmit(e)}>Upload Image</Button>
+                </div>
             <div className="img-thumbnail" style={{width:'16%', minWidth: "33px"}}><img src={pic2} style={{width:'100%'}}/>
             <Button
                 bsSize="large"
@@ -136,7 +138,7 @@ export default class Settings extends Component {
                 className="submitButton"
                 disabled={!this.profileCheck()}
                 // onClick={this.saveAndContinue}
-                onClick={(e)=>this._handleSubmit(e)}>Upload Image</Button></div>
+                onClick={(e)=>this._handleSubmit(e)}>Upload Image</Button></div> */}
             </div>
         )
     }

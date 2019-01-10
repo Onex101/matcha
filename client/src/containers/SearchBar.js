@@ -15,7 +15,7 @@ export default class SearchBar extends Component {
 //Check serverside for matching info
 //Split by each hash
   filterList = event => {
-    var updatedList = this.state.initialItems;
+    // var updatedList = this.state.initialItems;
     var search = event.target.value.toLowerCase();
 
     if (search){

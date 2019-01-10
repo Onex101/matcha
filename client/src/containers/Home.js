@@ -1,5 +1,6 @@
 import React, { Component } from "react";
-import { HelpBlock, ButtonGroup, ButtonToolbar, Button, FormGroup, FormControl, ControlLabel } from "react-bootstrap";
+// import { HelpBlock, ButtonGroup, ButtonToolbar, Button, FormGroup, FormControl, ControlLabel } from "react-bootstrap";
+import { ButtonGroup, ButtonToolbar, Button} from "react-bootstrap";
 import "./Home.css";
 
 // Renders the homepage given that the user is not currently signed in
