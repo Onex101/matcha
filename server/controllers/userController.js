@@ -219,7 +219,7 @@ exports.user_match_get = function(req, res) {
                     bio: row.bio,
 					fame: row.fame,
 					interests: row.interests}
-                    user.match(function (err, results){
+                    user.match(user.data.id, function (err, results){
                         if (err){
                             res.status(400)
                             res.send({
