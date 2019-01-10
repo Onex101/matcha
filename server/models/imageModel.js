@@ -15,11 +15,10 @@ Image.prototype.clean = function (data) {
 }
 
 //returns a table of base64 values of pictures that belong to the given user_id
-Image.prototype.getAllPics = function (callback){
-	console.log(this.data);
-	db.query(`SELECT pic FROM pictures WHERE user = '${this.data.user_id}'`, function (err, results) {
+Image.prototype.getAllPics = function (user_id, callback){
+	console.log(user_id);
+	db.query(`SELECT pic FROM pictures WHERE user_id = ${user_id}`, function (err, results) {
 		if (err){
-			throw err;
 			callback(err, null);
 		}
 		else{
@@ -71,7 +70,8 @@ Image.prototype.savePic = function (callback){
 
 //function returns the base64 of the given user's profile picture
 Image.prototype.getProfilePic = function (user_id, callback){
-	db.query(`SELECT pic FROM pictures JOIN users ON pictures.id = user.profile_pic_id WHERE user = '${user_id}'`, function (err, results) {
+	user_name = mysql.escape(user_name);
+	db.query(`SELECT pic FROM users JOIN pictures ON profile_pic_id = pictures.id WHERE user_name = ${user_name}`, function (err, results) {
 		if (err){
 			callback(err, null);
 		}

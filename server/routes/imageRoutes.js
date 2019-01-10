@@ -24,12 +24,12 @@ router.get('/image/update/:user_id/:id', image_controller.image_update_get);
 router.post('/image/update/user_id/:id', image_controller.image_update_post);
 
 // GET request for getting images by id
-router.get('/images/:id', image_controller.images_fetch_get);
+router.get('/images/:user_id', image_controller.images_fetch_get);
 
 // GET request for getting image by id.
 router.get('/image/:id', image_controller.image_fetch_get);
 
 // GET request for getting profile image by user_id.
-// router.get('/profile_pic/:user_id/:pic_id', image_controller.profile_image_get);
+router.get('/image/profile_pic/:user_name', image_controller.profile_image_get);
 
 module.exports = router;
