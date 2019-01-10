@@ -8,28 +8,22 @@ var image_controller = require('../controllers/imageController');
 // GET request for creating a image.
 router.get('/image/create', image_controller.image_create_get);
 
-// POST request for creating image.
+// POST request for creating image. - provisionally working, not tested with POST data
 router.post('/image/create', image_controller.image_create_post);
 
-// GET request to delete image.
+// GET request to delete image. - working
 router.get('/image/:id/delete', image_controller.image_delete_get);
 
-// POST request to delete image.
-router.post('/image/:id/delete', image_controller.image_delete_post);
+// GET request for getting images by id - working
+router.get('/images/:user_id', image_controller.images_fetch_get);
 
-// GET request to update image.
-router.get('/image/update/:user_id/:id', image_controller.image_update_get);
-
-// POST request to update image.
-router.post('/image/update/user_id/:id', image_controller.image_update_post);
-
-// GET request for getting images by id
-router.get('/images/:id', image_controller.images_fetch_get);
-
-// GET request for getting image by id.
+// GET request for getting image by id. - working
 router.get('/image/:id', image_controller.image_fetch_get);
 
-// GET request for getting profile image by user_id.
-// router.get('/profile_pic/:user_id/:pic_id', image_controller.profile_image_get);
+// GET request for getting profile image by user_id. -working
+router.get('/image/:user_name/profilepic', image_controller.profile_image_get);
+
+//GET request to set image as profile pic by pic_id
+router.get('/image/setProfilePic/:user_name/:pic_id', image_controller.profile_image_set);
 
 module.exports = router;
