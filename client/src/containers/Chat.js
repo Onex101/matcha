@@ -39,14 +39,14 @@ export default class Chat extends Component {
 			console.log("Connected");
 		})
 		this.setState({socket: socket})
-		console.info(this.props);
+		// console.info(this.props);
 		let user = {};
 		user.name = localStorage.getItem('user');
-		console.log("SOCK USR 1: " + user.name)
-		console.log(user);
+		// console.log("SOCK USR 1: " + user.name)
+		// console.log(user);
 		socket.emit(USER_CONNECTED, user);
-		console.log("SOCK USR 2: " + socket)
-		console.info(socket)
+		// console.log("SOCK USR 2: " + socket)
+		// console.info(socket)
 	}
 
 	logout = ()=>{
@@ -60,11 +60,11 @@ export default class Chat extends Component {
 		{
 			var ret = '<div className="lander">';
 			for (var elem in this.props.userMatches) {
-				console.log("elem = " + JSON.stringify(this.props.userMatches[elem].data.user_name));
+				// console.log("elem = " + JSON.stringify(this.props.userMatches[elem].data.user_name));
 				ret += '<ButtonGroup><Button bsSize="large" onClick={this.openChat('+ this.props.userMatches[elem].data.id + ')}>' + this.props.userMatches[elem].data.user_name + '</Button></ButtonGroup><br />'
 			};
 			ret += '</div>';
-			console.log("RET = " + ret);
+			// console.log("RET = " + ret);
 			return ret;
 		}
 	}

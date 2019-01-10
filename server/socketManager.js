@@ -1,5 +1,5 @@
 const socketIO = require('./index.js');
-const {VERIFY_USER, USER_CONNECTED, USER_DISCONNECTED, LOGOUT, COMMUNITY_CHAT, MESSAGE_RECIEVED, MESSAGE_SENT, TYPING} = require('../client/src/Events')
+const {VERIFY_USER, USER_CONNECTED, USER_DISCONNECTED, LOGOUT, COMMUNITY_CHAT, MESSAGE_RECEIVED, MESSAGE_SENT, TYPING} = require('../client/src/Events')
 const {createUser, createMessage, createChat} = require('../client/src/Factories')
 
 let connectedUsers = {}
@@ -23,16 +23,15 @@ module.exports = function(socket){
 	})
 
 	socket.on(USER_CONNECTED, (user)=>{
+		console.log('This user has connected: ' + JSON.stringify(user))
 		connectedUsers = addUser(connectedUsers, user)
-		// console.log("Connected Users: " + JSON.stringify(connectedUsers));
-		console.log("IN SOCK TEST A: " + user.name)
 		socket.user = user
-		console.log("IN SOCK TEST B: " + socket.user.name)
-		console.log("IN SOCK TEST c: " + socket)
-		console.info(socket.user)
+		// console.log("Connected Users: " + JSON.stringify(connectedUsers));
 		sendMessageToChatFromUser = sendMessageToChat(user.name);
 		sendTypingFromUser = sendTypingToChat(user.name)
+
 		socketIO.io.emit(USER_CONNECTED, connectedUsers)
+		console.log(socket.user);
 		console.log("Connected Users: " + JSON.stringify(connectedUsers));
 	})
 
@@ -59,6 +58,7 @@ module.exports = function(socket){
 	})
 
 	socket.on(MESSAGE_SENT, ({chatId, message})=>{
+		console.log("MESSAGE SENT " + message + " " + " " + chatId)
 		sendMessageToChatFromUser(chatId, message)
 	})
 
@@ -68,15 +68,16 @@ module.exports = function(socket){
 }
 
 function sendTypingToChat(user){
-	return ((chatId, isTyping)=>{
+	return (chatId, isTyping)=>{
 		socketIO.io.emit(`${TYPING}-${chatId}`, {user, isTyping})
-	})
+	}
 }
 
 function sendMessageToChat(sender){
-	return ((chatId, message)=>{
-		socketIO.io.emit(`${MESSAGE_RECIEVED}-${chatId}`, createMessage({message, sender}))
-	})
+	return (chatId, message)=>{
+		console.log("sendMessageToChat: " + message + " " + chatId)
+		socketIO.io.emit(`${MESSAGE_RECEIVED}-${chatId}`, createMessage({message, sender}))
+	}
 }
 
 function addUser(userList, user){
