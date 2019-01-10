@@ -330,7 +330,7 @@ exports.user_verify = function(req, res){
 //GETs all interests for a given user
 exports.user_interests_get = function(req, res){
 	let user = new User('');
-	user.getInterestsById(user.data.id, function(err, results){
+	user.getInterestsById(req.params.id, function(err, results){
 		if(err){
 			res.send(err)
 		}

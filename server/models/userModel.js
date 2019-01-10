@@ -80,10 +80,10 @@ User.prototype.getByUsername = function (data, callback) {
 }
 
 //Retrieves a list interests of a given users user_id
-User.prototype.getInterestsById = function (data, callback) {
+User.prototype.getInterestsById = function (id, callback) {
 	var self = this;
-	data = mysql.escape(data);
-	var query = `SELECT interest FROM interests JOIN user_interests ON interests.id=user_interests.interest_id WHERE user_id = ${data}`;
+	id = mysql.escape(id);
+	var query = `SELECT interest FROM interests JOIN user_interests ON interests.id=user_interests.interest_id WHERE user_id = ${id}`;
 	db.query(query, function (err, result) {
 		if (err) {callback(err, null);}
 		else{
