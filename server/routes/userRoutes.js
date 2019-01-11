@@ -53,7 +53,19 @@ router.post('/signup', user_controller.user_exists);
 // POST request for checking if a user confirmation code is valid
 router.post('/signup/verify', user_controller.user_verify);
 
-//GET request to logout user
+// GET request to logout user
 router.get('/logout/:id',user_controller.user_logout);
+
+// SET single interests for user via GET
+router.get('interests/set/:user_id/:interest', user_controller.set_interest);
+
+// Replace interest via GET
+router.get('interests/replace/:user_id/:interest_old/:interest_new', user_controller.replace_interest);
+
+// Add new interest and add to user who added it
+router.get('interests/new/:user_id/:interest', user_controller.new_interest);
+
+// Remove interest from given user via GET
+router.get('interests/delete/:user_id/:interest', user_controller.delete_interest);
 
 module.exports = router;
