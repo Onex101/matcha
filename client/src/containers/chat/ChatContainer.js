@@ -3,7 +3,7 @@ import SideBar from './SideBar';
 import ChatHeading from './ChatHeading';
 import Messages from '../messages/Messages';
 import MessageInput from '../messages/MessageInput';
-import {COMMUNITY_CHAT, MESSAGE_SENT, MESSAGE_RECEIVED, TYPING} from '../../Events';
+import {COMMUNITY_CHAT, MESSAGE_SENT, MESSAGE_RECEIVED, TYPING, PRIVATE_MESSAGE} from '../../Events';
 
 export default class ChatContainer extends Component{
 	constructor(props){
@@ -17,14 +17,30 @@ export default class ChatContainer extends Component{
 
 	componentDidMount(){
 		const {socket} = this.props
+		this.initSocket(socket)
+		// socket.emit(COMMUNITY_CHAT, this.resetChat)
+	}
+
+	initSocket(socket){	
+		const {user} = this.props
 		socket.emit(COMMUNITY_CHAT, this.resetChat)
+		socket.on(PRIVATE_MESSAGE, this.addChat)
+		socket.on('connect', ()=>{
+			socket.emit(COMMUNITY_CHAT, this.resetChat)
+		})
+		// socket.emit(PRIVATE_MESSAGE, {receiver:"Mike", sender: user})
+	}
+
+	sendOpenPrivateMessage = (receiver) => {
+		const {socket, user} = this.props
+		socket.emit(PRIVATE_MESSAGE, {receiver, sender: user})
 	}
 
 	resetChat = (chat)=>{
 		return this.addChat(chat, true)
 	}
 
-	addChat = (chat, reset) => {
+	addChat = (chat, reset = false) => {
 		console.log("Adding Chat: " + chat.id)
 		const {socket} = this.props
 		const {chats} = this.state
@@ -54,7 +70,7 @@ export default class ChatContainer extends Component{
 
 	updateTypingInChat = (chatId)=>{
 		return ({isTyping, user})=>{
-			console.log("Updating typing in chat-" + chatId)
+			// console.log("Updating typing in chat-" + chatId)
 			if(user !== this.props.user.name){
 
 				const { chats } = this.state
@@ -100,6 +116,7 @@ export default class ChatContainer extends Component{
 					user={user}
 					activeChat={activeChat}
 					setActiveChat={this.setActiveChat}
+					onSendPrivateMessage ={this.sendOpenPrivateMessage}
 				/>
 				<div className="chat-room-container">
 					{activeChat !== null ? (

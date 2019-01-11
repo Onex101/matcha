@@ -243,7 +243,7 @@ User.prototype.match = function (callback){
 	WHERE NOT id = 102 GROUP BY user_name, id ORDER BY id`;
 	db.query(query,function (err, results) {
 		console.log("MATCH FUNCTION")
-		console.log(results)
+		// console.log(results)
 		if (err){
 			callback(err, null);
 		}

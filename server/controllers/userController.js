@@ -251,7 +251,7 @@ exports.user_match_get = function(req, res) {
                                 i++;
 							}
 							array.sort(sortFunction);
-							console.log(array);
+							// console.log(array);
                             obj = {};
                             for (var key in array) {
                                 obj[key] = array[key]
