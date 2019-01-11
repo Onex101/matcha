@@ -330,7 +330,7 @@ exports.user_verify = function(req, res){
 //GETs all interests for a given user
 exports.user_interests_get = function(req, res){
 	let user = new User('');
-	user.getInterestsById(req.params.id, function(err, results){
+	user.getInterestById(req.params.id, function(err, results){
 		if(err){
 			res.send(err)
 		}
@@ -340,10 +340,10 @@ exports.user_interests_get = function(req, res){
 	})
 }
 
-//GET
+//GET /interests/set/:user_id/:interest_id
 exports.set_interest = function(req, res){
 	let user = new User('');
-	user.setInterestById(req.params.id, function(err, results){
+	user.setInterestByIds(req.params.user_id, req.params.interest_id, function(err, results){
 		if(err){
 			res.send(err)
 		}
@@ -353,23 +353,23 @@ exports.set_interest = function(req, res){
 	})
 }
 
-//GET
+//GET /interests/replace/:user_id/:interest_id_old/:interest_id_new
 exports.replace_interest = function(req, res){
 	let user = new User('');
-	user.methodInModel(req.params.id, function(err, results){
+	user.replaceInterest(req.params.user_id, req.params.interest_id_old, req.params.interest_id_new, function(err, results){
 		if(err){
 			res.send(err)
 		}
 		else{
-			res.send(results);
+			res.send("Interests updated succesfully");
 		}
 	})
 }
 
-//GET
+//GET /interests/new/:user_id/:interest'
 exports.new_interest = function(req, res){
 	let user = new User('');
-	user.methodInModel(req.params.id, function(err, results){
+	user.createNewInterest(req.params.user_id,req.params.interest, function(err, results){
 		if(err){
 			res.send(err)
 		}
@@ -379,10 +379,10 @@ exports.new_interest = function(req, res){
 	})
 }
 
-//GET
+//GET /interests/delete/:user_id/:interest
 exports.delete_interest = function(req, res){
 	let user = new User('');
-	user.methodInModel(req.params.id, function(err, results){
+	user.removeInterestByUserId(req.params.id, function(err, results){
 		if(err){
 			res.send(err)
 		}
@@ -392,10 +392,10 @@ exports.delete_interest = function(req, res){
 	})
 }
 
-//GET
+//GET /interests
 exports.get_interests = function(req, res){
 	let user = new User('');
-	user.methodInModel(req.params.id, function(err, results){
+	user.fetchInterestsList(function(err, results){
 		if(err){
 			res.send(err)
 		}

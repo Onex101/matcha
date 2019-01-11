@@ -286,4 +286,80 @@ User.prototype.getEmailByUserName = function (callback){
 	})
 }
 
+User.prototype.setInterestByIds = function (user_id, interest_id, callback){
+	var query = `INSERT INTO user_interests VALUES(${user_id},${interest_id})`;
+	db.query(query , function (err, results) {
+		if (err){
+			callback(err, null);
+		}
+		else{
+			"Interest has been added";
+		}
+	})
+}
+
+User.prototype.replaceInterest = function (user_id, interest_id_old, interest_id_new, callback){
+	var query1 = `DELETE FROM user_interests WHERE user_id = ${user_id} AND interest_id = ${interest_id_old}`;
+	var query2 = `INSERT INTO user_interests VALUES(${user_id},${interest_id_new})`;
+	db.query(query1 , function (err, results) {
+		if (err){
+			callback(err, null);
+		}
+		else{
+			db.query(query2 , function (err, results) {
+				if (err){
+					callback(err, null);
+				}
+				else{
+					callback(null, results);
+				}
+			})
+		}
+	})
+}
+
+User.prototype.createNewInterest = function (user_id, interest, callback){
+	var query1 = `INSERT INTO interests (interest) VALUES ('${interest}');`;
+	var query2 = `INSERT INTO user_interests VALUES(${user_id},(SELECT id FROM interests WHERE interest = '${interest}' LIMIT 1))`;
+	db.query(query1 , function (err, results) {
+		if (err){
+			callback(err, null);
+		}
+		else{
+			db.query(query2 , function (err, results) {
+				if (err){
+					callback(err, null);
+				}
+				else{
+					callback(null, results);
+				}
+			})
+		}
+	})
+}
+
+User.prototype.removeInterestByUserId = function (user_id, interest, callback){
+	var query = `DELETE user_interests FROM user_interests JOIN interests ON user_interests.interest_id = interests.id WHERE user_id = ${user_id} AND interests.interest = '${interest}';`;
+	db.query(query , function (err, results) {
+		if (err){
+			callback(err, null);
+		}
+		else{
+			callback(null, results);
+		}
+	})
+}
+
+User.prototype.fetchInterestsList = function (callback){
+	var query = `SELECT * FROM interests`;
+	db.query(query , function (err, results) {
+		if (err){
+			callback(err, null);
+		}
+		else{
+			callback(null, results);
+		}
+	})
+}
+
 module.exports = User;
