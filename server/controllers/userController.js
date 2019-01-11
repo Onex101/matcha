@@ -354,7 +354,7 @@ exports.set_interest = function(req, res){
 }
 
 //GET
-exports.function_name = function(req, res){
+exports.replace_interest = function(req, res){
 	let user = new User('');
 	user.methodInModel(req.params.id, function(err, results){
 		if(err){
@@ -367,7 +367,7 @@ exports.function_name = function(req, res){
 }
 
 //GET
-exports.function_name = function(req, res){
+exports.new_interest = function(req, res){
 	let user = new User('');
 	user.methodInModel(req.params.id, function(err, results){
 		if(err){
@@ -380,7 +380,7 @@ exports.function_name = function(req, res){
 }
 
 //GET
-exports.function_name = function(req, res){
+exports.delete_interest = function(req, res){
 	let user = new User('');
 	user.methodInModel(req.params.id, function(err, results){
 		if(err){
@@ -393,7 +393,7 @@ exports.function_name = function(req, res){
 }
 
 //GET
-exports.function_name = function(req, res){
+exports.get_interests = function(req, res){
 	let user = new User('');
 	user.methodInModel(req.params.id, function(err, results){
 		if(err){
