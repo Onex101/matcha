@@ -219,7 +219,7 @@ exports.user_match_get = function(req, res) {
                     bio: row.bio,
 					fame: row.fame,
 					interests: row.interests}
-                    user.match(function (err, results){
+                    user.match(user.data.id, function (err, results){
                         if (err){
                             res.status(400)
                             res.send({
@@ -330,7 +330,7 @@ exports.user_verify = function(req, res){
 //GETs all interests for a given user
 exports.user_interests_get = function(req, res){
 	let user = new User('');
-	user.getInterestsById(user.data.id, function(err, results){
+	user.getInterestsById(req.params.id, function(err, results){
 		if(err){
 			res.send(err)
 		}
@@ -340,6 +340,70 @@ exports.user_interests_get = function(req, res){
 	})
 }
 
+//GET
+exports.set_interest = function(req, res){
+	let user = new User('');
+	user.setInterestById(req.params.id, function(err, results){
+		if(err){
+			res.send(err)
+		}
+		else{
+			res.send(results);
+		}
+	})
+}
+
+//GET
+exports.replace_interest = function(req, res){
+	let user = new User('');
+	user.methodInModel(req.params.id, function(err, results){
+		if(err){
+			res.send(err)
+		}
+		else{
+			res.send(results);
+		}
+	})
+}
+
+//GET
+exports.new_interest = function(req, res){
+	let user = new User('');
+	user.methodInModel(req.params.id, function(err, results){
+		if(err){
+			res.send(err)
+		}
+		else{
+			res.send(results);
+		}
+	})
+}
+
+//GET
+exports.delete_interest = function(req, res){
+	let user = new User('');
+	user.methodInModel(req.params.id, function(err, results){
+		if(err){
+			res.send(err)
+		}
+		else{
+			res.send(results);
+		}
+	})
+}
+
+//GET
+exports.get_interests = function(req, res){
+	let user = new User('');
+	user.methodInModel(req.params.id, function(err, results){
+		if(err){
+			res.send(err)
+		}
+		else{
+			res.send(results);
+		}
+	})
+}
 
 //Logout the current user
 exports.user_logout = function(req, res){

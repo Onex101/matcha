@@ -80,10 +80,10 @@ User.prototype.getByUsername = function (data, callback) {
 }
 
 //Retrieves a list interests of a given users user_id
-User.prototype.getInterestsById = function (data, callback) {
+User.prototype.getInterestsById = function (id, callback) {
 	var self = this;
-	data = mysql.escape(data);
-	var query = `SELECT interest FROM interests JOIN user_interests ON interests.id=user_interests.interest_id WHERE user_id = ${data}`;
+	id = mysql.escape(id);
+	var query = `SELECT interest FROM interests JOIN user_interests ON interests.id=user_interests.interest_id WHERE user_id = ${id}`;
 	db.query(query, function (err, result) {
 		if (err) {callback(err, null);}
 		else{
@@ -233,14 +233,14 @@ User.prototype.login = function (callback){
     })
 }
 
-User.prototype.match = function (callback){
+User.prototype.match = function (id, callback){
 	var query = `SELECT id, user_name, birth_date, gender, pref, gps_lat, gps_lon, bio, GROUP_CONCAT(interest) AS interests FROM\
 	(SELECT users.id, user_name,interest, birth_date, gender, pref, gps_lat, gps_lon, bio FROM user_interests\
 	RIGHT JOIN users ON user_interests.user_id = users.id\
 	LEFT JOIN interests ON user_interests.interest_id = interests.id\
 	LEFT JOIN likes ON users.id = user2_id\
 	WHERE likes.link_code IS NULL) x\
-	WHERE NOT id = 102 GROUP BY user_name, id ORDER BY id`;
+	WHERE NOT id = ${id} GROUP BY user_name, id ORDER BY id`;
 	db.query(query,function (err, results) {
 		console.log("MATCH FUNCTION")
 		// console.log(results)
