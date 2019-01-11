@@ -97,9 +97,9 @@ export default class Settings extends Component {
             pic4 = temp;
 
         return(<div className="imgBar">
-            <div className="img-thumbnail" id="profile" ref="profile" style={{width:'20%', minWidth: "50px"}}>
-                {this.state.profile ? <img src={this.state.profile} style={{width:'100%', height:"auto", maxHeight: "109px", maxWidth: "109px"}} alt="Profile pic"/>
-                                    : <img src={temp} style={{width:'100%'}} alt="Profile pic"/>}
+            <div className="img-thumbnail" id="profile" ref="profile">
+                {this.state.profile ? <img src={this.state.profile} className='profile_thumb' alt="Profile pic"/>
+                                    : <img src={temp} className='profile_thumb' alt="Profile pic"/>}
                 <Button
                     bsSize="large"
                     type="submit" 
@@ -112,8 +112,8 @@ export default class Settings extends Component {
                     // onClick={({target}) => this.setState({pic[1]: target.value})}
                     // onClick={this.handleChange} 
                     >Upload Image</Button>
-            </div><br />
-            <div className="img-thumbnail" style={{width:'16%', minWidth: "33px", minHeight: "40px"}}>
+            </div><br/>
+            {/* <div className="img-thumbnail" style={{width:'16%', minWidth: "33px", minHeight: "40px"}}>
                 <img src={pic1} style={{width:'100%'}} alt="IMG 1"/>
                 <Button
                     bsSize="large"
@@ -122,8 +122,8 @@ export default class Settings extends Component {
                     disabled={!this.profileCheck()}
                     // onClick={this.saveAndContinue}
                     onClick={(e)=>this._handleSubmit(e)}>Upload Image</Button>
-            </div>
-            <div className="img-thumbnail" style={{width:'16%', minWidth: "33px"}}>
+            </div> */}
+            {/* <div className="img-thumbnail" style={{width:'16%', minWidth: "33px"}}>
                 <img src={pic2} style={{width:'100%'}} alt="IMG 2"/>
                 <Button
                     bsSize="large"
@@ -132,8 +132,8 @@ export default class Settings extends Component {
                     disabled={!this.profileCheck()}
                     // onClick={this.saveAndContinue}
                     onClick={(e)=>this._handleSubmit(e)}>Upload Image</Button>
-            </div>
-            <div className="img-thumbnail" style={{width:'16%', minWidth: "33px"}}>
+            </div> */}
+            {/* <div className="img-thumbnail" style={{width:'16%', minWidth: "33px"}}>
                 <img src={pic3} style={{width:'100%'}} alt="IMG 3"/>
                 <Button
                     bsSize="large"
@@ -142,8 +142,8 @@ export default class Settings extends Component {
                     disabled={!this.profileCheck()}
                     // onClick={this.saveAndContinue}
                     onClick={(e)=>this._handleSubmit(e)}>Upload Image</Button>
-            </div>
-            <div className="img-thumbnail" style={{width:'16%', minWidth: "33px"}}>
+            </div> */}
+            {/* <div className="img-thumbnail" style={{width:'16%', minWidth: "33px"}}>
                 <img src={pic4} style={{width:'100%'}} alt="IMG 4"/>
                 <Button
                     bsSize="large"
@@ -152,7 +152,7 @@ export default class Settings extends Component {
                     disabled={!this.profileCheck()}
                     // onClick={this.saveAndContinue}
                     onClick={(e)=>this._handleSubmit(e)}>Upload Image</Button>
-                </div>
+                </div> */}
             </div>
         )
     }
@@ -200,20 +200,12 @@ export default class Settings extends Component {
     handleImgChange = event => {
     event.preventDefault();
     console.log("Image Test")
-    // console.log(this.refs.profile)
-    // this.refs.profile
     this.setState({
         profile: this.state.imagePreviewUrl
     });
-        // this.setState({
-        //     [event.target.id]: event.target.src
-        // });
     }
 
     render() {
-        // var style = {
-        //     display: 'flex',
-        //   }
         return (
                 // <div className="previewComponent">
                 //     <ControlLabel>Upload Images</ControlLabel>
@@ -287,7 +279,7 @@ export default class Settings extends Component {
                         <ControlLabel>Your Interest</ControlLabel>
                         <br/>
                         <div className="slider-grp">
-                            <img src={female} alt="Female" />
+                            <img src={female} className='gender' alt="Female" />
                             <FormControl
                             autoFocus
                             type="range"
