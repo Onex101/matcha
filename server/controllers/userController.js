@@ -219,7 +219,7 @@ exports.user_match_get = function(req, res) {
                     bio: row.bio,
 					fame: row.fame,
 					interests: row.interests}
-                    user.match(function (err, results){
+                    user.match(user.data.id, function (err, results){
                         if (err){
                             res.status(400)
                             res.send({
@@ -251,7 +251,7 @@ exports.user_match_get = function(req, res) {
                                 i++;
 							}
 							array.sort(sortFunction);
-							console.log(array);
+							// console.log(array);
                             obj = {};
                             for (var key in array) {
                                 obj[key] = array[key]
@@ -330,7 +330,7 @@ exports.user_verify = function(req, res){
 //GETs all interests for a given user
 exports.user_interests_get = function(req, res){
 	let user = new User('');
-	user.getInterestsById(user.data.id, function(err, results){
+	user.getInterestById(req.params.id, function(err, results){
 		if(err){
 			res.send(err)
 		}
@@ -340,6 +340,70 @@ exports.user_interests_get = function(req, res){
 	})
 }
 
+//GET /interests/set/:user_id/:interest_id
+exports.set_interest = function(req, res){
+	let user = new User('');
+	user.setInterestByIds(req.params.user_id, req.params.interest_id, function(err, results){
+		if(err){
+			res.send(err)
+		}
+		else{
+			res.send(results);
+		}
+	})
+}
+
+//GET /interests/replace/:user_id/:interest_id_old/:interest_id_new
+exports.replace_interest = function(req, res){
+	let user = new User('');
+	user.replaceInterest(req.params.user_id, req.params.interest_id_old, req.params.interest_id_new, function(err, results){
+		if(err){
+			res.send(err)
+		}
+		else{
+			res.send("Interests updated succesfully");
+		}
+	})
+}
+
+//GET /interests/new/:user_id/:interest'
+exports.new_interest = function(req, res){
+	let user = new User('');
+	user.createNewInterest(req.params.user_id,req.params.interest, function(err, results){
+		if(err){
+			res.send(err)
+		}
+		else{
+			res.send(results);
+		}
+	})
+}
+
+//GET /interests/delete/:user_id/:interest
+exports.delete_interest = function(req, res){
+	let user = new User('');
+	user.removeInterestByUserId(req.params.id, function(err, results){
+		if(err){
+			res.send(err)
+		}
+		else{
+			res.send(results);
+		}
+	})
+}
+
+//GET /interests
+exports.get_interests = function(req, res){
+	let user = new User('');
+	user.fetchInterestsList(function(err, results){
+		if(err){
+			res.send(err)
+		}
+		else{
+			res.send(results);
+		}
+	})
+}
 
 //Logout the current user
 exports.user_logout = function(req, res){

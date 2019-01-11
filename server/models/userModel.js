@@ -80,10 +80,10 @@ User.prototype.getByUsername = function (data, callback) {
 }
 
 //Retrieves a list interests of a given users user_id
-User.prototype.getInterestsById = function (data, callback) {
+User.prototype.getInterestsById = function (id, callback) {
 	var self = this;
-	data = mysql.escape(data);
-	var query = `SELECT interest FROM interests JOIN user_interests ON interests.id=user_interests.interest_id WHERE user_id = ${data}`;
+	id = mysql.escape(id);
+	var query = `SELECT interest FROM interests JOIN user_interests ON interests.id=user_interests.interest_id WHERE user_id = ${id}`;
 	db.query(query, function (err, result) {
 		if (err) {callback(err, null);}
 		else{
@@ -233,17 +233,17 @@ User.prototype.login = function (callback){
     })
 }
 
-User.prototype.match = function (callback){
+User.prototype.match = function (id, callback){
 	var query = `SELECT id, user_name, birth_date, gender, pref, gps_lat, gps_lon, bio, GROUP_CONCAT(interest) AS interests FROM\
 	(SELECT users.id, user_name,interest, birth_date, gender, pref, gps_lat, gps_lon, bio FROM user_interests\
 	RIGHT JOIN users ON user_interests.user_id = users.id\
 	LEFT JOIN interests ON user_interests.interest_id = interests.id\
 	LEFT JOIN likes ON users.id = user2_id\
 	WHERE likes.link_code IS NULL) x\
-	WHERE NOT id = 102 GROUP BY user_name, id ORDER BY id`;
+	WHERE NOT id = ${id} GROUP BY user_name, id ORDER BY id`;
 	db.query(query,function (err, results) {
 		console.log("MATCH FUNCTION")
-		console.log(results)
+		// console.log(results)
 		if (err){
 			callback(err, null);
 		}
@@ -279,6 +279,82 @@ User.prototype.getEmailById = function (callback){
 
 User.prototype.getEmailByUserName = function (callback){
 	db.query(`SELECT email FROM users WHERE user_name = '${this.data.user_name}'`, function (err, results) {
+		if (err){
+			callback(err, null);
+		}
+		else{
+			callback(null, results);
+		}
+	})
+}
+
+User.prototype.setInterestByIds = function (user_id, interest_id, callback){
+	var query = `INSERT INTO user_interests VALUES(${user_id},${interest_id})`;
+	db.query(query , function (err, results) {
+		if (err){
+			callback(err, null);
+		}
+		else{
+			"Interest has been added";
+		}
+	})
+}
+
+User.prototype.replaceInterest = function (user_id, interest_id_old, interest_id_new, callback){
+	var query1 = `DELETE FROM user_interests WHERE user_id = ${user_id} AND interest_id = ${interest_id_old}`;
+	var query2 = `INSERT INTO user_interests VALUES(${user_id},${interest_id_new})`;
+	db.query(query1 , function (err, results) {
+		if (err){
+			callback(err, null);
+		}
+		else{
+			db.query(query2 , function (err, results) {
+				if (err){
+					callback(err, null);
+				}
+				else{
+					callback(null, results);
+				}
+			})
+		}
+	})
+}
+
+User.prototype.createNewInterest = function (user_id, interest, callback){
+	var query1 = `INSERT INTO interests (interest) VALUES ('${interest}');`;
+	var query2 = `INSERT INTO user_interests VALUES(${user_id},(SELECT id FROM interests WHERE interest = '${interest}' LIMIT 1))`;
+	db.query(query1 , function (err, results) {
+		if (err){
+			callback(err, null);
+		}
+		else{
+			db.query(query2 , function (err, results) {
+				if (err){
+					callback(err, null);
+				}
+				else{
+					callback(null, results);
+				}
+			})
+		}
+	})
+}
+
+User.prototype.removeInterestByUserId = function (user_id, interest, callback){
+	var query = `DELETE user_interests FROM user_interests JOIN interests ON user_interests.interest_id = interests.id WHERE user_id = ${user_id} AND interests.interest = '${interest}';`;
+	db.query(query , function (err, results) {
+		if (err){
+			callback(err, null);
+		}
+		else{
+			callback(null, results);
+		}
+	})
+}
+
+User.prototype.fetchInterestsList = function (callback){
+	var query = `SELECT * FROM interests`;
+	db.query(query , function (err, results) {
 		if (err){
 			callback(err, null);
 		}

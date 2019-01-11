@@ -44,7 +44,7 @@ export default class Chat extends Component {
 		user.name = localStorage.getItem('user');
 		// console.log("SOCK USR 1: " + user.name)
 		// console.log(user);
-		socket.emit(USER_CONNECTED, user);
+		// socket.emit(USER_CONNECTED, user);
 		// console.log("SOCK USR 2: " + socket)
 		// console.info(socket)
 	}
@@ -82,7 +82,6 @@ export default class Chat extends Component {
 	render(){
 		console.log("PROPS:")
 		console.info(this.props)
-
 		return(this.props.userInfo ? <div className="chat">
 				<div className="chat-container">
 				{this.loadContainer()}
