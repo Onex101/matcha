@@ -1,5 +1,5 @@
 const socketIO = require('./index.js');
-const {VERIFY_USER, USER_CONNECTED, USER_DISCONNECTED, LOGOUT, COMMUNITY_CHAT, MESSAGE_RECEIVED, MESSAGE_SENT, TYPING} = require('../client/src/Events')
+const {VERIFY_USER, USER_CONNECTED, USER_DISCONNECTED, LOGOUT, COMMUNITY_CHAT, MESSAGE_RECEIVED, MESSAGE_SENT, TYPING, PRIVATE_MESSAGE} = require('../client/src/Events')
 const {createUser, createMessage, createChat} = require('../client/src/Factories')
 
 let connectedUsers = {}
@@ -7,7 +7,7 @@ let connectedUsers = {}
 let communityChat = createChat()
 
 module.exports = function(socket){
-	console.log("Socket Id: " + socket.id);
+	// console.log("Socket Id: " + socket.id);
 
 	let sendMessageToChatFromUser;
 
@@ -18,12 +18,14 @@ module.exports = function(socket){
 			callback({isUser: true, user:null});
 		}
 		else{
-			callback({isUser: false, user:createUser({name: nickname})})
+			console.log("creating a user")
+			callback({isUser: false, user:createUser({name: nickname, socketID:socket.id})})
 		}
 	})
 
-	socket.on(USER_CONNECTED, (user)=>{
-		console.log('This user has connected: ' + JSON.stringify(user))
+	socket.on(USER_CONNECTED, (user_name)=>{
+		// console.log('This user has connected: ' + JSON.stringify(user))
+		user = createUser({name: user_name, socketID:socket.id})
 		connectedUsers = addUser(connectedUsers, user)
 		socket.user = user
 		// console.log("Connected Users: " + JSON.stringify(connectedUsers));
@@ -31,7 +33,7 @@ module.exports = function(socket){
 		sendTypingFromUser = sendTypingToChat(user.name)
 
 		socketIO.io.emit(USER_CONNECTED, connectedUsers)
-		console.log(socket.user);
+		// console.log(socket.user);
 		console.log("Connected Users: " + JSON.stringify(connectedUsers));
 	})
 
@@ -58,12 +60,23 @@ module.exports = function(socket){
 	})
 
 	socket.on(MESSAGE_SENT, ({chatId, message})=>{
-		console.log("MESSAGE SENT " + message + " " + " " + chatId)
+		// console.log("MESSAGE SENT " + message + " " + " " + chatId)
 		sendMessageToChatFromUser(chatId, message)
 	})
 
 	socket.on(TYPING, ({chatId, isTyping})=>{
 		sendTypingFromUser(chatId, isTyping)
+	})
+
+	socket.on(PRIVATE_MESSAGE, ({receiver, sender})=>{
+		console.log(receiver, sender)
+		if(receiver in connectedUsers){
+			const newChat = createChat({name:`${receiver}&${sender}`, users:[receiver, sender]})
+			const receiverSocket = connectedUsers[receiver].socketID
+			console.log(receiverSocket)
+			socket.to(receiverSocket).emit(PRIVATE_MESSAGE, newChat)
+			socket.emit(PRIVATE_MESSAGE, newChat)
+		}
 	})
 }
 
@@ -75,13 +88,13 @@ function sendTypingToChat(user){
 
 function sendMessageToChat(sender){
 	return (chatId, message)=>{
-		console.log("sendMessageToChat: " + message + " " + chatId)
+		// console.log("sendMessageToChat: " + message + " " + chatId)
 		socketIO.io.emit(`${MESSAGE_RECEIVED}-${chatId}`, createMessage({message, sender}))
 	}
 }
 
 function addUser(userList, user){
-	console.log("Add user: ", user)
+	// console.log("Add user: ", user)
 	let newList = Object. assign({}, userList)
 	if (user)
 		newList[user.name] = user.name

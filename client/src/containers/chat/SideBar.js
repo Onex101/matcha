@@ -5,12 +5,22 @@ export default class SideBar extends Component{
 		super(props)
 
 		this.state = {
-			user: null
+			receiver:""
 		};
+	}
+
+	handleSubmit = (e)=>{
+		e.preventDefault()
+		const {receiver} = this.state
+		const {onSendPrivateMessage} = this.props
+		console.log(receiver)
+
+		onSendPrivateMessage(receiver)
 	}
 
 	render() {
 		const {chats, activeChat, user, setActiveChat} = this.props
+		const {receiver} = this.state
 		return(
 			<div id="side-bar">
 				<div className="heading">
@@ -20,11 +30,14 @@ export default class SideBar extends Component{
 							Menu
 						</div>
 					</div>
-					<div className="search">
+					<form onSubmit={this.hanleSubmit} className="search">
 						<i className="search-icon"></i>
-						<input placeholder="Search" type="text"/>
+						<input placeholder="Search"
+								type="text"
+								value={receiver}
+								onChange={(e)=>{this.setState({receiver: e.target.value}) }}/>
 						<div className="plus"></div>
-					</div>
+					</form>
 					<div
 						className="users"
 						ref="users"

@@ -242,6 +242,8 @@ User.prototype.match = function (id, callback){
 	WHERE likes.link_code IS NULL) x\
 	WHERE NOT id = ${id} GROUP BY user_name, id ORDER BY id`;
 	db.query(query,function (err, results) {
+		console.log("MATCH FUNCTION")
+		// console.log(results)
 		if (err){
 			callback(err, null);
 		}
