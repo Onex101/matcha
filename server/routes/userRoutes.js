@@ -56,6 +56,8 @@ router.post('/signup/verify', user_controller.user_verify);
 // GET request to logout user
 router.get('/logout/:id',user_controller.user_logout);
 
+
+//** THESE THINGS SHAM */
 // SET single interests for user via GET
 router.get('interests/set/:user_id/:interest', user_controller.set_interest);
 
