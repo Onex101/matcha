@@ -59,15 +59,19 @@ router.get('/logout/:id',user_controller.user_logout);
 
 //** THESE THINGS SHAM */
 // SET single interests for user via GET
-router.get('interests/set/:user_id/:interest', user_controller.set_interest);
+router.get('/interests/set/:user_id/:interest_id', user_controller.set_interest);
 
 // Replace interest via GET
-router.get('interests/replace/:user_id/:interest_old/:interest_new', user_controller.replace_interest);
+router.get('/interests/replace/:user_id/:interest_id_old/:interest_id_new', user_controller.replace_interest);
 
 // Add new interest and add to user who added it
-router.get('interests/new/:user_id/:interest', user_controller.new_interest);
+router.get('/interests/new/:user_id/:interest', user_controller.new_interest);
 
 // Remove interest from given user via GET
-router.get('interests/delete/:user_id/:interest', user_controller.delete_interest);
+router.get('/interests/delete/:user_id/:interest', user_controller.delete_interest);
+
+// GET interest table
+// Remove interest from given user via GET
+router.get('/interests', user_controller.get_interests);
 
 module.exports = router;

@@ -340,6 +340,70 @@ exports.user_interests_get = function(req, res){
 	})
 }
 
+//GET
+exports.set_interest = function(req, res){
+	let user = new User('');
+	user.setInterestById(req.params.id, function(err, results){
+		if(err){
+			res.send(err)
+		}
+		else{
+			res.send(results);
+		}
+	})
+}
+
+//GET
+exports.function_name = function(req, res){
+	let user = new User('');
+	user.methodInModel(req.params.id, function(err, results){
+		if(err){
+			res.send(err)
+		}
+		else{
+			res.send(results);
+		}
+	})
+}
+
+//GET
+exports.function_name = function(req, res){
+	let user = new User('');
+	user.methodInModel(req.params.id, function(err, results){
+		if(err){
+			res.send(err)
+		}
+		else{
+			res.send(results);
+		}
+	})
+}
+
+//GET
+exports.function_name = function(req, res){
+	let user = new User('');
+	user.methodInModel(req.params.id, function(err, results){
+		if(err){
+			res.send(err)
+		}
+		else{
+			res.send(results);
+		}
+	})
+}
+
+//GET
+exports.function_name = function(req, res){
+	let user = new User('');
+	user.methodInModel(req.params.id, function(err, results){
+		if(err){
+			res.send(err)
+		}
+		else{
+			res.send(results);
+		}
+	})
+}
 
 //Logout the current user
 exports.user_logout = function(req, res){
