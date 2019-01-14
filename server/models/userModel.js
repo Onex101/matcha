@@ -295,7 +295,7 @@ User.prototype.setInterestByIds = function (user_id, interest_id, callback){
 			callback(err, null);
 		}
 		else{
-			"Interest has been added";
+			callback(null, results);
 		}
 	})
 }
