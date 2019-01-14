@@ -1,3 +1,85 @@
+/*___Profile Picture___*/
+.profile-thumbnail {
+  min-width: 50px;
+  min-height: 70.02px;
+  display: inline-block;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  width: 20%;
+}
+
+.profile-elems {
+  display: inline-block;
+  position: relative;
+  width: 95%; /* The size you want */
+  margin: 2% 1% 1%;
+}
+.profile-elems:after {
+  content: "";
+  display: block;
+  padding-bottom: 100%; /* The padding depends on the width, not on the height, so with a padding-bottom of 100% you will get a square */
+}
+
+.profile_thumb {
+  position: absolute; /* Take your picture out of the flow */
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0; /* Make the picture taking the size of it's parent */
+  width: 100%; /* This if for the object-fit */
+  height: 100%; /* This if for the object-fit */
+  object-fit: cover; /* Equivalent of the background-size: cover; of a background-image */
+  object-position: center;
+}
+
+.submitButton{
+  padding: 0px;
+  background: white;
+  border: 4px solid lightgray;
+  border-radius: 15px;
+  font-weight: 700;
+  font-size: 1.5vw;
+  cursor: pointer;
+  position: relative;
+  margin: auto;
+}
+/*_____________________*/
+
+
+.img-thumbnail {
+  min-width: 40px;
+  min-height: 70.02px;
+  display: inline-block;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  width: 16%;
+  padding: 0;
+}
+
+.img_thumb {
+  position: absolute; /* Take your picture out of the flow */
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0; /* Make the picture taking the size of it's parent */
+  width: 100%; /* This if for the object-fit */
+  height: 100%; /* This if for the object-fit */
+  object-fit: cover; /* Equivalent of the background-size: cover; of a background-image */
+  object-position: center;
+}
+
+.img-submitButton{
+  padding: 0px;
+  background: white;
+  border: 4px solid lightgray;
+  border-radius: 15px;
+  font-weight: 700;
+  font-size: 1.2vw;
+  cursor: pointer;
+  position: relative;
+  margin: auto;
+}
+
 .settings {
   vertical-align: middle;
   margin: auto;
@@ -43,43 +125,26 @@ h3{
 }
 
 .preview{
-  height: auto;
-  width: 60%;
+  height: 6%;
+  width: auto;
+  max-height: 200px;
 }
 
 .gender{
   width: auto;
   height: 100%;
 }
-/* img { */
-  /* width: auto; */
-  /* width: 100%; */
-  /* height: 100%; */
-  /* height: auto; */
-/* } */
   
 .previewText{
   width: 100%;
   margin-top: 20px;
 }
-  
-.submitButton{
-  padding: 0px;
-  /* margin: 5px 0px 5px; */
-  background: white;
-  border: 4px solid lightgray;
-  border-radius: 15px;
-  font-weight: 700;
-  font-size: 10pt;
-  cursor: pointer;
-  position: absolute;
-  top: 84%;
-  left: 33%;
-}
 
 .submitButton:hover{
   background: #efefef;
-  
+}
+.img-submitButton:hover{
+  background: #efefef;
 }
 
 .centerText {
@@ -89,89 +154,43 @@ h3{
 
 .profile {
   width: 30%;
-  /* padding:100%; */
   min-width: 50px;
-  /* min-height: 152.261px; */
-}
-
-.img-thumbnail {
-  /* style={{width:'30%', backgroundColor: 'red', position:'relative', paddingTop: '30%', minWidth: "50px"}} */
-  width: 30%;
-  height: 0;
-  background-color: red;
-  position: relative;
-  padding-top: 35%;
-  min-width: 50px;
-  min-height: 80.02px;
-
-}
-.profile_thumb {
-  /* width:'100%', minHeight: '336.67px', objectFit: "cover" */
-  width: 95%;
-  height:75%;
-  position: absolute;
-  top: 2%;
-  left: 2%;
-  margin: auto;
-  /* padding-top: 100%; */
-  /* min-height: 336.67px;
-  max-height: 336.67px; */
-  /* min-height: 271.88px;
-  min-width: 271.88px;
-  max-height: 271.88px;
-  max-width: 271.88px; */
-  object-fit: cover;
-  /* height: width; */
 }
 
 @media only screen and (max-width : 350px) {
-  .submitButton { font-size:16% }    
   .control-label{font-size:70%} 
   .previewText{font-size:60%}
   .submit_btn{font-size: 70%}
-  /* .profile_thumb {
-    min-height: 40px;
-    min-width: 40px;
-    max-height: 40px;
-    max-width: 40px;
-  } */
-  /* .profile_thumb {padding-top: 100%} */
 }
-@media only screen and (min-width : 351px) and (max-width : 522px) {
-  .submitButton { font-size:23% }   
+@media only screen and (min-width : 351px) and (max-width : 529px) {
   .control-label{font-size:70%} 
   .previewText{font-size:80%}
   .submit_btn{font-size: 80%}
-  /* .profile_thumb {
-    min-height: 61.59px;
-    min-width: 61.59px;
-    max-height: 61.59px;
-    max-width: 61.59px;
-  } */
 }
-@media only screen and (min-width : 523px) and (max-width : 745px) {
-  .submitButton { font-size:45% } 
+@media only screen and (min-width : 530px) and (max-width : 637px) {
+  .control-label{font-size:70%} 
+  .previewText{font-size:80%}
+  .submit_btn{font-size: 80%}
+}
+@media only screen and (min-width : 638px) and (max-width : 744px) {
   .control-label{font-size:100%}
   .previewText{font-size:90%}   
   .submit_btn{font-size: 100%}
-  /* .profile_thumb {
-    min-height: 110.19px;
-    min-width: 110.19px;
-    max-height: 110.19px;
-    max-width: 110.19px;
-  } */
 }
-@media only screen and (min-width : 746px) and (max-width : 1000px) {
-  .submitButton { font-size:60% }    
+@media only screen and (min-width : 745px) and (max-width : 840px) {
   .control-label{font-size:100%}
   .previewText{font-size:90%}
   .tsubmit_btnest {font-size: 100%}
-  /* .profile_thumb {
-    min-height: 271.88px;
-    min-width: 271.88px;
-    max-height: 271.88px;
-    max-width: 271.88px;
-  } */
+}
+@media only screen and (min-width : 841px) and (max-width : 991px) {
+  .control-label{font-size:100%}
+  .previewText{font-size:90%}
+  .tsubmit_btnest {font-size: 100%}
+}
+@media only screen and (min-width : 992px) and (max-width : 1110px) {
+  .control-label{font-size:100%}
+  .previewText{font-size:90%}
+  .tsubmit_btnest {font-size: 100%}
 }
 
 
