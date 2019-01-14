@@ -300,6 +300,18 @@ User.prototype.setInterestByIds = function (user_id, interest_id, callback){
 	})
 }
 
+User.prototype.getInterestById = function (user_id, callback){
+	var query = `SELECT interest FROM user_interests JOIN interests ON user_interests.interest_id = interests.id WHERE user_id = ${user_id}`;
+	db.query(query , function (err, results) {
+		if (err){
+			callback(err, null);
+		}
+		else{
+			callback(null, results);
+		}
+	})
+}
+
 User.prototype.replaceInterest = function (user_id, interest_id_old, interest_id_new, callback){
 	var query1 = `DELETE FROM user_interests WHERE user_id = ${user_id} AND interest_id = ${interest_id_old}`;
 	var query2 = `INSERT INTO user_interests VALUES(${user_id},${interest_id_new})`;
