@@ -2,6 +2,8 @@ import React, { Component } from "react";
 // import { HelpBlock, ButtonGroup, ButtonToolbar, Button, FormGroup, FormControl, ControlLabel } from "react-bootstrap";
 import { ButtonGroup, ButtonToolbar, Button} from "react-bootstrap";
 import "./Home.css";
+import Usercard from "../containers/Usercard";
+import {ControlLabel } from "react-bootstrap";
 
 // Renders the homepage given that the user is not currently signed in
 export default class Home extends Component {
@@ -86,14 +88,26 @@ export default class Home extends Component {
   getMatchCards() {
     if (this.state.matches !== null) {
       // console.log("State = " + this.state.matches);
-      var ret = '<div className="lander">';
+      // var ret = '<div className="lander">';
+      // for (var elem in this.state.matches) {
+      //   // console.log("elem = " + JSON.stringify(this.state.matches[elem].data.user_name));
+      //   ret += '<div>' + this.state.matches[elem].data.user_name + '</div>'
+      // };
+      // ret += '</div>';
+      // // console.log("RET = " + ret);
+      // return ret;
+
+      var numrows = 10;
+      var rows = [];
+      // for (var i = 0; i < numrows; i++) {
       for (var elem in this.state.matches) {
-        // console.log("elem = " + JSON.stringify(this.state.matches[elem].data.user_name));
-        ret += '<div>' + this.state.matches[elem].data.user_name + '</div>'
-      };
-      ret += '</div>';
-      // console.log("RET = " + ret);
-      return ret;
+          // note: we add a key prop here to allow react to uniquely identify each
+          // element in this array. see: https://reactjs.org/docs/lists-and-keys.html
+          console.log('INFO: ')
+          console.info(this.state.matches[elem])
+          rows.push(<Usercard props={this.state.matches[elem].data} key={elem}/>);
+      }
+      return <div>{rows}</div>;
     }
   }
   
@@ -145,14 +159,29 @@ export default class Home extends Component {
   render() {
     // if (this.state.matches === null)
     //   this.getMatches()
-    return (
-      <div className="Home">
-        <div className="lander">
-          {this.state.matches === null
-            ? <div dangerouslySetInnerHTML={{__html: this.landerCheck()}}></div>
-           :<div>{this.landerCheck()}<div dangerouslySetInnerHTML={{__html: this.getMatchCards()}}></div></div>}
-        </div>
-      </div>
-    );
+
+    return(localStorage.getItem('user') && this.state.matches 
+            ?  <div className="Home">
+                  <div className="lander">
+                    {/* <div>{this.landerCheck()}<div dangerouslySetInnerHTML={{__html: this.getMatchCards()}}></div></div> */}
+                    <div>{this.landerCheck()}{this.getMatchCards()}</div>
+                  </div>
+                </div>
+		      	: <div className="Home">{this.getMatches()}<ControlLabel> Loading ... </ControlLabel></div>);
+    // return (
+    //   <div className="Home">
+    //     <div className="lander">
+    //       {this.state.matches === null
+    //         ? <div dangerouslySetInnerHTML={{__html: this.landerCheck()}}></div>
+    //        :<div>{this.landerCheck()}<div dangerouslySetInnerHTML={{__html: this.getMatchCards()}}></div></div>}
+    //     </div>
+    //   </div>
+    // );
+    return(this.props.userInfo ? <div className="chat">
+				<div className="chat-container">
+				{this.loadContainer()}
+			</div>
+			</div>
+			: <ControlLabel> Loading ... </ControlLabel>)
   }
 }
