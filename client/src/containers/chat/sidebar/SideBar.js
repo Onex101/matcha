@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
 import {SideBarOption} from './SideBarOption';
 import {get, last} from 'lodash';
- 
+import {createChatNameFromUsers} from '../../../Factories'
+
 export default class SideBar extends Component{
 	constructor(props){
 		super(props)
@@ -21,7 +22,7 @@ export default class SideBar extends Component{
 	}
 
 	render() {
-		const {chats, activeChat, user, setActiveChat} = this.props
+		const {chats, activeChat, user, setActiveChat, users} = this.props
 		const {receiver} = this.state
 		return(
 			<div id="side-bar">
@@ -59,7 +60,7 @@ export default class SideBar extends Component{
 									return(
 										<SideBarOption
 											key = {chat.id}
-											name = {chat.name}
+											name = {chat.isCommunity ? chat.name : createChatNameFromUsers(users, user.name)}
 											lastMessage = {get(last(chat.messages), 'message', '')}
 											active = {activeChat.id === chat.id}
 											onClick = {() => {this.props.setActiveChat(chat)}}

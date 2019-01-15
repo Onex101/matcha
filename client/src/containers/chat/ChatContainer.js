@@ -11,6 +11,7 @@ export default class ChatContainer extends Component{
 		
 		this.state = {
 			chats:[],
+			users:[],
 			activeChat:null
 		}
 	}
@@ -110,13 +111,14 @@ export default class ChatContainer extends Component{
 
 	render() {
 		const {user, logout} = this.props;
-		const {chats, activeChat} = this.state;
+		const {chats, activeChat, users} = this.state;
 		return(
 			<div className="chat-container">
 				<SideBar
 					logout={logout}
 					chats={chats}
 					user={user}
+					users={users}
 					activeChat={activeChat}
 					setActiveChat={this.setActiveChat}
 					onSendPrivateMessage ={this.sendOpenPrivateMessage}
