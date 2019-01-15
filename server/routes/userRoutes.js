@@ -58,6 +58,10 @@ router.get('/logout/:id',user_controller.user_logout);
 
 
 //** THESE THINGS SHAM */
+
+//GET a users interests - working
+router.get('/user/:id/interests',user_controller.user_interests_get);
+
 // SET single interests for user via GET - done
 router.get('/interests/set/:user_id/:interest_id', user_controller.set_interest);
 

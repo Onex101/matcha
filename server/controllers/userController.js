@@ -196,8 +196,7 @@ exports.user_login_get = function(req, res) {
 
 // Display User MATCHES on GET.
 exports.user_match_get = function(req, res) {
-    testData = req.params;
-    let user = new User(data = {id: testData.id});
+    let user = new User(data = {id: req.params.id});
     if (!user.data.id)
         return res.send("failed: user does not exist")
     user.getById(this.data['id'], function(err, result){
@@ -218,7 +217,8 @@ exports.user_match_get = function(req, res) {
                     gps_lon: row.gps_lat,
                     bio: row.bio,
 					fame: row.fame,
-					interests: row.interests}
+					interests: row.interests,
+					pic: row.pic}
                     user.match(user.data.id, function (err, results){
                         if (err){
                             res.status(400)
@@ -245,7 +245,9 @@ exports.user_match_get = function(req, res) {
                                     new_user.match = matchC;
                                     new_user.like = like  * 100;
                                     new_user.dist_raw = dist_raw;
-                                    new_user.birth_date_diff = Math.abs(Match.getAge(user.data.birth_date) - Match.getAge(results[i].birth_date));
+									new_user.birth_date_diff = Math.abs(Match.getAge(user.data.birth_date) - Match.getAge(results[i].birth_date));
+									new_user.interests = results[i].interests;
+									new_user.pic = results[i].pic;
                                     array.push(new_user);
                                 }
                                 i++;

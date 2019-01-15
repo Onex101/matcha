@@ -86,6 +86,7 @@ connection.connect(function (err) {
 	user1_id int NOT NULL,\
 	user2_id int NOT NULL,\
 	msg varchar(1000),\
+	timestamp DATETIME,\
 	PRIMARY KEY (`id`))');
 
 	console.log('Creating fake profiles...')

@@ -14,6 +14,7 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 var userRoutes = require('./routes/userRoutes.js');
 var imgRoutes = require('./routes/imageRoutes.js');
+var msgRoutes = require('./routes/messageRoutes.js');
 
 app.use(bodyParser.json());
 app.use(cors());

@@ -46,9 +46,9 @@ User.prototype.deleteById = function (id, callback) {
 
 User.prototype.getById = function (data, callback) {
     var self = this;
-	// var query = `SELECT * FROM users WHERE id = ${data}`;
+
 	var query = `SELECT id, password,user_name, birth_date, gender, pref, gps_lat, gps_lon,bio, GROUP_CONCAT(interest) AS interests FROM\
-	(SELECT users.id, user_name, password,interest, birth_date, gender, pref, gps_lat, gps_lon, bio FROM user_interests\
+	(SELECT users.id, user_name, password,interest, birth_date, gender, pref, gps_lat, gps_lon, bio, profile_pic_id FROM user_interests\
 	RIGHT JOIN users ON user_interests.user_id = users.id\
 	LEFT JOIN interests ON user_interests.interest_id = interests.id) x\
 	WHERE id = ${data} GROUP BY user_name, id`;
@@ -234,16 +234,15 @@ User.prototype.login = function (callback){
 }
 
 User.prototype.match = function (id, callback){
-	var query = `SELECT id, user_name, birth_date, gender, pref, gps_lat, gps_lon, bio, GROUP_CONCAT(interest) AS interests FROM\
-	(SELECT users.id, user_name,interest, birth_date, gender, pref, gps_lat, gps_lon, bio FROM user_interests\
+	var query = `SELECT id, user_name, birth_date, gender, pref, gps_lat, gps_lon, bio, pic, GROUP_CONCAT(interest) AS interests FROM\
+	(SELECT users.id, user_name,interest, birth_date, gender, pref, gps_lat, gps_lon, bio, pic FROM user_interests\
 	RIGHT JOIN users ON user_interests.user_id = users.id\
 	LEFT JOIN interests ON user_interests.interest_id = interests.id\
 	LEFT JOIN likes ON users.id = user2_id\
+	LEFT JOIN pictures ON profile_pic_id = pictures.id\
 	WHERE likes.link_code IS NULL) x\
 	WHERE NOT id = ${id} GROUP BY user_name, id ORDER BY id`;
 	db.query(query,function (err, results) {
-		console.log("MATCH FUNCTION")
-		// console.log(results)
 		if (err){
 			callback(err, null);
 		}
@@ -295,7 +294,19 @@ User.prototype.setInterestByIds = function (user_id, interest_id, callback){
 			callback(err, null);
 		}
 		else{
-			"Interest has been added";
+			callback(null, results);
+		}
+	})
+}
+
+User.prototype.getInterestById = function (user_id, callback){
+	var query = `SELECT interest FROM user_interests JOIN interests ON user_interests.interest_id = interests.id WHERE user_id = ${user_id}`;
+	db.query(query , function (err, results) {
+		if (err){
+			callback(err, null);
+		}
+		else{
+			callback(null, results);
 		}
 	})
 }
