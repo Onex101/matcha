@@ -28,7 +28,7 @@ const createChat = ({messages = [], name = "Community", users = [], isCommunity 
 	}
 )
 
-const createChatNameFromUsers = (users, excludedUSer = "")=>{
+const createChatNameFromUsers = (users, excludedUser = "")=>{
 	return users.filter(u => u !== excludedUser).join('&') || "Empty Users"
 }
 
