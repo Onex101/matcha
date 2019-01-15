@@ -89,12 +89,8 @@ Image.prototype.getPicById = function (id, callback){
 }
 
 Image.prototype.setProfilePic = function (user_name, pic_id, callback){
-	console.log("Username: " + user_name);
-	console.log("Pic ID: " + pic_id);
 	db.query(`UPDATE users SET profile_pic_id = ${pic_id} WHERE user_name = '${user_name}'`, function (err, results) {
-	if (err){
-		callback(err, null);
-	}
+	if (err){callback(err, null);}
 	else{
 			callback(null, results);
 		}
