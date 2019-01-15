@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import "./Chat.css";
 import io from 'socket.io-client';
 import {USER_CONNECTED, LOGOUT} from '../Events';
-import ChatContainer from './chat/ChatContainer'
+import ChatContainer from './chat/ChatContainer';
 import {ControlLabel } from "react-bootstrap";
 
 const socektUrl = "http://localhost:4000"
@@ -20,24 +20,23 @@ export default class Chat extends Component {
 	}
 
 	componentDidMount(){
-		if (this.state.user === null && this.props.userInfo !== null)
-			this.setState({user: this.props.userInfo.user_name}, this.initSocket())
-		if (this.state.socket === null && localStorage.getItem('user') )
-			this.initSocket();
+		if (this.props.userInfo !== null)
+			this.setState({user: this.props.userInfo.user_name})
+		this.initSocket();
 	}
 
 	componentWillMount(){
 		if (this.state.user === null && this.props.userInfo !== null)
-			this.setState({user: this.props.userInfo.user_name}, this.initSocket())
-		if (this.state.socket === null && localStorage.getItem('user') )
-			this.initSocket();
+			this.setState({user: this.props.userInfo.user_name})
+		this.initSocket();
 	}
 
 	initSocket = ()=>{
-		if (!this.state.socket)
-			const socket = io(socektUrl)
+		var socket
+		if (!(this.state.socket))
+			 socket = io(socektUrl)
 		else
-			const socket = this.state.socket
+			socket = this.state.socket
 		socket.on('connect', ()=>{
 			console.log("Connected");
 		})
