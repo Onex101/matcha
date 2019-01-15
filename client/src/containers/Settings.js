@@ -2,11 +2,12 @@ import React, { Component } from "react";
 // import { ButtonGroup, ButtonToolbar, Button, FormGroup, FormControl, ControlLabel } from "react-bootstrap";
 // import { HelpBlock, ButtonGroup, ButtonToolbar, Button, FormGroup, FormControl, ControlLabel } from "react-bootstrap";
 import { ButtonGroup, ButtonToolbar, Button, FormGroup, FormControl, ControlLabel } from "react-bootstrap";
+// import { ReactTags } from "react-tag-autocomplete";
 import "./Settings.css";
 import female from './imgs/female_logo/favicon-32x32.png';
 import male from './imgs/male_logo/favicon-32x32.png';
 import temp from './imgs/profile-placeholder.png';
-
+const ReactTags = require('react-tag-autocomplete')
 
 export default class Settings extends Component {
     constructor(props) {
@@ -26,6 +27,14 @@ export default class Settings extends Component {
             pref: null,
             gps_lat: null,
             gps_lon: null,
+            tags: [{id: 1, name: "apples"}, {id: 2, name: "pears"}],
+            suggestions: [
+                { id: 3, name: "Bananas" },
+                { id: 4, name: "Mangos" },
+                { id: 5, name: "Lemons" },
+                { id: 6, name: "Apricots" },
+                { id: 1, name: "Lego" }
+              ]
         }
     }
 
@@ -33,22 +42,6 @@ export default class Settings extends Component {
         e.preventDefault();
         // TODO: do something with -> this.state.file
         console.log('handle uploading-', this.state.file);
-    }
-    
-    _handleImageChange(e) {
-        e.preventDefault();
-
-        let reader = new FileReader();
-        let file = e.target.files[0];
-
-        reader.onloadend = () => {
-            this.setState({
-            file: file,
-            imagePreviewUrl: reader.result
-            });
-        }
-
-        reader.readAsDataURL(file)
     }
 
     preview(){
@@ -212,6 +205,18 @@ export default class Settings extends Component {
             this.setState({pic4: this.state.imagePreviewUrl});
       }
 
+    handleDelete (i) {
+        const tags = this.state.tags.slice(0)
+        tags.splice(i, 1)
+        this.setState({ tags })
+    }
+    
+    handleAddition (tag) {
+        if (this.state.tags.length < 10){
+        const tags = [].concat(this.state.tags, tag)
+        this.setState({ tags })}
+    }
+    
     render() {
         return (
                 // <div className="previewComponent">
@@ -243,6 +248,7 @@ export default class Settings extends Component {
                     <FormGroup bsSize="large">
                         <ControlLabel>Upload Images</ControlLabel>
                         <div className="settings-pictures">
+                            {/* View and edit current images */}
                             {this.pics()}
                             <br/>
                             <FormControl
@@ -299,6 +305,21 @@ export default class Settings extends Component {
                         </div>
                     </FormGroup>
 
+
+                    <FormGroup controlId="pref" bsSize="small">
+                        <ControlLabel>Your Tags</ControlLabel>
+                        <br/>
+                        <ReactTags
+                            allowNew = 'true' 
+                            placeholder = 'Add new/existing tag'
+                            tags={this.state.tags}
+                            inputAttributes= {{onkeyup:"return forceLower(this)"}} 
+                            suggestions={this.state.suggestions}
+                            handleDelete={this.handleDelete.bind(this)}
+                            handleAddition={this.handleAddition.bind(this)} />
+                    </FormGroup>
+
+<br/>
                     <ButtonToolbar>
                         <ButtonGroup>
                             <Button
