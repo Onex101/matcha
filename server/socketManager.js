@@ -18,15 +18,15 @@ module.exports = function(socket){
 			callback({isUser: true, user:null});
 		}
 		else{
-			console.log("creating a user")
+			console.log("Creating a user")
 			callback({isUser: false, user:createUser({name: nickname, socketId:socket.id})})
 		}
 	})
 
-	socket.on(USER_CONNECTED, (user_name)=>{
-		// console.log('This user has connected: ' + JSON.stringify(user))
-		user = createUser({name: user_name, socketId:socket.id})
-		// console.log(user);
+	socket.on(USER_CONNECTED, (user)=>{
+		console.log('This user has connected: ')
+		console.log(user);
+		user.socketId = socket.id;
 		connectedUsers = addUser(connectedUsers, user)
 		socket.user = user
 		// console.log("Connected Users: " + JSON.stringify(connectedUsers));
@@ -105,7 +105,7 @@ function addUser(userList, user){
 	// console.log("Add user: ", user)
 	let newList = Object. assign({}, userList)
 	if (user)
-		newList[user.name] = user
+		newList[user.name] = user.name
 	return newList
 }
 
