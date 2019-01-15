@@ -245,6 +245,10 @@ connection.connect(function (err) {
 	WHERE id = 144\
 	");
 
+	connection.query("\
+	UPDATE users SET verified = 1\
+	");
+
 	console.log('Sucess!');
 	console.log('Exiting...');
 	connection.end();
