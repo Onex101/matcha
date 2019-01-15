@@ -12,10 +12,10 @@ export default class Chat extends Component {
 		super(props);
 
 		this.state = {
-			chatId: "",
-			chat: null,
-			socket: null,
-			user: null,
+			chatId:		 "",
+			chat:		 null,
+			socket:		 null,
+			user:		 null,
 		};
 	}
 
@@ -34,7 +34,10 @@ export default class Chat extends Component {
 	}
 
 	initSocket = ()=>{
-		const socket = io(socektUrl)
+		if (!this.state.socket)
+			const socket = io(socektUrl)
+		else
+			const socket = this.state.socket
 		socket.on('connect', ()=>{
 			console.log("Connected");
 		})

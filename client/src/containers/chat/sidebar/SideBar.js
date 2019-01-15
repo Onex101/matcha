@@ -1,5 +1,7 @@
 import React, {Component} from 'react';
-
+import {SideBarOption} from './SideBarOption';
+import {get, last} from 'lodash';
+ 
 export default class SideBar extends Component{
 	constructor(props){
 		super(props)
@@ -15,6 +17,7 @@ export default class SideBar extends Component{
 		const {onSendPrivateMessage} = this.props
 		console.log(receiver)
 		onSendPrivateMessage(receiver)
+		this.setState({receiver:""})
 	}
 
 	render() {
@@ -54,17 +57,13 @@ export default class SideBar extends Component{
 									const classNames = (activeChat && activeChat.id === chat.id) ? 'active' : ''
 									
 									return(
-										<div
-											key={chat.id}
-											className={`user ${classNames}`}
-											onClick={ ()=>{ setActiveChat(chat)}}
-											>
-											<div className="user-photo">{chatSideName[0].toUpperCase()}</div>
-											<div className="user-info">
-												<div className="name">{chatSideName}</div>
-												{lastMessage && <div className="last-message">{lastMessage.message}</div>}
-											</div>
-										</div>
+										<SideBarOption
+											key = {chat.id}
+											name = {chat.name}
+											lastMessage = {get(last(chat.messages), 'message', '')}
+											active = {activeChat.id === chat.id}
+											onClick = {() => {this.props.setActiveChat(chat)}}
+										/>
 									)
 								}
 								return null

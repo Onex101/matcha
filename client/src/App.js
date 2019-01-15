@@ -17,7 +17,7 @@ class App extends Component {
       userInfo              : null,
       userProfile           : null,
       userMatches           : null,
-	  endpoint: "http://localhost:4000"
+      endpoint              : "http://localhost:4000"
     };
     this.renderUser = this.renderUser.bind(this);
   }
