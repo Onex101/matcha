@@ -17,13 +17,14 @@ const createMessage = ({message="", sender=""} = {})=>(
 	}
 )
 
-const createChat = ({messages = [], name = "Community", users = []} = {})=>(
+const createChat = ({messages = [], name = "Community", users = [], isCommunity = false} = {})=>(
 	{
 		id:uuidv4(),
 		name,
 		messages,
 		users,
-		typingUsers:[]
+		typingUsers:[],
+		isCommunity
 	}
 )
 
