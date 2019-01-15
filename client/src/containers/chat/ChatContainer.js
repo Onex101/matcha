@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import SideBar from './SideBar';
+import SideBar from './sidebar/SideBar';
 import ChatHeading from './ChatHeading';
 import Messages from '../messages/Messages';
 import MessageInput from '../messages/MessageInput';
@@ -23,7 +23,7 @@ export default class ChatContainer extends Component{
 
 	initSocket(socket){	
 		const {user} = this.props
-		socket.emit(COMMUNITY_CHAT, this.resetChat)
+		// socket.emit(COMMUNITY_CHAT, this.resetChat)
 		socket.on(PRIVATE_MESSAGE, this.addChat)
 		socket.on('connect', ()=>{
 			socket.emit(COMMUNITY_CHAT, this.resetChat)
@@ -33,7 +33,10 @@ export default class ChatContainer extends Component{
 
 	sendOpenPrivateMessage = (receiver) => {
 		const {socket, user} = this.props
-		socket.emit(PRIVATE_MESSAGE, {receiver, sender: user})
+		const {activeChat} = this.state
+		console.log("sending private message")
+		console.log(receiver, user)
+		socket.emit(PRIVATE_MESSAGE, {receiver, sender: user, activeChat})
 	}
 
 	resetChat = (chat)=>{

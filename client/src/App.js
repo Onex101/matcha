@@ -6,6 +6,7 @@ import Routes from "./Routes";
 import SearchBar from "./containers/SearchBar";
 import { LinkContainer } from "react-router-bootstrap";
 import socketIOClient from 'socket.io-client';
+import {LOGOUT} from "./Events.js";
 
 class App extends Component {
   constructor(props) {
@@ -52,7 +53,7 @@ class App extends Component {
   }
 
   componentDidUpdate(){
-	  console.log("SAD " + this.state.userInfo)
+	  // console.log(this.state.userInfo)
   }
 
   getMatches() {
@@ -89,7 +90,9 @@ class App extends Component {
   }
 
   handleLogout = event => {
+    const {socket} = this.state;
     this.userHasAuthenticated(false);
+    socket.emit(LOGOUT)
     localStorage.removeItem('user');
     localStorage.removeItem('id');
     this.setState({ userInfo: null });
@@ -176,6 +179,7 @@ class App extends Component {
               }
         </Navbar>
         {console.log("Childprops: ")}
+        {console.log("Test for re-render")}
         {console.info(childProps)}
         <Routes childProps={childProps} />
       </div>

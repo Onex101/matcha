@@ -14,7 +14,6 @@ export default class SideBar extends Component{
 		const {receiver} = this.state
 		const {onSendPrivateMessage} = this.props
 		console.log(receiver)
-
 		onSendPrivateMessage(receiver)
 	}
 
@@ -30,7 +29,7 @@ export default class SideBar extends Component{
 							Menu
 						</div>
 					</div>
-					<form onSubmit={this.hanleSubmit} className="search">
+					<form onSubmit={this.handleSubmit} className="search">
 						<i className="search-icon"></i>
 						<input placeholder="Search"
 								type="text"
@@ -45,10 +44,13 @@ export default class SideBar extends Component{
 						{
 							chats.map((chat)=>{
 								if(chat.name){
+									console.log(chat)
 									const lastMessage = chat.messages[chat.messages.length - 1];
-									const user = chat.users.find(({name})=>{
-										return name !== this.props.name
-									}) || {name:"Community"}
+									const chatSideName = chat.users.find((name)=>{
+										console.log("Name and user_name")
+										console.log(name, user)
+										return name !== user
+									}) || "Community"
 									const classNames = (activeChat && activeChat.id === chat.id) ? 'active' : ''
 									
 									return(
@@ -57,9 +59,9 @@ export default class SideBar extends Component{
 											className={`user ${classNames}`}
 											onClick={ ()=>{ setActiveChat(chat)}}
 											>
-											<div className="user-photo">{user.name[0].toUpperCase()}</div>
+											<div className="user-photo">{chatSideName[0].toUpperCase()}</div>
 											<div className="user-info">
-												<div className="name">{user.name}</div>
+												<div className="name">{chatSideName}</div>
 												{lastMessage && <div className="last-message">{lastMessage.message}</div>}
 											</div>
 										</div>

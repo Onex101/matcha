@@ -19,13 +19,14 @@ module.exports = function(socket){
 		}
 		else{
 			console.log("creating a user")
-			callback({isUser: false, user:createUser({name: nickname, socketID:socket.id})})
+			callback({isUser: false, user:createUser({name: nickname, socketId:socket.id})})
 		}
 	})
 
 	socket.on(USER_CONNECTED, (user_name)=>{
 		// console.log('This user has connected: ' + JSON.stringify(user))
-		user = createUser({name: user_name, socketID:socket.id})
+		user = createUser({name: user_name, socketId:socket.id})
+		// console.log(user);
 		connectedUsers = addUser(connectedUsers, user)
 		socket.user = user
 		// console.log("Connected Users: " + JSON.stringify(connectedUsers));
@@ -39,6 +40,7 @@ module.exports = function(socket){
 
 	socket.on('disconnect', ()=>{
 		if("user" in socket){
+			console.log("Socket user:")
 			console.log(socket.user)
 			connectedUsers = removeUser(connectedUsers, socket.user.name)
 
@@ -68,14 +70,20 @@ module.exports = function(socket){
 		sendTypingFromUser(chatId, isTyping)
 	})
 
-	socket.on(PRIVATE_MESSAGE, ({receiver, sender})=>{
+	socket.on(PRIVATE_MESSAGE, ({receiver, sender, activeChat})=>{
 		console.log(receiver, sender)
 		if(receiver in connectedUsers){
-			const newChat = createChat({name:`${receiver}&${sender}`, users:[receiver, sender]})
-			const receiverSocket = connectedUsers[receiver].socketID
-			console.log(receiverSocket)
-			socket.to(receiverSocket).emit(PRIVATE_MESSAGE, newChat)
-			socket.emit(PRIVATE_MESSAGE, newChat)
+			const receiverSocket = connectedUsers[receiver].socketId
+			if (!activeChat || activeChat.id === communityChat.id){
+				const newChat = createChat({name:`${receiver}&${sender}`, users:[receiver, sender]})
+				console.log(receiver)
+				console.log(connectedUsers[receiver])
+				socket.to(receiverSocket).emit(PRIVATE_MESSAGE, newChat)
+				socket.emit(PRIVATE_MESSAGE, newChat)
+			}
+			else{
+				socket.to(receiverSocket).emit(PRIVATE_MESSAGE, activeChat)
+			}
 		}
 	})
 }
@@ -97,7 +105,7 @@ function addUser(userList, user){
 	// console.log("Add user: ", user)
 	let newList = Object. assign({}, userList)
 	if (user)
-		newList[user.name] = user.name
+		newList[user.name] = user
 	return newList
 }
 
