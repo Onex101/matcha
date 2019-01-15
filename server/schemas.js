@@ -18,7 +18,6 @@ var schemas = {
 	},
 	message: {
 		id: null,
-		conversation_id: null,
 		sender: null,
 		receiver: null,
 		message: null

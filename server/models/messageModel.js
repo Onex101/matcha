@@ -1,6 +1,5 @@
 var db = require("../db.js");
 var schemas = require("../schemas.js");
-var mysql = require('mysql');
 var _ = require("lodash");
 
 var Msg = function (data) {
@@ -15,26 +14,20 @@ Msg.prototype.clean = function (data) {
 	return _.pick(_.defaults(data, schema), _.keys(schema)); 
 }
 
-Msg.prototype.getByConversationId = function (conversation_id, callback) {
-	db.query(`SELECT msg FROM msgs WHERE conversation_id = ${conversation_id})`, function (err, result){
-		if (err){
-			callback(null, err);
-		}
+Msg.prototype.sendMsg = function (user1_id, user2_id, msg, callback) {
+	db.query(`INSERT INTO msgs(user1_id, user2_id, msg, timestamp) VALUES (${user1_id}, ${user2_id},${msg}, Date())`, function (err, result){
+		if (err){callback(err, null);}
 		else{
-			if (typeof callback === "function"){
-				callback(null, result);
-			}
+            callback(null, result);
 		}
 	})
 }
 
-Msg.prototype.create = function (callback) {
-	db.query(`INSERT INTO msgs VALUES (${this.conversation_id}, ${this.sender}, ${this.msg})`, function (err, result){
-		if (err){callback(null, err);}
+Msg.prototype.getConv = function (user1, user2, callback) {
+	db.query(`SELECT * FROM msgs WHERE (user1_id = ${user1} AND user2_id = ${user2}) OR (user2_id = ${user1} AND user1_id = ${user2})`, function (err, result){
+		if (err){callback(err, null);}
 		else{
-			if (typeof callback === "function"){
-				callback(null, result);
-			}
+			callback(null, result);
 		}
 	})
 }
