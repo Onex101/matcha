@@ -14,7 +14,8 @@ var schemas = {
 		email: null,
 		password: null,
 		veri_code: null,
-		verified: null
+		verified: null,
+		profile_pic_id: null
 	},
 	message: {
 		id: null,
