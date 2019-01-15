@@ -7,7 +7,7 @@ body {
   #user-profile {
     width: 50%;
     max-width: 450px;
-    margin: 0 auto;
+    margin: 5px auto 5px;
     border-radius: 5px;
     text-align: center;
     overflow: hidden;
@@ -40,7 +40,7 @@ body {
     font-size: 14px;
   }
   .top{
-    padding: 30px;
+    padding: 20px 30px;
     font-family: Calibri;
   }
   .avatar {
@@ -53,16 +53,20 @@ body {
   }
   .username{
     display: inline;
-    padding-top: 50px;
+    /* padding-top: 50px; */
+    font-weight: bold;
   }
 
 .bottom {
-  padding: 30px;
+  padding: 10px 30px;
   font-family: Calibri;
-  background-color: rgba(255, 255, 255, 0.3);
+  /* background-color: rgba(255, 255, 255, 0.3); */
   text-align: left;
+  color: rgb(87, 86, 86);
 }
   #user-profile .avatar img {
-    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Equivalent of the background-size: cover; of a background-image */
+  object-position: center;
   }
   

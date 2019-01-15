@@ -168,20 +168,5 @@ export default class Home extends Component {
                   </div>
                 </div>
 		      	: <div className="Home">{this.getMatches()}<ControlLabel> Loading ... </ControlLabel></div>);
-    // return (
-    //   <div className="Home">
-    //     <div className="lander">
-    //       {this.state.matches === null
-    //         ? <div dangerouslySetInnerHTML={{__html: this.landerCheck()}}></div>
-    //        :<div>{this.landerCheck()}<div dangerouslySetInnerHTML={{__html: this.getMatchCards()}}></div></div>}
-    //     </div>
-    //   </div>
-    // );
-    return(this.props.userInfo ? <div className="chat">
-				<div className="chat-container">
-				{this.loadContainer()}
-			</div>
-			</div>
-			: <ControlLabel> Loading ... </ControlLabel>)
   }
 }
