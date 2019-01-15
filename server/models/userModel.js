@@ -47,10 +47,11 @@ User.prototype.deleteById = function (id, callback) {
 User.prototype.getById = function (data, callback) {
     var self = this;
 
-	var query = `SELECT id, password,user_name, birth_date, gender, pref, gps_lat, gps_lon,bio, GROUP_CONCAT(interest) AS interests FROM\
-	(SELECT users.id, user_name, password,interest, birth_date, gender, pref, gps_lat, gps_lon, bio, profile_pic_id FROM user_interests\
+	var query = `SELECT id, password,user_name, birth_date, gender, pref, gps_lat, gps_lon,bio, profile_pic_id, pic, GROUP_CONCAT(interest) AS interests FROM\
+	(SELECT users.id, user_name, password,interest, birth_date, gender, pref, gps_lat, gps_lon, bio, profile_pic_id, pic FROM user_interests\
 	RIGHT JOIN users ON user_interests.user_id = users.id\
-	LEFT JOIN interests ON user_interests.interest_id = interests.id) x\
+	LEFT JOIN interests ON user_interests.interest_id = interests.id\
+	LEFT JOIN pictures ON profile_pic_id = pictures.id) x\
 	WHERE id = ${data} GROUP BY user_name, id`;
     db.query(query, function (err, result) {
         if (err) {callback(err, null);}
