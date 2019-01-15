@@ -310,10 +310,10 @@ export default class Settings extends Component {
                         <ControlLabel>Your Tags</ControlLabel>
                         <br/>
                         <ReactTags
-                            allowNew = 'true' 
+                            allowNew = {true}
                             placeholder = 'Add new/existing tag'
                             tags={this.state.tags}
-                            inputAttributes= {{onkeyup:"return forceLower(this)"}} 
+                            inputAttributes= {{onKeyUp:"return forceLower(this)"}} 
                             suggestions={this.state.suggestions}
                             handleDelete={this.handleDelete.bind(this)}
                             handleAddition={this.handleAddition.bind(this)} />

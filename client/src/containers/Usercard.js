@@ -17,11 +17,9 @@ export default class Usercard extends Component {
             }; 
         
         if (!image) return null;
-        var img_src = this.props.props.pic + ( this.props.props.id % 7)
         return (
          <div className="avatar" style={style}>
-               {/* <img src={this.props.props.pic} />  */}
-               <img src={img_src} /> 
+               <img src={this.props.props.pic} /> 
           </div>
         );
     }
