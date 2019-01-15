@@ -44,7 +44,10 @@ exports.user_detail = function(req, res) {
                     bio: row.bio,
                     fame: row.fame,
                     email: row.email,
-                    password: row.password}
+					password: row.password,
+					interests: row.interests,
+					profile_pic_id: row.profile_pic_id,
+					pic: row.pic}
             res.json(user);
         }
     })
