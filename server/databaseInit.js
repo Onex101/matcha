@@ -254,6 +254,11 @@ connection.connect(function (err) {
 	UPDATE users SET verified = 1\
 	");
 
+	for (var i = 101; i <= 200; i++){
+		var fame = Math.floor(Math.random() * 21);
+		connection.query(`UPDATE users SET fame = ${fame} WHERE id = ${i}`);
+	}
+
 	console.log('Sucess!');
 	console.log('Exiting...');
 	connection.end();
