@@ -77,7 +77,7 @@ connection.connect(function (err) {
 	id int NOT NULL AUTO_INCREMENT,\
 	user_id int NOT NULL,\
 	noti varchar(255),\
-	viewed_status int,\
+	viewed_status int DEFAULT 0,\
 	PRIMARY KEY (`id`)\
 	)');
 
@@ -86,7 +86,8 @@ connection.connect(function (err) {
 	user1_id int NOT NULL,\
 	user2_id int NOT NULL,\
 	msg varchar(1000),\
-	timestamp DATETIME,\
+	timestamp DATETIME DEFAULT NOW(),\
+	viewed int DEFAULT 0,\
 	PRIMARY KEY (`id`))');
 
 	console.log('Creating fake profiles...')
