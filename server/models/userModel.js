@@ -241,14 +241,26 @@ User.prototype.like = function (user_id, target_id, callback){
 				var query = `UPDATE likes SET link_code = 0 WHERE (user1_id = ${user_id} AND user2_id = ${target_id}) OR (user2_id = ${user_id} AND user1_id = ${target_id})`
 				db.query(query, function(err, result){
 					if(err){callback(err,null);}
-					else{callback(null, result);}
+					else{
+						var query = `UPDATE users SET fame = ((SELECT COUNT(link_code) FROM likes WHERE link_code = 0 AND user2_id = ${target_id}) + (SELECT COUNT(link_code) FROM likes WHERE link_code = 1 AND user1_id = ${target_id})) WHERE id = ${target_id}`;
+						db.query(query, function(err, result){
+							if(err){callback(err,null);}
+							else{callback(null, result);}
+						})
+					}
 				})
 			}
 			else{
 				var query = `INSERT INTO likes VALUES(${user_id},${target_id},0)`;
 				db.query(query, function(err, result){
 					if(err){callback(err,null);}
-					else{callback(null, result);}
+					else{
+						var query = `UPDATE users SET fame = ((SELECT COUNT(link_code) FROM likes WHERE link_code = 0 AND user2_id = ${target_id}) + (SELECT COUNT(link_code) FROM likes WHERE link_code = 1 AND user1_id = ${target_id})) WHERE id = ${target_id}`;
+						db.query(query, function(err, result){
+							if(err){callback(err,null);}
+							else{callback(null, result);}
+						})
+					}
 				})
 			}
 		}
@@ -264,14 +276,26 @@ User.prototype.dislike = function (user_id, target_id, callback){
 				var query = `UPDATE likes SET link_code = 2 WHERE (user1_id = ${user_id} AND user2_id = ${target_id}) OR (user2_id = ${user_id} AND user1_id = ${target_id})`
 				db.query(query, function(err, result){
 					if(err){callback(err,null);}
-					else{callback(null, result);}
+					else{
+						var query = `UPDATE users SET fame = ((SELECT COUNT(link_code) FROM likes WHERE link_code = 0 AND user2_id = ${target_id}) + (SELECT COUNT(link_code) FROM likes WHERE link_code = 1 AND user1_id = ${target_id})) WHERE id = ${target_id}`;
+						db.query(query, function(err, result){
+							if(err){callback(err,null);}
+							else{callback(null, result);}
+						})
+					}
 				})
 			}
 			else{
 				var query = `INSERT INTO likes VALUES(${user_id},${target_id},2)`;
 				db.query(query, function(err, result){
 					if(err){callback(err,null);}
-					else{callback(null, result);}
+					else{
+						var query = `UPDATE users SET fame = ((SELECT COUNT(link_code) FROM likes WHERE link_code = 0 AND user2_id = ${target_id}) + (SELECT COUNT(link_code) FROM likes WHERE link_code = 1 AND user1_id = ${target_id})) WHERE id = ${target_id}`;
+						db.query(query, function(err, result){
+							if(err){callback(err,null);}
+							else{callback(null, result);}
+						})
+					}
 				})
 			}
 		}
