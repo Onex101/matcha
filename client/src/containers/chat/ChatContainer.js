@@ -3,7 +3,7 @@ import SideBar from './sidebar/SideBar';
 import ChatHeading from './ChatHeading';
 import Messages from '../messages/Messages';
 import MessageInput from '../messages/MessageInput';
-import {COMMUNITY_CHAT, MESSAGE_SENT, MESSAGE_RECEIVED, TYPING, PRIVATE_MESSAGE, USER_CONNECTED, USER_DISCONNECTED} from '../../Events';
+import {COMMUNITY_CHAT, MESSAGE_SENT, MESSAGE_RECEIVED, TYPING, PRIVATE_MESSAGE, USER_CONNECTED, USER_DISCONNECTED, GET_PREVIOUS_MESSAGES} from '../../Events';
 import {values} from 'lodash';
 
 export default class ChatContainer extends Component{
@@ -67,7 +67,9 @@ export default class ChatContainer extends Component{
 	
 		const messageEvent = `${MESSAGE_RECEIVED}-${chat.id}`
 		const typingEvent = `${TYPING}-${chat.id}`
+		const getPreviousMessages = GET_PREVIOUS_MESSAGES
 
+		socket.emit(getPreviousMessages, {chat})
 		socket.on(typingEvent, this.updateTypingInChat(chat.id))
 		socket.on(messageEvent, this.addMessageToChat(chat.id))
 	}
