@@ -27,3 +27,16 @@ exports.get_conversation = function(req, res){
 		}
 	})
 }
+
+//Retrieve all msgs any user sent to global chat
+exports.fetch_global = function(req, res){
+	let msg = new Message('');
+	msg.getGlobal(function (err, result){
+		if (err){
+			res.send(err);
+		}
+		else{
+			res.send(result)
+		}
+	})
+}
