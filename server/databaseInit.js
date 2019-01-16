@@ -77,7 +77,7 @@ connection.connect(function (err) {
 	id int NOT NULL AUTO_INCREMENT,\
 	user_id int NOT NULL,\
 	noti varchar(255),\
-	viewed_status int,\
+	viewed_status int DEFAULT 0,\
 	PRIMARY KEY (`id`)\
 	)');
 
@@ -86,7 +86,8 @@ connection.connect(function (err) {
 	user1_id int NOT NULL,\
 	user2_id int NOT NULL,\
 	msg varchar(1000),\
-	timestamp DATETIME,\
+	timestamp DATETIME DEFAULT NOW(),\
+	viewed int DEFAULT 0,\
 	PRIMARY KEY (`id`))');
 
 	console.log('Creating fake profiles...')
@@ -253,6 +254,15 @@ connection.connect(function (err) {
 	connection.query("\
 	UPDATE users SET verified = 1\
 	");
+
+	connection.query(`
+	INSERT INTO msgs(user1_id, user2_id, msg) VALUES
+	(201, 0, "testmsg"), 
+	(201, 0, "this is another test msg"), 
+	(201, 0, "test msgs for dayz"),
+	(101, 0, "this is a different user"),
+	(101, 102, "this is a private msg")
+	`);
 
 	for (var i = 101; i <= 200; i++){
 		var fame = Math.floor(Math.random() * 21);
