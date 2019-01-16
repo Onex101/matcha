@@ -45,8 +45,6 @@ User.prototype.deleteById = function (id, callback) {
 }
 
 User.prototype.getById = function (data, callback) {
-    var self = this;
-
 	var query = `SELECT id, password,user_name, birth_date, gender, pref, gps_lat, gps_lon,bio, profile_pic_id, pic, GROUP_CONCAT(interest) AS interests FROM\
 	(SELECT users.id, user_name, password,interest, birth_date, gender, pref, gps_lat, gps_lon, bio, profile_pic_id, pic FROM user_interests\
 	RIGHT JOIN users ON user_interests.user_id = users.id\
@@ -232,6 +230,52 @@ User.prototype.login = function (callback){
         else
             callback(null, results);
     })
+}
+
+User.prototype.like = function (user_id, target_id, callback){
+	var query = `SELECT count(*) AS count FROM likes WHERE (user1_id = ${user_id} AND user2_id = ${target_id}) OR (user2_id = ${user_id} AND user1_id = ${target_id})`;
+	db.query(query, function(err, results){
+		if(err){callback(err,null);}
+		else{
+			if (results[0].count > 0){
+				var query = `UPDATE likes SET link_code = 0 WHERE (user1_id = ${user_id} AND user2_id = ${target_id}) OR (user2_id = ${user_id} AND user1_id = ${target_id})`
+				db.query(query, function(err, result){
+					if(err){callback(err,null);}
+					else{callback(null, result);}
+				})
+			}
+			else{
+				var query = `INSERT INTO likes VALUES(${user_id},${target_id},0)`;
+				db.query(query, function(err, result){
+					if(err){callback(err,null);}
+					else{callback(null, result);}
+				})
+			}
+		}
+	})
+}
+
+User.prototype.dislike = function (user_id, target_id, callback){
+	var query = `SELECT count(*) AS count FROM likes WHERE (user1_id = ${user_id} AND user2_id = ${target_id}) OR (user2_id = ${user_id} AND user1_id = ${target_id})`;
+	db.query(query, function(err, results){
+		if(err){callback(err,null);}
+		else{
+			if (results[0].count > 0){
+				var query = `UPDATE likes SET link_code = 2 WHERE (user1_id = ${user_id} AND user2_id = ${target_id}) OR (user2_id = ${user_id} AND user1_id = ${target_id})`
+				db.query(query, function(err, result){
+					if(err){callback(err,null);}
+					else{callback(null, result);}
+				})
+			}
+			else{
+				var query = `INSERT INTO likes VALUES(${user_id},${target_id},2)`;
+				db.query(query, function(err, result){
+					if(err){callback(err,null);}
+					else{callback(null, result);}
+				})
+			}
+		}
+	})
 }
 
 User.prototype.match = function (id, callback){

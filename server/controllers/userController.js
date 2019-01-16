@@ -410,15 +410,28 @@ exports.get_interests = function(req, res){
 	})
 }
 
-//Logout the current user
-exports.user_logout = function(req, res){
+//Like user
+exports.like_userId = function(req, res){
 	let user = new User('');
-	user.logout(this.data.id, function(err, results){
+	user.like(req.params.user_id, req.params.target_id, function(err, results){
 		if (err){
 			res.send(err)
 		}
 		else{
-			
+			res.send("Update complete");
+		}
+	})
+}
+
+//DisLike user
+exports.dislike_userId = function(req, res){
+	let user = new User('');
+	user.dislike(req.params.user_id, req.params.target_id, function(err, results){
+		if (err){
+			res.send(err)
+		}
+		else{
+			res.send("Update complete");
 		}
 	})
 }
@@ -431,4 +444,16 @@ function sortFunction(a, b) {
     else {
         return (a['match'] > b['match']) ? -1 : 1;
     }
+}
+
+exports.user_logout = function(req, res){
+    let user = new User('');
+    user.logout(this.data.id, function(err, results){
+        if (err){
+            res.send(err)
+        }
+        else{
+            
+        }
+    })
 }
