@@ -60,7 +60,6 @@ User.prototype.getById = function (data, callback) {
 }
 
 User.prototype.getByUsername = function (data, callback) {
-    var self = this;
     data = mysql.escape(data);
 	var query = `SELECT * FROM users WHERE user_name = ${data}`;
 	// var query = `SELECT id, user_name, password, birth_date, gender, pref, gps_lat, gps_lon,bio, GROUP_CONCAT(interest) AS interests FROM\
@@ -80,7 +79,6 @@ User.prototype.getByUsername = function (data, callback) {
 
 //Retrieves a list interests of a given users user_id
 User.prototype.getInterestsById = function (id, callback) {
-	var self = this;
 	id = mysql.escape(id);
 	var query = `SELECT interest FROM interests JOIN user_interests ON interests.id=user_interests.interest_id WHERE user_id = ${id}`;
 	db.query(query, function (err, result) {
@@ -94,7 +92,6 @@ User.prototype.getInterestsById = function (id, callback) {
 }
 
 User.prototype.update = function (callback) {
-	// var self = this;
     for (var key in this.data) {
         if (this.data.hasOwnProperty(key)) {
             key = mysql.escape(key);
@@ -151,9 +148,6 @@ User.prototype.update = function (callback) {
 
 User.prototype.save = function (callback) {
     var self = this;
-    // console.log(this.data);
-
-    // this.data = mysql.escape(this.data);
     for (var key in this.data) {
         if (this.data.hasOwnProperty(key)) {
             if (key != null)
@@ -200,7 +194,6 @@ User.prototype.save = function (callback) {
             )`, function (err, result){
                     if (typeof callback === "function"){
                         if (err){
-							throw err;
                             callback(err, null);
                         }
                         else{
