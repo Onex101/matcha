@@ -20,13 +20,28 @@ export default class Chat extends Component {
 	}
 
 	componentDidMount(){
-		if(!this.state.user)
-		this.initSocket();
+		if(!this.state.socket){
+			console.log("Test 1")
+			this.initSocket();
+		}
 	}
 
 	componentWillMount(){
-		if(!this.state.user)
-		this.initSocket();
+		if(!this.state.socket){
+			console.log("Test 2")
+			this.initSocket();
+		}
+	}
+
+	componentWillUnmount(){
+		this.logout()
+	}
+
+	componentWillUpdate(){
+		if(!this.state.socket){
+			console.log("Test 3")
+			this.initSocket();
+		}
 	}
 
 	initSocket = ()=>{
@@ -37,7 +52,7 @@ export default class Chat extends Component {
 		// else 
 		
 		socket.on('connect', ()=>{
-			console.log("Connected");
+			console.log("Connected " + user_name);
 		})
 		
 		this.setState({socket: socket})
@@ -65,19 +80,19 @@ export default class Chat extends Component {
 		this.setState({user:null})
 	}
 
-	getChats() {
-		if (this.props.userMatches)
-		{
-			var ret = '<div className="lander">';
-			for (var elem in this.props.userMatches) {
-				// console.log("elem = " + JSON.stringify(this.props.userMatches[elem].data.user_name));
-				ret += '<ButtonGroup><Button bsSize="large" onClick={this.openChat('+ this.props.userMatches[elem].data.id + ')}>' + this.props.userMatches[elem].data.user_name + '</Button></ButtonGroup><br />'
-			};
-			ret += '</div>';
-			// console.log("RET = " + ret);
-			return ret;
-		}
-	}
+	// getChats() {
+	// 	if (this.props.userMatches)
+	// 	{
+	// 		var ret = '<div className="lander">';
+	// 		for (var elem in this.props.userMatches) {
+	// 			// console.log("elem = " + JSON.stringify(this.props.userMatches[elem].data.user_name));
+	// 			ret += '<ButtonGroup><Button bsSize="large" onClick={this.openChat('+ this.props.userMatches[elem].data.id + ')}>' + this.props.userMatches[elem].data.user_name + '</Button></ButtonGroup><br />'
+	// 		};
+	// 		ret += '</div>';
+	// 		// console.log("RET = " + ret);
+	// 		return ret;
+	// 	}
+	// }
 
 	loadContainer = ()=>{
 		// const {title} = this.props

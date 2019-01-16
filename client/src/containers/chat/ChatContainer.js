@@ -22,7 +22,12 @@ export default class ChatContainer extends Component{
 		this.initSocket(socket)
 		// socket.emit(COMMUNITY_CHAT, this.resetChat)
 	}
-
+	componentWillUnmount(){
+		const {socket} = this.props
+		socket.off(PRIVATE_MESSAGE)
+		socket.off(USER_CONNECTED)
+		socket.off(USER_DISCONNECTED)
+	}
 	initSocket(socket){	
 		// socket.emit(COMMUNITY_CHAT, this.resetChat)
 		console.log("Adding Chats to Sidebar" + JSON.stringify(this.props.user))
@@ -89,10 +94,10 @@ export default class ChatContainer extends Component{
 
 				let newChats = chats.map((chat)=>{
 					if(chat.id === chatId){
-						if(isTyping && !chat.typingUsers.includes(user.name)){
-							chat.typingUsers.push(user.name)
-						}else if(!isTyping && chat.typingUsers.includes(user.name)){
-							chat.typingUsers = chat.typingUsers.filter(u => u !== user.name)
+						if(isTyping && !chat.typingUsers.includes(user)){
+							chat.typingUsers.push(user)
+						}else if(!isTyping && chat.typingUsers.includes(user)){
+							chat.typingUsers = chat.typingUsers.filter(u => u !== user)
 						}
 					}
 					return chat
@@ -137,7 +142,7 @@ export default class ChatContainer extends Component{
 							<ChatHeading name={activeChat.name} />
 							<Messages
 								messages={activeChat.messages}
-								user={user.name}
+								user={user}
 								typingUser={activeChat.typingUsers}
 							/>
 							<MessageInput

@@ -29,7 +29,7 @@ const createChat = ({messages = [], name = "Community", users = [], isCommunity 
 )
 
 const createChatNameFromUsers = (users, excludedUser = "")=>{
-	return users.filter(u => u !== excludedUser).join('&') || "Empty Users"
+	return users.filter(u => u !== excludedUser).join(' & ') || "Empty Users"
 }
 
 const getTime = (date)=>{

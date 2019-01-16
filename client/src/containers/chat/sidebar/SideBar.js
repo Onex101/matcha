@@ -27,6 +27,7 @@ export default class SideBar extends Component{
 	}
 
 	addChatForUser = (username)=>{
+		this.setActiveSideBar(SideBar.type.CHATS)
 		this.props.onSendPrivateMessage(username)
 	}
 
@@ -74,9 +75,8 @@ export default class SideBar extends Component{
 					<div
 						className="users"
 						ref="users"
-						onClick={(e)=>{ (e.target === this.refs.user.name) && setActiveChat(null)}}>
+						onClick={(e)=>{ (e.target === this.refs.user) && setActiveChat(null)}}>
 						{
-							
 							activeSideBar === SideBar.type.CHATS ?
 							chats.map((chat)=>{
 								console.log(user)
@@ -93,7 +93,7 @@ export default class SideBar extends Component{
 									return(
 										<SideBarOption
 											key = {chat.id}
-											name = {chat.isCommunity ? chat.name : createChatNameFromUsers(chat.users, user)}
+											name = {chat.isCommunity ? chat.name : createChatNameFromUsers(chat.users, user.name)}
 											lastMessage = {get(last(chat.messages), 'message', '')}
 											active = {activeChat.id === chat.id}
 											onClick = {() => {this.props.setActiveChat(chat)}}
@@ -104,12 +104,11 @@ export default class SideBar extends Component{
 							})
 						
 						:
-							// console.log("HELLO")
-							differenceBy(users, user).map((otherUser)=>{
+							differenceBy(users, [user], 'name').map((otherUser)=>{
 								console.log(users)
 								return(
 									<SideBarOption
-										key = {'otherUser.id'}
+										key = {otherUser.id}
 										name = {otherUser.name}
 										onClick = { () => {this.addChatForUser(otherUser.name)}}
 									/>

@@ -77,7 +77,7 @@ module.exports = function(socket){
 			if (!activeChat || activeChat.id === communityChat.id){
 				const newChat = createChat({name:`${receiver}&${sender}`, users:[receiver, sender]})
 				console.log(receiver)
-				console.log(connectedUsers[receiver])
+				console.log(connectedUsers[receiver].socketId)
 				socket.to(receiverSocket).emit(PRIVATE_MESSAGE, newChat)
 				socket.emit(PRIVATE_MESSAGE, newChat)
 			}
@@ -105,7 +105,7 @@ function addUser(userList, user){
 	// console.log("Add user: ", user)
 	let newList = Object. assign({}, userList)
 	if (user)
-		newList[user.name] = user.name
+		newList[user.name] = user
 	return newList
 }
 
