@@ -16,7 +16,7 @@ exports.sendMessage = function(req, res) {
 
 //receive msgs between given user id's
 exports.get_conversation = function(req, res){
-	let msg = new Message();
+	let msg = new Message('');
 	console.log(req.params);
 	msg.getConv(req.params.id1, req.params.id2, function (err, result){
 		if (err){
