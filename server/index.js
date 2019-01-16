@@ -25,6 +25,7 @@ app.get('/', (req, res) => {
 
 app.use(userRoutes);
 app.use(imgRoutes);
+app.use(msgRoutes);
 
 // io.on('connection', socket => {
 // 	console.log('User connected')

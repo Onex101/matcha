@@ -1,10 +1,43 @@
 const socketIO = require('./index.js');
-const {VERIFY_USER, USER_CONNECTED, USER_DISCONNECTED, LOGOUT, COMMUNITY_CHAT, MESSAGE_RECEIVED, MESSAGE_SENT, TYPING, PRIVATE_MESSAGE} = require('../client/src/Events')
+const {GET_PREVIOUS_MESSAGES, VERIFY_USER, USER_CONNECTED, USER_DISCONNECTED, LOGOUT, COMMUNITY_CHAT, MESSAGE_RECEIVED, MESSAGE_SENT, TYPING, PRIVATE_MESSAGE} = require('../client/src/Events')
 const {createUser, createMessage, createChat} = require('../client/src/Factories')
 
 let connectedUsers = {}
 
-let communityChat = createChat()
+let communityChat = createChat({isCommunity: true})
+
+let communityMessages = [
+		{
+		id:1,
+		time: 100000,
+		message: "Hi",
+		sender: "Mememem"
+	},
+	{
+		id:2,
+		time: 100000,
+		message: "This is meme",
+		sender: "Mememem"
+	},
+	{
+		id:3,
+		time: 100000,
+		message: "I like memems",
+		sender: "Mememem"
+	},
+	{
+		id:4,
+		time: 100000,
+		message: "How about you?",
+		sender: "Mememem"
+	},
+	{
+		id:5,
+		time: 100000,
+		message: "Lol",
+		sender: "Mememem"
+	}
+]
 
 module.exports = function(socket){
 	// console.log("Socket Id: " + socket.id);
@@ -18,14 +51,15 @@ module.exports = function(socket){
 			callback({isUser: true, user:null});
 		}
 		else{
-			console.log("creating a user")
-			callback({isUser: false, user:createUser({name: nickname, socketID:socket.id})})
+			console.log("Creating a user")
+			callback({isUser: false, user:createUser({name: nickname, socketId:socket.id})})
 		}
 	})
 
-	socket.on(USER_CONNECTED, (user_name)=>{
-		// console.log('This user has connected: ' + JSON.stringify(user))
-		user = createUser({name: user_name, socketID:socket.id})
+	socket.on(USER_CONNECTED, (user)=>{
+		console.log('This user has connected: ')
+		console.log(user);
+		user.socketId = socket.id;
 		connectedUsers = addUser(connectedUsers, user)
 		socket.user = user
 		// console.log("Connected Users: " + JSON.stringify(connectedUsers));
@@ -39,6 +73,7 @@ module.exports = function(socket){
 
 	socket.on('disconnect', ()=>{
 		if("user" in socket){
+			console.log("Socket user:")
 			console.log(socket.user)
 			connectedUsers = removeUser(connectedUsers, socket.user.name)
 
@@ -68,14 +103,32 @@ module.exports = function(socket){
 		sendTypingFromUser(chatId, isTyping)
 	})
 
-	socket.on(PRIVATE_MESSAGE, ({receiver, sender})=>{
+	socket.on(PRIVATE_MESSAGE, ({receiver, sender, activeChat})=>{
 		console.log(receiver, sender)
+		
 		if(receiver in connectedUsers){
-			const newChat = createChat({name:`${receiver}&${sender}`, users:[receiver, sender]})
-			const receiverSocket = connectedUsers[receiver].socketID
-			console.log(receiverSocket)
-			socket.to(receiverSocket).emit(PRIVATE_MESSAGE, newChat)
-			socket.emit(PRIVATE_MESSAGE, newChat)
+			const receiverSocket = connectedUsers[receiver].socketId
+			if (!activeChat || activeChat.id === communityChat.id){
+				const newChat = createChat({name:`${receiver}&${sender}`, users:[receiver, sender]})
+				console.log(receiver)
+				console.log(connectedUsers[receiver].socketId)
+				socket.to(receiverSocket).emit(PRIVATE_MESSAGE, newChat)
+				socket.emit(PRIVATE_MESSAGE, newChat)
+				
+			}
+			else{
+				socket.to(receiverSocket).emit(PRIVATE_MESSAGE, activeChat)
+			}
+		}
+	})
+
+	socket.on(GET_PREVIOUS_MESSAGES, ({chat})=>{
+		if(chat.id === communityChat.id){
+			console.log("sending old messages")
+			communityMessages.forEach(function (test, index){
+					socketIO.io.to(socket.id).emit(`${MESSAGE_RECEIVED}-${chat.id}`, test)
+				}
+			)
 		}
 	})
 }
@@ -97,7 +150,7 @@ function addUser(userList, user){
 	// console.log("Add user: ", user)
 	let newList = Object. assign({}, userList)
 	if (user)
-		newList[user.name] = user.name
+		newList[user.name] = user
 	return newList
 }
 

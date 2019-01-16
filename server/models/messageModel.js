@@ -32,4 +32,13 @@ Msg.prototype.getConv = function (user1, user2, callback) {
 	})
 }
 
+Msg.prototype.getGlobal = function (callback){
+	db.query(`SELECT * FROM msgs WHERE user2_id = 0`, function (err, results){
+		if (err){callback(err, null);}
+		else{
+			callback(null, results);
+		}
+	})
+}
+
 module.exports = Msg;

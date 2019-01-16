@@ -17,7 +17,7 @@ Image.prototype.clean = function (data) {
 //returns a table of base64 values of pictures that belong to the given user_id
 Image.prototype.getAllPics = function (user_id, callback){
 	console.log(user_id);
-	db.query(`SELECT pic FROM pictures WHERE user_id = ${user_id}`, function (err, results) {
+	db.query(`SELECT id, pic FROM pictures WHERE user_id = ${user_id}`, function (err, results) {
 		if (err){
 			callback(err, null);
 		}
@@ -44,7 +44,7 @@ Image.prototype.deletePic = function (id, callback){
 //add warning to let user know about this action
 Image.prototype.savePic = function (callback){
 	console.log(this.data);
-	db.query(`INSERT INTO pictures(pic, user_id) VALUES('${this.data.pic}', ${this.data.user_id})`, function (err, results) {
+	db.query(`INSERT INTO pictures(pic, user_id) VALUES('${this.data.pic}', ${this.data.id})`, function (err, results) {
 		if (err){
 			callback(err, null);
 		}

@@ -77,4 +77,10 @@ router.get('/interests/delete/:user_id/:interest', user_controller.delete_intere
 // GET interest table - done
 router.get('/interests', user_controller.get_interests);
 
+// Like user
+router.get('/like/:user_id/:target_id',user_controller.like_userId);
+
+// DisLike user
+router.get('/dislike/:user_id/:target_id',user_controller.dislike_userId);
+
 module.exports = router;

@@ -9,6 +9,9 @@ var msg_controller = require('../controllers/messageController');
 router.post('/msg/:id/send', msg_controller.sendMessage);
 
 //Receive updated list of msgs from server between logged in user and given user using get
-router.get('/msg/:id1/id2/receive', msg_controller.get_conversation);
+router.get('/msg/:id1/:id2/receive', msg_controller.get_conversation);
+
+//Retrieve global chat msgs
+router.get('/msg/getglobal', msg_controller.fetch_global);
 
 module.exports = router;

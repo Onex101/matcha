@@ -99,7 +99,7 @@ exports.image_fetch_post = function(req, res){
 exports.profile_image_set = function(req, res){
 	user_name = req.params.user_name;
 	image_id = req.params.pic_id;
-	let image = new Image();
+	let image = new Image('');
 	image.setProfilePic(user_name, image_id, function(err, result){
 		if (err){
 			res.send({
