@@ -103,8 +103,8 @@ export default class Home extends Component {
       for (var elem in this.state.matches) {
           // note: we add a key prop here to allow react to uniquely identify each
           // element in this array. see: https://reactjs.org/docs/lists-and-keys.html
-          console.log('INFO: ')
-          console.info(this.state.matches[elem])
+          // console.log('INFO: ')
+          // console.info(this.state.matches[elem])
           rows.push(<Usercard props={this.state.matches[elem].data} key={elem}/>);
       }
       return <div>{rows}</div>;
