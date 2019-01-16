@@ -2,10 +2,12 @@ import React, { Component } from "react";
 // import { ButtonGroup, ButtonToolbar, Button, FormGroup, FormControl, ControlLabel } from "react-bootstrap";
 // import { HelpBlock, ButtonGroup, ButtonToolbar, Button, FormGroup, FormControl, ControlLabel } from "react-bootstrap";
 import { ButtonGroup, ButtonToolbar, Button, FormGroup, FormControl, ControlLabel } from "react-bootstrap";
+// import { ReactTags } from "react-tag-autocomplete";
 import "./Settings.css";
 import female from './imgs/female_logo/favicon-32x32.png';
 import male from './imgs/male_logo/favicon-32x32.png';
 import temp from './imgs/profile-placeholder.png';
+const ReactTags = require('react-tag-autocomplete')
 
 export default class Settings extends Component {
     constructor(props) {
@@ -25,6 +27,14 @@ export default class Settings extends Component {
             pref: null,
             gps_lat: null,
             gps_lon: null,
+            tags: [{id: 1, name: "apples"}, {id: 2, name: "pears"}],
+            suggestions: [
+                { id: 3, name: "Bananas" },
+                { id: 4, name: "Mangos" },
+                { id: 5, name: "Lemons" },
+                { id: 6, name: "Apricots" },
+                { id: 1, name: "Lego" }
+              ]
         }
     }
 
@@ -32,22 +42,6 @@ export default class Settings extends Component {
         e.preventDefault();
         // TODO: do something with -> this.state.file
         console.log('handle uploading-', this.state.file);
-    }
-    
-    _handleImageChange(e) {
-        e.preventDefault();
-
-        let reader = new FileReader();
-        let file = e.target.files[0];
-
-        reader.onloadend = () => {
-            this.setState({
-            file: file,
-            imagePreviewUrl: reader.result
-            });
-        }
-
-        reader.readAsDataURL(file)
     }
 
     preview(){
@@ -76,83 +70,83 @@ export default class Settings extends Component {
         else
             profile = temp;
         
-        if(this.state.pictures[1])
-            pic1 = this.state.pictures[1];
+        if(this.state.pic1)
+            pic1 = this.state.pic1;
         else
             pic1 = temp;
 
-        if(this.state.pictures[2])
-            pic2 = this.state.pictures[2];
+        if(this.state.pic2)
+            pic2 = this.state.pic2;
         else
             pic2 = temp;
         
-        if(this.state.pictures[3])
-            pic3 = this.state.pictures[3];
+        if(this.state.pic3)
+            pic3 = this.state.pic3;
         else
             pic3 = temp;
         
-        if(this.state.pictures[4])
-            pic4 = this.state.pictures[4];
+        if(this.state.pic4)
+            pic4 = this.state.pic4;
         else
             pic4 = temp;
 
         return(<div className="imgBar">
-            <div className="img-thumbnail" id="profile" ref="profile">
-                {this.state.profile ? <img src={this.state.profile} className='profile_thumb' alt="Profile pic"/>
-                                    : <img src={temp} className='profile_thumb' alt="Profile pic"/>}
-                <Button
-                    bsSize="large"
-                    type="submit" 
-                    className="submitButton"
-                    // disabled={!this.profileCheck()}
-                    // onClick={this.saveAndContinue}
-                    // controlid="profile"
-                    // onClick={(e)=>this._handleSubmit(e)}
-                    onClick={this.handleImgChange} 
-                    // onClick={({target}) => this.setState({pic[1]: target.value})}
-                    // onClick={this.handleChange} 
-                    >Upload Image</Button>
-            </div><br/>
-            {/* <div className="img-thumbnail" style={{width:'16%', minWidth: "33px", minHeight: "40px"}}>
-                <img src={pic1} style={{width:'100%'}} alt="IMG 1"/>
-                <Button
-                    bsSize="large"
-                    type="submit" 
-                    className="submitButton"
-                    disabled={!this.profileCheck()}
-                    // onClick={this.saveAndContinue}
-                    onClick={(e)=>this._handleSubmit(e)}>Upload Image</Button>
-            </div> */}
-            {/* <div className="img-thumbnail" style={{width:'16%', minWidth: "33px"}}>
-                <img src={pic2} style={{width:'100%'}} alt="IMG 2"/>
-                <Button
-                    bsSize="large"
-                    type="submit" 
-                    className="submitButton"
-                    disabled={!this.profileCheck()}
-                    // onClick={this.saveAndContinue}
-                    onClick={(e)=>this._handleSubmit(e)}>Upload Image</Button>
-            </div> */}
-            {/* <div className="img-thumbnail" style={{width:'16%', minWidth: "33px"}}>
-                <img src={pic3} style={{width:'100%'}} alt="IMG 3"/>
-                <Button
-                    bsSize="large"
-                    type="submit" 
-                    className="submitButton"
-                    disabled={!this.profileCheck()}
-                    // onClick={this.saveAndContinue}
-                    onClick={(e)=>this._handleSubmit(e)}>Upload Image</Button>
-            </div> */}
-            {/* <div className="img-thumbnail" style={{width:'16%', minWidth: "33px"}}>
-                <img src={pic4} style={{width:'100%'}} alt="IMG 4"/>
-                <Button
-                    bsSize="large"
-                    type="submit" 
-                    className="submitButton"
-                    disabled={!this.profileCheck()}
-                    // onClick={this.saveAndContinue}
-                    onClick={(e)=>this._handleSubmit(e)}>Upload Image</Button>
-                </div> */}
+                <div className="profile-thumbnail" id="profile" ref="profile">
+                    <div className="profile-elems">
+                        {this.state.profile ? <img src={this.state.profile} className='profile_thumb' alt="Profile pic"/>
+                                            : <img src={temp} className='profile_thumb' alt="Profile pic"/>}
+                    </div>
+                    <Button
+                        bsSize="large"
+                        type="submit" 
+                        className="submitButton"
+                        onClick={(e) => this.handleImgChange('profile', e)} >Update</Button>
+                </div>
+                <br/>
+                <div className="img-thumbnail">
+                    <div className="profile-elems">
+                        <img src={pic1} className='img_thumb' alt="IMG 1"/>
+                    </div>
+                    <Button
+                        bsSize="large"
+                        type="submit" 
+                        className="img-submitButton"
+                        disabled={!this.profileCheck()}
+                        onClick={(e) => this.handleImgChange('img1', e)} >Update</Button>
+                </div>
+                <div className="img-thumbnail">
+                    <div className="profile-elems">
+                        <img src={pic2} className='img_thumb' alt="IMG 2"/>
+                    </div>
+                    <Button
+                        bsSize="large"
+                        type="submit" 
+                        className="img-submitButton"
+                        disabled={!this.profileCheck()}
+                        onClick={(e) => this.handleImgChange('img2', e)} >Update</Button>
+                </div>
+                <div className="img-thumbnail">
+                    <div className="profile-elems">
+                        <img src={pic3} className='img_thumb' alt="IMG 3"/>
+                    </div>
+                    <Button
+                        bsSize="large"
+                        type="submit" 
+                        className="img-submitButton"
+                        disabled={!this.profileCheck()}
+                        onClick={(e) => this.handleImgChange('img3', e)} >Update</Button>
+                </div>
+                <div className="img-thumbnail">
+                    <div className="profile-elems">
+                        <img src={pic4} className='img_thumb' alt="IMG 4"/>
+                    </div>
+                    <Button
+                        bsSize="large"
+                        type="submit" 
+                        className="img-submitButton"
+                        disabled={!this.profileCheck()}
+                        onClick={(e) => this.handleImgChange('img4', e)} >Update</Button>
+                </div>
             </div>
         )
     }
@@ -197,14 +191,32 @@ export default class Settings extends Component {
         });
     }
 
-    handleImgChange = event => {
-    event.preventDefault();
-    console.log("Image Test")
-    this.setState({
-        profile: this.state.imagePreviewUrl
-    });
-    }
+    handleImgChange(param, e) {
+        e.preventDefault();
+        if (param === 'profile')
+            this.setState({profile: this.state.imagePreviewUrl});
+        else if (param === 'img1')
+            this.setState({pic1: this.state.imagePreviewUrl});
+        else if (param === 'img2')
+            this.setState({pic2: this.state.imagePreviewUrl});
+        else if (param === 'img3')
+            this.setState({pic3: this.state.imagePreviewUrl});
+        else if (param === 'img4')
+            this.setState({pic4: this.state.imagePreviewUrl});
+      }
 
+    handleDelete (i) {
+        const tags = this.state.tags.slice(0)
+        tags.splice(i, 1)
+        this.setState({ tags })
+    }
+    
+    handleAddition (tag) {
+        if (this.state.tags.length < 10){
+        const tags = [].concat(this.state.tags, tag)
+        this.setState({ tags })}
+    }
+    
     render() {
         return (
                 // <div className="previewComponent">
@@ -236,6 +248,7 @@ export default class Settings extends Component {
                     <FormGroup bsSize="large">
                         <ControlLabel>Upload Images</ControlLabel>
                         <div className="settings-pictures">
+                            {/* View and edit current images */}
                             {this.pics()}
                             <br/>
                             <FormControl
@@ -292,6 +305,21 @@ export default class Settings extends Component {
                         </div>
                     </FormGroup>
 
+
+                    <FormGroup controlId="pref" bsSize="small">
+                        <ControlLabel>Your Tags</ControlLabel>
+                        <br/>
+                        <ReactTags
+                            allowNew = {true}
+                            placeholder = 'Add new/existing tag'
+                            tags={this.state.tags}
+                            inputAttributes= {{onKeyUp:"return forceLower(this)"}} 
+                            suggestions={this.state.suggestions}
+                            handleDelete={this.handleDelete.bind(this)}
+                            handleAddition={this.handleAddition.bind(this)} />
+                    </FormGroup>
+
+<br/>
                     <ButtonToolbar>
                         <ButtonGroup>
                             <Button

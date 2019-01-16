@@ -45,12 +45,11 @@ User.prototype.deleteById = function (id, callback) {
 }
 
 User.prototype.getById = function (data, callback) {
-    var self = this;
-	// var query = `SELECT * FROM users WHERE id = ${data}`;
-	var query = `SELECT id, password,user_name, birth_date, gender, pref, gps_lat, gps_lon,bio, GROUP_CONCAT(interest) AS interests FROM\
-	(SELECT users.id, user_name, password,interest, birth_date, gender, pref, gps_lat, gps_lon, bio FROM user_interests\
+	var query = `SELECT id, password,user_name, birth_date, gender, pref, gps_lat, gps_lon,bio, profile_pic_id, pic, fame, GROUP_CONCAT(interest) AS interests FROM\
+	(SELECT users.id, user_name, password,interest, birth_date, gender, pref, gps_lat, gps_lon, bio, profile_pic_id, fame, pic FROM user_interests\
 	RIGHT JOIN users ON user_interests.user_id = users.id\
-	LEFT JOIN interests ON user_interests.interest_id = interests.id) x\
+	LEFT JOIN interests ON user_interests.interest_id = interests.id\
+	LEFT JOIN pictures ON profile_pic_id = pictures.id) x\
 	WHERE id = ${data} GROUP BY user_name, id`;
     db.query(query, function (err, result) {
         if (err) {callback(err, null);}
@@ -233,17 +232,86 @@ User.prototype.login = function (callback){
     })
 }
 
+User.prototype.like = function (user_id, target_id, callback){
+	var query = `SELECT count(*) AS count FROM likes WHERE (user1_id = ${user_id} AND user2_id = ${target_id}) OR (user2_id = ${user_id} AND user1_id = ${target_id})`;
+	db.query(query, function(err, results){
+		if(err){callback(err,null);}
+		else{
+			if (results[0].count > 0){
+				var query = `UPDATE likes SET link_code = 0 WHERE (user1_id = ${user_id} AND user2_id = ${target_id}) OR (user2_id = ${user_id} AND user1_id = ${target_id})`
+				db.query(query, function(err, result){
+					if(err){callback(err,null);}
+					else{
+						var query = `UPDATE users SET fame = ((SELECT COUNT(link_code) FROM likes WHERE link_code = 0 AND user2_id = ${target_id}) + (SELECT COUNT(link_code) FROM likes WHERE link_code = 1 AND user1_id = ${target_id})) WHERE id = ${target_id}`;
+						db.query(query, function(err, result){
+							if(err){callback(err,null);}
+							else{callback(null, result);}
+						})
+					}
+				})
+			}
+			else{
+				var query = `INSERT INTO likes VALUES(${user_id},${target_id},0)`;
+				db.query(query, function(err, result){
+					if(err){callback(err,null);}
+					else{
+						var query = `UPDATE users SET fame = ((SELECT COUNT(link_code) FROM likes WHERE link_code = 0 AND user2_id = ${target_id}) + (SELECT COUNT(link_code) FROM likes WHERE link_code = 1 AND user1_id = ${target_id})) WHERE id = ${target_id}`;
+						db.query(query, function(err, result){
+							if(err){callback(err,null);}
+							else{callback(null, result);}
+						})
+					}
+				})
+			}
+		}
+	})
+}
+
+User.prototype.dislike = function (user_id, target_id, callback){
+	var query = `SELECT count(*) AS count FROM likes WHERE (user1_id = ${user_id} AND user2_id = ${target_id}) OR (user2_id = ${user_id} AND user1_id = ${target_id})`;
+	db.query(query, function(err, results){
+		if(err){callback(err,null);}
+		else{
+			if (results[0].count > 0){
+				var query = `UPDATE likes SET link_code = 2 WHERE (user1_id = ${user_id} AND user2_id = ${target_id}) OR (user2_id = ${user_id} AND user1_id = ${target_id})`
+				db.query(query, function(err, result){
+					if(err){callback(err,null);}
+					else{
+						var query = `UPDATE users SET fame = ((SELECT COUNT(link_code) FROM likes WHERE link_code = 0 AND user2_id = ${target_id}) + (SELECT COUNT(link_code) FROM likes WHERE link_code = 1 AND user1_id = ${target_id})) WHERE id = ${target_id}`;
+						db.query(query, function(err, result){
+							if(err){callback(err,null);}
+							else{callback(null, result);}
+						})
+					}
+				})
+			}
+			else{
+				var query = `INSERT INTO likes VALUES(${user_id},${target_id},2)`;
+				db.query(query, function(err, result){
+					if(err){callback(err,null);}
+					else{
+						var query = `UPDATE users SET fame = ((SELECT COUNT(link_code) FROM likes WHERE link_code = 0 AND user2_id = ${target_id}) + (SELECT COUNT(link_code) FROM likes WHERE link_code = 1 AND user1_id = ${target_id})) WHERE id = ${target_id}`;
+						db.query(query, function(err, result){
+							if(err){callback(err,null);}
+							else{callback(null, result);}
+						})
+					}
+				})
+			}
+		}
+	})
+}
+
 User.prototype.match = function (id, callback){
-	var query = `SELECT id, user_name, birth_date, gender, pref, gps_lat, gps_lon, bio, GROUP_CONCAT(interest) AS interests FROM\
-	(SELECT users.id, user_name,interest, birth_date, gender, pref, gps_lat, gps_lon, bio FROM user_interests\
+	var query = `SELECT id, user_name, birth_date, gender, pref, gps_lat, gps_lon, bio, pic, fame, GROUP_CONCAT(interest) AS interests FROM\
+	(SELECT users.id, user_name,interest, birth_date, gender, pref, gps_lat, gps_lon, bio, pic, fame, verified FROM user_interests\
 	RIGHT JOIN users ON user_interests.user_id = users.id\
 	LEFT JOIN interests ON user_interests.interest_id = interests.id\
 	LEFT JOIN likes ON users.id = user2_id\
-	WHERE likes.link_code IS NULL) x\
+	LEFT JOIN pictures ON profile_pic_id = pictures.id\
+	WHERE likes.link_code IS NULL AND verified IS NOT NULL AND pic IS NOT NULL) x\
 	WHERE NOT id = ${id} GROUP BY user_name, id ORDER BY id`;
 	db.query(query,function (err, results) {
-		console.log("MATCH FUNCTION")
-		// console.log(results)
 		if (err){
 			callback(err, null);
 		}
@@ -295,7 +363,19 @@ User.prototype.setInterestByIds = function (user_id, interest_id, callback){
 			callback(err, null);
 		}
 		else{
-			"Interest has been added";
+			callback(null, results);
+		}
+	})
+}
+
+User.prototype.getInterestById = function (user_id, callback){
+	var query = `SELECT interest FROM user_interests JOIN interests ON user_interests.interest_id = interests.id WHERE user_id = ${user_id}`;
+	db.query(query , function (err, results) {
+		if (err){
+			callback(err, null);
+		}
+		else{
+			callback(null, results);
 		}
 	})
 }

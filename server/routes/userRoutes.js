@@ -58,6 +58,10 @@ router.get('/logout/:id',user_controller.user_logout);
 
 
 //** THESE THINGS SHAM */
+
+//GET a users interests - working
+router.get('/user/:id/interests',user_controller.user_interests_get);
+
 // SET single interests for user via GET - done
 router.get('/interests/set/:user_id/:interest_id', user_controller.set_interest);
 
@@ -72,5 +76,11 @@ router.get('/interests/delete/:user_id/:interest', user_controller.delete_intere
 
 // GET interest table - done
 router.get('/interests', user_controller.get_interests);
+
+// Like user
+router.get('/like/:user_id/:target_id',user_controller.like_userId);
+
+// DisLike user
+router.get('/dislike/:user_id/:target_id',user_controller.dislike_userId);
 
 module.exports = router;

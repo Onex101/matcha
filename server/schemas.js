@@ -14,11 +14,13 @@ var schemas = {
 		email: null,
 		password: null,
 		veri_code: null,
-		verified: null
+		verified: null,
+		profile_pic_id: null,
+		pic:null,
+		interests:null
 	},
 	message: {
 		id: null,
-		conversation_id: null,
 		sender: null,
 		receiver: null,
 		message: null
