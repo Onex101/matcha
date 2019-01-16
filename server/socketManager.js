@@ -46,13 +46,13 @@ module.exports = function(socket){
 
 	let sendTypingFromUser;
 
-	socket.on(VERIFY_USER, (nickname, callback)=>{
-		if (isUser(connectedUsers, nickname)){
+	socket.on(VERIFY_USER, (id, name, callback)=>{
+		if (isUser(connectedUsers, name)){
 			callback({isUser: true, user:null});
 		}
 		else{
-			console.log("Creating a user")
-			callback({isUser: false, user:createUser({name: nickname, socketId:socket.id})})
+			console.log("Creating a user " + name)
+			callback({isUser: false, user:createUser({id: id, name: name, socketId:socket.id})})
 		}
 	})
 

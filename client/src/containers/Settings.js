@@ -14,14 +14,11 @@ export default class Settings extends Component {
         super(props);
 
         this.state = {
+            id: null,
             file: '',
             imagePreviewUrl: '',
             profile: null,
             pictures: [],
-            pic1: null,
-            pic2: null,
-            pic3: null,
-            pic4: null,
             bio: null,
             gender: null,
             pref: null,
@@ -44,6 +41,24 @@ export default class Settings extends Component {
         console.log('handle uploading-', this.state.file);
     }
 
+    // Handles Image for preview
+    _handleImageChange(e) {
+        e.preventDefault();
+
+        let reader = new FileReader();
+        let file = e.target.files[0];
+
+        reader.onloadend = () => {
+            this.setState({
+            file: file,
+            imagePreviewUrl: reader.result
+            });
+        }
+
+        reader.readAsDataURL(file)
+    }
+
+    // Placeholder for preview
     preview(){
         var imagePreviewUrl = this.state.imagePreviewUrl;
 
@@ -54,47 +69,44 @@ export default class Settings extends Component {
         }
     }
 
+    // Checks if profile picture exists
     profileCheck(){
         if (this.state.profile === null)
             return false
         else
             return true
-
     }
 
     pics(){
         var profile, pic1, pic2, pic3, pic4;
 
-        if(this.state.profile)
+        if (this.state.profile)
             profile = this.state.profile;
         else
             profile = temp;
-        
-        if(this.state.pic1)
-            pic1 = this.state.pic1;
+        if (this.state.pictures[1] && this.state.pictures[1].pic)
+            pic1 = this.state.pictures[1].pic;
         else
             pic1 = temp;
-
-        if(this.state.pic2)
-            pic2 = this.state.pic2;
+        if (this.state.pictures[2] && this.state.pictures[2].pic)
+            pic2 = this.state.pictures[2].pic;
         else
             pic2 = temp;
-        
-        if(this.state.pic3)
-            pic3 = this.state.pic3;
+        if (this.state.pictures[3] && this.state.pictures[3].pic)
+            pic3 = this.state.pictures[3].pic;
         else
             pic3 = temp;
-        
-        if(this.state.pic4)
-            pic4 = this.state.pic4;
+        if (this.state.pictures[4] && this.state.pictures[4].pic)
+            pic4 = this.state.pictures[4].pic;
         else
             pic4 = temp;
 
         return(<div className="imgBar">
                 <div className="profile-thumbnail" id="profile" ref="profile">
                     <div className="profile-elems">
-                        {this.state.profile ? <img src={this.state.profile} className='profile_thumb' alt="Profile pic"/>
-                                            : <img src={temp} className='profile_thumb' alt="Profile pic"/>}
+                        <img src={profile} className='profile_thumb' alt="Profile pic"/>
+                        {/* {this.state.profile ? <img src={this.state.profile} className='profile_thumb' alt="Profile pic"/>
+                                            : <img src={temp} className='profile_thumb' alt="Profile pic"/>} */}
                     </div>
                     <Button
                         bsSize="large"
@@ -151,16 +163,7 @@ export default class Settings extends Component {
         )
     }
 
-    gallery() {
-        var imagePreviewUrl = this.state.imagePreviewUrl;
-
-        if (imagePreviewUrl) {
-            return( <img src={imagePreviewUrl} alt="Preview"/>);
-        } else {
-            return(<div className="previewText">Oops, looks like you don't have a profile pic!</div>);
-        }
-    }
-
+    // Update geo location
     geoFindMe = () => {     
         if (!navigator.geolocation){
           console.log("Geolocation is not supported by your browser");
@@ -191,6 +194,7 @@ export default class Settings extends Component {
         });
     }
 
+    // Handles Change of user's images
     handleImgChange(param, e) {
         e.preventDefault();
         if (param === 'profile')
@@ -205,21 +209,158 @@ export default class Settings extends Component {
             this.setState({pic4: this.state.imagePreviewUrl});
       }
 
+    // Handle Delete of Tag
     handleDelete (i) {
         const tags = this.state.tags.slice(0)
         tags.splice(i, 1)
         this.setState({ tags })
     }
     
+    // Handle Addition of Tag to user profile
     handleAddition (tag) {
         if (this.state.tags.length < 10){
         const tags = [].concat(this.state.tags, tag)
         this.setState({ tags })}
     }
+
+    // Gets user info
+    getInfo(){
+        this.setState({id: this.props.userInfo.id,
+            gender: this.props.userInfo.gender,
+            pref: this.props.userInfo.pref,
+            bio: this.props.userInfo.bio,
+            gps_lat: this.props.userInfo.gps_lat,
+            gps_lon: this.props.userInfo.gps_lon,
+            profile: this.props.userInfo.pic,
+            tags: this.props.userInfo.interests,
+             });
+        // console.log("STATE: ");
+        // console.info(this.state);
+    }
     
+    // Updates user info
+    updateInfo(){
+        
+    }
+
+    // Gets user images
+    getUserImages(){
+        // console.log("Getting images 1")
+        // console.info(this.state.pictures[0])
+        // if (this.state.id && this.state.pictures === null){
+        if (localStorage.getItem('id') && !this.state.pictures[0]){
+            // console.log("Getting images 2")
+            try {
+            //   fetch('/image/' + localStorage.getItem('id'), {
+                fetch('/image/' + '101', {
+                method: "GET",
+                headers: {
+                  "Content-Type": "application/json; charset=utf-8",
+                },
+              })
+              .then(response => response.json())
+              .then((responseJSON) => {
+                  console.log("RESPONSE")
+                  console.info(responseJSON)
+                  var pic1 = responseJSON[0] ? responseJSON[0].pic : null;
+                  var pic2 = responseJSON[1] ? responseJSON[1].pic : null;
+                  var pic3 = responseJSON[2] ? responseJSON[2].pic : null;
+                  var pic4 = responseJSON[3] ? responseJSON[3].pic : null;
+                  var pic5 = responseJSON[4] ?  responseJSON[4].pic : null;
+                  var newPics = [{ id: 0, pic: pic1 },
+                                    { id: 1, pic: pic2 },
+                                    { id: 2, pic: pic3 },
+                                    { id: 3, pic: pic4 },
+                                    { id: 4, pic: pic5 }]
+                this.setState({ pictures: newPics});
+                this.setState({ profile: pic1});
+                // console.log("Result = ");
+                // console.info(this.state.pictures);
+              })
+              .catch(err => console.error(err))
+              } catch (e) {
+                alert(e.message);
+              }
+        }
+    }
+
+    // Updates user images
+    updateImages(){
+        const user = this.props.fieldValues;
+        // fetch(`/products/add?name=${product.name}&price=${product.price}`)
+        // .then(response => response.json())
+        fetch(`/user/create`, {
+          method: "POST",
+          headers: {
+              "Content-Type": "application/json; charset=utf-8",
+          },
+          body: JSON.stringify({
+            first_name: user.first_name,
+            last_name: user.last_name,
+            user_name:  user.user_name,
+            email:      user.email,
+            password:   user.password,
+            birth_date:  user.birth_date,
+            gender:     this.state.gender || '0.5',
+            pref:       this.state.pref || '0.5',
+            gps_lat:    this.state.gps_lat,
+		    gps_lon:    this.state.gps_lon
+          })
+        })
+        // .then(this.getUsers)
+        .catch(err => console.error(err))
+    }
+
+    // Stops the auto focus on the tags
+    componentDidMount(){
+        window.scrollTo(0, 0);
+    }
+
+    componentDidUpdate() {
+        window.onbeforeunload = function () {
+            window.scrollTo(0, 0);
+          }
+        if (this.state.id === null && this.props.userInfo !== null && this.props.userInfo.id !== null){
+            console.log("If for you! 1 user");
+            console.log("UPDATE TEST PROPS:");
+            console.info(this.props.userInfo);
+            // console.log("UPDATE TEST STATE:");
+            // console.info(this.state)
+            this.getInfo();
+        } else {
+            console.log("No user if for you! 1");
+            console.log("STATE: ");
+            console.info(this.state);
+        }
+        if (this.state.id !== null && !this.state.pictures[0]){
+            console.log("If for you! 1 image");
+            //get pictures
+            this.getUserImages();
+            // console.log("STATE: ");
+            // console.info(this.state);
+        }
+        else {
+            console.log("No image if for you! 1");
+            console.log("STATE: ");
+            console.info(this.state);
+        }
+    }
+
     render() {
-        return (
-                // <div className="previewComponent">
+        // console.log("SETTINGS TEST:");
+        // console.info(this.props.userInfo)
+        if (this.state.id === null && this.props.userInfo !== null && this.props.userInfo.id !== null){
+            // if (this.props.userInfo && this.state.id === null){
+            this.getInfo();
+        }
+        else if (this.state.id !== null && !this.state.pictures[0]){
+            this.getUserImages();
+        }
+        // else {
+            console.log("STATE: ");
+            console.info(this.state);
+        // }
+        // <div className="previewComponent">
                 //     <ControlLabel>Upload Images</ControlLabel>
                 //     <form onSubmit={(e)=>this._handleSubmit(e)}>
                 //         <div style={style}>
@@ -242,7 +383,7 @@ export default class Settings extends Component {
                 //         type="file" 
                 //         onChange={(e)=>this._handleImageChange(e)} />
                 // </div>
-                <div className="settings">
+        return (this.props.userInfo ? <div className="settings">
                 <ControlLabel>Settings</ControlLabel>
                 <ul className="form-fields">
                     <FormGroup bsSize="large">
@@ -280,14 +421,13 @@ export default class Settings extends Component {
                             autoFocus
                             type="range"
                             min="0" max="1" step="0.01" 
-                            // defaultValue={ this.props.fieldValues.gender } 
+                            defaultValue={ this.state.gender } 
                             onChange={this.handleChange} 
-                        // onChange={({target}) => this.setState({gender: target.value})}
+                            onChange={({target}) => this.setState({gender: target.value})}
                             />
                             <img src={male} alt="Male" />
                         </div>
                     </FormGroup>
-
                     <FormGroup controlId="pref" bsSize="small">
                         <ControlLabel>Your Interest</ControlLabel>
                         <br/>
@@ -297,29 +437,35 @@ export default class Settings extends Component {
                             autoFocus
                             type="range"
                             min="0" max="1" step="0.01"
-                            // defaultValue={this.props.fieldValues.pref} 
+                            defaultValue={this.state.pref} 
                             onChange={this.handleChange} 
-                            // onChange={({target}) => this.setState({pref: target.value})}
+                            onChange={({target}) => this.setState({pref: target.value})}
                             />
                             <img src={male} alt="Male" />
                         </div>
                     </FormGroup>
-
-
                     <FormGroup controlId="pref" bsSize="small">
-                        <ControlLabel>Your Tags</ControlLabel>
+                        <ControlLabel>Your 10 Tags</ControlLabel>
                         <br/>
-                        <ReactTags
+                        {this.state.tags ? <ReactTags
                             allowNew = {true}
+                            autofocus={false}
                             placeholder = 'Add new/existing tag'
                             tags={this.state.tags}
-                            inputAttributes= {{onKeyUp:"return forceLower(this)"}} 
+                            // inputAttributes= {{onKeyUp:"return forceLower(this)"}} 
                             suggestions={this.state.suggestions}
                             handleDelete={this.handleDelete.bind(this)}
                             handleAddition={this.handleAddition.bind(this)} />
+                            : <ReactTags
+                            allowNew = {true}
+                            autofocus={false}
+                            placeholder = 'Add new/existing tag'
+                            // inputAttributes= {{onKeyUp:"return forceLower(this)"}} 
+                            suggestions={this.state.suggestions}
+                            handleDelete={this.handleDelete.bind(this)}
+                            handleAddition={this.handleAddition.bind(this)} />}
                     </FormGroup>
-
-<br/>
+                    <br/>
                     <ButtonToolbar>
                         <ButtonGroup>
                             <Button
@@ -344,7 +490,7 @@ export default class Settings extends Component {
                     </ButtonToolbar>
                 </ul>
             </div>
-            
+            : <ControlLabel> Loading ... </ControlLabel>            
         )
     }
 }

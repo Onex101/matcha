@@ -46,17 +46,18 @@ export default class Chat extends Component {
 
 	initSocket = ()=>{
 		const socket = io(socketUrl)
-		var user_name
+		var name, id
 		// if (this.props.userInfo)
-		user_name = localStorage.getItem('user');
+		name = localStorage.getItem('user');
+		id = localStorage.getItem('id');
 		// else 
 		
 		socket.on('connect', ()=>{
-			console.log("Connected " + user_name);
+			console.log("Connected " + name);
 		})
 		
 		this.setState({socket: socket})
-		socket.emit(VERIFY_USER, user_name, this.verifyUser)
+		socket.emit(VERIFY_USER, id, name, this.verifyUser)
 		// this.setUser(user_name)
 	}
 
