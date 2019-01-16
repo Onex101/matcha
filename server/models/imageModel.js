@@ -80,7 +80,7 @@ Image.prototype.getProfilePic = function (user_name, callback){
 //returns base64 value of picture of the given pic_id
 Image.prototype.getPicById = function (id, callback){
 	id = mysql.escape(id);
-	db.query(`SELECT pic FROM pictures WHERE id = ${id}`, function (err, results) {
+	db.query(`SELECT id, pic FROM pictures WHERE id = ${id}`, function (err, results) {
 		if (err)
 			callback(err, null);
 		else
