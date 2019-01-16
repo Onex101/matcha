@@ -92,7 +92,7 @@ class App extends Component {
   handleLogout = event => {
     const {socket} = this.state;
     this.userHasAuthenticated(false);
-    socket.emit(LOGOUT)
+    socket.emit(LOGOUT);
     localStorage.removeItem('user');
     localStorage.removeItem('id');
     this.setState({ userInfo: null });
