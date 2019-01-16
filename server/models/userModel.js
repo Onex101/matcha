@@ -241,7 +241,7 @@ User.prototype.match = function (id, callback){
 	LEFT JOIN interests ON user_interests.interest_id = interests.id\
 	LEFT JOIN likes ON users.id = user2_id\
 	LEFT JOIN pictures ON profile_pic_id = pictures.id\
-	WHERE likes.link_code IS NULL AND verified IS NOT NULL) x\
+	WHERE likes.link_code IS NULL AND verified IS NOT NULL AND pic IS NOT NULL) x\
 	WHERE NOT id = ${id} GROUP BY user_name, id ORDER BY id`;
 	db.query(query,function (err, results) {
 		if (err){

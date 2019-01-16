@@ -246,6 +246,11 @@ connection.connect(function (err) {
 	");
 
 	connection.query("\
+	UPDATE users SET profile_pic_id = NULL\
+	WHERE id = 111\
+	");
+
+	connection.query("\
 	UPDATE users SET verified = 1\
 	");
 
