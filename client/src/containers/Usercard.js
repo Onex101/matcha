@@ -2,11 +2,26 @@ import React, { Component } from "react";
 import "./Usercard.css";
 import heart from './imgs/heart.png';
 import x from './imgs/x.png';
+import Modal from 'react-responsive-modal';
+import Profile from "../containers/Profile";
 
 export default class Usercard extends Component {
     constructor(props) {
         super(props);
+
+      this.state = {
+        open: false,
+      }
     }
+
+    
+  onOpenModal = () => {
+    this.setState({ open: true });
+  };
+ 
+  onCloseModal = () => {
+    this.setState({ open: false });
+  };
 
     avatar(image, width, height) {
         var image = image,
@@ -46,14 +61,22 @@ export default class Usercard extends Component {
     }
 
     mainPanel(info) {
-        if (!info) return null;
-        var width=100
-        var height=100
-        return (
+      if (!info) return null;
+      var width=100
+      var height=100
+      const { open } = this.state;
+      return (
          <div>
             <div className="top">
                 {this.avatar(info.pic, width, height)}
-        <div className="username"><br/><h1 onClick={(e) => this.openProfile(e)}>{info.user_name}</h1></div>
+        <div className="username"><br/><h1 onClick={this.onOpenModal}>{info.user_name}</h1></div>
+                  <div>
+                    {/* <button onClick={this.onOpenModal}>Open modal</button> */}
+                    <Modal open={open} onClose={this.onCloseModal} center>
+                      {/* <h2>Simple centered modal</h2> */}
+                      <Profile props={info} />
+                    </Modal>
+                  </div>
               <hr />
             </div>
             {this.bio(info)}

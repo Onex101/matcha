@@ -11,10 +11,9 @@ export default class Home extends Component {
     super(props);
 
     this.state = {
-        matches: props.userMatches,
+      matches: props.userMatches,
     }
   }
-
 
   sort_by(field, reverse, primer) {
     // console.log("Sort by test 1");
@@ -159,7 +158,6 @@ export default class Home extends Component {
   render() {
     // if (this.state.matches === null)
     //   this.getMatches()
-
     return(localStorage.getItem('user') && this.state.matches 
             ?  <div className="Home">
                   <div className="lander">
