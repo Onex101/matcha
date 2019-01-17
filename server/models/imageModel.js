@@ -43,7 +43,7 @@ Image.prototype.deletePic = function (id, callback){
 //saves the given picture, if after adding the picture more than 5 images exist for this user the oldest, non profile pic will be deleted
 //add warning to let user know about this action
 Image.prototype.savePic = function (callback){
-	console.log(this.data.pic);
+	console.log(this);
 	db.query(`INSERT INTO pictures(pic, user_id) VALUES('${this.data.pic}', ${this.data.id})`, function (err, results) {
 		if (err){
 			callback(err, null);
