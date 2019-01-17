@@ -355,7 +355,7 @@ export default class Settings extends Component {
                         "Content-Type": "application/json; charset=utf-8",
                     },
                     body: JSON.stringify({
-                      id: user_id,
+                      user_id: user_id,
                       pic: pics[i].pic
                     })
                   })
