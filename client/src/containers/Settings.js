@@ -195,37 +195,38 @@ export default class Settings extends Component {
     // Handles Change of user's images
     handleImgChange(param, e) {
         e.preventDefault();
+        var newPics;
         if (param === 'profile') {
             this.setState({profile: this.state.imagePreviewUrl});
-            var newPics = this.state.pictures;
+            newPics = this.state.pictures;
             newPics[0].pic = this.state.imagePreviewUrl;
             console.log("New pics: ")
             console.info(newPics)
             this.setState({pictures: newPics});
         }
         else if (param === 'img1'){
-            var newPics = this.state.pictures;
+            newPics = this.state.pictures;
             newPics[1].pic = this.state.imagePreviewUrl;
             console.log("New pics: ")
             console.info(newPics)
             this.setState({pictures: newPics});
         }
         else if (param === 'img2'){
-            var newPics = this.state.pictures;
+            newPics = this.state.pictures;
             newPics[2].pic = this.state.imagePreviewUrl;
             console.log("New pics: ")
             console.info(newPics)
             this.setState({pictures: newPics});
         }
         else if (param === 'img3'){
-            var newPics = this.state.pictures;
+            newPics = this.state.pictures;
             newPics[3].pic = this.state.imagePreviewUrl;
             console.log("New pics: ")
             console.info(newPics)
             this.setState({pictures: newPics});
         }
         else if (param === 'img4'){
-            var newPics = this.state.pictures;
+            newPics = this.state.pictures;
             newPics[4].pic = this.state.imagePreviewUrl;
             console.log("New pics: ")
             console.info(newPics)
@@ -341,7 +342,9 @@ export default class Settings extends Component {
     // Updates user images
     updateImages(){
         const pics = this.state.pictures;
-        const user_id = this.state.id;
+        var user_id;
+        if (this.state.id)
+            user_id = this.state.id;
         for (var i = 0; i < pics.length; i++) { 
             if (pics[i].id === null && pics[i].pic) {
                 console.log("Making new image");
