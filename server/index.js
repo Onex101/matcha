@@ -26,6 +26,8 @@ app.get('/', (req, res) => {
 app.use(userRoutes);
 app.use(imgRoutes);
 app.use(msgRoutes);
+app.use(bodyParser.json({limit: '10mb', extended: true}))
+app.use(bodyParser.urlencoded({limit: '10mb', extended: true}))
 
 // io.on('connection', socket => {
 // 	console.log('User connected')
