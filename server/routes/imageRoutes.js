@@ -26,7 +26,7 @@ router.get('/image/:user_name/profilepic', image_controller.profile_image_get);
 //GET request to set image as profile pic by pic_id - working
 router.get('/image/setProfilePic/:user_name/:pic_id', image_controller.profile_image_set);
 
-//GET method to replace image
-router.get('/image/replace/:user_name/:pic_id_old/:pic_id_new', image_controller.profile_image_set);
+//POST method to replace image
+router.post('/image/replace/', image_controller.image_replace);
 
 module.exports = router;

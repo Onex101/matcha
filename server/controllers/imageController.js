@@ -112,3 +112,17 @@ exports.profile_image_set = function(req, res){
 		}
 	})
 }
+
+exports.image_replace = function(req, res){
+	data = req.body;
+	let image = new Image(data);
+	image.replacePic(function (err, result){
+		if (err){
+			res.send('Couldnt not replace image');
+			throw err;
+		}
+		else{
+			res.send('Image updated');
+		}
+	})
+}
