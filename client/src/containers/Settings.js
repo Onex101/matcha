@@ -430,8 +430,8 @@ export default class Settings extends Component {
             this.getUserImages();
         }
         // else {
-            console.log("STATE: ");
-            console.info(this.state);
+            // console.log("STATE: ");
+            // console.info(this.state);
         // }
         // <div className="previewComponent">
                 //     <ControlLabel>Upload Images</ControlLabel>
