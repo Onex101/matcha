@@ -327,7 +327,7 @@ export default class Settings extends Component {
                 newPics[4].pic = pic5 ? pic5.pic : null;
 
                 this.setState({ pictures: newPics});
-                this.setState({ profile: pic1.pic});
+                this.setState({ profile:  newPics[0].pic});
                 console.log("Result = ");
                 console.info(this.state.pictures);
               })
