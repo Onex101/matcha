@@ -105,8 +105,6 @@ export default class Settings extends Component {
                 <div className="profile-thumbnail" id="profile" ref="profile">
                     <div className="profile-elems">
                         <img src={profile} className='profile_thumb' alt="Profile pic"/>
-                        {/* {this.state.profile ? <img src={this.state.profile} className='profile_thumb' alt="Profile pic"/>
-                                            : <img src={temp} className='profile_thumb' alt="Profile pic"/>} */}
                     </div>
                     <Button
                         bsSize="large"
@@ -252,7 +250,7 @@ export default class Settings extends Component {
             // console.log("Getting images 2")
             try {
             //   fetch('/image/' + localStorage.getItem('id'), {
-                fetch('/image/' + '101', {
+                fetch('/images/' + '101', {
                 method: "GET",
                 headers: {
                   "Content-Type": "application/json; charset=utf-8",
@@ -260,22 +258,46 @@ export default class Settings extends Component {
               })
               .then(response => response.json())
               .then((responseJSON) => {
-                  console.log("RESPONSE")
-                  console.info(responseJSON)
-                  var pic1 = responseJSON[0] ? responseJSON[0].pic : null;
-                  var pic2 = responseJSON[1] ? responseJSON[1].pic : null;
-                  var pic3 = responseJSON[2] ? responseJSON[2].pic : null;
-                  var pic4 = responseJSON[3] ? responseJSON[3].pic : null;
-                  var pic5 = responseJSON[4] ?  responseJSON[4].pic : null;
-                  var newPics = [{ id: 0, pic: pic1 },
-                                    { id: 1, pic: pic2 },
-                                    { id: 2, pic: pic3 },
-                                    { id: 3, pic: pic4 },
-                                    { id: 4, pic: pic5 }]
+                //   console.log("RESPONSE")
+                //   console.info(responseJSON)
+                  //Change this to de checks to get img_id
+                //   var pic1 = responseJSON[0] ? responseJSON[0].pic : null;
+                //   var pic2 = responseJSON[1] ? responseJSON[1].pic : null;
+                //   var pic3 = responseJSON[2] ? responseJSON[2].pic : null;
+                //   var pic4 = responseJSON[3] ? responseJSON[3].pic : null;
+                //   var pic5 = responseJSON[4] ?  responseJSON[4].pic : null;
+
+                  var pic1 = responseJSON[0] ? responseJSON[0] : null;
+                  var pic2 = responseJSON[1] ? responseJSON[1] : null;
+                  var pic3 = responseJSON[2] ? responseJSON[2] : null;
+                  var pic4 = responseJSON[3] ? responseJSON[3] : null;
+                  var pic5 = responseJSON[4] ?  responseJSON[4] : null;
+                //   var newPics = [{ id: 0, pic: pic1 },
+                //                     { id: 1, pic: pic2 },
+                //                     { id: 2, pic: pic3 },
+                //                     { id: 3, pic: pic4 },
+                //                     { id: 4, pic: pic5 }]
+                var newPics = [{ id: null, pic: null },
+                                    { id: null, pic: null },
+                                    { id: null, pic: null },
+                                    { id: null, pic: null },
+                                    { id: null, pic: null }];
+                
+                newPics[0].id = pic1 ? pic1.id : null;
+                newPics[0].pic = pic1 ? pic1.pic : null;
+                newPics[1].id = pic2 ? pic2.id : null;
+                newPics[1].pic = pic2 ? pic2.pic : null;
+                newPics[2].id = pic3 ? pic3.id : null;
+                newPics[2].pic = pic3 ? pic3.pic : null;
+                newPics[3].id = pic4 ? pic4.id : null;
+                newPics[3].pic = pic4 ? pic4.pic : null;
+                newPics[4].id = pic5 ? pic5.id : null;
+                newPics[4].pic = pic5 ? pic5.pic : null;
+
                 this.setState({ pictures: newPics});
-                this.setState({ profile: pic1});
-                // console.log("Result = ");
-                // console.info(this.state.pictures);
+                this.setState({ profile: pic1.pic});
+                console.log("Result = ");
+                console.info(this.state.pictures);
               })
               .catch(err => console.error(err))
               } catch (e) {
@@ -286,29 +308,48 @@ export default class Settings extends Component {
 
     // Updates user images
     updateImages(){
-        const user = this.props.fieldValues;
-        // fetch(`/products/add?name=${product.name}&price=${product.price}`)
-        // .then(response => response.json())
-        fetch(`/user/create`, {
-          method: "POST",
-          headers: {
-              "Content-Type": "application/json; charset=utf-8",
-          },
-          body: JSON.stringify({
-            first_name: user.first_name,
-            last_name: user.last_name,
-            user_name:  user.user_name,
-            email:      user.email,
-            password:   user.password,
-            birth_date:  user.birth_date,
-            gender:     this.state.gender || '0.5',
-            pref:       this.state.pref || '0.5',
-            gps_lat:    this.state.gps_lat,
-		    gps_lon:    this.state.gps_lon
-          })
-        })
-        // .then(this.getUsers)
-        .catch(err => console.error(err))
+        const pics = this.state.pictures;
+        const user_id = this.state.id;
+        for (i = 0; i < pics.length; i++) { 
+            if (pics[i].id === null) {
+                //Send new image and user id
+                fetch(`/image/create`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json; charset=utf-8",
+                    },
+                    body: JSON.stringify({
+                      pic: pics[i].pic,
+                      id: user_id
+                    })
+                  })
+                  // .then(this.getUsers)
+                  .catch(err => console.error(err))
+            }
+            else {
+                //Send replace image
+                fetch('/image/replace/' + user_name + '/' + pic_id_old + '/' + pic_id_new, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json; charset=utf-8",
+                    },
+                    body: JSON.stringify({
+                      first_name: user.first_name,
+                      last_name: user.last_name,
+                      user_name:  user.user_name,
+                      email:      user.email,
+                      password:   user.password,
+                      birth_date:  user.birth_date,
+                      gender:     this.state.gender || '0.5',
+                      pref:       this.state.pref || '0.5',
+                      gps_lat:    this.state.gps_lat,
+                      gps_lon:    this.state.gps_lon
+                    })
+                  })
+                  // .then(this.getUsers)
+                  .catch(err => console.error(err))
+            }
+        }
     }
 
     // Stops the auto focus on the tags
