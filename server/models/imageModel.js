@@ -44,7 +44,7 @@ Image.prototype.deletePic = function (id, callback){
 //add warning to let user know about this action
 Image.prototype.savePic = function (callback){
 	console.log(this);
-	db.query(`INSERT INTO pictures(pic, user_id) VALUES('${this.data.pic}', ${this.data.id})`, function (err, results) {
+	db.query(`INSERT INTO pictures(pic, user_id) VALUES('${this.data.data}', ${this.data.user_id})`, function (err, results) {
 		if (err){
 			callback(err, null);
 		}
