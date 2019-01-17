@@ -195,17 +195,43 @@ export default class Settings extends Component {
     // Handles Change of user's images
     handleImgChange(param, e) {
         e.preventDefault();
-        if (param === 'profile')
+        if (param === 'profile') {
             this.setState({profile: this.state.imagePreviewUrl});
-        else if (param === 'img1')
-            this.setState({pic1: this.state.imagePreviewUrl});
-        else if (param === 'img2')
-            this.setState({pic2: this.state.imagePreviewUrl});
-        else if (param === 'img3')
-            this.setState({pic3: this.state.imagePreviewUrl});
-        else if (param === 'img4')
-            this.setState({pic4: this.state.imagePreviewUrl});
-      }
+            var newPics = this.state.pictures;
+            newPics[0].pic = this.state.imagePreviewUrl;
+            console.log("New pics: ")
+            console.info(newPics)
+            this.setState({pictures: newPics});
+        }
+        else if (param === 'img1'){
+            var newPics = this.state.pictures;
+            newPics[1].pic = this.state.imagePreviewUrl;
+            console.log("New pics: ")
+            console.info(newPics)
+            this.setState({pictures: newPics});
+        }
+        else if (param === 'img2'){
+            var newPics = this.state.pictures;
+            newPics[2].pic = this.state.imagePreviewUrl;
+            console.log("New pics: ")
+            console.info(newPics)
+            this.setState({pictures: newPics});
+        }
+        else if (param === 'img3'){
+            var newPics = this.state.pictures;
+            newPics[3].pic = this.state.imagePreviewUrl;
+            console.log("New pics: ")
+            console.info(newPics)
+            this.setState({pictures: newPics});
+        }
+        else if (param === 'img4'){
+            var newPics = this.state.pictures;
+            newPics[4].pic = this.state.imagePreviewUrl;
+            console.log("New pics: ")
+            console.info(newPics)
+            this.setState({pictures: newPics});
+        }
+    }
 
     // Handle Delete of Tag
     handleDelete (i) {
@@ -238,19 +264,37 @@ export default class Settings extends Component {
     
     // Updates user info
     updateInfo(){
-        
+        // const user = this.state;
+        // // fetch(`/products/add?name=${product.name}&price=${product.price}`)
+        // // .then(response => response.json())
+        // fetch(`/user/create`, {
+        //   method: "POST",
+        //   headers: {
+        //       "Content-Type": "application/json; charset=utf-8",
+        //   },
+        //   body: JSON.stringify({
+        //     first_name: user.first_name,
+        //     last_name: user.last_name,
+        //     user_name:  user.user_name,
+        //     email:      user.email,
+        //     password:   user.password,
+        //     birth_date:  user.birth_date,
+        //     gender:     this.state.gender || '0.5',
+        //     pref:       this.state.pref || '0.5',
+        //     gps_lat:    this.state.gps_lat,
+		//     gps_lon:    this.state.gps_lon
+        //   })
+        // })
+        // // .then(this.getUsers)
+        // .catch(err => console.error(err))
     }
 
     // Gets user images
     getUserImages(){
-        // console.log("Getting images 1")
-        // console.info(this.state.pictures[0])
-        // if (this.state.id && this.state.pictures === null){
         if (localStorage.getItem('id') && !this.state.pictures[0]){
-            // console.log("Getting images 2")
             try {
-            //   fetch('/image/' + localStorage.getItem('id'), {
-                fetch('/images/' + '101', {
+              fetch('/image/' + localStorage.getItem('id'), {
+                // fetch('/images/' + '101', {
                 method: "GET",
                 headers: {
                   "Content-Type": "application/json; charset=utf-8",
@@ -258,25 +302,13 @@ export default class Settings extends Component {
               })
               .then(response => response.json())
               .then((responseJSON) => {
-                //   console.log("RESPONSE")
-                //   console.info(responseJSON)
-                  //Change this to de checks to get img_id
-                //   var pic1 = responseJSON[0] ? responseJSON[0].pic : null;
-                //   var pic2 = responseJSON[1] ? responseJSON[1].pic : null;
-                //   var pic3 = responseJSON[2] ? responseJSON[2].pic : null;
-                //   var pic4 = responseJSON[3] ? responseJSON[3].pic : null;
-                //   var pic5 = responseJSON[4] ?  responseJSON[4].pic : null;
 
                   var pic1 = responseJSON[0] ? responseJSON[0] : null;
                   var pic2 = responseJSON[1] ? responseJSON[1] : null;
                   var pic3 = responseJSON[2] ? responseJSON[2] : null;
                   var pic4 = responseJSON[3] ? responseJSON[3] : null;
                   var pic5 = responseJSON[4] ?  responseJSON[4] : null;
-                //   var newPics = [{ id: 0, pic: pic1 },
-                //                     { id: 1, pic: pic2 },
-                //                     { id: 2, pic: pic3 },
-                //                     { id: 3, pic: pic4 },
-                //                     { id: 4, pic: pic5 }]
+
                 var newPics = [{ id: null, pic: null },
                                     { id: null, pic: null },
                                     { id: null, pic: null },
@@ -310,8 +342,9 @@ export default class Settings extends Component {
     updateImages(){
         const pics = this.state.pictures;
         const user_id = this.state.id;
-        for (i = 0; i < pics.length; i++) { 
-            if (pics[i].id === null) {
+        for (var i = 0; i < pics.length; i++) { 
+            if (pics[i].id === null && pics[i].pic) {
+                console.log("Making new image");
                 //Send new image and user id
                 fetch(`/image/create`, {
                     method: "POST",
@@ -319,37 +352,36 @@ export default class Settings extends Component {
                         "Content-Type": "application/json; charset=utf-8",
                     },
                     body: JSON.stringify({
-                      pic: pics[i].pic,
-                      id: user_id
+                      id: user_id,
+                      pic: pics[i].pic
                     })
                   })
                   // .then(this.getUsers)
                   .catch(err => console.error(err))
             }
-            else {
+            else if (pics[i].id !== null && pics[i].pic) {
+                console.log("Replacing old image");
                 //Send replace image
-                fetch('/image/replace/' + user_name + '/' + pic_id_old + '/' + pic_id_new, {
+                fetch('/image/replace/', {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json; charset=utf-8",
                     },
                     body: JSON.stringify({
-                      first_name: user.first_name,
-                      last_name: user.last_name,
-                      user_name:  user.user_name,
-                      email:      user.email,
-                      password:   user.password,
-                      birth_date:  user.birth_date,
-                      gender:     this.state.gender || '0.5',
-                      pref:       this.state.pref || '0.5',
-                      gps_lat:    this.state.gps_lat,
-                      gps_lon:    this.state.gps_lon
+                        id: pics[i].id,
+                        pic: pics[i].pic
                     })
                   })
                   // .then(this.getUsers)
                   .catch(err => console.error(err))
             }
         }
+    }
+
+    saveChanges(e) {
+        e.preventDefault();
+        this.updateImages();
+        this.updateInfo();
     }
 
     // Stops the auto focus on the tags
@@ -525,7 +557,8 @@ export default class Settings extends Component {
                                 bsSize="large"
                                 className="submit_btn"
                                 // disabled={!this.validateForm()}
-                                // onClick={this.saveAndContinue}
+                                onClick={(e)=>this.saveChanges(e)}
+                                // onClick={this.saveChanges}
                             >Save Changes</Button>
                         </ButtonGroup>
                     </ButtonToolbar>
