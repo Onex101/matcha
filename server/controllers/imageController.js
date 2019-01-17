@@ -7,7 +7,9 @@ exports.image_create_get = function(req, res){
 
 exports.image_create_post = function(req, res){
 	data = req.body;
+	// console.log(data)
 	let image = new Image(data);
+	// console.log(image)
 	image.savePic(function (err, result){
 		if (err){
 			res.send('Couldnt not save image');
@@ -115,6 +117,7 @@ exports.profile_image_set = function(req, res){
 
 exports.image_replace = function(req, res){
 	data = req.body;
+	console.log(data)
 	let image = new Image(data);
 	image.replacePic(function (err, result){
 		if (err){

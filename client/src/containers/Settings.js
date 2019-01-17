@@ -373,7 +373,8 @@ export default class Settings extends Component {
                     },
                     body: JSON.stringify({
                         id: pics[i].id,
-                        pic: pics[i].pic
+                        pic: pics[i].pic,
+                        data: pics[i].pic
                     })
                   })
                   // .then(this.getUsers)

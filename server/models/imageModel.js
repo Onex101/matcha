@@ -43,7 +43,7 @@ Image.prototype.deletePic = function (id, callback){
 //saves the given picture, if after adding the picture more than 5 images exist for this user the oldest, non profile pic will be deleted
 //add warning to let user know about this action
 Image.prototype.savePic = function (callback){
-	console.log(this);
+	// console.log(this.data);
 	db.query(`INSERT INTO pictures(pic, user_id) VALUES('${this.data.data}', ${this.data.user_id})`, function (err, results) {
 		if (err){
 			callback(err, null);
@@ -80,7 +80,7 @@ Image.prototype.getProfilePic = function (user_name, callback){
 //returns base64 value of picture of the given pic_id
 Image.prototype.getPicById = function (id, callback){
 	id = mysql.escape(id);
-	db.query(`SELECT id, pic FROM pictures WHERE id = ${id}`, function (err, results) {
+	db.query(`SELECT id, pic FROM pictures WHERE user_id = ${id}`, function (err, results) {
 		if (err)
 			callback(err, null);
 		else
@@ -98,6 +98,7 @@ Image.prototype.setProfilePic = function (user_name, pic_id, callback){
 }
 
 Image.prototype.replacePic = function(callback){
+	console.log(this.data)
 	db.query(`UPDATE pictures SET pic = ${this.data.pic} WHERE id = '${this.data.id}'`, function (err, results) {
 		if (err){callback(err, null);}
 		else{
