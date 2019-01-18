@@ -35,6 +35,7 @@ app.use(msgRoutes);
 // })
 
 module.exports.io = io;
+module.exports.app = app;
 
 server.listen(4000, () => {
 	console.log(`Server running on port 4000`)

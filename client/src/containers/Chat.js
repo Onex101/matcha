@@ -45,6 +45,7 @@ export default class Chat extends Component {
 	}
 
 	initSocket = ()=>{
+		console.log('connecting user')
 		const socket = io(socketUrl)
 		var name, id
 		// if (this.props.userInfo)

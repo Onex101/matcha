@@ -31,6 +31,7 @@ export default class ChatContainer extends Component{
 	initSocket(socket){	
 		// socket.emit(COMMUNITY_CHAT, this.resetChat)
 		console.log("Adding Chats to Sidebar" + JSON.stringify(this.props.user))
+		console.log('COMMUNITY_CHAT')
 		socket.emit(COMMUNITY_CHAT, this.resetChat)
 		socket.on(PRIVATE_MESSAGE, this.addChat)
 		socket.on('connect', ()=>{
@@ -67,9 +68,7 @@ export default class ChatContainer extends Component{
 	
 		const messageEvent = `${MESSAGE_RECEIVED}-${chat.id}`
 		const typingEvent = `${TYPING}-${chat.id}`
-		const getPreviousMessages = GET_PREVIOUS_MESSAGES
 
-		socket.emit(getPreviousMessages, {chat})
 		socket.on(typingEvent, this.updateTypingInChat(chat.id))
 		socket.on(messageEvent, this.addMessageToChat(chat.id))
 	}
@@ -112,6 +111,7 @@ export default class ChatContainer extends Component{
 	sendMessage = (chatId, message)=>{
 		const {socket} = this.props
 		console.log("sendMessage to socket: " + message)
+
 		socket.emit(MESSAGE_SENT, {chatId, message})
 	}
 
