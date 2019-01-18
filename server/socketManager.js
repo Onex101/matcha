@@ -5,7 +5,7 @@ const {createUser, createMessage, createChat} = require('../client/src/Factories
 
 let connectedUsers = {}
 
-let communityChat = createChat({isCommunity: true})
+let communityChat = createChat({id: 1, isCommunity: true})
 
 let communityMessages = [
 		{
@@ -102,12 +102,13 @@ module.exports = function(socket){
 		// getUsersChat()
 		var msgArray = [];
 		var user_test = getChat('Community')
-		user_test('Community', (messages)=>{
+		user_test('Community', (results)=>{
 			// console.log(messages)
+			messages = results.body
 			messages.forEach(element => {
-				console.log(element)
+				// console.log(element)
 				var date = new Date(element.timestamp);
-				console.log(date)
+				// console.log(date)
 				var hours = date.getHours();
 				var minutes = "0" + date.getMinutes();
 				var formattedTime = hours + ':' + minutes.substr(-2);
@@ -134,6 +135,13 @@ module.exports = function(socket){
 		if(receiver in connectedUsers){
 			const receiverSocket = connectedUsers[receiver].socketId
 			if (!activeChat || activeChat.id === communityChat.id){
+				console.log('Changing chat')
+				getUsersChat(receiver, (results)=>{
+					console.log('getUsersChat results')
+					console.log(results)
+					if (results.length){
+					}
+				})
 				const newChat = createChat({name:`${receiver}&${sender}`, users:[receiver, sender]})
 				console.log(receiver)
 				console.log(connectedUsers[receiver].socketId)
@@ -207,7 +215,7 @@ function getChat(sender){
 		.expect(200)
 		.end(function(err, res) {
 			if (err) throw err;
-			else callback(res.body);
+			else callback(res);
 		});
 	}
 }

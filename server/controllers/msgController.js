@@ -22,8 +22,8 @@ exports.sendMessage = function(req, res) {
 
 exports.getConversation = function(req, res) {
 	data = req.params;
-	console.log("test")
-	console.log(data)
+	// console.log("test")
+	// console.log(data)
 	let conversation = new Conversation(data);
 	if (data.user2 == 'Community'){
 		conversation.data['id'] = 1;
@@ -39,7 +39,7 @@ exports.getConversation = function(req, res) {
 	}
 	else{
 		conversation.getByUsers(this.data.user1, this.data.user2, function (err, result){
-			console.log(result);
+			// console.log(result);
 			if (err){
 				res.send(err);
 			}
@@ -56,9 +56,9 @@ exports.getConversation = function(req, res) {
 						}
 					})
 				}
-				else{
-					res.send({fail: "no results"});
-				}
+				// else{
+				// 	res.send({fail: "no results"});
+				// }
 			}
 		})
 	}
