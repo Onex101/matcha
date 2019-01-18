@@ -16,7 +16,7 @@ Conversation.prototype.clean = function (data) {
 }
 
 Conversation.prototype.create = function (user1, user2, callback) {
-	db.query(`INSERT conversation (user1, user2) VALUES(${user1}, ${user2})`, function (err, result){
+	db.query(`INSERT conversations (user1, user2) VALUES('${user1}', '${user2}')`, function (err, result){
 		if (err){callback(err, null);}
 		else{
 			if (typeof callback === "function"){
@@ -27,13 +27,14 @@ Conversation.prototype.create = function (user1, user2, callback) {
 }
 
 Conversation.prototype.getByUsers = function (user1, user2, callback) {
-	db.query(`SELECT conversation FROM conversations WHERE (user1 = ${user1} AND user2 = ${user2}) OR (user1_id = ${id2} AND user2_id = ${id1})`, function (err, result){
+	self = this;
+	db.query(`SELECT * FROM conversations WHERE (user1 = '${user1}' AND user2 = '${user2}') OR (user1 = '${user2}' AND user2 = '${user1}')`, function (err, result){
 		if (err){
 			callback(err, null);
 		}
 		else{
-			if (!results.length)
-				Conversation.create(user1, user2, function (err, result){
+			if (!result.length)
+				self.create(user1, user2, function (err, result){
 					if (err){
 						callback(err, null);
 					}
