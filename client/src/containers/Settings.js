@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-// import { ButtonGroup, ButtonToolbar, Button, FormGroup, FormControl, ControlLabel } from "react-bootstrap";
 // import { HelpBlock, ButtonGroup, ButtonToolbar, Button, FormGroup, FormControl, ControlLabel } from "react-bootstrap";
 import { ButtonGroup, ButtonToolbar, Button, FormGroup, FormControl, ControlLabel } from "react-bootstrap";
 // import { ReactTags } from "react-tag-autocomplete";
@@ -102,7 +101,7 @@ export default class Settings extends Component {
             pic4 = temp;
 
         return(<div className="imgBar">
-                <div className="profile-thumbnail" id="profile" ref="profile">
+                <div className="profile-thumbnail" id="prof" ref="prof">
                     <div className="profile-elems">
                         <img src={profile} className='profile_thumb' alt="Profile pic"/>
                     </div>
@@ -329,8 +328,8 @@ export default class Settings extends Component {
 
                 this.setState({ pictures: newPics});
                 this.setState({ profile:  newPics[0].pic});
-                console.log("Result = ");
-                console.info(this.state.pictures);
+                // console.log("Result = ");
+                // console.info(this.state.pictures);
               })
               .catch(err => console.error(err))
               } catch (e) {
@@ -435,34 +434,7 @@ export default class Settings extends Component {
         else if (this.state.id !== null && !this.state.pictures[0]){
             this.getUserImages();
         }
-        // else {
-            // console.log("STATE: ");
-            // console.info(this.state);
-        // }
-        // <div className="previewComponent">
-                //     <ControlLabel>Upload Images</ControlLabel>
-                //     <form onSubmit={(e)=>this._handleSubmit(e)}>
-                //         <div style={style}>
-                //         <input className="fileInput" 
-                //         type="file" 
-                //         onChange={(e)=>this._handleImageChange(e)} />
-                //         <button className="submitButton" 
-                //         type="submit" 
-                //         onClick={(e)=>this._handleSubmit(e)}>Upload Image</button>
-                //         </div>
-                //     </form>
-                //     <div className="imgPreview">
-                //         {this.preview()}
-                //     </div>
-                //     <div className="imgPreview">
-                //         {this.gallery()}
-                //     </div>
-                //     <ControlLabel>Biography</ControlLabel>
-                //     <input className="fileInput" 
-                //         type="file" 
-                //         onChange={(e)=>this._handleImageChange(e)} />
-                // </div>
-        return (this.props.userInfo ? <div className="settings">
+        return (this.state.id ? <div className="settings">
                 <ControlLabel>Settings</ControlLabel>
                 <ul className="form-fields">
                     <FormGroup bsSize="large">

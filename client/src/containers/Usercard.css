@@ -46,7 +46,7 @@ body {
     padding: 20px 30px;
     font-family: Calibri;
   }
-  .avatar {
+  #settings .avatar {
     display: inline;
     float: left;
     overflow: hidden;
