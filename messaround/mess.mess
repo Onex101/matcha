@@ -10,3 +10,4 @@ RIGHT JOIN users ON user_interests.user_id = users.id
 LEFT JOIN interests ON user_interests.interest_id = interests.id 
 LEFT JOIN likes ON users.id = user2_id WHERE likes.link_code IS NULL) x 
 WHERE NOT id = 115 GROUP BY user_name, id ORDER BY id;
+asdfg;ldfkg;lk

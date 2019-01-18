@@ -105,8 +105,6 @@ export default class Settings extends Component {
                 <div className="profile-thumbnail" id="profile" ref="profile">
                     <div className="profile-elems">
                         <img src={profile} className='profile_thumb' alt="Profile pic"/>
-                        {/* {this.state.profile ? <img src={this.state.profile} className='profile_thumb' alt="Profile pic"/>
-                                            : <img src={temp} className='profile_thumb' alt="Profile pic"/>} */}
                     </div>
                     <Button
                         bsSize="large"
@@ -197,17 +195,44 @@ export default class Settings extends Component {
     // Handles Change of user's images
     handleImgChange(param, e) {
         e.preventDefault();
-        if (param === 'profile')
+        var newPics;
+        if (param === 'profile') {
             this.setState({profile: this.state.imagePreviewUrl});
-        else if (param === 'img1')
-            this.setState({pic1: this.state.imagePreviewUrl});
-        else if (param === 'img2')
-            this.setState({pic2: this.state.imagePreviewUrl});
-        else if (param === 'img3')
-            this.setState({pic3: this.state.imagePreviewUrl});
-        else if (param === 'img4')
-            this.setState({pic4: this.state.imagePreviewUrl});
-      }
+            newPics = this.state.pictures;
+            newPics[0].pic = this.state.imagePreviewUrl;
+            console.log("New pics: ")
+            console.info(newPics)
+            this.setState({pictures: newPics});
+        }
+        else if (param === 'img1'){
+            newPics = this.state.pictures;
+            newPics[1].pic = this.state.imagePreviewUrl;
+            console.log("New pics: ")
+            console.info(newPics)
+            this.setState({pictures: newPics});
+        }
+        else if (param === 'img2'){
+            newPics = this.state.pictures;
+            newPics[2].pic = this.state.imagePreviewUrl;
+            console.log("New pics: ")
+            console.info(newPics)
+            this.setState({pictures: newPics});
+        }
+        else if (param === 'img3'){
+            newPics = this.state.pictures;
+            newPics[3].pic = this.state.imagePreviewUrl;
+            console.log("New pics: ")
+            console.info(newPics)
+            this.setState({pictures: newPics});
+        }
+        else if (param === 'img4'){
+            newPics = this.state.pictures;
+            newPics[4].pic = this.state.imagePreviewUrl;
+            console.log("New pics: ")
+            console.info(newPics)
+            this.setState({pictures: newPics});
+        }
+    }
 
     // Handle Delete of Tag
     handleDelete (i) {
@@ -240,19 +265,37 @@ export default class Settings extends Component {
     
     // Updates user info
     updateInfo(){
-        
+        // const user = this.state;
+        // // fetch(`/products/add?name=${product.name}&price=${product.price}`)
+        // // .then(response => response.json())
+        // fetch(`/user/create`, {
+        //   method: "POST",
+        //   headers: {
+        //       "Content-Type": "application/json; charset=utf-8",
+        //   },
+        //   body: JSON.stringify({
+        //     first_name: user.first_name,
+        //     last_name: user.last_name,
+        //     user_name:  user.user_name,
+        //     email:      user.email,
+        //     password:   user.password,
+        //     birth_date:  user.birth_date,
+        //     gender:     this.state.gender || '0.5',
+        //     pref:       this.state.pref || '0.5',
+        //     gps_lat:    this.state.gps_lat,
+		//     gps_lon:    this.state.gps_lon
+        //   })
+        // })
+        // // .then(this.getUsers)
+        // .catch(err => console.error(err))
     }
 
     // Gets user images
     getUserImages(){
-        // console.log("Getting images 1")
-        // console.info(this.state.pictures[0])
-        // if (this.state.id && this.state.pictures === null){
         if (localStorage.getItem('id') && !this.state.pictures[0]){
-            // console.log("Getting images 2")
             try {
-            //   fetch('/image/' + localStorage.getItem('id'), {
-                fetch('/image/' + '101', {
+              fetch('/image/' + localStorage.getItem('id'), {
+                // fetch('/images/' + '101', {
                 method: "GET",
                 headers: {
                   "Content-Type": "application/json; charset=utf-8",
@@ -260,22 +303,34 @@ export default class Settings extends Component {
               })
               .then(response => response.json())
               .then((responseJSON) => {
-                  console.log("RESPONSE")
-                  console.info(responseJSON)
-                  var pic1 = responseJSON[0] ? responseJSON[0].pic : null;
-                  var pic2 = responseJSON[1] ? responseJSON[1].pic : null;
-                  var pic3 = responseJSON[2] ? responseJSON[2].pic : null;
-                  var pic4 = responseJSON[3] ? responseJSON[3].pic : null;
-                  var pic5 = responseJSON[4] ?  responseJSON[4].pic : null;
-                  var newPics = [{ id: 0, pic: pic1 },
-                                    { id: 1, pic: pic2 },
-                                    { id: 2, pic: pic3 },
-                                    { id: 3, pic: pic4 },
-                                    { id: 4, pic: pic5 }]
+
+                  var pic1 = responseJSON[0] ? responseJSON[0] : null;
+                  var pic2 = responseJSON[1] ? responseJSON[1] : null;
+                  var pic3 = responseJSON[2] ? responseJSON[2] : null;
+                  var pic4 = responseJSON[3] ? responseJSON[3] : null;
+                  var pic5 = responseJSON[4] ?  responseJSON[4] : null;
+
+                var newPics = [{ id: null, pic: null },
+                                    { id: null, pic: null },
+                                    { id: null, pic: null },
+                                    { id: null, pic: null },
+                                    { id: null, pic: null }];
+                
+                newPics[0].id = pic1 ? pic1.id : null;
+                newPics[0].pic = pic1 ? pic1.pic : null;
+                newPics[1].id = pic2 ? pic2.id : null;
+                newPics[1].pic = pic2 ? pic2.pic : null;
+                newPics[2].id = pic3 ? pic3.id : null;
+                newPics[2].pic = pic3 ? pic3.pic : null;
+                newPics[3].id = pic4 ? pic4.id : null;
+                newPics[3].pic = pic4 ? pic4.pic : null;
+                newPics[4].id = pic5 ? pic5.id : null;
+                newPics[4].pic = pic5 ? pic5.pic : null;
+
                 this.setState({ pictures: newPics});
-                this.setState({ profile: pic1});
-                // console.log("Result = ");
-                // console.info(this.state.pictures);
+                this.setState({ profile:  newPics[0].pic});
+                console.log("Result = ");
+                console.info(this.state.pictures);
               })
               .catch(err => console.error(err))
               } catch (e) {
@@ -286,29 +341,53 @@ export default class Settings extends Component {
 
     // Updates user images
     updateImages(){
-        const user = this.props.fieldValues;
-        // fetch(`/products/add?name=${product.name}&price=${product.price}`)
-        // .then(response => response.json())
-        fetch(`/user/create`, {
-          method: "POST",
-          headers: {
-              "Content-Type": "application/json; charset=utf-8",
-          },
-          body: JSON.stringify({
-            first_name: user.first_name,
-            last_name: user.last_name,
-            user_name:  user.user_name,
-            email:      user.email,
-            password:   user.password,
-            birth_date:  user.birth_date,
-            gender:     this.state.gender || '0.5',
-            pref:       this.state.pref || '0.5',
-            gps_lat:    this.state.gps_lat,
-		    gps_lon:    this.state.gps_lon
-          })
-        })
-        // .then(this.getUsers)
-        .catch(err => console.error(err))
+        const pics = this.state.pictures;
+        var user_id;
+        if (this.state.id)
+            user_id = this.state.id;
+        for (var i = 0; i < pics.length; i++) { 
+            if (pics[i].id === null && pics[i].pic) {
+                console.log("Making new image");
+                //Send new image and user id
+                fetch(`/image/create`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json; charset=utf-8",
+                    },
+                    body: JSON.stringify({
+                      user_id: user_id,
+                    //   pic: pics[i].pic,
+                      data: pics[i].pic
+                    })
+                  })
+                  // .then(this.getUsers)
+                  .catch(err => console.error(err))
+            }
+            else if (pics[i].id !== null && pics[i].pic) {
+                console.log("Replacing old image");
+                //Send replace image
+                fetch('/image/replace/', {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json; charset=utf-8",
+                    },
+                    body: JSON.stringify({
+                        id: pics[i].id,
+                      user_id: user_id,
+                      // pic: pics[i].pic,
+                        data: pics[i].pic
+                    })
+                  })
+                  // .then(this.getUsers)
+                  .catch(err => console.error(err))
+            }
+        }
+    }
+
+    saveChanges(e) {
+        e.preventDefault();
+        this.updateImages();
+        this.updateInfo();
     }
 
     // Stops the auto focus on the tags
@@ -357,8 +436,8 @@ export default class Settings extends Component {
             this.getUserImages();
         }
         // else {
-            console.log("STATE: ");
-            console.info(this.state);
+            // console.log("STATE: ");
+            // console.info(this.state);
         // }
         // <div className="previewComponent">
                 //     <ControlLabel>Upload Images</ControlLabel>
@@ -484,7 +563,8 @@ export default class Settings extends Component {
                                 bsSize="large"
                                 className="submit_btn"
                                 // disabled={!this.validateForm()}
-                                // onClick={this.saveAndContinue}
+                                onClick={(e)=>this.saveChanges(e)}
+                                // onClick={this.saveChanges}
                             >Save Changes</Button>
                         </ButtonGroup>
                     </ButtonToolbar>

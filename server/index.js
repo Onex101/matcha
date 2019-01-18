@@ -11,11 +11,13 @@ io.on('connection', socketManager);
 // var server = require('http').Server(app);
 // const io = require('socket.io')(server);
 const cors = require('cors');
-const bodyParser = require('body-parser');
 var userRoutes = require('./routes/userRoutes.js');
 var imgRoutes = require('./routes/imageRoutes.js');
 var msgRoutes = require('./routes/messageRoutes.js');
 
+var bodyParser = require('body-parser');
+app.use(bodyParser.json({limit: "10mb"}));
+app.use(bodyParser.urlencoded({limit: "10mb", extended: true, parameterLimit:10000}));
 app.use(bodyParser.json());
 app.use(cors());
 

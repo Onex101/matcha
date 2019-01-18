@@ -43,22 +43,23 @@ Image.prototype.deletePic = function (id, callback){
 //saves the given picture, if after adding the picture more than 5 images exist for this user the oldest, non profile pic will be deleted
 //add warning to let user know about this action
 Image.prototype.savePic = function (callback){
-	db.query(`INSERT INTO pictures(pic, user_id) VALUES('${this.data.pic}', ${this.data.id})`, function (err, results) {
+	// console.log(this.data);
+	db.query(`INSERT INTO pictures(pic, user_id) VALUES('${this.data.data}', ${this.data.user_id})`, function (err, results) {
 		if (err){
 			callback(err, null);
 		}
 		else{
-			db.query(`DELETE pictures FROM pictures LEFT JOIN users ON pictures.id = users.profile_pic_id
-			WHERE pictures.user_id = ${this.data.user_id} AND pictures.id NOT IN
-			(SELECT id FROM( SELECT id FROM pictures WHERE user_id = ${this.data.user_id} ORDER BY id DESC LIMIT 4) x ) 
-			AND user_name IS NULL`, function (err, results) {
-				if (err){
-					callback(err, null);
-				}
-				else{
+			// db.query(`DELETE pictures FROM pictures LEFT JOIN users ON pictures.id = users.profile_pic_id
+			// WHERE pictures.user_id = ${this.data.user_id} AND pictures.id NOT IN
+			// (SELECT id FROM( SELECT id FROM pictures WHERE user_id = ${this.data.user_id} ORDER BY id DESC LIMIT 4) x ) 
+			// AND user_name IS NULL`, function (err, results) {
+			// 	if (err){
+			// 		callback(err, null);
+			// 	}
+			// 	else{
 					callback(null, results);
-				}
-			})
+				// }
+			// })
 		}
 	})
 }
@@ -79,7 +80,7 @@ Image.prototype.getProfilePic = function (user_name, callback){
 //returns base64 value of picture of the given pic_id
 Image.prototype.getPicById = function (id, callback){
 	id = mysql.escape(id);
-	db.query(`SELECT id, pic FROM pictures WHERE id = ${id}`, function (err, results) {
+	db.query(`SELECT id, pic FROM pictures WHERE user_id = ${id}`, function (err, results) {
 		if (err)
 			callback(err, null);
 		else
@@ -97,7 +98,8 @@ Image.prototype.setProfilePic = function (user_name, pic_id, callback){
 }
 
 Image.prototype.replacePic = function(callback){
-	db.query(`UPDATE pictures SET pic = ${this.data.pic} WHERE id = '${this.data.id}'`, function (err, results) {
+	console.log(this.data)
+	db.query(`UPDATE pictures SET pic = '${this.data.data}' WHERE id = '${this.data.id}'`, function (err, results) {
 		if (err){callback(err, null);}
 		else{
 				"Success";			}
