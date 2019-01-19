@@ -105,8 +105,8 @@ class App extends Component {
     const session = localStorage.getItem('user');
 
     if (session != null){
-      // console.log("Getting username = " + session);
-    }
+      console.log("Getting username = " + session);
+    
     return(<Navbar.Collapse><Nav pullRight>
             <Fragment>
               <LinkContainer to="/Chat">
@@ -128,6 +128,7 @@ class App extends Component {
           </Nav>
           </Navbar.Collapse>
     )
+    }
   }
 
   searchCheck(){
