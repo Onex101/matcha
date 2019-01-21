@@ -28,8 +28,8 @@ export default class ControlledTabs extends React.Component {
     }
 
     componentDidMount(){
-        if (this.props.userInfo && this.props.userInfo.id && this.state.id === null)
-            this.setState({id: this.props.userInfo.id});
+        // if (this.props.userInfo && this.props.userInfo.id && this.state.id === null)
+        //     this.setState({id: this.props.userInfo.id});
         if (this.props.userInfo && this.props.userInfo.profile){
             this.setState({key: 1});
         }
@@ -39,8 +39,8 @@ export default class ControlledTabs extends React.Component {
     }
 
     componentDidUpdate(){
-        if (this.props.userInfo && this.props.userInfo.id && this.state.id === null)
-            this.setState({id: this.props.userInfo.id});
+        // if (this.props.userInfo && this.props.userInfo.id && this.state.id === null)
+        //     this.setState({id: this.props.userInfo.id});
         if (this.state.key === null) {
             if (this.props.userInfo && this.props.userInfo.profile){
                 this.setState({key: 1});
@@ -50,13 +50,23 @@ export default class ControlledTabs extends React.Component {
             }
         }
     }
-    
+
+    componentWillReceiveProps(nextProps) {
+        console.log("SDFKJHDSKFJHSDKJFHSDKFH: ", nextProps)
+        this.setState({id: nextProps.userInfo.id})
+    }
   
     render() {
         const validity = this.checkValidUser();
         // var childProps = this.props;
-        console.log("STATE ID TEST: " + this.props.userInfo);
-        return(this.state.id ?
+        if (this.props.userInfo){
+            console.log("STATE ID TEST: ");
+            console.info(this.state.id);
+            // console.log(JSON.stringify(this.props.userInfo.data));
+        }
+        else
+            console.log("STATE ID TEST: NO PROPS");
+        return(this.props.userInfo && this.props.userInfo.id ?
             // return (this.state.key ?
                 <Tabs activeKey={this.state.key}
                             onSelect={this.handleSelect}
@@ -74,7 +84,7 @@ export default class ControlledTabs extends React.Component {
                             : <Tab eventKey={1} title="Profile" disabled ></Tab>}
                 {validity === true ? <Tab eventKey={2} title="Likes"></Tab>
                 :<Tab eventKey={2} title="Likes" disabled></Tab>}
-                {this.state.id == localStorage.getItem('id') ? 
+                {this.props.userInfo && this.props.userInfo.id == localStorage.getItem('id') ? 
                     <Tab eventKey={3} title="Settings">
                         <Settings isAuthenticated = {this.props.isAuthenticated}
                             userHasAuthenticated  = {this.props.userHasAuthenticated}
