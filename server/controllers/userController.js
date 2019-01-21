@@ -137,7 +137,13 @@ exports.user_update_get = function(req, res) {
 
 // Handle User update on POST.
 exports.user_update_post = function(req, res) {
-	res.send('NOT IMPLEMENTED: User update POST');
+	let user = new User(req.body);
+	user.update_data(user.data.bio, user.data.gender, user.data.pref, user.data.id, function (err, results){
+		if(err){res.send(err)}
+		else{
+			res.send("Update sucessfull");
+		}
+	})
 };
 
 // Verify User

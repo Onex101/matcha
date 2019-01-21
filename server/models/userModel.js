@@ -437,4 +437,16 @@ User.prototype.fetchInterestsList = function (callback){
 	})
 }
 
+User.prototype.update_data = function (bio, gender, pref, id, callback){
+	var query = `UPDATE users SET bio = '${bio}', gender = '${gender}', pref = '${pref}' WHERE id = '${id}'`;
+	db.query(query , function (err, results) {
+		if (err){
+			callback(err, null);
+		}
+		else{
+			callback(null, results);
+		}
+	})
+}
+
 module.exports = User;

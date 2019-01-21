@@ -56,7 +56,7 @@ export default class ControlledTabs extends React.Component {
                         : <Tab eventKey={1} title="Profile" disabled ></Tab>}
             {validity === true ? <Tab eventKey={2} title="Likes"></Tab>
             :<Tab eventKey={2} title="Likes" disabled></Tab>}
-            {this.props.userInfo.id == localStorage.getItem('id') ? 
+            {/* {this.props.userInfo.id == localStorage.getItem('id') ?  */}
                 <Tab eventKey={3} title="Settings">
                     <Settings isAuthenticated = {this.props.isAuthenticated}
                         userHasAuthenticated  = {this.props.userHasAuthenticated}
@@ -64,7 +64,8 @@ export default class ControlledTabs extends React.Component {
                         userProfile = {this.props.userProfile}
                         userMatches = {this.props.userMatches}
                         setUser = {this.props.setUser} />
-                </Tab>:null}
+                </Tab>
+                {/* :null} */}
             </Tabs>
         :<ControlLabel> Loading ... </ControlLabel>);
         }

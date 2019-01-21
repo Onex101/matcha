@@ -23,7 +23,7 @@ router.post('/user/:id/delete', user_controller.user_delete_post);
 // GET request to update user.
 router.get('/user/:id/update', user_controller.user_update_get);
 
-// POST request to update user.
+// POST request to update user. User object must contain: id, bio, gender, pref
 router.post('/user/:id/update', user_controller.user_update_post);
 
 // GET request for one user. - working
