@@ -111,7 +111,6 @@ Image.prototype.addNewProfilePic = function(callback){
 	db.query(`INSERT INTO pictures(pic, user_id) VALUES('${self.data}', ${self.user_id})`, function (err, results) {
 		if (err){callback(err, null);}
 		else{
-			console.log(self);
 			db.query(`UPDATE users SET profile_pic_id = (SELECT id FROM pictures WHERE pic = '${self.data}' LIMIT 1) WHERE id = '${self.user_id}'`, function (err, results) {
 				if (err){callback(err, null);}
 				else{
