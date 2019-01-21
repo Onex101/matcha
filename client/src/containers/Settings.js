@@ -429,8 +429,8 @@ export default class Settings extends Component {
     }
 
     render() {
-        // console.log("SETTINGS TEST:");
-        // console.info(this.props.userInfo)
+        console.log("SETTINGS TEST:");
+        console.info(this.props)
         if (this.state.id === null && this.props.userInfo !== null && this.props.userInfo.id !== null){
             // if (this.props.userInfo && this.state.id === null){
             this.getInfo();
