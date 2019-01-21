@@ -352,8 +352,25 @@ export default class Settings extends Component {
         if (this.state.id)
             user_id = this.state.id;
         for (var i = 0; i < pics.length; i++) { 
-            if (i == 0 && pics[i].pic) {
+            if (i == 0 && pics[i].id === null && pics[i].pic) {
+                //profile pic new
+                fetch(`/image/ProfilePic/new`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json; charset=utf-8",
+                    },
+                    body: JSON.stringify({
+                      user_id: user_id,
+                    //   pic: pics[i].pic,
+                      data: pics[i].pic
+                    })
+                  })
+                  // .then(this.getUsers)
+                  .catch(err => console.error(err))
             }
+            // else if (i == 0 && pics[i].id !== null && pics[i].pic) {
+            //     //Replace profile
+            // }
             if (pics[i].id === null && pics[i].pic) {
                 console.log("Making new image");
                 //Send new image and user id
