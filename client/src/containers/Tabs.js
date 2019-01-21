@@ -45,12 +45,14 @@ export default class ControlledTabs extends React.Component {
                         id="controlled-tab-example" >
 
             {validity === true ?
-                        <Tab eventKey={1} title="Profile" ><Profile isAuthenticated = {this.props.isAuthenticated}
-                                                            userHasAuthenticated  = {this.props.userHasAuthenticated}
-                                                            userInfo = {this.props.userInfo}
-                                                            userProfile = {this.props.userProfile}
-                                                            userMatches = {this.props.userMatches}
-                                                            setUser = {this.props.setUser} /></Tab>
+                        <Tab eventKey={1} title="Profile" >
+                            <Profile isAuthenticated = {this.props.isAuthenticated}
+                                userHasAuthenticated  = {this.props.userHasAuthenticated}
+                                userInfo = {this.props.userInfo}
+                                userProfile = {this.props.userProfile}
+                                userMatches = {this.props.userMatches}
+                                setUser = {this.props.setUser} />
+                        </Tab>
                         : <Tab eventKey={1} title="Profile" disabled ></Tab>}
             {validity === true ? <Tab eventKey={2} title="Likes"></Tab>
             :<Tab eventKey={2} title="Likes" disabled></Tab>}

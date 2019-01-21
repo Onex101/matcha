@@ -246,6 +246,7 @@ export default class Settings extends Component {
     
     // Handle Addition of Tag to user profile
     handleAddition (tag) {
+        tag.name = tag.name.toLowerCase();
         if (this.state.tags.length < 10){
         const tags = [].concat(this.state.tags, tag)
         this.setState({ tags })}
@@ -260,7 +261,7 @@ export default class Settings extends Component {
             gps_lat: this.props.userInfo.gps_lat,
             gps_lon: this.props.userInfo.gps_lon,
             profile: this.props.userInfo.pic,
-            tags: this.props.userInfo.interests,
+            tags: this.props.userInfo.interests || [],
              });
         // console.log("STATE: ");
         // console.info(this.state);
@@ -376,7 +377,7 @@ export default class Settings extends Component {
                     },
                     body: JSON.stringify({
                         id: pics[i].id,
-                      user_id: user_id,
+                        user_id: user_id,
                       // pic: pics[i].pic,
                         data: pics[i].pic
                     })
@@ -403,42 +404,62 @@ export default class Settings extends Component {
             window.scrollTo(0, 0);
           }
         if (this.state.id === null && this.props.userInfo !== null && this.props.userInfo.id !== null){
-            console.log("If for you! 1 user");
-            console.log("UPDATE TEST PROPS:");
-            console.info(this.props.userInfo);
+            // console.log("If for you! 1 user");
+            // console.log("UPDATE TEST PROPS:");
+            // console.info(this.props.userInfo);
             // console.log("UPDATE TEST STATE:");
             // console.info(this.state)
             this.getInfo();
         } else {
-            console.log("No user if for you! 1");
-            console.log("STATE: ");
-            console.info(this.state);
+            // console.log("No user if for you! 1");
+            // console.log("STATE: ");
+            // console.info(this.state);
         }
         if (this.state.id !== null && !this.state.pictures[0]){
-            console.log("If for you! 1 image");
+            // console.log("If for you! 1 image");
             //get pictures
             this.getUserImages();
             // console.log("STATE: ");
             // console.info(this.state);
         }
         else {
-            console.log("No image if for you! 1");
-            console.log("STATE: ");
-            console.info(this.state);
+            // console.log("No image if for you! 1");
+            // console.log("STATE: ");
+            // console.info(this.state);
         }
     }
 
+    renderTags() {
+        // if (this.state.tags && this.state.tags[0])
+        // {
+            return (<ReactTags
+                allowNew = {true}
+                autofocus={false}
+                placeholder = 'Add new/existing tag'
+                tags={this.state.tags}
+                // inputAttributes= {{onKeyUp:"return forceLower(this)"}} 
+                suggestions={this.state.suggestions}
+                handleDelete={this.handleDelete.bind(this)}
+                handleAddition={this.handleAddition.bind(this)} />)
+        // }
+        // else {
+        //     return (<ReactTags
+        //         allowNew = {true}
+        //         autofocus={false}
+        //         placeholder = 'Add new/existing tag'
+        //         // inputAttributes= {{onKeyUp:"return forceLower(this)"}} 
+        //         suggestions={this.state.suggestions}
+        //         handleDelete={this.handleDelete.bind(this)}
+        //         handleAddition={this.handleAddition.bind(this)} />)
+        // }
+    }
+
     render() {
-        console.log("SETTINGS TEST:");
-        console.info(this.props)
-        if (this.state.id === null && this.props.userInfo !== null && this.props.userInfo.id !== null){
-            // if (this.props.userInfo && this.state.id === null){
-            this.getInfo();
-        }
-        else if (this.state.id !== null && !this.state.pictures[0]){
+        if (this.state.id !== null && !this.state.pictures[0]){
             this.getUserImages();
         }
-        return (this.state.id ? <div className="settings">
+        return (this.state.id ? 
+                <div className="settings">
                 <ControlLabel>Settings</ControlLabel>
                 <ul className="form-fields">
                     <FormGroup bsSize="large">
@@ -499,26 +520,10 @@ export default class Settings extends Component {
                             <img src={male} alt="Male" />
                         </div>
                     </FormGroup>
-                    <FormGroup controlId="pref" bsSize="small">
+                    <FormGroup controlId="tags" bsSize="small">
                         <ControlLabel>Your 10 Tags</ControlLabel>
                         <br/>
-                        {this.state.tags ? <ReactTags
-                            allowNew = {true}
-                            autofocus={false}
-                            placeholder = 'Add new/existing tag'
-                            tags={this.state.tags}
-                            // inputAttributes= {{onKeyUp:"return forceLower(this)"}} 
-                            suggestions={this.state.suggestions}
-                            handleDelete={this.handleDelete.bind(this)}
-                            handleAddition={this.handleAddition.bind(this)} />
-                            : <ReactTags
-                            allowNew = {true}
-                            autofocus={false}
-                            placeholder = 'Add new/existing tag'
-                            // inputAttributes= {{onKeyUp:"return forceLower(this)"}} 
-                            suggestions={this.state.suggestions}
-                            handleDelete={this.handleDelete.bind(this)}
-                            handleAddition={this.handleAddition.bind(this)} />}
+                        {this.renderTags()}
                     </FormGroup>
                     <br/>
                     <ButtonToolbar>

@@ -203,20 +203,22 @@ export default class Profile extends Component {
             
             <div className="bottom">
                 <hr /><br/>
-                <div className="left">
-                    <h4>Bio</h4>
-                    {info.bio ? <div>{info.bio}</div> : <div></div>}
+                {/* <div className="left"> */}
+                {info.bio != "null" ? <div><h4>Bio</h4>
+                                        {info.bio}</div> : null}
                     <h4>Tags</h4>
-                </div>
-                <div className="right">
-                    <h4>Likes</h4>
-                </div>
+                {/* </div> */}
+                {/* <div className="right"> */}
+                    {/* <h4>Likes</h4> */}
+                {/* </div> */}
             </div>
-            <div className="choices">
-                <img src={x} alt="Dislike" className="dislike" onClick={(e) => this.dislike(e)}/>
-                <img src={heart} alt="Like" className="like" onClick={(e) => this.like(e)} />
-                <img src={x} alt="Report" className="report" onClick={(e) => this.like(e)} />
-            </div>
+            {this.props.userInfo.id != localStorage.getItem('id') ? 
+                <div className="choices">
+                    <img src={x} alt="Dislike" className="dislike" onClick={(e) => this.dislike(e)}/>
+                    <img src={heart} alt="Like" className="like" onClick={(e) => this.like(e)} />
+                    <img src={x} alt="Report" className="report" onClick={(e) => this.like(e)} />
+                </div>
+                : null}
             {/* {this.mainPanel(this.props.props)} */}
           </div>
           : <ControlLabel> Loading ... </ControlLabel>
