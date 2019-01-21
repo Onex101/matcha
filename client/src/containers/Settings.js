@@ -354,6 +354,7 @@ export default class Settings extends Component {
         for (var i = 0; i < pics.length; i++) { 
             if (i == 0 && pics[i].id === null && pics[i].pic) {
                 //profile pic new
+                console.log("HERE");
                 fetch(`/image/ProfilePic/new`, {
                     method: "POST",
                     headers: {
