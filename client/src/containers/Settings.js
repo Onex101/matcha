@@ -17,6 +17,7 @@ export default class Settings extends Component {
             file: '',
             imagePreviewUrl: '',
             profile: null,
+            profile_id: null,
             pictures: [],
             bio: null,
             gender: null,
@@ -260,6 +261,7 @@ export default class Settings extends Component {
             bio: this.props.userInfo.bio,
             gps_lat: this.props.userInfo.gps_lat,
             gps_lon: this.props.userInfo.gps_lon,
+            profile_id: this.props.userInfo.profile_pic_id,
             profile: this.props.userInfo.pic,
             tags: this.props.userInfo.interests || [],
              });
@@ -350,6 +352,8 @@ export default class Settings extends Component {
         if (this.state.id)
             user_id = this.state.id;
         for (var i = 0; i < pics.length; i++) { 
+            if (i == 0 && pics[i].pic) {
+            }
             if (pics[i].id === null && pics[i].pic) {
                 console.log("Making new image");
                 //Send new image and user id
@@ -419,8 +423,25 @@ export default class Settings extends Component {
             // console.log("If for you! 1 image");
             //get pictures
             this.getUserImages();
-            // console.log("STATE: ");
-            // console.info(this.state);
+            if (this.state.profile_id === null && this.state.profile !== null) {
+                // update profile route
+                // /image/setProfilePic/:user_name/:pic_id
+                try {
+                    fetch(`/image/` + this.state.user_name + `/` + this.state.pictures[0].id, {
+                        method: "GET",
+                        headers: {
+                            "Content-Type": "application/json; charset=utf-8",
+                        },
+                    })
+                    .then(response => response.json())
+                    .then((responseJSON) => {
+
+                    })
+                    .catch(err => console.error(err))
+                } catch (e) {
+                    alert(e.message);
+                }
+            }
         }
         else {
             // console.log("No image if for you! 1");
@@ -455,9 +476,11 @@ export default class Settings extends Component {
     }
 
     render() {
-        if (this.state.id !== null && !this.state.pictures[0]){
-            this.getUserImages();
-        }
+        console.log("PROPS")
+        console.info(this.props.userInfo)
+        // if (this.state.id !== null && !this.state.pictures[0]){
+        //     this.getUserImages();
+        // }
         return (this.state.id ? 
                 <div className="settings">
                 <ControlLabel>Settings</ControlLabel>
