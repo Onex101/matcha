@@ -5,6 +5,7 @@ import NotFound from "./containers/NotFound";
 import Login from "./containers/Login";
 import Signup from "./containers/Signup";
 import Settings from "./containers/Settings";
+import Profile from "./containers/Profile";
 import Chat from "./containers/Chat";
 
 import AppliedRoute from "./components/AppliedRoute";
@@ -16,6 +17,7 @@ export default ({ childProps }) =>
     <AppliedRoute path="/login" exact component={Login} props={childProps} />
     <AppliedRoute path="/signup" exact component={Signup} props={childProps} />
     <AppliedRoute path="/settings" exact component={Settings} props={childProps} />
+    {/* <AppliedRoute path="/settings" exact component={Profile} props={childProps} /> */}
     {/* {console.log("test: " + JSON.stringify(childProps))} */}
 	  <AppliedRoute path="/chat" exact component={Chat} props={childProps} />
     { /* Finally, catch all unmatched routes */ }

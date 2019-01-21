@@ -42,7 +42,7 @@ exports.images_fetch_get = function(req, res){
 	user_id = req.params.user_id;
 	let image = new Image('')
 	image.getAllPics(user_id, function(err, result){
-		console.log(result);
+		// console.log(result);
 		if (err){
 			res.send({
 						error: 'failed to get pics',
@@ -117,7 +117,7 @@ exports.profile_image_set = function(req, res){
 
 exports.image_replace = function(req, res){
 	data = req.body;
-	console.log(data)
+	// console.log(data)
 	let image = new Image(data);
 	image.replacePic(function (err, result){
 		if (err){
