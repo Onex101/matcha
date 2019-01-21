@@ -106,4 +106,18 @@ Image.prototype.replacePic = function(callback){
 		})
 }
 
+Image.prototype.addNewProfilePic = function(callback){
+	db.query(`INSERT INTO pictures(pic, user_id) VALUES('${this.data.data}', ${this.data.user_id})`, function (err, results) {
+		if (err){callback(err, null);}
+		else{
+			db.query(`UPDATE users SET profile_pic_id = (SELECT id FROM pictures WHERE pic = '${this.data.data}' LIMIT 1)x WHERE id = '${this.data.user_id}'`, function (err, results) {
+				if (err){callback(err, null);}
+				else{
+						"Success";
+				}
+			})
+		}
+	})
+}
+
 module.exports = Image;

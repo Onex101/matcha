@@ -115,6 +115,18 @@ exports.profile_image_set = function(req, res){
 	})
 }
 
+exports.new_profile_pic = function(req,res){
+	data = req.body;
+	let image = new Image(data);
+	user_name = req.body.user_name;
+	image.addNewProfilePic(function (err,result){
+		if(err){res.send(err)}
+		else{
+			res.send("Done");
+		}
+	})
+}
+
 exports.image_replace = function(req, res){
 	data = req.body;
 	// console.log(data)
