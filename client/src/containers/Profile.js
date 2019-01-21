@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import "./Profile.css";
 import heart from './imgs/heart.png';
 import x from './imgs/x.png';
-import Modal from 'react-responsive-modal';
+// import Modal from 'react-responsive-modal';
 import {ControlLabel } from "react-bootstrap";
 import temp from './imgs/profile-placeholder.png';
 import female from './imgs/female_logo/favicon-32x32.png';
@@ -116,6 +116,8 @@ export default class Profile extends Component {
     }
 
     componentDidMount() {
+        console.log("Profile INFO 1: " +JSON.stringify(this.props.userInfo))
+        
         if (this.props.userInfo && this.props.userInfo.id && !this.state.id){
             this.getInfo();
             //get more info
@@ -124,6 +126,8 @@ export default class Profile extends Component {
     }
 
     componentDidUpdate() {
+        console.log("Profile INFO 2: " +JSON.stringify(this.props.userInfo))
+        
         if (this.props.userInfo && this.props.userInfo.id && !this.state.id){
             this.getInfo();
             //get more info
@@ -135,10 +139,12 @@ export default class Profile extends Component {
         // console.log("INFO 2:");
         // console.info(this.props.props)
         const info = this.state;
-        console.log("INFO: " +JSON.stringify(this.props.userInfo))
+        // console.log("Profile INFO: " +JSON.stringify(this.props.userInfo))
         var width=150
         var height=150
-        return (this.props.userInfo && this.props.userInfo.id && this.state.id && this.state.pictures[0] ?
+        return (
+            this.state.id  && this.state.pictures[0]?
+            // this.props.userInfo && this.props.userInfo.id && this.state.id && this.state.pictures[0] ?
           <div id="profile">
             <div className="top">
                 <div className="left">
@@ -212,7 +218,7 @@ export default class Profile extends Component {
                     {/* <h4>Likes</h4> */}
                 {/* </div> */}
             </div>
-            {this.props.userInfo.id != localStorage.getItem('id') ? 
+            {this.props.userInfo.id !== localStorage.getItem('id') ? 
                 <div className="choices">
                     <img src={x} alt="Dislike" className="dislike" onClick={(e) => this.dislike(e)}/>
                     <img src={heart} alt="Like" className="like" onClick={(e) => this.like(e)} />

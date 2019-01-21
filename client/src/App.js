@@ -40,7 +40,7 @@ class App extends Component {
         .then(response => response.json())
         .then((responseJSON) => {
           this.setState({ userInfo: responseJSON["data"] });
-        //   console.log("User = " + JSON.stringify(this.state.userInfo));
+          console.log("User = " + JSON.stringify(this.state.userInfo));
         })
         .catch(err => console.error(err))
         } catch (e) {

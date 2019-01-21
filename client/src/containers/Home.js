@@ -88,7 +88,9 @@ export default class Home extends Component {
     if (this.state.matches !== null) {
       var rows = [];
       for (var elem in this.state.matches) {
-          rows.push(<Usercard props={this.state.matches[elem].data} key={elem}/>);
+          rows.push(<Usercard  userInfo = {this.state.matches[elem].data}
+                key={elem}
+                pic = {this.state.matches[elem].pic} />);
       }
       return <div>{rows}</div>;
     }

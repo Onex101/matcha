@@ -4,6 +4,7 @@ import heart from './imgs/heart.png';
 import x from './imgs/x.png';
 import Modal from 'react-responsive-modal';
 import Profile from "../containers/Profile";
+import ControlledTabs from "./Tabs";
 
 export default class Usercard extends Component {
     constructor(props) {
@@ -32,7 +33,7 @@ export default class Usercard extends Component {
         if (!image) return null;
         return (
          <div className="avatar" style={style}>
-               <img src={this.props.props.pic} /> 
+               <img src={image} /> 
           </div>
         );
     }
@@ -69,12 +70,12 @@ export default class Usercard extends Component {
          <div>
             <div className="top">
                 {this.avatar(info.pic, width, height)}
-        <div className="username"><br/><h1 onClick={this.onOpenModal}>{info.user_name}</h1></div>
+        <div className="username"><br/><h1 onClick={this.onOpenModal}>{info.userInfo.user_name}</h1></div>
                   <div>
-                    {/* <button onClick={this.onOpenModal}>Open modal</button> */}
                     <Modal open={open} onClose={this.onCloseModal} center>
-                      {/* <h2>Simple centered modal</h2> */}
-                      <Profile props={info} />
+                      <ControlledTabs 
+                        userInfo = {this.props.userInfo}
+                        />
                     </Modal>
                   </div>
               <hr />
@@ -90,11 +91,10 @@ export default class Usercard extends Component {
 
     render() {
         // console.log("INFO 2:");
-        // console.info(this.props.props)
+        // console.info(this.props)
         return (
           <div id="user-profile">
-        {/* {console.log("INFO 2:")} */}
-            {this.mainPanel(this.props.props)}
+            {this.mainPanel(this.props)}
           </div>
         )
       }
