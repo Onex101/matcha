@@ -7,39 +7,6 @@ let connectedUsers = {}
 
 let communityChat = createChat({id: 1, isCommunity: true})
 
-let communityMessages = [
-		{
-		id:1,
-		time: 100000,
-		message: "Hi",
-		sender: "Mememem"
-	},
-	{
-		id:2,
-		time: 100000,
-		message: "This is meme",
-		sender: "Mememem"
-	},
-	{
-		id:3,
-		time: 100000,
-		message: "I like memems",
-		sender: "Mememem"
-	},
-	{
-		id:4,
-		time: 100000,
-		message: "How about you?",
-		sender: "Mememem"
-	},
-	{
-		id:5,
-		time: 100000,
-		message: "Lol",
-		sender: "Mememem"
-	}
-]
-
 module.exports = function(socket){
 	// console.log("Socket Id: " + socket.id);
 
@@ -138,7 +105,7 @@ module.exports = function(socket){
 				console.log('Changing chat')
 				getUsersChat(receiver, (results)=>{
 					console.log('getUsersChat results')
-					console.log(results)
+					// console.log(results)
 					if (results.length){
 					}
 				})
@@ -173,8 +140,8 @@ function sendTypingToChat(user){
 
 function sendMessageToChat(sender){
 	return (chatId, message)=>{
-		// console.log("sendMessageToChat: " + message + " " + chatId)
-		console.log(chatId)
+		console.log("sendMessageToChat: " + message + " " + chatId)
+		// console.log(chatId)
 		request(socketIO.app)
 		.post(`/msg/send`)
 		.send({conversation_id: chatId, message: message, sender:sender})
@@ -210,10 +177,16 @@ function isUser(userList, username){
 function getChat(sender){
 	// console.log(socketIO)
 	return (receiver, callback)=>{
+		console.log("Sender and receiver:")
+		console.log(sender, receiver)
 		request(socketIO.app)
 		.get(`/msg/` + sender + `/` + receiver)
-		.expect(200)
+		.set('Accept', 'application/json')
+			.expect('Content-Type', /json/)
+			.expect(200)
 		.end(function(err, res) {
+			console.log('Result')
+			// console.log(res)
 			if (err) throw err;
 			else callback(res);
 		});

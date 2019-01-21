@@ -42,7 +42,8 @@ Conversation.prototype.getByUsers = function (user1, user2, callback) {
 						callback(null, result);
 					}
 				})
-			if (typeof callback === "function"){
+			else if (typeof callback === "function"){
+				// console.log(result)
 				callback(null, result);
 			}
 		}

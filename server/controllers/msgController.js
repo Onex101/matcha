@@ -39,20 +39,28 @@ exports.getConversation = function(req, res) {
 	}
 	else{
 		conversation.getByUsers(this.data.user1, this.data.user2, function (err, result){
-			// console.log(result);
+			console.log(result);
 			if (err){
 				res.send(err);
 			}
 			else{
 				if (result.length){
-						conversation.data['id'] = result[0].id;
+					conversation.data['id'] = result[0].id;
 					let msg = new Msg('');
 					msg.getByConversationId(conversation.data.id, function (error, results){
-						if (err){
+						if (error){
 							res.send(error);
 						}
 						else{
-							res.send(results);
+							results.conversation = conversation.data
+
+							console.log("Grabbed users conversation")
+							console.log(conversation.data)
+							console.log(results)
+							// if (!results.length)
+							// 	res.send(results);
+							// else
+							res.send({hi: "message hello"})
 						}
 					})
 				}
