@@ -53,8 +53,12 @@ export default class Settings extends Component {
             imagePreviewUrl: reader.result
             });
         }
-
-        reader.readAsDataURL(file)
+        reader.onerror = function (evt) {
+            console.error("An error ocurred reading the file",evt);
+        };
+        if (e.target.files[0]){
+            reader.readAsDataURL(file);
+        }
     }
 
     // Placeholder for preview

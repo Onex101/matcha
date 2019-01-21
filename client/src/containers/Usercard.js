@@ -89,8 +89,8 @@ export default class Usercard extends Component {
     }
 
     render() {
-        console.log("INFO 2:");
-        console.info(this.props.props)
+        // console.log("INFO 2:");
+        // console.info(this.props.props)
         return (
           <div id="user-profile">
         {/* {console.log("INFO 2:")} */}

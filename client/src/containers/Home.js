@@ -86,24 +86,8 @@ export default class Home extends Component {
 
   getMatchCards() {
     if (this.state.matches !== null) {
-      // console.log("State = " + this.state.matches);
-      // var ret = '<div className="lander">';
-      // for (var elem in this.state.matches) {
-      //   // console.log("elem = " + JSON.stringify(this.state.matches[elem].data.user_name));
-      //   ret += '<div>' + this.state.matches[elem].data.user_name + '</div>'
-      // };
-      // ret += '</div>';
-      // // console.log("RET = " + ret);
-      // return ret;
-
-      var numrows = 10;
       var rows = [];
-      // for (var i = 0; i < numrows; i++) {
       for (var elem in this.state.matches) {
-          // note: we add a key prop here to allow react to uniquely identify each
-          // element in this array. see: https://reactjs.org/docs/lists-and-keys.html
-          // console.log('INFO: ')
-          // console.info(this.state.matches[elem])
           rows.push(<Usercard props={this.state.matches[elem].data} key={elem}/>);
       }
       return <div>{rows}</div>;
@@ -149,10 +133,12 @@ export default class Home extends Component {
   }
 
   getMatches() {
+    // console.log("State Matches: " + this.state.matches);
+    // console.log("Props Matches: " + JSON.stringify(this.props.userMatches));
     if (this.props.userMatches !== null) {
       this.setState({matches: this.props.userMatches});
-      console.log("State = " + this.state.matches);
-  }
+      // console.log("State = " + this.state.matches);
+    }
   }
 
   render() {

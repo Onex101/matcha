@@ -1,5 +1,5 @@
 var socketIO = require('./index.js');
-const request = require('supertest');
+// const request = require('supertest');
 const {GET_PREVIOUS_MESSAGES, VERIFY_USER, USER_CONNECTED, USER_DISCONNECTED, LOGOUT, COMMUNITY_CHAT, MESSAGE_RECEIVED, MESSAGE_SENT, TYPING, PRIVATE_MESSAGE} = require('../client/src/Events')
 const {createUser, createMessage, createChat} = require('../client/src/Factories')
 

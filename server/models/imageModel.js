@@ -98,7 +98,7 @@ Image.prototype.setProfilePic = function (user_name, pic_id, callback){
 }
 
 Image.prototype.replacePic = function(callback){
-	console.log(this.data)
+	// console.log(this.data)
 	db.query(`UPDATE pictures SET pic = '${this.data.data}' WHERE id = '${this.data.id}'`, function (err, results) {
 		if (err){callback(err, null);}
 		else{

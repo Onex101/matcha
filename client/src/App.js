@@ -57,6 +57,7 @@ class App extends Component {
   }
 
   getMatches() {
+    // console.log("Getting matches")
     // Get Matches
     try {
       fetch('/user/match/' + localStorage.getItem('id'), {
@@ -67,8 +68,9 @@ class App extends Component {
       })
       .then(response => response.json())
       .then((responseJSON) => {
+        // console.log("JSON match test = " + JSON.stringify(responseJSON));
         this.setState({ userMatches: responseJSON });
-        // console.log("Matches = " + JSON.stringify(this.state.userMatches));
+        // console.log("APP Matches = " + JSON.stringify(this.state.userMatches));
       })
       .catch(err => console.error(err))
       } catch (e) {
@@ -92,13 +94,13 @@ class App extends Component {
   handleLogout = event => {
     const {socket} = this.state;
     this.userHasAuthenticated(false);
-    socket.emit(LOGOUT);
     localStorage.removeItem('user');
     localStorage.removeItem('id');
     this.setState({ userInfo: null });
     this.setState({ userMatches: null });
     this.setState({ userProfile: null });
     console.log("ID = " + localStorage.getItem('id'))
+    socket.emit(LOGOUT);
   }
 
   renderUser() {
