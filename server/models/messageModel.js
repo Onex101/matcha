@@ -16,7 +16,7 @@ Msg.prototype.clean = function (data) {
 }
 
 Msg.prototype.getByConversationId = function (conversation_id, callback) {
-	db.query(`SELECT * FROM msgs WHERE conversation_id = ${conversation_id}`, function (err, result){
+	db.query(`SELECT * FROM msgs WHERE conversation_id = '${conversation_id}'`, function (err, result){
 		if (err){
 			callback(err, null);
 		}
