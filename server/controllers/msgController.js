@@ -52,15 +52,16 @@ exports.getConversation = function(req, res) {
 							res.send(error);
 						}
 						else{
-							results.conversation = conversation.data
-
+							var ret = {}
+							ret.body = results.body
+							ret.conversation = conversation.data
 							console.log("Grabbed users conversation")
 							console.log(conversation.data)
-							console.log(results)
+							console.log(ret)
 							// if (!results.length)
-							// 	res.send(results);
+							// 	res.json(conversation.data);
 							// else
-							res.send({hi: "message hello"})
+							res.send(ret)
 						}
 					})
 				}

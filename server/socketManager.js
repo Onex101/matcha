@@ -98,22 +98,37 @@ module.exports = function(socket){
 
 	socket.on(PRIVATE_MESSAGE, ({receiver, sender, activeChat})=>{
 		console.log(receiver, sender)
-		
+		var msgArray = [];
 		if(receiver in connectedUsers){
 			const receiverSocket = connectedUsers[receiver].socketId
 			if (!activeChat || activeChat.id === communityChat.id){
 				console.log('Changing chat')
 				getUsersChat(receiver, (results)=>{
 					console.log('getUsersChat results')
-					// console.log(results)
-					if (results.length){
-					}
+					console.log(results.body.conversation)
+					// if (results.length){
+						let messages = []
+						if(results.body.messages){
+							messages = results.body.messages
+							messages.forEach(element => {
+								// console.log(element)
+								var date = new Date(element.timestamp);
+								// console.log(date)
+								var hours = date.getHours();
+								var minutes = "0" + date.getMinutes();
+								var formattedTime = hours + ':' + minutes.substr(-2);
+								newMsg = {id: element.id, sender: element.sender, message: element.msg, time: formattedTime}
+								msgArray.push(newMsg)
+							});
+						}
+						conversation = results.body.conversation
+						const newChat = createChat({id: conversation.id, messages: msgArray, name:`${receiver}&${sender}`, users:[receiver, sender]})
+						socket.to(receiverSocket).emit(PRIVATE_MESSAGE, newChat)
+						socket.emit(PRIVATE_MESSAGE, newChat)
+					// }
 				})
-				const newChat = createChat({name:`${receiver}&${sender}`, users:[receiver, sender]})
 				console.log(receiver)
 				console.log(connectedUsers[receiver].socketId)
-				socket.to(receiverSocket).emit(PRIVATE_MESSAGE, newChat)
-				socket.emit(PRIVATE_MESSAGE, newChat)
 			}
 			else{
 				socket.to(receiverSocket).emit(PRIVATE_MESSAGE, activeChat)
@@ -182,11 +197,11 @@ function getChat(sender){
 		request(socketIO.app)
 		.get(`/msg/` + sender + `/` + receiver)
 		.set('Accept', 'application/json')
-			.expect('Content-Type', /json/)
+			// .expect('Content-Type', /json/)
 			.expect(200)
 		.end(function(err, res) {
 			console.log('Result')
-			// console.log(res)
+			console.log(res)
 			if (err) throw err;
 			else callback(res);
 		});
