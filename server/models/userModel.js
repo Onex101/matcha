@@ -60,7 +60,8 @@ User.prototype.getById = function (data, callback) {
 }
 
 User.prototype.linked_users = function(id, callback){
-	var query = `SELECT user1_id, user2_id from likes WHERE ((user1_id = ${id} OR user2_id = ${id}) AND (link_code = 1))`;
+	var query = `SELECT user1_id AS id FROM likes WHERE user2_id = ${id} AND link_code = 1
+		UNION SELECT user2_id FROM likes WHERE user1_id = ${id} AND link_code = 1`;
 	db.query(query, function(err,result){
 		if (err) {callback(err, null);}
         else{
