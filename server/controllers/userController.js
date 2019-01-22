@@ -47,7 +47,8 @@ exports.user_detail = function(req, res) {
 					password: row.password,
 					interests: row.interests,
 					profile_pic_id: row.profile_pic_id,
-					pic: row.pic}
+					pic: row.pic,
+					age: Match.getAge(row.birth_date)}
             res.json(user);
         }
     })
