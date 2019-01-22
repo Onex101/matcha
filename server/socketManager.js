@@ -103,32 +103,38 @@ module.exports = function(socket){
 			const receiverSocket = connectedUsers[receiver].socketId
 			if (!activeChat || activeChat.id === communityChat.id){
 				console.log('Changing chat')
-				getUsersChat(receiver, (results)=>{
-					console.log('getUsersChat results')
-					console.log(results.body.conversation)
-					// if (results.length){
-						let messages = []
-						if(results.body.messages){
-							messages = results.body.messages
-							messages.forEach(element => {
-								// console.log(element)
-								var date = new Date(element.timestamp);
-								// console.log(date)
-								var hours = date.getHours();
-								var minutes = "0" + date.getMinutes();
-								var formattedTime = hours + ':' + minutes.substr(-2);
-								newMsg = {id: element.id, sender: element.sender, message: element.msg, time: formattedTime}
-								msgArray.push(newMsg)
-							});
-						}
-						conversation = results.body.conversation
-						const newChat = createChat({id: conversation.id, messages: msgArray, name:`${receiver}&${sender}`, users:[receiver, sender]})
-						socket.to(receiverSocket).emit(PRIVATE_MESSAGE, newChat)
-						socket.emit(PRIVATE_MESSAGE, newChat)
-					// }
+				getUsersChat(receiver, (result)=>{
+					console.log('Result from getting chat')
+					console.log(result.body)
+					if (result.body.index >= 0){
+						conversation_id = result.body.index
+						messages = []
+					}
+					else if (result.body[0].conversation_id){
+						conversation_id = result.body[0].conversation_id
+						messages = result.body
+					}
+					else{
+						conversation_id = result.body[0].id
+						messages = []
+					}
+					console.log(conversation_id)
+					if (messages){
+						messages.forEach(element => {
+							// console.log(element)
+							var date = new Date(element.timestamp);
+							// console.log(date)
+							var hours = date.getHours();
+							var minutes = "0" + date.getMinutes();
+							var formattedTime = hours + ':' + minutes.substr(-2);
+							newMsg = {id: element.id, sender: element.sender, message: element.msg, time: formattedTime}
+							msgArray.push(newMsg)
+						});
+					}
+					const newChat = createChat({id: conversation_id, messages:msgArray, name:`${receiver}&${sender}`, users:[receiver, sender]})
+					socket.to(receiverSocket).emit(PRIVATE_MESSAGE, newChat)
+					socket.emit(PRIVATE_MESSAGE, newChat)
 				})
-				console.log(receiver)
-				console.log(connectedUsers[receiver].socketId)
 			}
 			else{
 				socket.to(receiverSocket).emit(PRIVATE_MESSAGE, activeChat)
@@ -200,8 +206,6 @@ function getChat(sender){
 			// .expect('Content-Type', /json/)
 			.expect(200)
 		.end(function(err, res) {
-			console.log('Result')
-			console.log(res)
 			if (err) throw err;
 			else callback(res);
 		});

@@ -50,4 +50,14 @@ Conversation.prototype.getByUsers = function (user1, user2, callback) {
 	})
 }
 
+Conversation.prototype.getConversationId = function(user1, user2, callback) {
+	var query = `SELECT id FROM conversations WHERE (user1 = '${user1}' AND user2 = '${user2}') OR (user1 = '${user2}' AND user2 =' ${user1}') LIMIT 1`;
+	db.query(query, function(err, result){
+		if (err){callback(err, null);}
+		else{
+			callback(null, result);
+		}
+	})
+}
+
 module.exports = Conversation;
