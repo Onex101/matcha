@@ -123,8 +123,8 @@ export default class ControlledTabs extends Component {
         if (this.props.userInfo && this.props.userInfo.data &&
             this.props.userInfo.data.id && this.state.userInfo === null)
           this.setState({userInfo: this.props.userInfo.data})
-        if (this.state.key === null) {
-          if (this.state.userInfo && this.state.userInfo.profile){
+        if (this.state.key === null && this.state.userInfo && this.state.userInfo.id) {
+          if (this.state.userInfo.pic){
               this.setState({key: 1});
           }
           else {
@@ -136,10 +136,12 @@ export default class ControlledTabs extends Component {
     componentWillUpdate(){
       console.log("In tabs test:")
       console.info(this.props)
-      if (this.props.userInfo && this.props.userInfo.id && this.state.userInfo === null)
-          this.setState({userInfo: this.props.userInfo})
-      if (this.state.key === null) {
-        if (this.state.userInfo && this.state.userInfo.profile){
+      if (this.props.userInfo && this.props.userInfo.id){
+          if (this.state.userInfo === null || this.state.userInfo.id !== this.props.userInfo.id)
+            this.setState({userInfo: this.props.userInfo})
+      }
+      if (this.state.key === null && this.state.userInfo && this.state.userInfo.id) {
+        if (this.state.userInfo.pic){
             this.setState({key: 1});
         }
         else {
@@ -149,10 +151,12 @@ export default class ControlledTabs extends Component {
     }
  
     checkValidUser() {
-      console.log("Valid user:")
+      console.log("Valid user check:")
       console.info(this.state)
-        if (this.state.userInfo && this.state.userInfo.profile_pic_id)
-            return true;
+        if (this.state.userInfo && this.state.userInfo.pic) {
+          console.log("Valid user!")
+          return true;
+        }
         else
             return false;
         // return true
@@ -166,8 +170,7 @@ export default class ControlledTabs extends Component {
         <Tabs
           activeKey={this.state.key}
           onSelect={this.handleSelect}
-          id="controlled-tab-example"
-        >
+          id="controlled-tab-example" >
         {validity === true ?
           <Tab eventKey={1} title="Profile" >
             <Profile userInfo = {this.state.userInfo} />

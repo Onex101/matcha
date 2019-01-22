@@ -362,11 +362,9 @@ export default class Settings extends Component {
                     },
                     body: JSON.stringify({
                       user_id: user_id,
-                    //   pic: pics[i].pic,
                       data: pics[i].pic
                     })
                   })
-                  // .then(this.getUsers)
                   .catch(err => console.error(err))
             }
             // else if (i == 0 && pics[i].id !== null && pics[i].pic) {
@@ -382,11 +380,9 @@ export default class Settings extends Component {
                     },
                     body: JSON.stringify({
                       user_id: user_id,
-                    //   pic: pics[i].pic,
                       data: pics[i].pic
                     })
                   })
-                  // .then(this.getUsers)
                   .catch(err => console.error(err))
             }
             else if (pics[i].id !== null && pics[i].pic) {
