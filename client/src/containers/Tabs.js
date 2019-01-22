@@ -120,6 +120,10 @@ export default class ControlledTabs extends Component {
     }
   
     componentDidMount(){
+      console.log("Tabs did mount props:")
+      console.info(this.props)
+      console.log("Tabs did mount state:")
+      console.info(this.state)
         if (this.props.userInfo && this.props.userInfo.data &&
             this.props.userInfo.data.id && this.state.userInfo === null)
           this.setState({userInfo: this.props.userInfo.data})
@@ -134,8 +138,12 @@ export default class ControlledTabs extends Component {
     }
 
     componentWillUpdate(){
-      console.log("In tabs test:")
+      // console.log("In tabs test:")
+      // console.info(this.props)
+      console.log("Tabs will update props:")
       console.info(this.props)
+      console.log("Tabs will update state:")
+      console.info(this.state)
       if (this.props.userInfo && this.props.userInfo.id){
           if (this.state.userInfo === null || this.state.userInfo.id !== this.props.userInfo.id)
             this.setState({userInfo: this.props.userInfo})
