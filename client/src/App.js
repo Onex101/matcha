@@ -29,6 +29,8 @@ class App extends Component {
 
   componentWillMount(){
     // Get User
+    console.log("Local user:", localStorage.getItem('user'))
+    console.log("Local id:", localStorage.getItem('id'))
     if (localStorage.getItem('user') && this.state.userInfo === null){
       try {
         fetch('/user/' + localStorage.getItem('id'), {
@@ -39,8 +41,10 @@ class App extends Component {
         })
         .then(response => response.json())
         .then((responseJSON) => {
+          console.log("response : ")
+          console.info(responseJSON["data"])
           this.setState({ userInfo: responseJSON["data"] });
-          console.log("User = " + JSON.stringify(this.state.userInfo));
+          // console.log("User = " + JSON.stringify(this.state.userInfo));
         })
         .catch(err => console.error(err))
         } catch (e) {
@@ -184,6 +188,8 @@ class App extends Component {
         {console.log("Childprops: ")}
         {console.log("Test for re-render")}
         {console.info(childProps)}
+        {/* {console.log("User = " + JSON.stringify(this.state))} */}
+
         <Routes childProps={childProps} />
       </div>
       </div>

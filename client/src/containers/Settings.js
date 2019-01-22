@@ -372,7 +372,7 @@ export default class Settings extends Component {
             // else if (i == 0 && pics[i].id !== null && pics[i].pic) {
             //     //Replace profile
             // }
-            if (pics[i].id === null && pics[i].pic) {
+            if (i != 0 && pics[i].id === null && pics[i].pic) {
                 console.log("Making new image");
                 //Send new image and user id
                 fetch(`/image/create`, {

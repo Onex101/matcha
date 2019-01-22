@@ -88,9 +88,11 @@ export default class Home extends Component {
     if (this.state.matches !== null) {
       var rows = [];
       for (var elem in this.state.matches) {
+        // console.log("match[" + elem + ']')
+        // console.info(this.state.matches[elem].data)
           rows.push(<Usercard  userInfo = {this.state.matches[elem].data}
                 key={elem}
-                pic = {this.state.matches[elem].pic} />);
+                pic = {this.state.matches[elem].data.pic} />);
       }
       return <div>{rows}</div>;
     }
@@ -148,6 +150,8 @@ export default class Home extends Component {
     //   this.getMatches()
     return(localStorage.getItem('user') && this.state.matches 
             ?  <div className="Home">
+            {/* {console.log("IN HOME MATHCES:")}
+            {console.info(this.state.matches)} */}
                   <div className="lander">
                     {/* <div>{this.landerCheck()}<div dangerouslySetInnerHTML={{__html: this.getMatchCards()}}></div></div> */}
                     <div>{this.landerCheck()}{this.getMatchCards()}</div>
