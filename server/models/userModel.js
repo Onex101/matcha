@@ -255,7 +255,7 @@ User.prototype.like = function (user_id, target_id, callback){
 		if(err){callback(err,null);}
 		else{
 			if (results[0].count > 0){
-				var query = `UPDATE likes SET link_code = 0 WHERE (user1_id = ${user_id} AND user2_id = ${target_id}) OR (user2_id = ${user_id} AND user1_id = ${target_id})`
+				var query = `UPDATE likes SET link_code = 1 WHERE (user1_id = ${user_id} AND user2_id = ${target_id}) OR (user2_id = ${user_id} AND user1_id = ${target_id})`
 				db.query(query, function(err, result){
 					if(err){callback(err,null);}
 					else{
@@ -268,7 +268,7 @@ User.prototype.like = function (user_id, target_id, callback){
 				})
 			}
 			else{
-				var query = `INSERT INTO likes VALUES(${user_id},${target_id},0)`;
+				var query = `INSERT INTO likes VALUES(${user_id},${target_id}, 0)`;
 				db.query(query, function(err, result){
 					if(err){callback(err,null);}
 					else{
