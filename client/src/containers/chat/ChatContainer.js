@@ -29,8 +29,11 @@ export default class ChatContainer extends Component{
 		socket.off(USER_CONNECTED)
 		socket.off(USER_DISCONNECTED)
 	}
+
 	initSocket(socket){	
 		// socket.emit(COMMUNITY_CHAT, this.resetChat)
+		
+
 		console.log("Adding Chats to Sidebar" + JSON.stringify(this.props.user))
 		console.log('COMMUNITY_CHAT')
 		socket.emit(COMMUNITY_CHAT, this.resetChat)
@@ -39,7 +42,8 @@ export default class ChatContainer extends Component{
 			socket.emit(COMMUNITY_CHAT, this.resetChat)
 		})
 		socket.on(USER_CONNECTED, (users)=>{
-
+			console.log(users)
+			this.getLikedPeople(users)
 			this.setState({users: values(users)})
 		})
 		socket.on(USER_DISCONNECTED, (users)=>{
@@ -48,10 +52,16 @@ export default class ChatContainer extends Component{
 		// socket.emit(PRIVATE_MESSAGE, {receiver:"Mike", sender: user})
 	}
 
-	getLikedPeople(users) {
-		// console.log("Getting matches")
+	getLikedPeople = (users) => {
+		console.log("Getting liked PEOPLE")
+		console.log(users)
 		// Get Matches
-		if (!this.state.likedUsers){
+		let usersArray = [];
+		let onlineUsers = Object.keys(users).map(function(key) {
+			return [users[key]];
+		});
+		console.log(onlineUsers)
+		// if (!this.state.likedUsers){
 			try {
 			fetch('/user/' + localStorage.getItem('id') + '/getliked', {
 				method: "GET",
@@ -62,15 +72,26 @@ export default class ChatContainer extends Component{
 			.then(response => response.json())
 			.then((responseJSON) => {
 				// console.log("JSON match test = " + JSON.stringify(responseJSON));
-				
-				this.setState({ likedUsers: responseJSON });
+				console.log('Getting liked people')
+				console.log(responseJSON)
+				responseJSON.forEach( likedUsers => {
+					console.log(likedUsers)
+					onlineUsers.forEach(elm => {
+						console.log(elm.id)
+						if (elm.id = likedUsers.id){
+							usersArray.push(elm)
+						}
+					});
+				});
+				console.log(usersArray)
+				this.setState({ likedUsers: usersArray });
 				// console.log("APP Matches = " + JSON.stringify(this.state.userMatches));
 			})
 			.catch(err => console.error(err))
 			} catch (e) {
 				alert(e.message);
 			}
-		}
+		// }
 	}
 
 	sendOpenPrivateMessage = (receiver) => {
