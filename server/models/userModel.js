@@ -59,6 +59,16 @@ User.prototype.getById = function (data, callback) {
     });
 }
 
+User.prototype.linked_users = function(id, callback){
+	var query = `SELECT user1_id, user2_id from likes WHERE ((user1_id = ${id} OR user2_id = ${id}) AND (link_code = 1))`;
+	db.query(query, function(err,result){
+		if (err) {callback(err, null);}
+        else{
+			callback(null, result); 
+        }
+	})
+}
+
 User.prototype.getByUsername = function (data, callback) {
     data = mysql.escape(data);
 	var query = `SELECT * FROM users WHERE user_name = ${data}`;

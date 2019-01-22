@@ -443,6 +443,17 @@ exports.dislike_userId = function(req, res){
 	})
 }
 
+//get list of people liked by :user_id
+exports.get_liked = function(req, res){
+	let user = new User('');
+	user.linked_users(req.params.id,function(err, results){
+		if(err){res.send(err);}
+		else{
+			res.send(results)
+		}
+	})
+}
+
 //sorting function to sort by match score
 function sortFunction(a, b) {
     if (a['match'] === b['match']) {
@@ -464,3 +475,4 @@ exports.user_logout = function(req, res){
         }
     })
 }
+
