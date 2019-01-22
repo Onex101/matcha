@@ -41,15 +41,16 @@ export default class Profile extends Component {
             profile: this.props.userInfo.pic,
             tags: this.props.userInfo.interests,
              });
-        // console.log("STATE: ");
-        // console.info(this.state);
+        console.log("PROF STATE: ");
+        console.info(this.state);
     }
 
     // Gets user images
     getUserImages(){
-        if (localStorage.getItem('id') && !this.state.pictures[0]){
+        if (this.state.id && !this.state.pictures[0]){
+            // console
             try {
-              fetch('/image/' + localStorage.getItem('id'), {
+              fetch('/image/' + this.state.id, {
                 // fetch('/images/' + '101', {
                 method: "GET",
                 headers: {
@@ -118,32 +119,41 @@ export default class Profile extends Component {
     componentDidMount() {
         console.log("Profile INFO 1: " +JSON.stringify(this.props.userInfo))
         
-        if (this.props.userInfo && this.props.userInfo.id && !this.state.id){
+        if (this.state.id === null && this.props.userInfo && this.props.userInfo.id  ){
             this.getInfo();
-            //get more info
+        }
+        if (this.state.id && !this.state.pictures[0]){
+        //get more info
             this.getUserImages();
         }
+        console.log("Profile State INFO 1: " +JSON.stringify(this.state))
     }
 
     componentDidUpdate() {
         console.log("Profile INFO 2: " +JSON.stringify(this.props.userInfo))
-        
+        if (this.props.userInfo){
+            // if (this.props.userInfo.id)
+                console.log("Profile Props test: " +JSON.stringify(this.props.userInfo.id))
+        }
         if (this.props.userInfo && this.props.userInfo.id && !this.state.id){
             this.getInfo();
-            //get more info
+        }
+        if (this.state.id && !this.state.pictures[0]){
+        //get more info
             this.getUserImages();
         }
+        console.log("Profile State INFO 2: " +JSON.stringify(this.state))
     }
 
     render() {
         // console.log("INFO 2:");
         // console.info(this.props.props)
         const info = this.state;
-        // console.log("Profile INFO: " +JSON.stringify(this.props.userInfo))
+        console.log("STATE INFO: " +JSON.stringify(this.state))
         var width=150
         var height=150
         return (
-            this.state.id  && this.state.pictures[0]?
+            this.state.id  && this.state.pictures[0] ?
             // this.props.userInfo && this.props.userInfo.id && this.state.id && this.state.pictures[0] ?
           <div id="profile">
             <div className="top">
@@ -209,16 +219,11 @@ export default class Profile extends Component {
             
             <div className="bottom">
                 <hr /><br/>
-                {/* <div className="left"> */}
                 {info.bio != "null" ? <div><h4>Bio</h4>
                                         {info.bio}</div> : null}
-                    <h4>Tags</h4>
-                {/* </div> */}
-                {/* <div className="right"> */}
-                    {/* <h4>Likes</h4> */}
-                {/* </div> */}
+                <h4>Tags</h4>
             </div>
-            {this.props.userInfo.id !== localStorage.getItem('id') ? 
+            {this.props.userInfo.id != localStorage.getItem('id') ? 
                 <div className="choices">
                     <img src={x} alt="Dislike" className="dislike" onClick={(e) => this.dislike(e)}/>
                     <img src={heart} alt="Like" className="like" onClick={(e) => this.like(e)} />

@@ -54,9 +54,9 @@ export default class Usercard extends Component {
     }
 
     bio(info){
-      if (info.bio !== "null") {
+      if (info.userInfo.bio !== "null") {
       return (<div className="bottom">
-                  {info.bio}
+                  {info.userInfo.bio}
                 </div>) 
       }
     }
@@ -70,12 +70,12 @@ export default class Usercard extends Component {
          <div>
             <div className="top">
                 {this.avatar(info.pic, width, height)}
-        <div className="username"><br/><h1 onClick={this.onOpenModal}>{info.userInfo.user_name}</h1></div>
+            <div className="username"><br/><h1 onClick={this.onOpenModal}>{info.userInfo.user_name}</h1></div>
                   <div>
+                  {console.log("Modal test:")}
+                  {console.info(info.userInfo)}
                     <Modal open={open} onClose={this.onCloseModal} center>
-                      <ControlledTabs 
-                        userInfo = {this.props.userInfo}
-                        />
+                      <ControlledTabs userInfo={info.userInfo} />
                     </Modal>
                   </div>
               <hr />
