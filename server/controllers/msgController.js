@@ -26,7 +26,7 @@ exports.getConversation = function(req, res) {
 	// console.log(data)
 	let conversation = new Conversation(data);
 	let msg = new Msg('');
-	if (data.user2 == 'Community'){
+	if (data.user2 == 1){
 		conversation.data['id'] = 1;
 		msg.getByConversationId(conversation.data.id, function (err, results){
 			if (err){

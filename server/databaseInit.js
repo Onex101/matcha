@@ -86,14 +86,14 @@ connection.connect(function (err) {
 	//username->user_id
 	connection.query('CREATE TABLE conversations\
 	(id int NOT NULL AUTO_INCREMENT,\
-	user1 varchar(100) NOT NULL,\
-	user2 varchar(100) NOT NULL,\
+	user1 int NOT NULL,\
+	user2 int NOT NULL,\
 	PRIMARY KEY (`id`))');
 
 	connection.query('CREATE TABLE msgs\
 	(id int NOT NULL AUTO_INCREMENT,\
 	conversation_id int NOT NULL,\
-	sender varchar(100) NOT NULL,\
+	sender int NOT NULL,\
 	msg varchar(1000),\
 	timestamp DATETIME DEFAULT NOW(),\
 	viewed int DEFAULT 0,\
@@ -265,15 +265,7 @@ connection.connect(function (err) {
 	");
 
 	connection.query("\
-	INSERT INTO conversations (user1, user2) VALUES('Community', 'Community')\
-	");
-
-	connection.query("\
-	INSERT INTO conversations (user1, user2) VALUES('Onex101', 'GG')\
-	");
-
-	connection.query("\
-	INSERT msgs (conversation_id, sender, msg) VALUES(2,'Onex101', 'test msg')\
+	INSERT INTO conversations (user1, user2) VALUES(1, 1)\
 	");
 
 	for (var i = 101; i <= 200; i++){

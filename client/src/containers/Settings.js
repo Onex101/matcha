@@ -362,17 +362,15 @@ export default class Settings extends Component {
                     },
                     body: JSON.stringify({
                       user_id: user_id,
-                    //   pic: pics[i].pic,
                       data: pics[i].pic
                     })
                   })
-                  // .then(this.getUsers)
                   .catch(err => console.error(err))
             }
             // else if (i == 0 && pics[i].id !== null && pics[i].pic) {
             //     //Replace profile
             // }
-            if (pics[i].id === null && pics[i].pic) {
+            if (i != 0 && pics[i].id === null && pics[i].pic) {
                 console.log("Making new image");
                 //Send new image and user id
                 fetch(`/image/create`, {
@@ -382,11 +380,9 @@ export default class Settings extends Component {
                     },
                     body: JSON.stringify({
                       user_id: user_id,
-                    //   pic: pics[i].pic,
                       data: pics[i].pic
                     })
                   })
-                  // .then(this.getUsers)
                   .catch(err => console.error(err))
             }
             else if (pics[i].id !== null && pics[i].pic) {
