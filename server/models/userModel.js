@@ -226,21 +226,26 @@ User.prototype.getAll = function (callback){
 }
 
 User.prototype.login = function (callback){
+	let self = this
     this.getByUsername(this.data.user_name, function(err, results){
         if (err)
             callback(err, null);
-        else
-            this.login_user(this.data.user_name, function(err, result){
+        else{
+			let newUser = new User('')
+            newUser.login_user(self.data.user_name, function(err, result){
+				console.log(err)
 				if(err){callback(err,null);}
 				else{
-					callback(null, result);
+					console.log(results)
+					callback(null, results);
 				}
 			});
+		}
     })
 }
 
 User.prototype.login_user = function (user_name, callback){
-	var query = `UPDATE users SET online = 0 WHERE user_name = ${user_name}`;
+	var query = `UPDATE users SET online = 0 WHERE user_name = '${user_name}'`;
 	db.query(query, function(err, result){
 		if(err){callback(err,null);}
 		else{
@@ -475,7 +480,8 @@ User.prototype.update_data = function (bio, gender, pref, id, callback){
 
 User.prototype.logout = function(id, callback){
 	var now = new Date();
-	var query = `UPDATE users SET online = ${now} WHERE id = ${id}`;
+	console.log('UserId loginout ' + id)
+	var query = `UPDATE users SET online = '${now}' WHERE id = ${id}`;
 	db.query(query, function(err, results){
 		if (err){
 			callback(err, null);

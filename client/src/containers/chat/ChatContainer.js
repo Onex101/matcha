@@ -13,6 +13,7 @@ export default class ChatContainer extends Component{
 		this.state = {
 			chats:[],
 			users:[],
+			likedUsers: [],
 			activeChat:null
 		}
 	}
@@ -38,12 +39,38 @@ export default class ChatContainer extends Component{
 			socket.emit(COMMUNITY_CHAT, this.resetChat)
 		})
 		socket.on(USER_CONNECTED, (users)=>{
+
 			this.setState({users: values(users)})
 		})
 		socket.on(USER_DISCONNECTED, (users)=>{
 			this.setState({users:values(users)})
 		})
 		// socket.emit(PRIVATE_MESSAGE, {receiver:"Mike", sender: user})
+	}
+
+	getLikedPeople(users) {
+		// console.log("Getting matches")
+		// Get Matches
+		if (!this.state.likedUsers){
+			try {
+			fetch('/user/' + localStorage.getItem('id') + '/getliked', {
+				method: "GET",
+				headers: {
+				"Content-Type": "application/json; charset=utf-8",
+				},
+			})
+			.then(response => response.json())
+			.then((responseJSON) => {
+				// console.log("JSON match test = " + JSON.stringify(responseJSON));
+				
+				this.setState({ likedUsers: responseJSON });
+				// console.log("APP Matches = " + JSON.stringify(this.state.userMatches));
+			})
+			.catch(err => console.error(err))
+			} catch (e) {
+				alert(e.message);
+			}
+		}
 	}
 
 	sendOpenPrivateMessage = (receiver) => {
