@@ -51,7 +51,7 @@ export default class ChatContainer extends Component{
 		const {activeChat} = this.state
 		console.log("sending private message")
 		console.log(receiver, user)
-		socket.emit(PRIVATE_MESSAGE, {receiver, sender: user.name, activeChat})
+		socket.emit(PRIVATE_MESSAGE, {receiver, sender: user, activeChat})
 	}
 
 	resetChat = (chat)=>{
