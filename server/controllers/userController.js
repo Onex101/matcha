@@ -466,12 +466,12 @@ function sortFunction(a, b) {
 
 exports.user_logout = function(req, res){
     let user = new User('');
-    user.logout(this.data.id, function(err, results){
+    user.logout(req.params.id, function(err, results){
         if (err){
             res.send(err)
         }
         else{
-            
+            res.send("Logged out");
         }
     })
 }

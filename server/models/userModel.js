@@ -218,7 +218,6 @@ User.prototype.getAll = function (callback){
     db.query(SELECT_ALL_USERS_QUERY, (err, result) => {
         if (err) {
             callback(err, null);
-            throw(err);
         }
         else {
             callback(null, result);
@@ -231,8 +230,23 @@ User.prototype.login = function (callback){
         if (err)
             callback(err, null);
         else
-            callback(null, results);
+            this.login_user(this.data.user_name, function(err, result){
+				if(err){callback(err,null);}
+				else{
+					callback(null, result);
+				}
+			});
     })
+}
+
+User.prototype.login_user = function (user_name, callback){
+	var query = `UPDATE users SET online = 0 WHERE user_name = ${user_name}`;
+	db.query(query, function(err, result){
+		if(err){callback(err,null);}
+		else{
+			callback(null, result);
+		}
+	})
 }
 
 User.prototype.like = function (user_id, target_id, callback){
@@ -449,7 +463,20 @@ User.prototype.fetchInterestsList = function (callback){
 
 User.prototype.update_data = function (bio, gender, pref, id, callback){
 	var query = `UPDATE users SET bio = '${bio}', gender = '${gender}', pref = '${pref}' WHERE id = '${id}'`;
-	db.query(query , function (err, results) {
+	db.query(query, function (err, results) {
+		if (err){
+			callback(err, null);
+		}
+		else{
+			callback(null, results);
+		}
+	})
+}
+
+User.prototype.logout = function(id, callback){
+	var now = new Date();
+	var query = `UPDATE users SET online = ${now} WHERE id = ${id}`;
+	db.query(query, function(err, results){
 		if (err){
 			callback(err, null);
 		}

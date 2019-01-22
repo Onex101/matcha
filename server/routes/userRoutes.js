@@ -56,7 +56,6 @@ router.post('/signup/verify', user_controller.user_verify);
 // GET request to logout user
 router.get('/logout/:id',user_controller.user_logout);
 
-
 //** THESE THINGS SHAM */
 
 //GET a users interests - working
