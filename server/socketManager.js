@@ -106,7 +106,11 @@ module.exports = function(socket){
 				getUsersChat(receiver, (result)=>{
 					console.log('Result from getting chat')
 					console.log(result.body)
-					if (result.body.index >= 0){
+					if (result.body.insertId){
+						conversation_id = result.body.insertId
+						messages = []
+					}
+					else if (result.body.index >= 0){
 						conversation_id = result.body.index
 						messages = []
 					}
