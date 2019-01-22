@@ -25,9 +25,9 @@ exports.getConversation = function(req, res) {
 	// console.log("test")
 	// console.log(data)
 	let conversation = new Conversation(data);
+	let msg = new Msg('');
 	if (data.user2 == 'Community'){
 		conversation.data['id'] = 1;
-		let msg = new Msg('');
 		msg.getByConversationId(conversation.data.id, function (err, results){
 			if (err){
 				res.send(err);
@@ -38,35 +38,38 @@ exports.getConversation = function(req, res) {
 		})
 	}
 	else{
-		conversation.getByUsers(this.data.user1, this.data.user2, function (err, result){
+		msg.getByMessagesByUserIds(conversation.data.user1, conversation.data.user2, function (err, result){
 			console.log(result);
 			if (err){
 				res.send(err);
 			}
 			else{
+				//if conversation already exists and has msgs
 				if (result.length){
-					conversation.data['id'] = result[0].id;
-					let msg = new Msg('');
-					msg.getByConversationId(conversation.data.id, function (error, results){
-						if (error){
-							res.send(error);
+					res.send(result)
+				}
+				//else if conversation contains no msgs
+				else{
+					conversation.getConversationId(conversation.data.user1, conversation.data.user2, function (err, result){
+						//if it already exists
+						if (err)
+							res.send(err)
+						else if(result.length){
+							res.send(result)
 						}
+						//else create conversation
 						else{
-							results.conversation = conversation.data
-
-							console.log("Grabbed users conversation")
-							console.log(conversation.data)
-							console.log(results)
-							// if (!results.length)
-							// 	res.send(results);
-							// else
-							res.send({hi: "message hello"})
+							conversation.create(conversation.data.user1, conversation.data.user2, function (err, result){
+								if (err){
+									res.send(err);
+								}
+								else{
+									res.send(result)
+								}
+							})
 						}
 					})
 				}
-				// else{
-				// 	res.send({fail: "no results"});
-				// }
 			}
 		})
 	}

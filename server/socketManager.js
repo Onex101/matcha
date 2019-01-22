@@ -33,9 +33,9 @@ module.exports = function(socket){
 		connectedUsers = addUser(connectedUsers, user)
 		socket.user = user
 		// console.log("Connected Users: " + JSON.stringify(connectedUsers));
-		sendMessageToChatFromUser = sendMessageToChat(user.name)
+		sendMessageToChatFromUser = sendMessageToChat(user)
 		sendTypingFromUser = sendTypingToChat(user.name)
-		getUsersChat = getChat(user.name)
+		getUsersChat = getChat(user)
 		// console.log(getUsersChat)
 		// getUsersChat('Community', ()=>{})
 
@@ -68,8 +68,8 @@ module.exports = function(socket){
 		// getUsersChat('Community')
 		// getUsersChat()
 		var msgArray = [];
-		var user_test = getChat('Community')
-		user_test('Community', (results)=>{
+		var user_test = getChat({id: 1})
+		user_test({id: 1}, (results)=>{
 			// console.log(messages)
 			messages = results.body
 			messages.forEach(element => {
@@ -98,22 +98,43 @@ module.exports = function(socket){
 
 	socket.on(PRIVATE_MESSAGE, ({receiver, sender, activeChat})=>{
 		console.log(receiver, sender)
-		
-		if(receiver in connectedUsers){
-			const receiverSocket = connectedUsers[receiver].socketId
+		var msgArray = [];
+		if(receiver.name in connectedUsers){
+			const receiverSocket = connectedUsers[receiver.name].socketId
 			if (!activeChat || activeChat.id === communityChat.id){
 				console.log('Changing chat')
-				getUsersChat(receiver, (results)=>{
-					console.log('getUsersChat results')
-					// console.log(results)
-					if (results.length){
+				getUsersChat(receiver, (result)=>{
+					console.log('Result from getting chat')
+					console.log(result.body)
+					if (result.body.index >= 0){
+						conversation_id = result.body.index
+						messages = []
 					}
+					else if (result.body[0].conversation_id){
+						conversation_id = result.body[0].conversation_id
+						messages = result.body
+					}
+					else{
+						conversation_id = result.body[0].id
+						messages = []
+					}
+					console.log(conversation_id)
+					if (messages){
+						messages.forEach(element => {
+							// console.log(element)
+							var date = new Date(element.timestamp);
+							// console.log(date)
+							var hours = date.getHours();
+							var minutes = "0" + date.getMinutes();
+							var formattedTime = hours + ':' + minutes.substr(-2);
+							newMsg = {id: element.id, sender: element.sender, message: element.msg, time: formattedTime}
+							msgArray.push(newMsg)
+						});
+					}
+					const newChat = createChat({id: conversation_id, messages:msgArray, name:`${receiver.name}&${sender.name}`, users:[receiver.name, sender.name]})
+					socket.to(receiverSocket).emit(PRIVATE_MESSAGE, newChat)
+					socket.emit(PRIVATE_MESSAGE, newChat)
 				})
-				const newChat = createChat({name:`${receiver}&${sender}`, users:[receiver, sender]})
-				console.log(receiver)
-				console.log(connectedUsers[receiver].socketId)
-				socket.to(receiverSocket).emit(PRIVATE_MESSAGE, newChat)
-				socket.emit(PRIVATE_MESSAGE, newChat)
 			}
 			else{
 				socket.to(receiverSocket).emit(PRIVATE_MESSAGE, activeChat)
@@ -144,7 +165,7 @@ function sendMessageToChat(sender){
 		// console.log(chatId)
 		request(socketIO.app)
 		.post(`/msg/send`)
-		.send({conversation_id: chatId, message: message, sender:sender})
+		.send({conversation_id: chatId, message: message, sender:sender.id})
 		.set('Accept', 'application/json')
 			.expect('Content-Type', /json/)
 			.expect(200)
@@ -152,7 +173,7 @@ function sendMessageToChat(sender){
 				if (err) throw err;
 				else console.log(res.text);
 			});
-		socketIO.io.emit(`${MESSAGE_RECEIVED}-${chatId}`, createMessage({message, sender}))
+		socketIO.io.emit(`${MESSAGE_RECEIVED}-${chatId}`, createMessage({message, sender: sender.name}))
 	}
 }
 
@@ -180,13 +201,11 @@ function getChat(sender){
 		console.log("Sender and receiver:")
 		console.log(sender, receiver)
 		request(socketIO.app)
-		.get(`/msg/` + sender + `/` + receiver)
+		.get(`/msg/` + sender.id + `/` + receiver.id)
 		.set('Accept', 'application/json')
-			.expect('Content-Type', /json/)
+			// .expect('Content-Type', /json/)
 			.expect(200)
 		.end(function(err, res) {
-			console.log('Result')
-			// console.log(res)
 			if (err) throw err;
 			else callback(res);
 		});

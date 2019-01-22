@@ -28,6 +28,30 @@ Msg.prototype.getByConversationId = function (conversation_id, callback) {
 	})
 }
 
+Msg.prototype.getByMessagesByUserNames = function (user_name1, user_name2, callback){
+	var query =  `SELECT * FROM msgs WHERE conversation_id = (SELECT id FROM conversations WHERE (user1 = '${user_name1}' AND user2 = '${user_name2}') OR (user1 = '${user_name2}' AND user2 = '${user_name1}'))`
+	db.query(query, function(err,result){
+		if (err){callback(err, null);}
+		else{
+			if (typeof callback === "function"){
+				callback(null, result);
+			}
+		}
+	})
+}
+
+Msg.prototype.getByMessagesByUserIds = function (user_name1, user_name2, callback){
+	var query =  `SELECT * FROM msgs WHERE conversation_id = (SELECT id FROM conversations WHERE (user1 = '${user_id1}' AND user2 = '${user_id2}') OR (user1 = '${user_id2}' AND user2 = '${user_id1}'))`
+	db.query(query, function(err,result){
+		if (err){callback(err, null);}
+		else{
+			if (typeof callback === "function"){
+				callback(null, result);
+			}
+		}
+	})
+}
+
 Msg.prototype.create = function (callback) {
 	db.query(`INSERT msgs (conversation_id, sender, msg) VALUES ('${this.data.conversation_id}', '${this.data.sender}', '${this.data.message}')`, function (err, result){
 		if (err){callback(err, null);}

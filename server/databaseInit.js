@@ -86,14 +86,14 @@ connection.connect(function (err) {
 	//username->user_id
 	connection.query('CREATE TABLE conversations\
 	(id int NOT NULL AUTO_INCREMENT,\
-	user1 varchar(100) NOT NULL,\
-	user2 varchar(100) NOT NULL,\
+	user1 int NOT NULL,\
+	user2 int NOT NULL,\
 	PRIMARY KEY (`id`))');
 
 	connection.query('CREATE TABLE msgs\
 	(id int NOT NULL AUTO_INCREMENT,\
 	conversation_id int NOT NULL,\
-	sender varchar(100) NOT NULL,\
+	sender int NOT NULL,\
 	msg varchar(1000),\
 	timestamp DATETIME DEFAULT NOW(),\
 	viewed int DEFAULT 0,\

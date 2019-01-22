@@ -26,9 +26,9 @@ export default class SideBar extends Component{
 		this.setState({receiver:""})
 	}
 
-	addChatForUser = (username)=>{
+	addChatForUser = (user)=>{
 		this.setActiveSideBar(SideBar.type.CHATS)
-		this.props.onSendPrivateMessage(username)
+		this.props.onSendPrivateMessage(user)
 	}
 
 	setActiveSideBar = (newSideBar) =>{
@@ -110,7 +110,7 @@ export default class SideBar extends Component{
 									<SideBarOption
 										key = {otherUser.id}
 										name = {otherUser.name}
-										onClick = { () => {this.addChatForUser(otherUser.name)}}
+										onClick = { () => {this.addChatForUser(otherUser)}}
 									/>
 								)
 							})
