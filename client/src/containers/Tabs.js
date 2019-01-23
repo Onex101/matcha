@@ -142,7 +142,7 @@ export default class ControlledTabs extends Component {
       if (this.state.key === null && this.state.userInfo && this.state.userInfo.id) {
         // console.log("DU Key State")
         // console.info(this.state)
-        if (this.state.userInfo.pic){
+        if (this.state.userInfo.profile_pic_id){
             this.setState({key: 1});
         }
         else {
