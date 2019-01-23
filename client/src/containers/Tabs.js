@@ -124,17 +124,31 @@ export default class ControlledTabs extends Component {
       console.info(this.props)
       console.log("Tabs did mount state:")
       console.info(this.state)
-        if (this.props.userInfo && this.props.userInfo.data &&
-            this.props.userInfo.data.id && this.state.userInfo === null)
+      if (!this.state.userInfo){
+        console.log("DM State userinfo is empty")
+        if (this.props.userInfo && this.props.userInfo.id){
+          console.log("DM Props userinfo exists")
+          this.setState({userInfo: this.props.userInfo})
           this.setState({userInfo: this.props.userInfo.data})
-        if (this.state.key === null && this.state.userInfo && this.state.userInfo.id) {
-          if (this.state.userInfo.pic){
-              this.setState({key: 1});
-          }
-          else {
-              this.setState({key: 3});
-          }
         }
+        else if (this.props.userInfo && this.props.userInfo.data && this.props.userInfo.data.id){
+          console.log("DM Props data userinfo exists")
+          this.setState({userInfo: this.props.userInfo.data})
+        }
+        else {
+          console.log("DM Props is empty")
+        }
+      }
+      if (this.state.key === null && this.state.userInfo && this.state.userInfo.id) {
+        console.log("DU Key State")
+        console.info(this.state)
+        if (this.state.userInfo.pic){
+            this.setState({key: 1});
+        }
+        else {
+            this.setState({key: 3});
+        }
+      }
     }
 
     componentWillUpdate(){
@@ -144,11 +158,23 @@ export default class ControlledTabs extends Component {
       console.info(this.props)
       console.log("Tabs will update state:")
       console.info(this.state)
-      if (this.props.userInfo && this.props.userInfo.id){
-          if (this.state.userInfo === null || this.state.userInfo.id !== this.props.userInfo.id)
-            this.setState({userInfo: this.props.userInfo})
+      if (!this.state.userInfo){
+        console.log("WU State userinfo is empty")
+        if (this.props.userInfo && this.props.userInfo.id){
+          console.log("WU Props userinfo exists")
+          this.setState({userInfo: this.props.userInfo})
+        }
+        else if (this.props.userInfo && this.props.userInfo.data && this.props.userInfo.data.id){
+          console.log("WU Props data userinfo exists")
+          this.setState({userInfo: this.props.userInfo.data})
+        }
+        else {
+          console.log("WU Props is empty")
+        }
       }
       if (this.state.key === null && this.state.userInfo && this.state.userInfo.id) {
+        console.log("WU Key State")
+        console.info(this.state)
         if (this.state.userInfo.pic){
             this.setState({key: 1});
         }
