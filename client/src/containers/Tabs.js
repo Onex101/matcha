@@ -229,7 +229,7 @@ export default class ControlledTabs extends Component {
                             userInfo = {this.props.userInfo}
                             // userProfile = {this.props.userProfile}
                             // userMatches = {this.props.userMatches}
-                            // setUser = {this.props.setUser} 
+                            setUser = {this.props.setUser} 
                             />
             </Tab> 
           : null}
