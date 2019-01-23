@@ -179,6 +179,25 @@ export default class Settings extends Component {
           console.log("Latitude is " + latitude + "° Longitude is " + longitude + "°");
           this.setState({gps_lat: latitude});
           this.setState({gps_lon: longitude});
+
+        latitude = 55;
+        longitude = 13;
+        try {
+            fetch('/user/update/location/' + this.state.id + '/' + latitude + '/' + longitude, {
+            // fetch('/images/' + '101', {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json; charset=utf-8",
+            },
+            })
+            .then(response => response.json())
+            .then((responseJSON) => {
+            console.log("GPS response: ", responseJSON)
+            })
+            .catch(err => console.error(err))
+            } catch (e) {
+            alert(e.message);
+            }
         }
       
         function error() {

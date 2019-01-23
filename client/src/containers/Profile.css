@@ -139,6 +139,7 @@ body {
 .bottom {
   width: 80%;
   padding: 10px 30px;
+  padding-bottom: 8%;
   font-family: Calibri;
   text-align: left;
   color: rgb(87, 86, 86);

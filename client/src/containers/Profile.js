@@ -221,6 +221,7 @@ export default class Profile extends Component {
                 <hr /><br/>
                 {info.bio != "null" ? <div><h4>Bio</h4>
                                         {info.bio}</div> : null}
+                <br /><br />
                 <h4>Tags</h4>
             </div>
             {this.props.userInfo.id != localStorage.getItem('id') ? 

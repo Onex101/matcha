@@ -146,8 +146,6 @@ export default class Home extends Component {
   }
 
   render() {
-    // if (this.state.matches === null)
-    //   this.getMatches()
     return(localStorage.getItem('user') && this.state.matches 
             ?  <div className="Home">
             {/* {console.log("IN HOME MATHCES:")}
@@ -157,6 +155,6 @@ export default class Home extends Component {
                     <div>{this.landerCheck()}{this.getMatchCards()}</div>
                   </div>
                 </div>
-		      	: <div className="Home">{this.getMatches()}<ControlLabel> Loading ... </ControlLabel></div>);
+		      	: <div className="Home"><ControlLabel> Loading ... </ControlLabel></div>);
   }
 }
