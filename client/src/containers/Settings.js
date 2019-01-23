@@ -271,29 +271,46 @@ export default class Settings extends Component {
     
     // Updates user info
     updateInfo(){
-        // const user = this.state;
-        // // fetch(`/products/add?name=${product.name}&price=${product.price}`)
-        // // .then(response => response.json())
-        // fetch(`/user/create`, {
-        //   method: "POST",
-        //   headers: {
-        //       "Content-Type": "application/json; charset=utf-8",
-        //   },
-        //   body: JSON.stringify({
-        //     first_name: user.first_name,
-        //     last_name: user.last_name,
-        //     user_name:  user.user_name,
-        //     email:      user.email,
-        //     password:   user.password,
-        //     birth_date:  user.birth_date,
-        //     gender:     this.state.gender || '0.5',
-        //     pref:       this.state.pref || '0.5',
-        //     gps_lat:    this.state.gps_lat,
-		//     gps_lon:    this.state.gps_lon
-        //   })
-        // })
-        // // .then(this.getUsers)
-        // .catch(err => console.error(err))
+        // event.preventDefault();
+  
+        try {
+          const user = this.state;
+          fetch(`/user/update`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json; charset=utf-8",
+            },
+            body: JSON.stringify({
+              id        :   this.state.id,
+              bio       :   this.state.bio,
+              gender    :   this.state.gender,
+              pref      :   this.state.pref
+            })
+          })
+          .then(response => response.json())
+          .then((responseJSON) => {
+              console.log(responseJSON);
+            //   if (responseJSON["success"]) {
+            //     if (responseJSON["success"] === "login sucessfull") {
+            //       this.props.userHasAuthenticated(true);
+            //       this.props.setUser(responseJSON["user"]);
+            //       this.props.history.push("/");
+            //     } else if (responseJSON["success"] === "Username and password does not match"){
+            //       alert(responseJSON["success"]);
+            //     } else if (responseJSON["success"] === "Username does not exist"){
+            //       alert(responseJSON["success"]);}
+            //   }
+                if (responseJSON){
+                    console.log("ResponseJSON:")
+                    console.info(responseJSON)
+                }
+              else
+                alert("Something went wrong :(");
+          })
+          .catch(err => console.error(err))
+          } catch (e) {
+            alert(e.message);
+          }
     }
 
     // Gets user images
@@ -385,7 +402,7 @@ export default class Settings extends Component {
                   })
                   .catch(err => console.error(err))
             }
-            else if (pics[i].id !== null && pics[i].pic) {
+            else if (pics[i].id !== null && pics[i].pic !== null) {
                 console.log("Replacing old image");
                 //Send replace image
                 fetch('/image/replace/', {
@@ -421,6 +438,8 @@ export default class Settings extends Component {
         window.onbeforeunload = function () {
             window.scrollTo(0, 0);
           }
+        // if (this.state.profile_id !== this.props.userInfo.profile_pic_id)
+        //   this.props.setUser(this.state.user_name)
         if (this.state.id === null && this.props.userInfo !== null && this.props.userInfo.id !== null){
             // console.log("If for you! 1 user");
             // console.log("UPDATE TEST PROPS:");
