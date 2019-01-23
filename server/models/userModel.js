@@ -471,7 +471,7 @@ User.prototype.fetchInterestsList = function (callback){
 
 User.prototype.update_data = function (bio, gender, pref, id, callback){
 	bio = mysql.escape(bio);
-	var query = `UPDATE users SET bio = '${bio}', gender = '${gender}', pref = '${pref}' WHERE id = '${id}'`;
+	var query = `UPDATE users SET bio = ${bio}, gender = '${gender}', pref = '${pref}' WHERE id = '${id}'`;
 	db.query(query, function (err, results) {
 		if (err){
 			callback(err, null);
@@ -480,6 +480,10 @@ User.prototype.update_data = function (bio, gender, pref, id, callback){
 			callback(null, results);
 		}
 	})
+}
+
+User.prototype.set_gps = function(lat, lon, callback){
+	var
 }
 
 User.prototype.logout = function(id, callback){
