@@ -426,7 +426,8 @@ User.prototype.replaceInterest = function (user_id, interest_id_old, interest_id
 }
 
 User.prototype.createNewInterest = function (user_id, interest, callback){
-	var query1 = `INSERT INTO interests (interest) VALUES ('${interest}');`;
+	interest = mysql.escape(interest);
+	var query1 = `INSERT INTO interests (interest) VALUES (${interest});`;
 	db.query(query1 , function (err, results) {
 		if (err){
 			callback(err, null);
