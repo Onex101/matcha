@@ -40,7 +40,7 @@ exports.user_detail = function(req, res) {
                     gender: row.gender,
                     pref: row.pref,
                     gps_lat: row.gps_lat,
-                    gps_lon: row.gps_lat,
+                    gps_lon: row.gps_lon,
                     bio: row.bio,
                     fame: row.fame,
                     email: row.email,
