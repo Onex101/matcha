@@ -41,8 +41,8 @@ export default class Profile extends Component {
             profile: this.props.userInfo.pic,
             tags: this.props.userInfo.interests,
              });
-        console.log("PROF STATE: ");
-        console.info(this.state);
+        // console.log("PROF STATE: ");
+        // console.info(this.state);
     }
 
     // Gets user images
@@ -117,7 +117,7 @@ export default class Profile extends Component {
     }
 
     componentDidMount() {
-        console.log("Profile INFO 1: " +JSON.stringify(this.props.userInfo))
+        // console.log("Profile INFO 1: " +JSON.stringify(this.props.userInfo))
         
         if (this.state.id === null && this.props.userInfo && this.props.userInfo.id  ){
             this.getInfo();
@@ -126,14 +126,14 @@ export default class Profile extends Component {
         //get more info
             this.getUserImages();
         }
-        console.log("Profile State INFO 1: " +JSON.stringify(this.state))
+        // console.log("Profile State INFO 1: " +JSON.stringify(this.state))
     }
 
     componentDidUpdate() {
-        console.log("Profile INFO 2: " +JSON.stringify(this.props.userInfo))
+        // console.log("Profile INFO 2: " +JSON.stringify(this.props.userInfo))
         if (this.props.userInfo){
             // if (this.props.userInfo.id)
-                console.log("Profile Props test: " +JSON.stringify(this.props.userInfo.id))
+                // console.log("Profile Props test: " +JSON.stringify(this.props.userInfo.id))
         }
         if (this.props.userInfo && this.props.userInfo.id && !this.state.id){
             this.getInfo();
@@ -142,14 +142,14 @@ export default class Profile extends Component {
         //get more info
             this.getUserImages();
         }
-        console.log("Profile State INFO 2: " +JSON.stringify(this.state))
+        // console.log("Profile State INFO 2: " +JSON.stringify(this.state))
     }
 
     render() {
         // console.log("INFO 2:");
         // console.info(this.props.props)
         const info = this.state;
-        console.log("STATE INFO: " +JSON.stringify(this.state))
+        // console.log("STATE INFO: " +JSON.stringify(this.state))
         var width=150
         var height=150
         return (

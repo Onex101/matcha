@@ -11,6 +11,7 @@ const ReactTags = require('react-tag-autocomplete')
 export default class Settings extends Component {
     constructor(props) {
         super(props);
+            // tags: [{id: 1, name: "apples"}, {id: 2, name: "pears"}],
 
         this.state = {
             id: null,
@@ -24,7 +25,7 @@ export default class Settings extends Component {
             pref: null,
             gps_lat: null,
             gps_lon: null,
-            tags: [{id: 1, name: "apples"}, {id: 2, name: "pears"}],
+            tags: null,
             suggestions: [
                 { id: 3, name: "Bananas" },
                 { id: 4, name: "Mangos" },
@@ -171,7 +172,6 @@ export default class Settings extends Component {
           console.log("Geolocation is not supported by your browser");
           return;
         }
-      
         const success = (position) => {
           var latitude  = position.coords.latitude;
           var longitude = position.coords.longitude;
@@ -179,12 +179,8 @@ export default class Settings extends Component {
           console.log("Latitude is " + latitude + "° Longitude is " + longitude + "°");
           this.setState({gps_lat: latitude});
           this.setState({gps_lon: longitude});
-
-        latitude = 55;
-        longitude = 13;
         try {
             fetch('/user/update/location/' + this.state.id + '/' + latitude + '/' + longitude, {
-            // fetch('/images/' + '101', {
             method: "GET",
             headers: {
                 "Content-Type": "application/json; charset=utf-8",
@@ -199,12 +195,9 @@ export default class Settings extends Component {
             alert(e.message);
             }
         }
-      
         function error() {
             console.log("Unable to retrieve your location");
-        //   output.innerHTML = "Unable to retrieve your location";
         }
-      
         console.log("Locating…");
         navigator.geolocation.getCurrentPosition(success, error);
     }
@@ -268,8 +261,15 @@ export default class Settings extends Component {
     handleAddition (tag) {
         tag.name = tag.name.toLowerCase();
         if (this.state.tags.length < 10){
-        const tags = [].concat(this.state.tags, tag)
-        this.setState({ tags })}
+            var tags;
+            if (this.state.tags === null)
+                tags = [{id: 0, name: tag.name}]
+            else
+                tags = [].concat(this.state.tags, tag)
+            this.setState({ tags })
+        }
+        console.log("Tags: ")
+        console.info(this.state.tags)
     }
 
     // Gets user info
@@ -321,6 +321,37 @@ export default class Settings extends Component {
           } catch (e) {
             alert(e.message);
           }
+    }
+
+    getInterests(){
+        console.log("Getting interests 1")
+        if (this.state.tags !== null)
+            console.log(this.state.tags[0])
+        if (localStorage.getItem('id') && this.state.tags !== null && !this.state.tags[0]){
+            console.log("Getting interests 2")
+            try {
+                console.log("Getting interests 3")
+              fetch('/user/' + localStorage.getItem('id') + '/interests', {
+                method: "GET",
+                headers: {
+                  "Content-Type": "application/json; charset=utf-8",
+                },
+              })
+              .then(response => response.json())
+              .then((responseJSON) => {
+                console.log("Interests response: ")
+                console.info(responseJSON)
+                if (responseJSON.length > 0)
+                    this.setState({tags: responseJSON})
+                else
+                    this.setState({tags: null})
+
+              })
+              .catch(err => console.error(err))
+              } catch (e) {
+                alert(e.message);
+              }
+        }
     }
 
     // Gets user images
@@ -455,6 +486,7 @@ export default class Settings extends Component {
             // console.log("UPDATE TEST STATE:");
             // console.info(this.state)
             this.getInfo();
+            this.getInterests();
         } else {
             // console.log("No user if for you! 1");
             // console.log("STATE: ");

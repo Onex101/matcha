@@ -120,28 +120,28 @@ export default class ControlledTabs extends Component {
     }
   
     componentDidMount(){
-      console.log("Tabs did mount props:")
-      console.info(this.props)
-      console.log("Tabs did mount state:")
-      console.info(this.state)
+      // console.log("Tabs did mount props:")
+      // console.info(this.props)
+      // console.log("Tabs did mount state:")
+      // console.info(this.state)
       if (!this.state.userInfo){
-        console.log("DM State userinfo is empty")
+        // console.log("DM State userinfo is empty")
         if (this.props.userInfo && this.props.userInfo.id){
-          console.log("DM Props userinfo exists")
+          // console.log("DM Props userinfo exists")
           this.setState({userInfo: this.props.userInfo})
           this.setState({userInfo: this.props.userInfo.data})
         }
         else if (this.props.userInfo && this.props.userInfo.data && this.props.userInfo.data.id){
-          console.log("DM Props data userinfo exists")
+          // console.log("DM Props data userinfo exists")
           this.setState({userInfo: this.props.userInfo.data})
         }
         else {
-          console.log("DM Props is empty")
+          // console.log("DM Props is empty")
         }
       }
       if (this.state.key === null && this.state.userInfo && this.state.userInfo.id) {
-        console.log("DU Key State")
-        console.info(this.state)
+        // console.log("DU Key State")
+        // console.info(this.state)
         if (this.state.userInfo.pic){
             this.setState({key: 1});
         }
@@ -154,27 +154,27 @@ export default class ControlledTabs extends Component {
     componentWillUpdate(){
       // console.log("In tabs test:")
       // console.info(this.props)
-      console.log("Tabs will update props:")
-      console.info(this.props)
-      console.log("Tabs will update state:")
-      console.info(this.state)
+      // console.log("Tabs will update props:")
+      // console.info(this.props)
+      // console.log("Tabs will update state:")
+      // console.info(this.state)
       if (!this.state.userInfo){
-        console.log("WU State userinfo is empty")
+        // console.log("WU State userinfo is empty")
         if (this.props.userInfo && this.props.userInfo.id){
-          console.log("WU Props userinfo exists")
+          // console.log("WU Props userinfo exists")
           this.setState({userInfo: this.props.userInfo})
         }
         else if (this.props.userInfo && this.props.userInfo.data && this.props.userInfo.data.id){
-          console.log("WU Props data userinfo exists")
+          // console.log("WU Props data userinfo exists")
           this.setState({userInfo: this.props.userInfo.data})
         }
         else {
-          console.log("WU Props is empty")
+          // console.log("WU Props is empty")
         }
       }
       if (this.state.key === null && this.state.userInfo && this.state.userInfo.id) {
-        console.log("WU Key State")
-        console.info(this.state)
+        // console.log("WU Key State")
+        // console.info(this.state)
         if (this.state.userInfo.pic){
             this.setState({key: 1});
         }
@@ -185,10 +185,10 @@ export default class ControlledTabs extends Component {
     }
  
     checkValidUser() {
-      console.log("Valid user check:")
-      console.info(this.state)
+      // console.log("Valid user check:")
+      // console.info(this.state)
         if (this.state.userInfo && this.state.userInfo.pic) {
-          console.log("Valid user!")
+          // console.log("Valid user!")
           return true;
         }
         else
