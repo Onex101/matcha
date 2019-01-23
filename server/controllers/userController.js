@@ -456,6 +456,10 @@ exports.get_liked = function(req, res){
 	})
 }
 
+exports.update_gps = function(req, res){
+
+}
+
 //sorting function to sort by match score
 function sortFunction(a, b) {
     if (a['match'] === b['match']) {
