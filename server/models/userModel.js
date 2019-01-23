@@ -481,7 +481,6 @@ User.prototype.update_data = function (bio, gender, pref, id, callback){
 }
 
 User.prototype.set_gps = function(id, lat, lon, callback){
-	console.log("Lat= " + lat + "   long= " + lon)
 	var query = `UPDATE users SET gps_lat = ${lat}, gps_lon = ${lon} WHERE id = ${id}`;
 	db.query(query, function(err, results){
 		if (err){
