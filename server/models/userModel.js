@@ -241,17 +241,15 @@ User.prototype.login = function (callback){
 					callback(null, results);
 				}
 			});
+			callback(null, results);
 		}
     })
 }
 
 User.prototype.login_user = function (user_name, callback){
-	var query = `UPDATE users SET online = 0 WHERE user_name = '${user_name}'`;
+	var query = `UPDATE users SET online = NULL WHERE user_name = '${user_name}'`;
 	db.query(query, function(err, result){
 		if(err){callback(err,null);}
-		else{
-			callback(null, result);
-		}
 	})
 }
 
