@@ -482,9 +482,9 @@ User.prototype.update_data = function (bio, gender, pref, id, callback){
 	})
 }
 
-User.prototype.set_gps = function(lat, lon, callback){
-	var
-}
+// User.prototype.set_gps = function(lat, lon, callback){
+// 	var
+// }
 
 User.prototype.logout = function(id, callback){
 	var now = new Date();

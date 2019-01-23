@@ -290,20 +290,11 @@ export default class Settings extends Component {
           .then(response => response.json())
           .then((responseJSON) => {
               console.log(responseJSON);
-            //   if (responseJSON["success"]) {
-            //     if (responseJSON["success"] === "login sucessfull") {
+              if (responseJSON["success"]) {
+                if (responseJSON["success"] === "Update sucessfull") {
             //       this.props.userHasAuthenticated(true);
-            //       this.props.setUser(responseJSON["user"]);
-            //       this.props.history.push("/");
-            //     } else if (responseJSON["success"] === "Username and password does not match"){
-            //       alert(responseJSON["success"]);
-            //     } else if (responseJSON["success"] === "Username does not exist"){
-            //       alert(responseJSON["success"]);}
-            //   }
-                if (responseJSON){
-                    console.log("ResponseJSON:")
-                    console.info(responseJSON)
                 }
+              }
               else
                 alert("Something went wrong :(");
           })
@@ -437,9 +428,7 @@ export default class Settings extends Component {
     componentDidUpdate() {
         window.onbeforeunload = function () {
             window.scrollTo(0, 0);
-          }
-        // if (this.state.profile_id !== this.props.userInfo.profile_pic_id)
-        //   this.props.setUser(this.state.user_name)
+        }
         if (this.state.id === null && this.props.userInfo !== null && this.props.userInfo.id !== null){
             // console.log("If for you! 1 user");
             // console.log("UPDATE TEST PROPS:");
@@ -539,7 +528,7 @@ export default class Settings extends Component {
                         componentClass="textarea" 
                         placeholder="Tell us about yourself!"
                         // id="bio"
-                        // defaultValue={this.props.profile.biography}
+                        defaultValue={this.state.bio}
                         onChange={this.handleChange} 
                         />
                     </FormGroup>

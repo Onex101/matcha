@@ -31,6 +31,8 @@ class App extends Component {
     // Get User
     console.log("Local user:", localStorage.getItem('user'))
     console.log("Local id:", localStorage.getItem('id'))
+    if (localStorage.getItem('user') && this.state.isAuthenticated === false)
+      this.setState({isAuthenticated: true})
     if (localStorage.getItem('user') && this.state.userInfo === null){
       try {
         fetch('/user/' + localStorage.getItem('id'), {
