@@ -233,27 +233,24 @@ User.prototype.login = function (callback){
         if (err)
             callback(err, null);
         else{
-			// let newUser = new User('')
-            // newUser.login_user(self.data.user_name, function(err, result){
-			// 	console.log(err)
-			// 	if(err){callback(err,null);}
-			// 	else{
-			// 		console.log(results)
-			// 		callback(null, results);
-			// 	}
-			// });
-			callback(null, results)
+			let newUser = new User('')
+            newUser.login_user(self.data.user_name, function(err, result){
+				console.log(err)
+				if(err){callback(err,null);}
+				else{
+					console.log(results)
+					callback(null, results);
+				}
+			});
+			callback(null, results);
 		}
     })
 }
 
 User.prototype.login_user = function (user_name, callback){
-	var query = `UPDATE users SET online = 0 WHERE user_name = '${user_name}'`;
+	var query = `UPDATE users SET online = NULL WHERE user_name = '${user_name}'`;
 	db.query(query, function(err, result){
 		if(err){callback(err,null);}
-		else{
-			callback(null, result);
-		}
 	})
 }
 
@@ -407,12 +404,12 @@ User.prototype.getInterestById = function (user_id, callback){
 
 User.prototype.replaceInterest = function (user_id, interest_id_old, interest_id_new, callback){
 	var query1 = `DELETE FROM user_interests WHERE user_id = ${user_id} AND interest_id = ${interest_id_old}`;
-	var query2 = `INSERT INTO user_interests VALUES(${user_id},${interest_id_new})`;
 	db.query(query1 , function (err, results) {
 		if (err){
 			callback(err, null);
 		}
 		else{
+			var query2 = `INSERT INTO user_interests VALUES(${user_id},${interest_id_new})`;
 			db.query(query2 , function (err, results) {
 				if (err){
 					callback(err, null);
@@ -426,13 +423,14 @@ User.prototype.replaceInterest = function (user_id, interest_id_old, interest_id
 }
 
 User.prototype.createNewInterest = function (user_id, interest, callback){
-	var query1 = `INSERT INTO interests (interest) VALUES ('${interest}');`;
-	var query2 = `INSERT INTO user_interests VALUES(${user_id},(SELECT id FROM interests WHERE interest = '${interest}' LIMIT 1))`;
+	interest = mysql.escape(interest);
+	var query1 = `INSERT INTO interests (interest) VALUES (${interest});`;
 	db.query(query1 , function (err, results) {
 		if (err){
 			callback(err, null);
 		}
 		else{
+			var query2 = `INSERT INTO user_interests VALUES(${user_id},(SELECT id FROM interests WHERE interest = '${interest}' LIMIT 1))`;
 			db.query(query2 , function (err, results) {
 				if (err){
 					callback(err, null);
