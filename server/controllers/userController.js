@@ -306,17 +306,17 @@ exports.user_checkVerify = function(req, res){
 exports.user_verify = function(req, res){
 	let user = new User('');
 	console.log("Verification test1");
-	console.log(req.body);
-	user.getByUsername(req.body['user_name'], function(err, results){
+	console.log(req.body.user_name);
+	user.getByUsername(req.body.user_name, function(err, results){
 		console.log(results);
-        user = new User(results[0]);
+        user = new User(results);
 		if (err){
             console.log("Verification test2");
             res.send(err)
 		}
 		else{
 			console.log("Verification test3");
-			// console.log(req.body['veri_code'] + "    "+ results[0].veri_code);
+			console.log(req.body['veri_code'] + "\n"+ results[0].veri_code);
 			if (results[0] === null){
 				res.send({error:'no results'})
 			}
