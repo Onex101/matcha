@@ -407,12 +407,12 @@ User.prototype.getInterestById = function (user_id, callback){
 
 User.prototype.replaceInterest = function (user_id, interest_id_old, interest_id_new, callback){
 	var query1 = `DELETE FROM user_interests WHERE user_id = ${user_id} AND interest_id = ${interest_id_old}`;
-	var query2 = `INSERT INTO user_interests VALUES(${user_id},${interest_id_new})`;
 	db.query(query1 , function (err, results) {
 		if (err){
 			callback(err, null);
 		}
 		else{
+			var query2 = `INSERT INTO user_interests VALUES(${user_id},${interest_id_new})`;
 			db.query(query2 , function (err, results) {
 				if (err){
 					callback(err, null);
@@ -427,12 +427,12 @@ User.prototype.replaceInterest = function (user_id, interest_id_old, interest_id
 
 User.prototype.createNewInterest = function (user_id, interest, callback){
 	var query1 = `INSERT INTO interests (interest) VALUES ('${interest}');`;
-	var query2 = `INSERT INTO user_interests VALUES(${user_id},(SELECT id FROM interests WHERE interest = '${interest}' LIMIT 1))`;
 	db.query(query1 , function (err, results) {
 		if (err){
 			callback(err, null);
 		}
 		else{
+			var query2 = `INSERT INTO user_interests VALUES(${user_id},(SELECT id FROM interests WHERE interest = '${interest}' LIMIT 1))`;
 			db.query(query2 , function (err, results) {
 				if (err){
 					callback(err, null);
