@@ -72,12 +72,13 @@ User.prototype.linked_users = function(id, callback){
 
 User.prototype.getByUsername = function (data, callback) {
     data = mysql.escape(data);
-	var query = `SELECT * FROM users WHERE user_name = ${data}`;
-	// var query = `SELECT id, user_name, password, birth_date, gender, pref, gps_lat, gps_lon,bio, GROUP_CONCAT(interest) AS interests FROM\
-	// (SELECT users.id, user_name, password, interest, birth_date, gender, pref, gps_lat, gps_lon, bio FROM user_interests\
-	// JOIN users ON user_interests.user_id = users.id\
-	// JOIN interests ON user_interests.interest_id = interests.id) x\
-	// WHERE user_name = ${data} GROUP BY user_name, id`;
+	// var query = `SELECT * FROM users WHERE user_name = ${data}`;
+	var query = `SELECT id, password,user_name, birth_date, gender, pref, gps_lat, gps_lon,bio, profile_pic_id, pic, fame, GROUP_CONCAT(interest) AS interests FROM\
+	(SELECT users.id, user_name, password,interest, birth_date, gender, pref, gps_lat, gps_lon, bio, profile_pic_id, fame, pic FROM user_interests\
+	RIGHT JOIN users ON user_interests.user_id = users.id\
+	LEFT JOIN interests ON user_interests.interest_id = interests.id\
+	LEFT JOIN pictures ON profile_pic_id = pictures.id) x\
+	WHERE user_name = ${data} GROUP BY user_name, id`;
     db.query(query, function (err, result) {
         if (err) {callback(err, null);}
         else{
@@ -403,12 +404,12 @@ User.prototype.getInterestById = function (user_id, callback){
 
 User.prototype.replaceInterest = function (user_id, interest_id_old, interest_id_new, callback){
 	var query1 = `DELETE FROM user_interests WHERE user_id = ${user_id} AND interest_id = ${interest_id_old}`;
-	var query2 = `INSERT INTO user_interests VALUES(${user_id},${interest_id_new})`;
 	db.query(query1 , function (err, results) {
 		if (err){
 			callback(err, null);
 		}
 		else{
+			var query2 = `INSERT INTO user_interests VALUES(${user_id},${interest_id_new})`;
 			db.query(query2 , function (err, results) {
 				if (err){
 					callback(err, null);
@@ -422,13 +423,14 @@ User.prototype.replaceInterest = function (user_id, interest_id_old, interest_id
 }
 
 User.prototype.createNewInterest = function (user_id, interest, callback){
-	var query1 = `INSERT INTO interests (interest) VALUES ('${interest}');`;
-	var query2 = `INSERT INTO user_interests VALUES(${user_id},(SELECT id FROM interests WHERE interest = '${interest}' LIMIT 1))`;
+	interest = mysql.escape(interest);
+	var query1 = `INSERT INTO interests (interest) VALUES (${interest});`;
 	db.query(query1 , function (err, results) {
 		if (err){
 			callback(err, null);
 		}
 		else{
+			var query2 = `INSERT INTO user_interests VALUES(${user_id},(SELECT id FROM interests WHERE interest = '${interest}' LIMIT 1))`;
 			db.query(query2 , function (err, results) {
 				if (err){
 					callback(err, null);
@@ -466,8 +468,21 @@ User.prototype.fetchInterestsList = function (callback){
 }
 
 User.prototype.update_data = function (bio, gender, pref, id, callback){
-	var query = `UPDATE users SET bio = '${bio}', gender = '${gender}', pref = '${pref}' WHERE id = '${id}'`;
+	bio = mysql.escape(bio);
+	var query = `UPDATE users SET bio = ${bio}, gender = '${gender}', pref = '${pref}' WHERE id = '${id}'`;
 	db.query(query, function (err, results) {
+		if (err){
+			callback(err, null);
+		}
+		else{
+			callback(null, results);
+		}
+	})
+}
+
+User.prototype.set_gps = function(id, lat, lon, callback){
+	var query = `UPDATE users SET gps_lat = ${lat}, gps_lon = ${lon} WHERE id = ${id}`;
+	db.query(query, function(err, results){
 		if (err){
 			callback(err, null);
 		}

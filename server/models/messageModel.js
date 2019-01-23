@@ -54,7 +54,8 @@ Msg.prototype.getByMessagesByUserIds = function (user_id1, user_id2, callback){
 }
 
 Msg.prototype.create = function (callback) {
-	db.query(`INSERT msgs (conversation_id, sender, msg) VALUES ('${this.data.conversation_id}', '${this.data.sender}', '${this.data.message}')`, function (err, result){
+	msg = mysql.escape(this.data.message);
+	db.query(`INSERT msgs (conversation_id, sender, msg) VALUES ('${this.data.conversation_id}', '${this.data.sender}', ${msg})`, function (err, result){
 		if (err){callback(err, null);}
 		else{
 			if (typeof callback === "function"){

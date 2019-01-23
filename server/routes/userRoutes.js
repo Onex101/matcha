@@ -85,4 +85,7 @@ router.get('/dislike/:user_id/:target_id',user_controller.dislike_userId);
 //get liked
 router.get('/user/:id/getliked',user_controller.get_liked);
 
+//GET route to update GPS
+router.get('user/update/location/:id/:lat/:lon', user_controller.update_gps);
+
 module.exports = router;

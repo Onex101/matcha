@@ -31,6 +31,8 @@ class App extends Component {
     // Get User
     console.log("Local user:", localStorage.getItem('user'))
     console.log("Local id:", localStorage.getItem('id'))
+    if (localStorage.getItem('user') && this.state.isAuthenticated === false)
+      this.setState({isAuthenticated: true})
     if (localStorage.getItem('user') && this.state.userInfo === null){
       try {
         fetch('/user/' + localStorage.getItem('id'), {
@@ -87,7 +89,11 @@ class App extends Component {
   }
 
   setUser = user => {
-    this.setState({ userInfo: user });
+    console.log("SetUser:")
+    console.info(user)
+    this.setState({ userInfo: user.data });
+    console.log("SetUser state:")
+    console.info(this.state)
     localStorage.setItem('user', user.data.user_name);
     localStorage.setItem('id', user.data.id);
     console.log("ID = " + localStorage.getItem('id'));

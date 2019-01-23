@@ -142,7 +142,7 @@ exports.user_update_post = function(req, res) {
 	user.update_data(user.data.bio, user.data.gender, user.data.pref, user.data.id, function (err, results){
 		if(err){res.send(err)}
 		else{
-			res.send("Update sucessfull");
+			res.send({success: "Update sucessfull"});
 		}
 	})
 };
@@ -166,23 +166,25 @@ exports.user_login_post = function(req, res) {
 					}
 					else{
 						row = results[0];
-						if (row)
-						user.data = {
-							id: row.id,
-							first_name: row.first_name,
-							last_name: row.last_name,
-							user_name: row.user_name,
-							birth_date: row.birth_date,
-							gender: row.gender,
-							pref: row.pref,
-							gps_lat: row.gps_lat,
-							gps_lon: row.gps_lat,
-							bio: row.bio,
-							fame: row.fame,
-							email: row.email,
-							password: row.password
-						}
-						// res.status(200);
+						if (row) 
+							user.data = {
+								id: row.id,
+								first_name: row.first_name,
+								last_name: row.last_name,
+								user_name: row.user_name,
+								birth_date: row.birth_date,
+								gender: row.gender,
+								pref: row.pref,
+								gps_lat: row.gps_lat,
+								gps_lon: row.gps_lat,
+								bio: row.bio,
+								fame: row.fame,
+								email: row.email,
+								password: row.password,
+								interests: row.interests,
+								profile_pic_id: row.profile_pic_id,
+								pic: row.pic,
+								age: Match.getAge(row.birth_date)}
 						res.send({
 							user,
 							success:"login sucessfull"
@@ -447,6 +449,16 @@ exports.dislike_userId = function(req, res){
 exports.get_liked = function(req, res){
 	let user = new User('');
 	user.linked_users(req.params.id,function(err, results){
+		if(err){res.send(err);}
+		else{
+			res.send(results)
+		}
+	})
+}
+
+exports.update_gps = function(req, res){
+	let user = new User('');
+	user.set_gps(req.params.id, req.params.lat, req.params.lon, function(err, results){
 		if(err){res.send(err);}
 		else{
 			res.send(results)
