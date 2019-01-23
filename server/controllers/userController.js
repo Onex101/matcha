@@ -458,6 +458,7 @@ exports.get_liked = function(req, res){
 
 exports.update_gps = function(req, res){
 	let user = new User('');
+	console.log(req.params)
 	user.set_gps(req.params.id, req.params.lat, req.params.lon, function(err, results){
 		if(err){res.send(err);}
 		else{
