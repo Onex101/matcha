@@ -457,7 +457,13 @@ exports.get_liked = function(req, res){
 }
 
 exports.update_gps = function(req, res){
-
+	let user = new User('');
+	user.set_gps(req.params.lat, req.params.lon, function(err, results){
+		if(err){res.send(err);}
+		else{
+			res.send(results)
+		}
+	})
 }
 
 //sorting function to sort by match score
