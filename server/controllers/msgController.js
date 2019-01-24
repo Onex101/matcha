@@ -39,7 +39,7 @@ exports.getConversation = function(req, res) {
 	}
 	else{
 		msg.getByMessagesByUserIds(conversation.data.user1, conversation.data.user2, function (err, result){
-			console.log(result);
+			// console.log(result);
 			if (err){
 				res.send(err);
 			}
