@@ -257,23 +257,14 @@ export default class Settings extends Component {
         this.setState({ tags })
     }
     
-    // Handle Addition of Tag to user profile
+
     handleAddition (tag) {
-        console.log("Tag:")
-        console.info(tag)
+        const tags = this.state.tags;
         tag.name = tag.name.toLowerCase();
-        if (this.state.tags.length < 10){
-            var tags;
-            console.log("State tags ")
-            console.info(this.state.tags)
-            if (this.state.tags.length === 0){
-                console.log("Empty tags")
-                tags = [{id: 0, name: tag.name}]
-            }
-            else
-                tags = [].concat(this.state.tags, tag)
-            this.setState({ tags })
+        if (tags.length < 10) {
+            tags.push({id: tag.id, name: tag.name})
         }
+        this.setState({ tags })
         console.log("Tags: ")
         console.info(this.state.tags)
     }
@@ -293,8 +284,8 @@ export default class Settings extends Component {
              this.setState({bio: null})
         if (this.state.tags === null && this.props.userInfo.id){
             try {
-                console.log("Tags test")
-                console.info(this.props.userInfo.id)
+                // console.log("Tags test")
+                // console.info(this.props.userInfo.id)
                 fetch('/user/' + this.props.userInfo.id + '/interests', {
                   method: "GET",
                   headers: {
@@ -303,22 +294,20 @@ export default class Settings extends Component {
                 })
                 .then(response => response.json())
                 .then((responseJSON) => {
-                  console.log("Tags response = ");
-                  console.info(responseJSON);
+                //   console.log("Tags response = ");
+                //   console.info(responseJSON);
                   if (responseJSON.length === 0)
-                      this.setState({tags: [{id:0, name: null}]})
+                      this.setState({tags: []})
                   else
                     this.setState({tags: responseJSON})
-                  console.log("Tags state = ");
-                  console.info(this.state.tags);
+                //   console.log("Tags state = ");
+                //   console.info(this.state.tags);
                 })
                 .catch(err => console.error(err))
                 } catch (e) {
                   alert("Settings 3: " + e.message);
                 }
-            } else {
-                console.log("Tags= " + this.state.tags + '      Id= ' + this.props.userInfo.id)
-        }
+            }
         // Get suggestions
         if (this.state.suggestions === null) {
             try {
@@ -330,11 +319,11 @@ export default class Settings extends Component {
                 })
                 .then(response => response.json())
                 .then((responseJSON) => {
-                  console.log("Suggestions response = ");
-                  console.info(responseJSON);
+                //   console.log("Suggestions response = ");
+                //   console.info(responseJSON);
                   this.setState({suggestions: responseJSON})
-                  console.log("Suggestions state = ");
-                  console.info(this.state.suggestions);
+                //   console.log("Suggestions state = ");
+                //   console.info(this.state.suggestions);
                 })
                 .catch(err => console.error(err))
                 } catch (e) {
@@ -575,7 +564,7 @@ export default class Settings extends Component {
 
     renderTags() {
         // if (this.state.tags && this.state.tags[0])
-        if (this.state.tags)
+        if (this.state.tags && this.state.suggestions)
         {
             return (<ReactTags
                 allowNew = {true}

@@ -344,7 +344,6 @@ exports.user_verify = function(req, res){
 
 //GETs all interests for a given user
 exports.user_interests_get = function(req, res){
-	console.log("Getting user interests 1");
 	let user = new User('');
 	user.getInterestById(req.params.id, function(err, results){
 		if(err){
