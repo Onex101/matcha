@@ -258,6 +258,7 @@ export default class Settings extends Component {
     }
     
 
+    // Handle Addition of Tag to user profile    
     handleAddition (tag) {
         const tags = this.state.tags;
         tag.name = tag.name.toLowerCase();
@@ -354,17 +355,55 @@ export default class Settings extends Component {
           .then((responseJSON) => {
               console.log(responseJSON);
               if (responseJSON["success"]) {
-            //     if (responseJSON["success"] === "Update sucessfull") {
-            // //       this.props.userHasAuthenticated(true);
-            //     }
+                // Successfully sent
               }
-            //   else
-            //     alert("Something went wrong :(");
           })
           .catch(err => console.error(err))
           } catch (e) {
             alert("Settings 2: " + e.message);
           }
+        if (this.state.tags) {
+            const tags = this.state.tags;
+            //Send tags through however the hell I'm supposed to do that
+            for (var i = 0; i < tags.length; i++) { 
+                if (tags[i].name) {
+                    if (tags[i].id) {
+                        //Replace
+                    }
+                    else {
+                        //Add
+                    }
+                    // try {
+                    //     const user = this.state;
+                    //     fetch(`/user/update`, {
+                    //     method: "POST",
+                    //     headers: {
+                    //         "Content-Type": "application/json; charset=utf-8",
+                    //     },
+                    //     body: JSON.stringify({
+                    //         id        :   this.state.id,
+                    //         bio       :   this.state.bio,
+                    //         gender    :   this.state.gender,
+                    //         pref      :   this.state.pref
+                    //     })
+                    //     })
+                    //     .then(response => response.json())
+                    //     .then((responseJSON) => {
+                    //         console.log(responseJSON);
+                    //         if (responseJSON["success"]) {
+                    //         // Successfully sent
+                    //         }
+                    //     })
+                    //     .catch(err => console.error(err))
+                    // } catch (e) {
+                    // alert("Settings 2: " + e.message);
+                    // }
+                }
+                else {
+                    //Delete
+                }
+            }
+        }
     }
 
     getInterests(){
