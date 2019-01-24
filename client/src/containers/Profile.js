@@ -146,8 +146,8 @@ export default class Profile extends Component {
     }
 
     render() {
-        console.log("INFO 2:");
-        console.info(this.props)
+        // console.log("INFO 2:");
+        // console.info(this.props)
         const info = this.state;
         // console.log("STATE INFO: " +JSON.stringify(this.state))
         var width=150

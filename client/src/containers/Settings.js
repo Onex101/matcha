@@ -12,7 +12,13 @@ export default class Settings extends Component {
     constructor(props) {
         super(props);
             // tags: [{id: 1, name: "apples"}, {id: 2, name: "pears"}],
-
+            // suggestions: [
+            //     { id: 3, name: "Bananas" },
+            //     { id: 4, name: "Mangos" },
+            //     { id: 5, name: "Lemons" },
+            //     { id: 6, name: "Apricots" },
+            //     { id: 1, name: "Lego" }
+            //   ]
         this.state = {
             id: null,
             file: '',
@@ -26,13 +32,7 @@ export default class Settings extends Component {
             gps_lat: null,
             gps_lon: null,
             tags: null,
-            suggestions: [
-                { id: 3, name: "Bananas" },
-                { id: 4, name: "Mangos" },
-                { id: 5, name: "Lemons" },
-                { id: 6, name: "Apricots" },
-                { id: 1, name: "Lego" }
-              ]
+            suggestions: null
         }
     }
 
@@ -257,17 +257,14 @@ export default class Settings extends Component {
         this.setState({ tags })
     }
     
-    // Handle Addition of Tag to user profile
+
     handleAddition (tag) {
+        const tags = this.state.tags;
         tag.name = tag.name.toLowerCase();
-        if (this.state.tags.length < 10){
-            var tags;
-            if (this.state.tags === null)
-                tags = [{id: 0, name: tag.name}]
-            else
-                tags = [].concat(this.state.tags, tag)
-            this.setState({ tags })
+        if (tags.length < 10) {
+            tags.push({id: tag.id, name: tag.name})
         }
+        this.setState({ tags })
         console.log("Tags: ")
         console.info(this.state.tags)
     }
@@ -281,10 +278,58 @@ export default class Settings extends Component {
             gps_lon: this.props.userInfo.gps_lon,
             profile_id: this.props.userInfo.profile_pic_id,
             profile: this.props.userInfo.pic,
-            tags: this.props.userInfo.interests || [],
+            tags: this.props.userInfo.interests || null,
              });
         if (this.props.userInfo.bio !== null && this.props.userInfo.bio !== "null")
              this.setState({bio: null})
+        if (this.state.tags === null && this.props.userInfo.id){
+            try {
+                // console.log("Tags test")
+                // console.info(this.props.userInfo.id)
+                fetch('/user/' + this.props.userInfo.id + '/interests', {
+                  method: "GET",
+                  headers: {
+                    "Content-Type": "application/json; charset=utf-8",
+                  },
+                })
+                .then(response => response.json())
+                .then((responseJSON) => {
+                //   console.log("Tags response = ");
+                //   console.info(responseJSON);
+                  if (responseJSON.length === 0)
+                      this.setState({tags: []})
+                  else
+                    this.setState({tags: responseJSON})
+                //   console.log("Tags state = ");
+                //   console.info(this.state.tags);
+                })
+                .catch(err => console.error(err))
+                } catch (e) {
+                  alert("Settings 3: " + e.message);
+                }
+            }
+        // Get suggestions
+        if (this.state.suggestions === null) {
+            try {
+                fetch('/interests/', {
+                  method: "GET",
+                  headers: {
+                    "Content-Type": "application/json; charset=utf-8",
+                  },
+                })
+                .then(response => response.json())
+                .then((responseJSON) => {
+                //   console.log("Suggestions response = ");
+                //   console.info(responseJSON);
+                  this.setState({suggestions: responseJSON})
+                //   console.log("Suggestions state = ");
+                //   console.info(this.state.suggestions);
+                })
+                .catch(err => console.error(err))
+                } catch (e) {
+                  alert("Settings 3: " + e.message);
+                }
+        }
     }
     
     // Updates user info
@@ -519,7 +564,8 @@ export default class Settings extends Component {
 
     renderTags() {
         // if (this.state.tags && this.state.tags[0])
-        // {
+        if (this.state.tags && this.state.suggestions)
+        {
             return (<ReactTags
                 allowNew = {true}
                 autofocus={false}
@@ -529,7 +575,7 @@ export default class Settings extends Component {
                 suggestions={this.state.suggestions}
                 handleDelete={this.handleDelete.bind(this)}
                 handleAddition={this.handleAddition.bind(this)} />)
-        // }
+        }
         // else {
         //     return (<ReactTags
         //         allowNew = {true}
