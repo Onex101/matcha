@@ -104,8 +104,8 @@ module.exports = function(socket){
 			if (!activeChat || activeChat.id === communityChat.id){
 				console.log('Changing chat')
 				getUsersChat(receiver, (result)=>{
-					console.log('Result from getting chat')
-					console.log(result.body)
+					// console.log('Result from getting chat')
+					// console.log(result.body)
 					if (result.body.insertId){
 						conversation_id = result.body.insertId
 						messages = []

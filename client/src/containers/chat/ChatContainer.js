@@ -34,15 +34,15 @@ export default class ChatContainer extends Component{
 		// socket.emit(COMMUNITY_CHAT, this.resetChat)
 		
 
-		console.log("Adding Chats to Sidebar" + JSON.stringify(this.props.user))
-		console.log('COMMUNITY_CHAT')
+		// console.log("Adding Chats to Sidebar")
+		// console.log('COMMUNITY_CHAT')
 		socket.emit(COMMUNITY_CHAT, this.resetChat)
 		socket.on(PRIVATE_MESSAGE, this.addChat)
 		socket.on('connect', ()=>{
 			socket.emit(COMMUNITY_CHAT, this.resetChat)
 		})
 		socket.on(USER_CONNECTED, (users)=>{
-			console.log(users)
+			// console.log(users)
 			this.getLikedPeople(users)
 			this.setState({users: values(users)})
 		})
@@ -54,13 +54,13 @@ export default class ChatContainer extends Component{
 
 	getLikedPeople = (users) => {
 		console.log("Getting liked PEOPLE")
-		console.log(users)
+		// console.log(users)
 		// Get Matches
 		let usersArray = [];
 		let onlineUsers = Object.keys(users).map(function(key) {
 			return [users[key]];
 		});
-		console.log(onlineUsers)
+		// console.log(onlineUsers)
 		// if (!this.state.likedUsers){
 			try {
 			fetch('/user/' + localStorage.getItem('id') + '/getliked', {
@@ -73,17 +73,17 @@ export default class ChatContainer extends Component{
 			.then((responseJSON) => {
 				// console.log("JSON match test = " + JSON.stringify(responseJSON));
 				console.log('Getting liked people')
-				console.log(responseJSON)
+				// console.log(responseJSON)
 				responseJSON.forEach( likedUsers => {
-					console.log(likedUsers)
+					// console.log(likedUsers)
 					onlineUsers.forEach(elm => {
-						console.log(elm.id)
+						// console.log(elm.id)
 						if (elm.id = likedUsers.id){
 							usersArray.push(elm)
 						}
 					});
 				});
-				console.log(usersArray)
+				// console.log(usersArray)
 				this.setState({ likedUsers: usersArray });
 				// console.log("APP Matches = " + JSON.stringify(this.state.userMatches));
 			})
@@ -106,19 +106,35 @@ export default class ChatContainer extends Component{
 		return this.addChat(chat, true)
 	}
 
+	containsObject = function (obj, list) {
+		console.log('Checking if object is in list')
+		var x = 0;
+		while (list[x]){
+			console.log(list[x].id, obj.id)
+			if (list[x].id == obj.id){
+				return (true)
+			}
+			x++
+		}
+		return (false)
+	}
+
 	addChat = (chat, reset = false) => {
-		console.log("Adding Chat: " + chat.id)
 		const {socket} = this.props
 		const {chats} = this.state
+		console.log("Adding Chat: " + JSON.stringify(chat))
+		console.log("Current chats: " + JSON.stringify(chats))
+		if (!(this.containsObject(chat, chats))){
+			const newChats = reset ? [chat]:[...chats, chat]
+			this.setState({chats:newChats, activeChat:reset ? chat : this.state.activeChat})
+		
+			const messageEvent = `${MESSAGE_RECEIVED}-${chat.id}`
+			const typingEvent = `${TYPING}-${chat.id}`
 
-		const newChats = reset ? [chat]:[...chats, chat]
-		this.setState({chats:newChats, activeChat:reset ? chat : this.state.activeChat})
-	
-		const messageEvent = `${MESSAGE_RECEIVED}-${chat.id}`
-		const typingEvent = `${TYPING}-${chat.id}`
-
-		socket.on(typingEvent, this.updateTypingInChat(chat.id))
-		socket.on(messageEvent, this.addMessageToChat(chat.id))
+			socket.on(typingEvent, this.updateTypingInChat(chat.id))
+			socket.on(messageEvent, this.addMessageToChat(chat.id))
+			console.log("Current chats: " + JSON.stringify(chats))
+		}
 	}
 
 	addMessageToChat = (chatId)=>{

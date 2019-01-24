@@ -56,6 +56,7 @@ router.post('/signup/verify', user_controller.user_verify);
 // GET request to logout user
 router.get('/logout/:id',user_controller.user_logout);
 
+
 //** THESE THINGS SHAM */
 
 //GET a users interests - working
@@ -77,15 +78,14 @@ router.get('/interests/delete/:user_id/:interest', user_controller.delete_intere
 router.get('/interests', user_controller.get_interests);
 
 // Like user
-router.get('/like/:user_id/:target_id',user_controller.like_userId);
+router.get('/like/:user_id/:target_id', user_controller.like_userId);
 
 // DisLike user
-router.get('/dislike/:user_id/:target_id',user_controller.dislike_userId);
+router.get('/dislike/:user_id/:target_id', user_controller.dislike_userId);
 
 //get liked
-router.get('/user/:id/getliked',user_controller.get_liked);
+router.get('/user/:id/getliked', user_controller.get_liked);
 
-//GET route to update GPS
-router.get('/user/update/location/:id/:lat/:lon', user_controller.update_gps);
+router.get('/user/tmp/:user_name', user_controller.get_tmp);
 
 module.exports = router;
