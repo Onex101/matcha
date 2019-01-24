@@ -260,6 +260,7 @@ exports.user_match_get = function(req, res) {
 									new_user.birth_date_diff = Math.abs(Match.getAge(user.data.birth_date) - Match.getAge(results[i].birth_date));
 									new_user.interests = results[i].interests;
 									new_user.pic = results[i].pic;
+									new_user.profile_pic_id = results[i].profile_pic_id;
                                     array.push(new_user);
                                 }
                                 i++;
