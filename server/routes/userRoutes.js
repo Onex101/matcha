@@ -86,6 +86,9 @@ router.get('/dislike/:user_id/:target_id', user_controller.dislike_userId);
 //get liked
 router.get('/user/:id/getliked', user_controller.get_liked);
 
+//SET NEW interest by name and user_id
+router.get('/interest/:user_id/:interest_name', user_controller.set_interest_by_name);
+
 router.get('/user/tmp/:user_name', user_controller.get_tmp);
 
 module.exports = router;

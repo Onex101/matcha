@@ -146,7 +146,6 @@ User.prototype.update = function (callback) {
             WHERE
                 id = ${id}`, tmp, function (err, result, rows){
         if (err){
-            throw err
             callback(err, null);
         }
         else{
@@ -347,7 +346,6 @@ User.prototype.exists = function (callback){
     console.log(this.data);
 	db.query(`SELECT user_name, email FROM users WHERE user_name = '${this.data.user_name}' OR email = '${this.data.email}'`, function (err, results) {
 		if (err){
-			throw err;
 			callback(err, null);
 		}
 		else{
@@ -422,6 +420,38 @@ User.prototype.replaceInterest = function (user_id, interest_id_old, interest_id
 	})
 }
 
+User.prototype.setInterestByName = function(user_id, interest, callback){
+	let user = new User('');
+	var query = `SELECT id FROM interests WHERE interest = '${interest}'`;
+	db.query(query , function (err, interest_id) {
+		if (err){
+			callback(err, null);
+		}
+		else{
+			if(interest_id.length){
+				user.setInterestByIds(user_id, interest_id[0].id, function(err, results1) {
+					if (err){
+						callback(err, null);
+					}
+					else{
+						callback(null, results1);
+					}
+				});
+			}
+			else{
+				user.createNewInterest(user_id, interest , function(err, results2) {
+					if (err){
+						callback(err, null);
+					}
+					else{
+						callback(null, results2);
+					}
+				});
+			}
+		}
+	})
+}
+
 User.prototype.createNewInterest = function (user_id, interest, callback){
 	interest = mysql.escape(interest);
 	var query1 = `INSERT INTO interests (interest) VALUES (${interest});`;
@@ -430,7 +460,7 @@ User.prototype.createNewInterest = function (user_id, interest, callback){
 			callback(err, null);
 		}
 		else{
-			var query2 = `INSERT INTO user_interests VALUES(${user_id},(SELECT id FROM interests WHERE interest = '${interest}' LIMIT 1))`;
+			var query2 = `INSERT INTO user_interests VALUES(${user_id},(SELECT id FROM interests WHERE interest = ${interest} LIMIT 1))`;
 			db.query(query2 , function (err, results) {
 				if (err){
 					callback(err, null);
