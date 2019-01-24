@@ -72,13 +72,13 @@ User.prototype.linked_users = function(id, callback){
 
 User.prototype.getByUsername = function (data, callback) {
     data = mysql.escape(data);
-	var query = `SELECT * FROM users WHERE user_name = ${data}`;
-	// var query = `SELECT id, password,user_name, birth_date, gender, pref, gps_lat, gps_lon,bio, profile_pic_id, pic, fame, veri_code, GROUP_CONCAT(interest) AS interests FROM\
-	// (SELECT users.id, user_name, password,interest, birth_date, gender, pref, gps_lat, gps_lon, bio, profile_pic_id, fame, pic veri_code FROM user_interests\
-	// RIGHT JOIN users ON user_interests.user_id = users.id\
-	// LEFT JOIN interests ON user_interests.interest_id = interests.id\
-	// LEFT JOIN pictures ON profile_pic_id = pictures.id) x\
-	// WHERE user_name = ${data} GROUP BY user_name, id`;
+	// var query = `SELECT * FROM users WHERE user_name = ${data}`;
+	var query = `SELECT id, password,user_name, birth_date, gender, pref, gps_lat, gps_lon,bio, profile_pic_id, pic, fame, veri_code, GROUP_CONCAT(interest) AS interests FROM\
+	(SELECT users.id, user_name, password,interest, birth_date, gender, pref, gps_lat, gps_lon, bio, profile_pic_id, fame, pic, veri_code FROM user_interests\
+	RIGHT JOIN users ON user_interests.user_id = users.id\
+	LEFT JOIN interests ON user_interests.interest_id = interests.id\
+	LEFT JOIN pictures ON profile_pic_id = pictures.id) x\
+	WHERE user_name = ${data} GROUP BY user_name, id`;
     db.query(query, function (err, result) {
         if (err) {callback(err, null);}
         else{
