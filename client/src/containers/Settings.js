@@ -76,7 +76,7 @@ export default class Settings extends Component {
 
     // Checks if profile picture exists
     profileCheck(){
-        if (this.state.profile === null)
+        if (this.state.profile === null || this.state.profile === "")
             return false
         else
             return true
@@ -192,7 +192,7 @@ export default class Settings extends Component {
             })
             .catch(err => console.error(err))
             } catch (e) {
-            alert(e.message);
+            alert("Settings 1: " + e.message);
             }
         }
         function error() {
@@ -277,15 +277,14 @@ export default class Settings extends Component {
         this.setState({id: this.props.userInfo.id,
             gender: this.props.userInfo.gender,
             pref: this.props.userInfo.pref,
-            bio: this.props.userInfo.bio,
             gps_lat: this.props.userInfo.gps_lat,
             gps_lon: this.props.userInfo.gps_lon,
             profile_id: this.props.userInfo.profile_pic_id,
             profile: this.props.userInfo.pic,
             tags: this.props.userInfo.interests || [],
              });
-        // console.log("STATE: ");
-        // console.info(this.state);
+        if (this.props.userInfo.bio !== null && this.props.userInfo.bio !== "null")
+             this.setState({bio: null})
     }
     
     // Updates user info
@@ -310,16 +309,16 @@ export default class Settings extends Component {
           .then((responseJSON) => {
               console.log(responseJSON);
               if (responseJSON["success"]) {
-                if (responseJSON["success"] === "Update sucessfull") {
-            //       this.props.userHasAuthenticated(true);
-                }
+            //     if (responseJSON["success"] === "Update sucessfull") {
+            // //       this.props.userHasAuthenticated(true);
+            //     }
               }
-              else
-                alert("Something went wrong :(");
+            //   else
+            //     alert("Something went wrong :(");
           })
           .catch(err => console.error(err))
           } catch (e) {
-            alert(e.message);
+            alert("Settings 2: " + e.message);
           }
     }
 
@@ -349,7 +348,7 @@ export default class Settings extends Component {
               })
               .catch(err => console.error(err))
               } catch (e) {
-                alert(e.message);
+                alert("Get interests:" + e.message);
               }
         }
     }
@@ -398,7 +397,7 @@ export default class Settings extends Component {
               })
               .catch(err => console.error(err))
               } catch (e) {
-                alert(e.message);
+                alert("Settings 3: " + e.message);
               }
         }
     }
@@ -425,10 +424,7 @@ export default class Settings extends Component {
                   })
                   .catch(err => console.error(err))
             }
-            // else if (i == 0 && pics[i].id !== null && pics[i].pic) {
-            //     //Replace profile
-            // }
-            if (i != 0 && pics[i].id === null && pics[i].pic) {
+            else if (i != 0 && pics[i].id === null && pics[i].pic) {
                 console.log("Making new image");
                 //Send new image and user id
                 fetch(`/image/create`, {
@@ -493,14 +489,12 @@ export default class Settings extends Component {
             // console.info(this.state);
         }
         if (this.state.id !== null && !this.state.pictures[0]){
-            // console.log("If for you! 1 image");
-            //get pictures
             this.getUserImages();
-            if (this.state.profile_id === null && this.state.profile !== null) {
+            if (this.state.profile_id === null && this.state.profile !== null && this.state.pictures[0]) {
                 // update profile route
                 // /image/setProfilePic/:user_name/:pic_id
                 try {
-                    fetch(`/image/` + this.state.user_name + `/` + this.state.pictures[0].id, {
+                    fetch(`/image/setProfilePic/` + this.state.user_name + `/` + this.state.pictures[0].id, {
                         method: "GET",
                         headers: {
                             "Content-Type": "application/json; charset=utf-8",
@@ -512,7 +506,7 @@ export default class Settings extends Component {
                     })
                     .catch(err => console.error(err))
                 } catch (e) {
-                    alert(e.message);
+                    alert("Settings 4: " + e.message);
                 }
             }
         }

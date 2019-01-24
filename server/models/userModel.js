@@ -456,7 +456,7 @@ User.prototype.removeInterestByUserId = function (user_id, interest, callback){
 }
 
 User.prototype.fetchInterestsList = function (callback){
-	var query = `SELECT * FROM interests`;
+	var query = `SELECT id, interest AS name FROM interests`;
 	db.query(query , function (err, results) {
 		if (err){
 			callback(err, null);

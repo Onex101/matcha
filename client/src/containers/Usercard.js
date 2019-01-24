@@ -32,9 +32,9 @@ export default class Usercard extends Component {
             }; 
         if (!image) return null;
         return (
-         <div className="avatar" style={style}>
-               <img src={image} /> 
-          </div>
+        //  <div style={style}>
+               <img className="avatar" style={style} src={image} /> 
+          // </div>
         );
     }
 
