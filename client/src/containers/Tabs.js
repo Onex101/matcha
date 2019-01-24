@@ -120,8 +120,8 @@ export default class ControlledTabs extends Component {
     }
   
     componentDidMount(){
-      // console.log("Tabs did mount props:")
-      // console.info(this.props)
+      console.log("Tabs did mount props:")
+      console.info(this.props)
       // console.log("Tabs did mount state:")
       // console.info(this.state)
       if (!this.state.userInfo){
@@ -154,8 +154,8 @@ export default class ControlledTabs extends Component {
     componentWillUpdate(){
       // console.log("In tabs test:")
       // console.info(this.props)
-      // console.log("Tabs will update props:")
-      // console.info(this.props)
+      console.log("Tabs will update props:")
+      console.info(this.props)
       // console.log("Tabs will update state:")
       // console.info(this.state)
       if (!this.state.userInfo){
@@ -175,11 +175,11 @@ export default class ControlledTabs extends Component {
       if (this.state.key === null && this.state.userInfo && this.state.userInfo.id) {
         // console.log("WU Key State")
         // console.info(this.state)
-        if (this.state.userInfo.pic){
-            this.setState({key: 1});
+        if (this.state.userInfo.id == localStorage.getItem("id") && !this.state.userInfo.profile_pic_id){
+            this.setState({key: 3});
         }
         else {
-            this.setState({key: 3});
+          this.setState({key: 1});
         }
       }
     }
@@ -187,7 +187,9 @@ export default class ControlledTabs extends Component {
     checkValidUser() {
       // console.log("Valid user check:")
       // console.info(this.state)
-        if (this.state.userInfo && this.state.userInfo.pic) {
+        // if (this.state.userInfo && this.state.userInfo.id == localStorage.getItem("id") &&
+        //       !this.state.userInfo.profile_pic_id){
+        if (this.state.userInfo &&  this.state.userInfo.profile_pic_id) {
           // console.log("Valid user!")
           return true;
         }

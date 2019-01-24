@@ -35,31 +35,29 @@ body {
   }
   #user-profile h3 {
     font-size: 18px;
-  }
-  #user-profile h4 {
+}
+#user-profile h4 {
     font-size: 16px;
-  }
-  #user-profile p {
+}
+#user-profile p {
     font-size: 14px;
-  }
-  #user-profile .top{
+}
+#user-profile .top{
     padding: 20px 30px;
     font-family: Calibri;
-  }
-  /* #settings .avatar { */
-    #user-profile .avatar {
+}
+#user-profile .avatar {
     display: inline;
-    float: left;
-    overflow: hidden;
+    margin: 2px;
     border-radius: 50%;
-    margin-bottom: 15px;
     border: 1px solid #000;
-  }
-  #user-profile .username{
+    object-fit: cover;
+    object-position: center;
+}
+#user-profile .username{
     display: inline;
-    /* padding-top: 50px; */
     font-weight: bold;
-  cursor: pointer;
+    cursor: pointer;
 }
 
 #user-profile .bottom {
@@ -95,9 +93,4 @@ body {
   background: #efefef;
 }
 
-  #user-profile .avatar img {
-    height: 100%;
-    object-fit: cover; /* Equivalent of the background-size: cover; of a background-image */
-  object-position: center;
-  }
   
