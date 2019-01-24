@@ -75,7 +75,7 @@ router.get('/interests/new/:user_id/:interest', user_controller.new_interest);
 router.get('/interests/delete/:user_id/:interest', user_controller.delete_interest);
 
 // GET interest table - done
-router.get('/interests', user_controller.get_interests);
+router.get('/interests/', user_controller.get_interests);
 
 // Like user
 router.get('/like/:user_id/:target_id', user_controller.like_userId);
