@@ -368,6 +368,18 @@ exports.set_interest = function(req, res){
 	})
 }
 
+exports.set_interest_by_name = function(req, res){
+	let user = new User('');
+	user.setInterestByName(req.params.user_id, req.params.interest_name, function(err, results){
+		if(err){
+			res.send(err)
+		}
+		else{
+			res.send(results);
+		}
+	})
+}
+
 //GET /interests/replace/:user_id/:interest_id_old/:interest_id_new
 exports.replace_interest = function(req, res){
 	let user = new User('');
