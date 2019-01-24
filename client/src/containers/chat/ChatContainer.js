@@ -52,16 +52,17 @@ export default class ChatContainer extends Component{
 		// socket.emit(PRIVATE_MESSAGE, {receiver:"Mike", sender: user})
 	}
 
+	arrayToObject = (array, keyField) =>
+	array.reduce((obj, item) => {
+		obj[item[keyField]] = item
+		return obj
+	}, {})
+
+		
 	getLikedPeople = (users) => {
-		console.log("Getting liked PEOPLE")
-		// console.log(users)
+		console.log("Getting liked PEOPLE", users)
 		// Get Matches
-		let usersArray = [];
-		let onlineUsers = Object.keys(users).map(function(key) {
-			return [users[key]];
-		});
-		// console.log(onlineUsers)
-		// if (!this.state.likedUsers){
+			var newList = {}
 			try {
 			fetch('/user/' + localStorage.getItem('id') + '/getliked', {
 				method: "GET",
@@ -73,25 +74,22 @@ export default class ChatContainer extends Component{
 			.then((responseJSON) => {
 				// console.log("JSON match test = " + JSON.stringify(responseJSON));
 				console.log('Getting liked people')
-				// console.log(responseJSON)
-				responseJSON.forEach( likedUsers => {
-					// console.log(likedUsers)
-					onlineUsers.forEach(elm => {
-						// console.log(elm.id)
-						if (elm.id = likedUsers.id){
-							usersArray.push(elm)
-						}
-					});
+				console.log(responseJSON)
+				responseJSON.forEach(element => {
+					console.log(element.id)
+					for (var user in users){
+						console.log(element.id, parseInt(users[user].id))
+						if (element.id == parseInt(users[user].id))
+							newList[users[user].name] = users[user]
+					}
 				});
-				// console.log(usersArray)
-				this.setState({ likedUsers: usersArray });
+				this.setState({ likedUsers: values(newList) });
 				// console.log("APP Matches = " + JSON.stringify(this.state.userMatches));
 			})
 			.catch(err => console.error(err))
 			} catch (e) {
 				alert(e.message);
 			}
-		// }
 	}
 
 	sendOpenPrivateMessage = (receiver) => {
@@ -191,13 +189,13 @@ export default class ChatContainer extends Component{
 	render() {
 		const {user} = this.props;
 
-		const {chats, activeChat, users} = this.state;
+		const {chats, activeChat, users, likedUsers} = this.state;
 		return(
 			<div className="chat-container">
 				<SideBar
 					chats={chats}
 					user={user}
-					users={users}
+					users={likedUsers}
 					activeChat={activeChat}
 					setActiveChat={this.setActiveChat}
 					onSendPrivateMessage ={this.sendOpenPrivateMessage}
