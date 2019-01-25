@@ -11,14 +11,7 @@ const ReactTags = require('react-tag-autocomplete')
 export default class Settings extends Component {
     constructor(props) {
         super(props);
-            // tags: [{id: 1, name: "apples"}, {id: 2, name: "pears"}],
-            // suggestions: [
-            //     { id: 3, name: "Bananas" },
-            //     { id: 4, name: "Mangos" },
-            //     { id: 5, name: "Lemons" },
-            //     { id: 6, name: "Apricots" },
-            //     { id: 1, name: "Lego" }
-            //   ]
+
         this.state = {
             id: null,
             file: '',
@@ -283,25 +276,25 @@ export default class Settings extends Component {
         tag.name = tag.name.toLowerCase();
         if (tags.length < 10) {
             tags.push({id: tag.id, name: tag.name})
-        }
-        this.setState({ tags })
-        console.log("Tags: ")
-        console.info(this.state.tags)
-        //Make tag add call
-        try {
-            fetch(`/interests/new/` + this.state.id + `/` + tag.name, {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json; charset=utf-8",
-            },
-            })
-            .then(response => response.json())
-            .then((responseJSON) => {
-                console.log(responseJSON);
-            })
-            .catch(err => console.error(err))
-        } catch (e) {
-            alert(e.message);
+            this.setState({ tags })
+            // console.log("Tags: ")
+            // console.info(this.state.tags)
+            //Make tag add call
+            try {
+                fetch(`/interests/new/` + this.state.id + `/` + tag.name, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json; charset=utf-8",
+                },
+                })
+                .then(response => response.json())
+                .then((responseJSON) => {
+                    // console.log(responseJSON);
+                })
+                .catch(err => console.error(err))
+            } catch (e) {
+                alert(e.message);
+            }
         }
     }
 
@@ -594,31 +587,17 @@ export default class Settings extends Component {
     }
 
     renderTags() {
-        // if (this.state.tags && this.state.tags[0])
-        if (this.state.tags && this.state.suggestions)
+        if (this.state.tags && this.state.tags.constructor === Array && this.state.suggestions)
         {
-            console.log("React tags: ")
-            console.info(this.state.tags)
             return (<ReactTags
                 allowNew = {true}
                 autofocus={false}
                 placeholder = 'Add new/existing tag'
                 tags={this.state.tags}
-                // inputAttributes= {{onKeyUp:"return forceLower(this)"}} 
                 suggestions={this.state.suggestions}
                 handleDelete={this.handleDelete.bind(this)}
                 handleAddition={this.handleAddition.bind(this)} />)
         }
-        // else {
-        //     return (<ReactTags
-        //         allowNew = {true}
-        //         autofocus={false}
-        //         placeholder = 'Add new/existing tag'
-        //         // inputAttributes= {{onKeyUp:"return forceLower(this)"}} 
-        //         suggestions={this.state.suggestions}
-        //         handleDelete={this.handleDelete.bind(this)}
-        //         handleAddition={this.handleAddition.bind(this)} />)
-        // }
     }
 
     render() {

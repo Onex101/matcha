@@ -16,19 +16,13 @@ export default class Home extends Component {
   }
 
   sort_by(field, reverse, primer) {
-    // console.log("Sort by test 1");
     var key = primer ? 
        function(x) {return primer(x[field])} : 
        function(x) {return x[field]};
-    // console.log("Sort by test 2");
 
     reverse = !reverse ? 1 : -1;
-    // console.log("Sort by test 3");
 
     return function (a, b) {
-      // console.log("Sort by test 4");
-      // console.log("a = " + key(a));
-      // console.log("b = " + key(b));
       return a = key(a), b = key(b), reverse * ((a > b) - (b > a));
     } 
   }
@@ -131,7 +125,8 @@ export default class Home extends Component {
         )
     }
     else {
-      var ret = '<div><h1>Matcha</h1><p>Find your Match and let Sparks fly!</p></div>';
+      var ret = '<div className="Home"><ControlLabel> Loading ... </ControlLabel></div>'
+      // var ret = '<div><h1>Matcha</h1><p>Find your Match and let Sparks fly!</p></div>';
       return ret;
     }
   }
@@ -146,15 +141,12 @@ export default class Home extends Component {
   }
 
   render() {
-    return(localStorage.getItem('user') && this.state.matches 
-            ?  <div className="Home">
-            {/* {console.log("IN HOME MATHCES:")}
-            {console.info(this.state.matches)} */}
-                  <div className="lander">
-                    {/* <div>{this.landerCheck()}<div dangerouslySetInnerHTML={{__html: this.getMatchCards()}}></div></div> */}
-                    <div>{this.landerCheck()}{this.getMatchCards()}</div>
+    return(<div className="Home">
+              <div className="lander">
+                {localStorage.getItem('user') && this.state.matches 
+                  ?  <div>{this.landerCheck()}{this.getMatchCards()}</div>
+                  : <div><h1>Matcha</h1><p>Find your Match and let Sparks fly!</p></div>}
                   </div>
-                </div>
-		      	: <div className="Home"><ControlLabel> Loading ... </ControlLabel></div>);
+               </div>)
   }
 }

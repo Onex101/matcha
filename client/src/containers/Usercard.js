@@ -3,7 +3,6 @@ import "./Usercard.css";
 import heart from './imgs/heart.png';
 import x from './imgs/x.png';
 import Modal from 'react-responsive-modal';
-import Profile from "../containers/Profile";
 import ControlledTabs from "./Tabs";
 
 export default class Usercard extends Component {
