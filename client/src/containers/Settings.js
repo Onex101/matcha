@@ -252,9 +252,26 @@ export default class Settings extends Component {
 
     // Handle Delete of Tag
     handleDelete (i) {
+        const tagDelete = this.state.tags[i]
         const tags = this.state.tags.slice(0)
         tags.splice(i, 1)
         this.setState({ tags })
+        //Make tag delete call
+        try {
+            fetch(`/interests/delete/` + this.state.id + `/` + tagDelete.name, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json; charset=utf-8",
+            },
+            })
+            .then(response => response.json())
+            .then((responseJSON) => {
+                console.log(responseJSON);
+            })
+            .catch(err => console.error(err))
+        } catch (e) {
+            alert(e.message);
+        }
     }
     
 
@@ -268,6 +285,22 @@ export default class Settings extends Component {
         this.setState({ tags })
         console.log("Tags: ")
         console.info(this.state.tags)
+        //Make tag add call
+        try {
+            fetch(`/interests/new/` + this.state.id + `/` + tag.name, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json; charset=utf-8",
+            },
+            })
+            .then(response => response.json())
+            .then((responseJSON) => {
+                console.log(responseJSON);
+            })
+            .catch(err => console.error(err))
+        } catch (e) {
+            alert(e.message);
+        }
     }
 
     // Gets user info
@@ -282,7 +315,9 @@ export default class Settings extends Component {
             tags: this.props.userInfo.interests || null,
              });
         if (this.props.userInfo.bio !== null && this.props.userInfo.bio !== "null")
-             this.setState({bio: null})
+             this.setState({bio: this.props.userInfo.bio})
+        else
+            this.setState({bio: null})
         if (this.state.tags === null && this.props.userInfo.id){
             try {
                 // console.log("Tags test")
@@ -299,8 +334,13 @@ export default class Settings extends Component {
                 //   console.info(responseJSON);
                   if (responseJSON.length === 0)
                       this.setState({tags: []})
-                  else
+                  else {
+                      console.log(responseJSON)
+                    //   var tags = responseJSON
+                    //   tags = tags.split(",")
+                    //   console.log("Tags got: " + tags)
                     this.setState({tags: responseJSON})
+                }
                 //   console.log("Tags state = ");
                 //   console.info(this.state.tags);
                 })
@@ -362,48 +402,6 @@ export default class Settings extends Component {
           } catch (e) {
             alert("Settings 2: " + e.message);
           }
-        if (this.state.tags) {
-            const tags = this.state.tags;
-            //Send tags through however the hell I'm supposed to do that
-            for (var i = 0; i < tags.length; i++) { 
-                if (tags[i].name) {
-                    if (tags[i].id) {
-                        //Replace
-                    }
-                    else {
-                        //Add
-                    }
-                    // try {
-                    //     const user = this.state;
-                    //     fetch(`/user/update`, {
-                    //     method: "POST",
-                    //     headers: {
-                    //         "Content-Type": "application/json; charset=utf-8",
-                    //     },
-                    //     body: JSON.stringify({
-                    //         id        :   this.state.id,
-                    //         bio       :   this.state.bio,
-                    //         gender    :   this.state.gender,
-                    //         pref      :   this.state.pref
-                    //     })
-                    //     })
-                    //     .then(response => response.json())
-                    //     .then((responseJSON) => {
-                    //         console.log(responseJSON);
-                    //         if (responseJSON["success"]) {
-                    //         // Successfully sent
-                    //         }
-                    //     })
-                    //     .catch(err => console.error(err))
-                    // } catch (e) {
-                    // alert("Settings 2: " + e.message);
-                    // }
-                }
-                else {
-                    //Delete
-                }
-            }
-        }
     }
 
     getInterests(){
@@ -605,6 +603,8 @@ export default class Settings extends Component {
         // if (this.state.tags && this.state.tags[0])
         if (this.state.tags && this.state.suggestions)
         {
+            console.log("React tags: ")
+            console.info(this.state.tags)
             return (<ReactTags
                 allowNew = {true}
                 autofocus={false}
