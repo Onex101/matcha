@@ -104,17 +104,17 @@ export default class Profile extends Component {
     renderTags() {
         if (this.state.tags) {
             var  tags = this.state.tags
-            console.log("Tags: ")
-            console.info(tags)
+            // console.log("Tags: ")
+            // console.info(tags)
             // tags= tags.split(",")
             // console.log("Tags: " + tags)
             var rows = [];
             for (var elem in tags) {
-                console.log("Tags[" + elem + "] loop: " + tags[elem])
+                // console.log("Tags[" + elem + "] loop: " + tags[elem])
                 rows.push(<div key={elem} className="tags">{tags[elem]}</div>);
             }
-            console.log("Tag rows:")
-            console.info(rows)
+            // console.log("Tag rows:")
+            // console.info(rows)
             return <div>{rows}</div>;
         }
     }
@@ -173,7 +173,7 @@ export default class Profile extends Component {
         // console.log("INFO 2:");
         // console.info(this.props)
         const info = this.state;
-        console.log("STATE INFO: " +JSON.stringify(this.state.tags))
+        // console.log("STATE INFO: " +JSON.stringify(this.state.tags))
         var width=150
         var height=150
         return (
