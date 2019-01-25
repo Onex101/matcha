@@ -335,17 +335,14 @@ export default class Settings extends Component {
                   if (responseJSON.length === 0)
                       this.setState({tags: []})
                   else {
-                    //   console.log("TAGS RESPONE: " + responseJSON)
                     this.setState({tags: responseJSON})
                 }
-                //   console.log("Tags state = ");
-                //   console.info(this.state.tags);
                 })
                 .catch(err => console.error(err))
-                } catch (e) {
-                  alert("Settings 3: " + e.message);
-                }
+            } catch (e) {
+                alert("Settings 3: " + e.message);
             }
+        }
         // Get suggestions
         if (this.state.suggestions === null) {
             try {

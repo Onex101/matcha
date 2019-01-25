@@ -24,7 +24,7 @@ export default class Profile extends Component {
             pref: null,
             gps_lat: null,
             gps_lon: null,
-            tags: [{id: 1, name: "apples"}, {id: 2, name: "pears"}],
+            tags: null,
             dist_compare:  null
         }
     }
@@ -39,8 +39,14 @@ export default class Profile extends Component {
             gps_lat: this.props.userInfo.gps_lat,
             gps_lon: this.props.userInfo.gps_lon,
             profile: this.props.userInfo.pic,
-            tags: this.props.userInfo.interests,
              });
+        var tags = this.props.userInfo.interests
+        if (tags !== null && tags !== "null")
+            tags = tags.split(",")
+        else
+             tags = null
+        this.setState({tags: tags})
+
         // console.log("PROF STATE: ");
         // console.info(this.state);
     }
@@ -92,6 +98,24 @@ export default class Profile extends Component {
               } catch (e) {
                 alert(e.message);
               }
+        }
+    }
+
+    renderTags() {
+        if (this.state.tags) {
+            var  tags = this.state.tags
+            console.log("Tags: ")
+            console.info(tags)
+            // tags= tags.split(",")
+            // console.log("Tags: " + tags)
+            var rows = [];
+            for (var elem in tags) {
+                console.log("Tags[" + elem + "] loop: " + tags[elem])
+                rows.push(<div key={elem} className="tags">{tags[elem]}</div>);
+            }
+            console.log("Tag rows:")
+            console.info(rows)
+            return <div>{rows}</div>;
         }
     }
 
@@ -149,7 +173,7 @@ export default class Profile extends Component {
         // console.log("INFO 2:");
         // console.info(this.props)
         const info = this.state;
-        // console.log("STATE INFO: " +JSON.stringify(this.state))
+        console.log("STATE INFO: " +JSON.stringify(this.state.tags))
         var width=150
         var height=150
         return (
@@ -222,7 +246,9 @@ export default class Profile extends Component {
                 {info.bio != "null" ? <div><h4>Bio</h4>
                                         {info.bio}</div> : null}
                 <br /><br />
-                <h4>Tags</h4>
+                {info.tags !== null  ? <div><h4>Tags</h4><br/>
+                                        {this.renderTags()}</div>
+                                        : null}
             </div>
             {this.props.userInfo.id != localStorage.getItem('id') ? 
                 <div className="choices">

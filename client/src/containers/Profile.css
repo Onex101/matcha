@@ -307,3 +307,17 @@ body {
   #profile input[type=range]:focus::-ms-fill-upper {
     background: #ddd;
   }
+
+  #profile .tags {
+    display: inline-block;
+    box-sizing: border-box;
+    margin: 0 6px 6px 0;
+    padding: 6px 8px;
+    border: 1px solid #D1D1D1;
+    border-radius: 5px;
+    background: #F1F1F1;
+    box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+    font-size: inherit;
+    line-height: inherit;
+    cursor: default;
+  }
