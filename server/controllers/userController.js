@@ -409,7 +409,7 @@ exports.new_interest = function(req, res){
 //GET /interests/delete/:user_id/:interest
 exports.delete_interest = function(req, res){
 	let user = new User('');
-	user.removeInterestByUserId(req.params.id, function(err, results){
+	user.removeInterestByUserId(req.params.user_id, req.params.interest, function(err, results){
 		if(err){
 			res.send(err)
 		}
