@@ -48,10 +48,8 @@ export default class Chat extends Component {
 		console.log('connecting user')
 		const socket = io(socketUrl)
 		var name, id
-		// if (this.props.userInfo)
 		name = localStorage.getItem('user');
 		id = localStorage.getItem('id');
-		// else 
 		
 		socket.on('connect', ()=>{
 			console.log("Connected " + name);
@@ -59,7 +57,6 @@ export default class Chat extends Component {
 		
 		this.setState({socket: socket})
 		socket.emit(VERIFY_USER, id, name, this.verifyUser)
-		// this.setUser(user_name)
 	}
 
 	verifyUser = ({user, isUser}) => {
@@ -81,28 +78,6 @@ export default class Chat extends Component {
 		const {socket}=this.state
 		socket.emit(LOGOUT)
 		this.setState({user:null})
-	}
-
-	// getChats() {
-	// 	if (this.props.userMatches)
-	// 	{
-	// 		var ret = '<div className="lander">';
-	// 		for (var elem in this.props.userMatches) {
-	// 			// console.log("elem = " + JSON.stringify(this.props.userMatches[elem].data.user_name));
-	// 			ret += '<ButtonGroup><Button bsSize="large" onClick={this.openChat('+ this.props.userMatches[elem].data.id + ')}>' + this.props.userMatches[elem].data.user_name + '</Button></ButtonGroup><br />'
-	// 		};
-	// 		ret += '</div>';
-	// 		// console.log("RET = " + ret);
-	// 		return ret;
-	// 	}
-	// }
-
-	loadContainer = ()=>{
-		// const {title} = this.props
-		const {socket, user} = this.state
-		console.log("Does user exist: ")
-		console.log(this.state)
-		return (<ChatContainer socket={socket} user={user}/>)
 	}
 
 	render(){

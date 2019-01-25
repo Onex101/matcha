@@ -22,11 +22,6 @@ class App extends Component {
     this.renderUser = this.renderUser.bind(this);
   }
 
-  send = () => {
-	  const socket = socketIOClient(this.state.endpoint)
-	  socket.emit(this.state.userInfo) 
-  }
-
   componentWillMount(){
     // Get User
     console.log("Local user:", localStorage.getItem('user'))
