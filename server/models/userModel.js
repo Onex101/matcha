@@ -389,7 +389,7 @@ User.prototype.setInterestByIds = function (user_id, interest_id, callback){
 }
 
 User.prototype.getInterestById = function (user_id, callback){
-	var query = `SELECT id, interest FROM user_interests JOIN interests ON user_interests.interest_id = interests.id WHERE user_id = ${user_id}`;
+	var query = `SELECT id, interest AS name FROM user_interests JOIN interests ON user_interests.interest_id = interests.id WHERE user_id = ${user_id}`;
 	db.query(query , function (err, results) {
 		if (err){
 			callback(err, null);
