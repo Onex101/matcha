@@ -253,6 +253,8 @@ export default class Settings extends Component {
     // Handle Delete of Tag
     handleDelete (i) {
         const tagDelete = this.state.tags[i]
+        console.log("Deleting tags: ")
+        console.info(tagDelete)
         const tags = this.state.tags.slice(0)
         tags.splice(i, 1)
         this.setState({ tags })
@@ -330,15 +332,10 @@ export default class Settings extends Component {
                 })
                 .then(response => response.json())
                 .then((responseJSON) => {
-                //   console.log("Tags response = ");
-                //   console.info(responseJSON);
                   if (responseJSON.length === 0)
                       this.setState({tags: []})
                   else {
-                      console.log(responseJSON)
-                    //   var tags = responseJSON
-                    //   tags = tags.split(",")
-                    //   console.log("Tags got: " + tags)
+                    //   console.log("TAGS RESPONE: " + responseJSON)
                     this.setState({tags: responseJSON})
                 }
                 //   console.log("Tags state = ");
