@@ -587,31 +587,17 @@ export default class Settings extends Component {
     }
 
     renderTags() {
-        // if (this.state.tags && this.state.tags[0])
         if (this.state.tags && this.state.tags.constructor === Array && this.state.suggestions)
         {
-            // console.log("React tags: ")
-            // console.info(this.state.tags)
             return (<ReactTags
                 allowNew = {true}
                 autofocus={false}
                 placeholder = 'Add new/existing tag'
                 tags={this.state.tags}
-                // inputAttributes= {{onKeyUp:"return forceLower(this)"}} 
                 suggestions={this.state.suggestions}
                 handleDelete={this.handleDelete.bind(this)}
                 handleAddition={this.handleAddition.bind(this)} />)
         }
-        // else {
-        //     return (<ReactTags
-        //         allowNew = {true}
-        //         autofocus={false}
-        //         placeholder = 'Add new/existing tag'
-        //         // inputAttributes= {{onKeyUp:"return forceLower(this)"}} 
-        //         suggestions={this.state.suggestions}
-        //         handleDelete={this.handleDelete.bind(this)}
-        //         handleAddition={this.handleAddition.bind(this)} />)
-        // }
     }
 
     render() {
