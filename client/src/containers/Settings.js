@@ -533,6 +533,7 @@ export default class Settings extends Component {
         e.preventDefault();
         this.updateImages();
         this.updateInfo();
+        // this.setState({id: null})
     }
 
     // Stops the auto focus on the tags
