@@ -64,7 +64,7 @@ list() {
     itemList += <li>{item}</li>;
   }
 
-  return  <ul>{ itemList }</ul>
+  return  <ul className="suggestions">{ itemList }</ul>
 }
 
   render(){
@@ -76,7 +76,7 @@ list() {
         {/* <input type="text" className="searchBar" placeholder="Search" onChange={this.filterList}/> */}
         </fieldset>
         </form>
-        <div className="list">{this.list()}</div>
+        {this.state.items ? <div className="list">{this.list()}</div> :null}
       </div>
     );
   }

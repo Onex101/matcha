@@ -30,11 +30,7 @@ export default class Usercard extends Component {
               height: height || 50
             }; 
         if (!image) return null;
-        return (
-        //  <div style={style}>
-               <img className="avatar" style={style} src={image} /> 
-          // </div>
-        );
+        return (<img className="avatar" style={style} src={image} /> );
     }
 
     like(e){

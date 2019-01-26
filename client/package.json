@@ -4,7 +4,6 @@
   "private": true,
   "proxy": "http://localhost:4000",
   "dependencies": {
-    "bcrypt": "^3.0.2",
     "ciqu-react-calendar": "^1.0.2",
     "lodash": "^4.17.11",
     "nodemailer": "^4.7.0",

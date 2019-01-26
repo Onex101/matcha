@@ -23,4 +23,15 @@
   padding-left:  6px;
   margin: auto;
 }
-  
+
+.suggestions {
+  background-color: white;
+  position: fixed;
+  z-index: 100;
+  padding: 15px;
+  top: 4.5%;
+  width: 40%;
+  max-width: 360px;
+  margin: auto;
+  border: 1px solid #e7e7e7;
+}

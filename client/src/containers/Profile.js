@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import "./Profile.css";
 import heart from './imgs/heart.png';
 import x from './imgs/x.png';
+import report from './imgs/report.png';
 // import Modal from 'react-responsive-modal';
 import {ControlLabel } from "react-bootstrap";
 import temp from './imgs/profile-placeholder.png';
@@ -254,7 +255,7 @@ export default class Profile extends Component {
                 <div className="choices">
                     <img src={x} alt="Dislike" className="dislike" onClick={(e) => this.dislike(e)}/>
                     <img src={heart} alt="Like" className="like" onClick={(e) => this.like(e)} />
-                    <img src={x} alt="Report" className="report" onClick={(e) => this.like(e)} />
+                    <img src={report} alt="Report" className="report" onClick={(e) => this.report(e)} />
                 </div>
                 : null}
             {/* {this.mainPanel(this.props.props)} */}

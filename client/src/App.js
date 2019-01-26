@@ -7,6 +7,8 @@ import SearchBar from "./containers/SearchBar";
 import { LinkContainer } from "react-router-bootstrap";
 import socketIOClient from 'socket.io-client';
 import {LOGOUT} from "./Events.js";
+import chat from './containers/imgs/chat.png';
+import notification from './containers/imgs/notification.png';
 
 class App extends Component {
   constructor(props) {
@@ -20,6 +22,14 @@ class App extends Component {
       endpoint              : "http://localhost:4000"
     };
     this.renderUser = this.renderUser.bind(this);
+  }
+
+  getNotifications(){
+    //Make server call to get number of notifications
+  }
+
+  showNotifications() {
+    // Make server call to show a list of the user's notifications
   }
 
   componentWillMount(){
@@ -51,6 +61,7 @@ class App extends Component {
     // Get profile info
     // Get Matches
     this.getMatches();
+    this.getNotifications();
   }
 
   componentDidUpdate(){
@@ -95,6 +106,7 @@ class App extends Component {
     console.log("ID = " + localStorage.getItem('id'));
     // Get Matches
     this.getMatches();
+    this.getNotifications();
   }
 
   handleLogout = event => {
@@ -117,8 +129,16 @@ class App extends Component {
     
     return(<Navbar.Collapse><Nav pullRight>
             <Fragment>
+              {this.state.userInfo && this.state.userInfo.profile_pic_id
+                ? <NavDropdown eventKey={3} title={<img src={notification} className="nav-icon" id="Notification"/>} id="basic-nav-dropdown">
+                    {/* {this.showNotifications()} */}
+                  </NavDropdown>
+                : <NavDropdown disabled eventKey={3} title={<img src={notification} className="nav-icon" id="Notification"/>} id="basic-nav-dropdown">
+                  </NavDropdown>}
               <LinkContainer to="/Chat">
-                <NavItem>Chat</NavItem>
+                {this.state.userInfo && this.state.userInfo.profile_pic_id
+                    ? <NavItem><img src={chat} className="nav-icon" id="Chat"/></NavItem>
+                    : <NavItem disabled><img src={chat} className="nav-icon" id="Chat"/></NavItem>}
               </LinkContainer>
               <NavDropdown eventKey={3} title={(session)} id="basic-nav-dropdown">
                 <LinkContainer to="/settings">
@@ -144,11 +164,6 @@ class App extends Component {
       return(<SearchBar/>)
   }
   render() {
-	// const socket = socketIOClient(this.state.endpoint)
-	// socket.on('change color', (color) => {
-	// 	// setting the color of our button
-	// 	document.body.style.backgroundColor = color
-	// })
     const childProps = {
       isAuthenticated       : this.state.isAuthenticated,
       userHasAuthenticated  : this.userHasAuthenticated,
@@ -162,11 +177,11 @@ class App extends Component {
     }
     return (
       <div className="App-setup">
-      <div className="App container">
+      <div className="App-container">
         <Navbar fluid collapseOnSelect>
           <Navbar.Header>
             <Navbar.Brand>
-              <Link to="/">Matcha</Link>
+              <Link to="/" className="App-logo">Matcha</Link>
             </Navbar.Brand>
             <div style={style}>
             {this.searchCheck()}
@@ -190,9 +205,9 @@ class App extends Component {
         {console.log("Childprops: ")}
         {console.log("Test for re-render")}
         {console.info(childProps)}
-        {/* {console.log("User = " + JSON.stringify(this.state))} */}
-
-        <Routes childProps={childProps} />
+        <div className="App-content">
+          <Routes childProps={childProps} />
+        </div>
       </div>
       </div>
     );

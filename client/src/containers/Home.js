@@ -94,40 +94,46 @@ export default class Home extends Component {
   
   landerCheck() {
     if (localStorage.getItem('user') !== null && this.state.matches !== null) {
-        return (
-          <div className='button-fix'>
-            <ButtonToolbar className='buttons'><ButtonGroup>
-                <Button
-                    bsSize="large"
-                    onClick={this.sortByAge}
-                >Age</Button>
-            </ButtonGroup>
-            <ButtonGroup>
-                <Button
-                    bsSize="large"
-                    onClick={this.sortByLocation}
-                >Location</Button>
-            </ButtonGroup>
-            <ButtonGroup>
-                <Button
-                    bsSize="large"
-                    onClick={this.sortByFame}
-                >Fame</Button>
-            </ButtonGroup>
-            <ButtonGroup>
-                <Button
-                    bsSize="large"
-                    onClick={this.sortByTags}
-                >Tags</Button>
-            </ButtonGroup>
-            </ButtonToolbar>
-          </div>
-        )
+    if (this.props.userInfo && this.props.userInfo.profile_pic_id) {
+      // if (localStorage.getItem('user') !== null && this.state.matches !== null) {
+          return (<div>
+            <div className='button-fix'>
+              <ButtonToolbar className='buttons'><ButtonGroup>
+                  <Button
+                      bsSize="large"
+                      onClick={this.sortByAge}
+                  >Age</Button>
+              </ButtonGroup>
+              <ButtonGroup>
+                  <Button
+                      bsSize="large"
+                      onClick={this.sortByLocation}
+                  >Location</Button>
+              </ButtonGroup>
+              <ButtonGroup>
+                  <Button
+                      bsSize="large"
+                      onClick={this.sortByFame}
+                  >Fame</Button>
+              </ButtonGroup>
+              <ButtonGroup>
+                  <Button
+                      bsSize="large"
+                      onClick={this.sortByTags}
+                  >Tags</Button>
+              </ButtonGroup>
+              </ButtonToolbar>
+            </div>
+            {this.getMatchCards()}
+            </div>
+          )
+      }
+      else {
+        return (<div><h1>Hey stranger!</h1><p>Head over to your profile to add a profile picture so other users can see you!</p></div>)
+      }
     }
     else {
-      var ret = '<div className="Home"><ControlLabel> Loading ... </ControlLabel></div>'
-      // var ret = '<div><h1>Matcha</h1><p>Find your Match and let Sparks fly!</p></div>';
-      return ret;
+        return <div className="Home"><ControlLabel> Loading ... </ControlLabel></div>;
     }
   }
 
@@ -143,8 +149,8 @@ export default class Home extends Component {
   render() {
     return(<div className="Home">
               <div className="lander">
-                {localStorage.getItem('user') && this.state.matches 
-                  ?  <div>{this.landerCheck()}{this.getMatchCards()}</div>
+                {localStorage.getItem('user')
+                  ?  this.landerCheck()
                   : <div><h1>Matcha</h1><p>Find your Match and let Sparks fly!</p></div>}
                   </div>
                </div>)
