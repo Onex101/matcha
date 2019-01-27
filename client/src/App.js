@@ -5,10 +5,14 @@ import "./App.css";
 import Routes from "./Routes";
 import SearchBar from "./containers/SearchBar";
 import { LinkContainer } from "react-router-bootstrap";
-import socketIOClient from 'socket.io-client';
-import {LOGOUT} from "./Events.js";
+// import socketIOClient from 'socket.io-client';
+// import {LOGOUT} from "./Events.js";
 import chat from './containers/imgs/chat.png';
 import notification from './containers/imgs/notification.png';
+
+import io from 'socket.io-client';
+import {USER_CONNECTED, LOGOUT, VERIFY_USER} from './Events';
+const socketUrl = "http://localhost:4000"
 
 class App extends Component {
   constructor(props) {
@@ -19,7 +23,9 @@ class App extends Component {
       userInfo              : null,
       userProfile           : null,
       userMatches           : null,
-      endpoint              : "http://localhost:4000"
+      endpoint              : "http://localhost:4000",
+      socket                : null,
+      socketUser            : null,
     };
     this.renderUser = this.renderUser.bind(this);
   }
@@ -62,11 +68,55 @@ class App extends Component {
     // Get Matches
     this.getMatches();
     this.getNotifications();
+
+    //Socket test
+    if(!this.state.socket){
+      console.log("Test 2")
+      this.initSocket();
+		}
   }
 
   componentDidUpdate(){
-	  // console.log(this.state.userInfo)
+    // console.log(this.state.userInfo)
+
+    //Socket test
+    if(!this.state.socket){
+			console.log("Test 2")
+			this.initSocket();
+		}
   }
+
+  //Socket test
+  initSocket = ()=>{
+		console.log('connecting user')
+		const socket = io(socketUrl)
+		var name, id
+		name = localStorage.getItem('user');
+		id = localStorage.getItem('id');
+		
+		socket.on('connect', ()=>{
+			console.log("Connected " + name);
+		})
+		
+		this.setState({socket: socket})
+		socket.emit(VERIFY_USER, id, name, this.verifyUser)
+	}
+
+	verifyUser = ({user, isUser}) => {
+		const {socket} = this.state
+		console.log("This is the user:")
+		console.log(user)
+		// socket.emit(USER_CONNECTED, user)
+		this.setState({socketUser: user})
+		console.log('user_connected')
+		socket.emit(USER_CONNECTED, user);
+	}
+
+	setUser = (user) =>{
+		const { socket } = this.state
+		
+  }
+  ////
 
   getMatches() {
     // console.log("Getting matches")
@@ -110,7 +160,7 @@ class App extends Component {
   }
 
   handleLogout = event => {
-    const {socket} = this.state;
+    // const {socket} = this.state;
     this.userHasAuthenticated(false);
     localStorage.removeItem('user');
     localStorage.removeItem('id');
@@ -119,6 +169,13 @@ class App extends Component {
     this.setState({ userProfile: null });
     console.log("ID = " + localStorage.getItem('id'))
     socket.emit(LOGOUT);
+
+
+    //Socket teest
+
+    const {socket}=this.state
+		socket.emit(LOGOUT)
+		this.setState({socketUser:null})
   }
 
   renderUser() {
@@ -170,7 +227,9 @@ class App extends Component {
       userInfo              : this.state.userInfo,
       userProfile           : this.state.userProfile,
       userMatches           : this.state.userMatches,
-      setUser               : this.setUser
+      setUser               : this.setUser,
+      socket                : this.state.socket,
+      socketUser            : this.state.socketUser,
     };
     var style = {
       display: 'flex',
