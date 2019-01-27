@@ -93,9 +93,9 @@ export default class Home extends Component {
   }
   
   landerCheck() {
-    if (localStorage.getItem('user') !== null && this.state.matches !== null) {
-    if (this.props.userInfo && this.props.userInfo.profile_pic_id) {
-      // if (localStorage.getItem('user') !== null && this.state.matches !== null) {
+    if (localStorage.getItem('user')) {
+      if (this.props.userInfo && this.props.userInfo.id && this.state.matches !== null) {
+        if (this.props.userInfo && this.props.userInfo.profile_pic_id) {
           return (<div>
             <div className='button-fix'>
               <ButtonToolbar className='buttons'><ButtonGroup>
@@ -127,22 +127,20 @@ export default class Home extends Component {
             {this.getMatchCards()}
             </div>
           )
+        }
+        else {
+          return (<div><h1>Hey stranger!</h1><p>Head over to your profile to add a profile picture so other users can see you!</p></div>)
+        }
       }
       else {
-        return (<div><h1>Hey stranger!</h1><p>Head over to your profile to add a profile picture so other users can see you!</p></div>)
+          return <div className="Home"><ControlLabel> Loading ... </ControlLabel></div>;
       }
-    }
-    else {
-        return <div className="Home"><ControlLabel> Loading ... </ControlLabel></div>;
     }
   }
 
   getMatches() {
-    // console.log("State Matches: " + this.state.matches);
-    // console.log("Props Matches: " + JSON.stringify(this.props.userMatches));
     if (this.props.userMatches !== null) {
       this.setState({matches: this.props.userMatches});
-      // console.log("State = " + this.state.matches);
     }
   }
 

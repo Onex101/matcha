@@ -1,0 +1,118 @@
+body {
+    color: black;
+    /* background-color: #6b0a3a; */
+    padding: 5px;
+    font-family: Calibri;
+}
+
+#likes {
+  width: 95%;
+  margin: 5px auto 5px;
+  border-radius: 5px;
+  text-align: center;
+  overflow: hidden;
+  box-shadow: 2px 2px 5px #000;
+  border: 1px solid #000;
+  background-color: #b1afaf;
+  /* background-image: radial-gradient(#55965d 15%, transparent 16%), radial-gradient(#55965d 15%, transparent 16%); */
+  background-size: 60px 60px;
+  font-family: Calibri;
+  background-position: 0 0, 30px 30px;
+}
+
+#likes .list {
+    text-align: left;
+    margin: auto;
+}
+#likes hr {
+  /* margin: 20px auto; */
+  width: 50px;
+  border: 1px solid #6b0a3a;
+  background-color: transparent;
+}
+#likes h1, #likes h2, #likes h3, #likes h4, #likes h5, #likes h6, #likes p {
+  margin: 0;
+}
+#likes h1 {
+  font-size: 15px;
+}
+#likes h2 {
+  font-size: 30px;
+  font-family: Calibri;
+}
+#likes h3 {
+  font-size: 18px;
+  font-family: Calibri;
+}
+#likes h4 {
+  font-family: Calibri;
+  font-size: 24px;
+}
+#likes p {
+  font-size: 14px;
+}
+
+#likes .userLabel {
+    margin: 2% 5%;
+}
+
+#likes .userNameLabel {
+    display: inline-block;
+}
+
+@media screen and (max-width: 770px) {
+    #likes{
+        min-width: 405px;
+    }
+    .top{
+        align-content: center;
+    }
+    .top .left {
+        width: 45%;
+        float: none;
+        margin:auto;
+        padding-bottom: 10px;
+    }
+    .top .right {
+        width: 55%;
+        float: none;
+        min-width: 329px;
+        margin: auto;
+        /* padding-bottom: 10px; */
+    }
+    .user-info {margin: 5%;}
+}
+
+.user-info {
+    margin-left: 10%;
+    text-align: left;
+}
+
+.likes-pic {
+    margin: 0 18%;
+}
+#likes .user-images {
+    display: inline;
+    /* float: left; */
+    overflow: hidden;
+    /* border-radius: 50%; */
+    margin: 2px;
+    /* border: 1px solid #000; */
+}
+
+.username{
+  /* display: inline; */
+  /* padding-top: 50px; */
+  font-weight: bold;
+  cursor: pointer;
+}
+
+#likes .avatar{
+    display: inline;
+    margin: 2px;
+    margin-right: 2%;
+    border-radius: 50%;
+    border: 1px solid #000;
+    object-fit: cover; /* Equivalent of the background-size: cover; of a background-image */
+    object-position: center;
+}

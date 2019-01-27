@@ -347,11 +347,7 @@ export default class Settings extends Component {
                 })
                 .then(response => response.json())
                 .then((responseJSON) => {
-                //   console.log("Suggestions response = ");
-                //   console.info(responseJSON);
                   this.setState({suggestions: responseJSON})
-                //   console.log("Suggestions state = ");
-                //   console.info(this.state.suggestions);
                 })
                 .catch(err => console.error(err))
                 } catch (e) {
@@ -427,7 +423,6 @@ export default class Settings extends Component {
         if (localStorage.getItem('id') && !this.state.pictures[0]){
             try {
               fetch('/image/' + localStorage.getItem('id'), {
-                // fetch('/images/' + '101', {
                 method: "GET",
                 headers: {
                   "Content-Type": "application/json; charset=utf-8",
@@ -461,8 +456,6 @@ export default class Settings extends Component {
 
                 this.setState({ pictures: newPics});
                 this.setState({ profile:  newPics[0].pic});
-                // console.log("Result = ");
-                // console.info(this.state.pictures);
               })
               .catch(err => console.error(err))
               } catch (e) {
@@ -533,6 +526,8 @@ export default class Settings extends Component {
         e.preventDefault();
         this.updateImages();
         this.updateInfo();
+
+        //Figure out a way to refresh the page nicely once save changes is pressed
         // this.setState({id: null})
     }
 
@@ -546,11 +541,6 @@ export default class Settings extends Component {
             window.scrollTo(0, 0);
         }
         if (this.state.id === null && this.props.userInfo !== null && this.props.userInfo.id !== null){
-            // console.log("If for you! 1 user");
-            // console.log("UPDATE TEST PROPS:");
-            // console.info(this.props.userInfo);
-            // console.log("UPDATE TEST STATE:");
-            // console.info(this.state)
             this.getInfo();
             this.getInterests();
         } else {
@@ -631,7 +621,6 @@ export default class Settings extends Component {
                     <FormControl 
                         componentClass="textarea" 
                         placeholder="Tell us about yourself!"
-                        // id="bio"
                         defaultValue={this.state.bio}
                         onChange={this.handleChange} 
                         />
@@ -680,10 +669,7 @@ export default class Settings extends Component {
                             <Button
                                 bsSize="large"
                                 className="submit_btn"
-                                // disabled={!this.validateForm()}
-                                onClick={this.geoFindMe}
-                            >Update Location!
-                            </Button>
+                                onClick={this.geoFindMe} >Update Location!</Button>
                         </ButtonGroup>
                     </ButtonToolbar>
                     <br />
@@ -692,10 +678,7 @@ export default class Settings extends Component {
                             <Button
                                 bsSize="large"
                                 className="submit_btn"
-                                // disabled={!this.validateForm()}
-                                onClick={(e)=>this.saveChanges(e)}
-                                // onClick={this.saveChanges}
-                            >Save Changes</Button>
+                                onClick={(e)=>this.saveChanges(e)} >Save Changes</Button>
                         </ButtonGroup>
                     </ButtonToolbar>
                 </ul>

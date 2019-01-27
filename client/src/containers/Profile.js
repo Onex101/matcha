@@ -3,7 +3,6 @@ import "./Profile.css";
 import heart from './imgs/heart.png';
 import x from './imgs/x.png';
 import report from './imgs/report.png';
-// import Modal from 'react-responsive-modal';
 import {ControlLabel } from "react-bootstrap";
 import temp from './imgs/profile-placeholder.png';
 import female from './imgs/female_logo/favicon-32x32.png';
@@ -26,7 +25,8 @@ export default class Profile extends Component {
             gps_lat: null,
             gps_lon: null,
             tags: null,
-            dist_compare:  null
+            dist_compare:  null,
+            userDetails: null
         }
     }
 
@@ -50,6 +50,13 @@ export default class Profile extends Component {
 
         // console.log("PROF STATE: ");
         // console.info(this.state);
+
+        if (this.state.userDetails === null) {
+            //Make server call to get all information for the profile
+            // Fame, Visits, Name, Surname, Distance, Age
+
+            // this.setState({userDetails: responseJSON["data"]})
+        }
     }
 
     // Gets user images

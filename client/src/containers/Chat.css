@@ -175,6 +175,7 @@
     }
     
     .chat-header .user-info{
+        margin-left: 2%;
         align-items:center;
         display:flex
     }

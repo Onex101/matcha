@@ -17,6 +17,9 @@ export default class Usercard extends Component {
     
   onOpenModal = () => {
     this.setState({ open: true });
+    //Add to the visits
+
+    // this.props.userInfo.id
   };
  
   onCloseModal = () => {
@@ -67,8 +70,6 @@ export default class Usercard extends Component {
                 {this.avatar(info.pic, width, height)}
             <div className="username"><br/><h1 onClick={this.onOpenModal}>{info.userInfo.user_name}</h1></div>
                   <div>
-                  {/* {console.log("Modal test:")} */}
-                  {/* {console.info(info.userInfo)} */}
                     <Modal open={open} onClose={this.onCloseModal} center>
                       <ControlledTabs userInfo={info.userInfo} />
                     </Modal>
