@@ -47,15 +47,49 @@ export default class Profile extends Component {
         else
              tags = null
         this.setState({tags: tags})
+    }
 
-        // console.log("PROF STATE: ");
-        // console.info(this.state);
-
-        if (this.state.userDetails === null) {
-            //Make server call to get all information for the profile
-            // Fame, Visits, Name, Surname, Distance, Age
-
-            // this.setState({userDetails: responseJSON["data"]})
+    getUserDetails() {
+        if (this.state.id){
+            console.log("DETAILS TEST 1")
+            if (this.state.id === localStorage.getItem('id')) {
+                // try {
+                //     fetch('/image/' + this.state.id, {
+                //       // fetch('/images/' + '101', {
+                //       method: "GET",
+                //       headers: {
+                //         "Content-Type": "application/json; charset=utf-8",
+                //       },
+                //     })
+                //     .then(response => response.json())
+                //     .then((responseJSON) => {
+                //         // this.setState({userDetails: responseJSON["data"]})
+                //     })
+                //     .catch(err => console.error(err))
+                //     } catch (e) {
+                //       alert(e.message);
+                //     }
+            }
+            else {
+                // console.log("Trying to get userDetails of another user")
+                // try {
+                //     fetch(`/match/details/` + localStorage.getItem('id') + `/` + this.state.id, {
+                //     method: "GET",
+                //     headers: {
+                //         "Content-Type": "application/json; charset=utf-8",
+                //     },
+                //     })
+                //     .then(response => response.json())
+                //     .then((responseJSON) => {
+                //         console.log("User DETAILS:")
+                //         console.info(responseJSON)
+                //         // this.setState({userDetails: responseJSON["data"]})
+                //     })
+                //     .catch(err => console.error(err))
+                // } catch (e) {
+                //     alert(e.message);
+                // }
+            }
         }
     }
 
@@ -159,6 +193,12 @@ export default class Profile extends Component {
             this.getUserImages();
         }
         // console.log("Profile State INFO 1: " +JSON.stringify(this.state))
+        if (this.state.userDetails == null) {
+            //Make server call to get all information for the profile
+            // Fame, Visits, Name, Surname, Distance, Age
+            console.log("DETAILS TEST 1")
+            this.getUserDetails()
+        }
     }
 
     componentDidUpdate() {
@@ -175,6 +215,12 @@ export default class Profile extends Component {
             this.getUserImages();
         }
         // console.log("Profile State INFO 2: " +JSON.stringify(this.state))
+        if (this.state.userDetails == null) {
+            //Make server call to get all information for the profile
+            // Fame, Visits, Name, Surname, Distance, Age
+            console.log("DETAILS TEST 1")
+            this.getUserDetails()
+        }
     }
 
     render() {
