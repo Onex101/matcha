@@ -42,12 +42,25 @@ export default class Home extends Component {
     
     try {
       var ageSort = this.state.matches;
-      console.log("AGE SORT:")
-      console.info(ageSort)
+      // console.log("AGE SORT:")
+      // console.info(ageSort)
       if (ageSort) {
-        [].slice.call(ageSort).sort(this.sort_by('birth_date_diff', true, false));
-        console.log("GPSSort = " + JSON.stringify(ageSort));
-        this.setState({matches: ageSort});
+        var result = [];
+        for(var i in ageSort){
+            var keys = Object.keys(ageSort[i]);
+            var values = Object.values(ageSort[i]);
+            var temp = [];
+            for(var i in keys){
+              temp[keys[i]] = values[i];
+            }
+            result.push(temp);
+        }
+        // console.log("AGE RESULT:")
+        // console.info(result)
+       result.sort(this.sort_by('birth_date_diff', false, false));
+        // console.log("AGESORT FINAL = ");
+        // console.info(result)
+        this.setState({matches: result});
       }
     } catch (e) {
       alert(e.message);
