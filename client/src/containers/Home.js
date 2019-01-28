@@ -98,8 +98,6 @@ export default class Home extends Component {
   componentDidUpdate(){
     if (this.state.matches === null){
       this.getMatches();
-    // console.log("State Matches 3 = " + JSON.stringify(this.state.matches));
-    // console.log("Props Matches 3 = " + JSON.stringify(this.props.userMatches));
     }
   }
 
@@ -107,8 +105,6 @@ export default class Home extends Component {
     if (this.state.matches !== null) {
       var rows = [];
       for (var elem in this.state.matches) {
-        // console.log("match[" + elem + ']')
-        // console.info(this.state.matches[elem].data)
           rows.push(<Usercard  userInfo = {this.state.matches[elem].data}
                 key={elem}
                 pic = {this.state.matches[elem].data.pic} />);

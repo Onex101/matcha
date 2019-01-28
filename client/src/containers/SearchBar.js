@@ -7,7 +7,8 @@ export default class SearchBar extends Component {
 
       this.state = {
           initialItems: '',
-          items: []
+          items: [],
+          search: null
       }
       this.saveAndContinue = this.saveAndContinue.bind(this);
   }
@@ -18,6 +19,7 @@ export default class SearchBar extends Component {
     // var updatedList = this.state.initialItems;
     var search = event.target.value.toLowerCase();
 
+    this.setState({search: search})
     if (search){
       if (search.indexOf('#') === 0){
         //Search tags
@@ -71,26 +73,55 @@ export default class SearchBar extends Component {
     console.log('test')
   }
 
-  mapping (item) {
-    return <li className="list-group-item" data-category={item} key={item}>{item}</li>
+  //////////Steps for listing suggestions//////////
+  escapeForRegExp (query) {
+    return query.replace(/[-\\^$*+?.()|[\]{}]/g, '\\$&')
   }
 
-list() {
-  console.log("Items = ")
-  console.info(this.state.items);
-  var itemList;
-  var items = this.state.items;
-  // for(let item in this.state.items) {
-  for(var i = 0; i < items.length; i++) {
-    if (items[i].name) {
-      console.log("Item[" + i + "] = " + items[i].name)
-      // console.info(items[i].name)
-      itemList += <li>{items[i].name}</li>;
+  markIt (input, query) {
+    const regex = RegExp(this.escapeForRegExp(query), 'gi')
+    console.log("regex")
+    console.info(regex)
+    console.log("Input test:      " + input.replace(regex, '<mark>$&</mark>'))
+    return {
+      __html: input.replace(regex, '<mark>$&</mark>')
     }
   }
 
-  return  <ul className="suggestions">{ itemList }</ul>
-}
+  searchThis(){
+    //Test
+  }
+
+  list() {
+    if (!this.state.search || !this.state.items) {
+      return null;
+    }
+
+    var search = this.state.search;
+    if (search[0] === '@' || search[0] === '#' || search[0] === '$') {
+      search = search.substring(1);
+    }
+    var itemList = this.state.items;
+    const regex = new RegExp(`(?:^|\\s)${this.escapeForRegExp(search)}`, 'i')
+    itemList = this.state.items.filter((item) => regex.test(item.name)).slice(0);
+
+    const options = itemList.map((item, i) => {
+      const key = i;
+
+      return (<li 
+        id={key}
+        key={key}
+        role='option'
+        aria-disabled={item.disabled === true}
+        onClick={this.searchThis()}
+        className="options"
+        >
+        <span dangerouslySetInnerHTML={this.markIt(item.name, search)} /></li>) 
+    })
+
+    return (<ul role='suggestions' className='suggestions'>{options}</ul>)
+  }
+  /////////////////////////////////////////////////
 
   render(){
     return (
@@ -98,7 +129,6 @@ list() {
         <form className="form">
         <fieldset className="form-group">
         <input type="text" className="form-control form-control-lg" placeholder="Search" onChange={this.filterList}/>
-        {/* <input type="text" className="searchBar" placeholder="Search" onChange={this.filterList}/> */}
         </fieldset>
         </form>
         {this.state.items ? <div className="list">{this.list()}</div> :null}
