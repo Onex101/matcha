@@ -343,6 +343,27 @@ User.prototype.match = function (id, callback){
 	})
 }
 
+User.prototype.user_search = function(id, search_name, callback){
+	var query = `SELECT id, user_name, birth_date, gender, pref, gps_lat, gps_lon, bio, pic, fame, profile_pic_id, GROUP_CONCAT(interest) AS interests FROM\
+	(SELECT users.id, user_name,interest, birth_date, gender, pref, gps_lat, gps_lon, bio, pic, fame, verified, profile_pic_id FROM user_interests\
+	RIGHT JOIN users ON user_interests.user_id = users.id
+	LEFT JOIN interests ON user_interests.interest_id = interests.id
+	LEFT JOIN likes ON users.id = user2_id
+	LEFT JOIN pictures ON profile_pic_id = pictures.id\
+	WHERE verified IS NOT NULL AND pic IS NOT NULL) x
+	WHERE user_name LIKE "%${search_name}%" AND NOT id = ${id}
+	GROUP BY user_name, id ORDER BY id`;
+	console.log(query);
+	db.query(query,function (err, results) {
+		if (err){
+			callback(err, null);
+		}
+		else{
+			callback(null, results);
+		}
+	})
+}
+
 User.prototype.linked = function(id,callback){
 	var query = `SELECT id, user_name, birth_date, gender, pref, gps_lat, gps_lon, bio, pic, fame, profile_pic_id, GROUP_CONCAT(interest) AS interests FROM\
 	(SELECT users.id, user_name,interest, birth_date, gender, pref, gps_lat, gps_lon, bio, pic, fame, verified, profile_pic_id FROM user_interests\
