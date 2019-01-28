@@ -56,7 +56,11 @@ class App extends Component {
         .then((responseJSON) => {
           console.log("response : ")
           console.info(responseJSON["data"])
-          this.setState({ userInfo: responseJSON["data"] });
+          this.setState({ userInfo: responseJSON["data"] }, this.initSocket());
+          // if(!this.state.socket){
+          //   console.log("component will mount init socket")
+          //   this.initSocket();
+          // }
           // console.log("User = " + JSON.stringify(this.state.userInfo));
         })
         .catch(err => console.error(err))
@@ -70,34 +74,34 @@ class App extends Component {
     this.getNotifications();
 
     //Socket test
-    if(!this.state.socket){
-      console.log("Test 2")
-      this.initSocket();
-		}
+    
   }
 
   componentDidUpdate(){
     // console.log(this.state.userInfo)
 
     //Socket test
-    if(!this.state.socket){
-			console.log("Test 2")
-			this.initSocket();
-		}
+    // if(!this.state.socket){
+		// 	console.log("Component DID mount init Socket")
+		// 	this.initSocket();
+		// }
   }
 
   //Socket test
   initSocket = ()=>{
 		console.log('connecting user')
-		const socket = io(socketUrl)
+    const socket = io(socketUrl)
+    // const {userInfo} = this.state.userInfo
 		var name, id
 		name = localStorage.getItem('user');
 		id = localStorage.getItem('id');
-		
+		console.log ('The socket will be initalized with:', name, id, this.state.userInfo)
 		socket.on('connect', ()=>{
 			console.log("Connected " + name);
-		})
-		
+    })
+    socket.on('notification', ()=>{
+      
+    })
 		this.setState({socket: socket})
 		socket.emit(VERIFY_USER, id, name, this.verifyUser)
 	}
@@ -111,12 +115,6 @@ class App extends Component {
 		console.log('user_connected')
 		socket.emit(USER_CONNECTED, user);
 	}
-
-	setUser = (user) =>{
-		const { socket } = this.state
-		
-  }
-  ////
 
   getMatches() {
     // console.log("Getting matches")
@@ -155,6 +153,7 @@ class App extends Component {
     localStorage.setItem('id', user.data.id);
     console.log("ID = " + localStorage.getItem('id'));
     // Get Matches
+    this.initSocket();
     this.getMatches();
     this.getNotifications();
   }

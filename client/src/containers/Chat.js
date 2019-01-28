@@ -14,8 +14,8 @@ export default class Chat extends Component {
 
 		this.state = {
 			error:"",
-			socket:		 null,
-			user:		 null,
+			socket:		this.props.socket,
+			user:		this.props.socketUser,
 		};
 	}
 
