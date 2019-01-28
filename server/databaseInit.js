@@ -54,9 +54,11 @@ connection.connect(function (err) {
 	user_id int(9),\
 	PRIMARY KEY (`id`))');
 
-	connection.query('CREATE TABLE history\
-	(viewer_id int NOT NULL,\
-	viewed_id int NOT NULL)');
+	connection.query(`CREATE TABLE history\
+	(viewer_id int NOT NULL,
+	viewed_id int NOT NULL,
+	timestamp DATETIME DEFAULT NOW()
+	)`);
 
 	connection.query('CREATE TABLE likes\
 	(user1_id int NOT NULL,\
@@ -82,8 +84,6 @@ connection.connect(function (err) {
 	PRIMARY KEY (`id`)\
 	)');
 
-	//CHANGE TO BE MADE
-	//username->user_id
 	connection.query('CREATE TABLE conversations\
 	(id int NOT NULL AUTO_INCREMENT,\
 	user1 int NOT NULL,\

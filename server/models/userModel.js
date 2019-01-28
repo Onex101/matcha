@@ -522,6 +522,18 @@ User.prototype.set_gps = function(id, lat, lon, callback){
 	})
 }
 
+User.prototype.addVisit = function(viewer_id, viewee_id, callback){
+	var query = `INSERT INTO history (viewer_id, viewed_id) VALUES (${viewer_id}, ${viewee_id})`;
+	db.query(query, function(err, results){
+		if (err){
+			callback(err, null);
+		}
+		else{
+			callback(null, results);
+		}
+	})
+}
+
 User.prototype.logout = function(id, callback){
 	var now = new Date();
 	console.log('UserId loginout ' + id)
