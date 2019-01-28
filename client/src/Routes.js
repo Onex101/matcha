@@ -8,6 +8,7 @@ import Signup from "./containers/Signup";
 // import Profile from "./containers/Profile";
 import Chat from "./containers/Chat";
 import ControlledTabs from "./containers/Tabs";
+import SearchResults from "./containers/SearchResults";
 import AppliedRoute from "./components/AppliedRoute";
 
 // Switch rebders the first matching route that is defined within it
@@ -24,5 +25,6 @@ export default ({ childProps }) =>
     {/* {console.log("test: " + JSON.stringify(childProps))} */}
 	  <AppliedRoute path="/chat" exact component={Chat} props={childProps} />
     { /* Finally, catch all unmatched routes */ }
+    <AppliedRoute path="/searchResults" exact component={SearchResults} props={childProps} />
     <Route component={NotFound} />
   </Switch>;

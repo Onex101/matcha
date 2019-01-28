@@ -80,16 +80,63 @@ export default class SearchBar extends Component {
 
   markIt (input, query) {
     const regex = RegExp(this.escapeForRegExp(query), 'gi')
-    console.log("regex")
-    console.info(regex)
-    console.log("Input test:      " + input.replace(regex, '<mark>$&</mark>'))
+    // console.log("regex")
+    // console.info(regex)
+    // console.log("Input test:      " + input.replace(regex, '<mark>$&</mark>'))
     return {
       __html: input.replace(regex, '<mark>$&</mark>')
     }
   }
 
-  searchThis(){
+  searchThis(item, e){
+    e.preventDefault()
+
     //Test
+    var searchType;
+    if (this.state.search[0] === '@') {
+      searchType = "user";
+    } else if (this.state.search[0] === '#') {
+      searchType = "tag";
+    } else if (this.state.search[0] === '$') {
+      searchType = "fame";
+    } else {
+      searchType = "all";
+    }
+
+    var results;
+    if (searchType === "user") {
+      //Do user call
+    } else if (searchType === "tag") {
+      //Do tag call
+
+      try {
+        // const user = this.state;
+        fetch(`/tagsearch/` + localStorage.getItem('id') + `/` + item.name, {
+          method: "GET",
+          headers: {
+              "Content-Type": "application/json; charset=utf-8",
+          }
+        })
+        .then(response => response.json())
+        .then((responseJSON) => {
+          console.log("SEARCH TAGS RESULTS:")
+          console.info(responseJSON)
+          results = responseJSON;
+          this.props.getSearchResults(results, "These are the users who have the tag you searched for");
+          this.setState({search: null})
+          this.refs.search.value = '';
+        })
+        .catch(err => console.error(err))
+        } catch (e) {
+          alert(e.message);
+        }
+
+
+    } else if (searchType === "fame") {
+      //Do fame call
+    } else {
+      //Do all call
+    }
   }
 
   list() {
@@ -113,7 +160,8 @@ export default class SearchBar extends Component {
         key={key}
         role='option'
         aria-disabled={item.disabled === true}
-        onClick={this.searchThis()}
+        // onClick={this.searchThis()}
+        onClick={this.searchThis.bind(this, item)}
         className="options"
         >
         <span dangerouslySetInnerHTML={this.markIt(item.name, search)} /></li>) 
@@ -128,7 +176,12 @@ export default class SearchBar extends Component {
       <div className="filter-list">
         <form className="form">
         <fieldset className="form-group">
-        <input type="text" className="form-control form-control-lg" placeholder="Search" onChange={this.filterList}/>
+        <input 
+          type="text"
+          className="form-control form-control-lg"
+          placeholder="Search"
+          ref="search"
+          onChange={this.filterList}/>
         </fieldset>
         </form>
         {this.state.items ? <div className="list">{this.list()}</div> :null}

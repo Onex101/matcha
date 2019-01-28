@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from "react";
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 import { Nav, Navbar, NavItem, NavDropdown, MenuItem } from "react-bootstrap";
 import "./App.css";
 import Routes from "./Routes";
@@ -26,6 +26,8 @@ class App extends Component {
       endpoint              : "http://localhost:4000",
       socket                : null,
       socketUser            : null,
+      results               : null,
+      resultType            : null,
     };
     this.renderUser = this.renderUser.bind(this);
   }
@@ -211,14 +213,28 @@ class App extends Component {
             </Fragment>
           </Nav>
           </Navbar.Collapse>
-    )
+      )
     }
   }
 
   searchCheck(){
     if (localStorage.getItem('user'))
-      return(<SearchBar/>)
+      return(<SearchBar getSearchResults={this.getSearchResults}/>)
   }
+
+  // getSearchResults(results, type) {
+  getSearchResults = (results, type ) => {
+
+    console.log("RECEIVED RESULTS:")
+    console.info(results)
+    //Make the route that passes the results and type to the props
+    // if (this.state.redirect) {
+      this.setState({results: results})
+      this.setState({resultType: type})
+      // return <Redirect push to="/searchResults" />;
+    // }
+  }
+
   render() {
     const childProps = {
       isAuthenticated       : this.state.isAuthenticated,
@@ -229,10 +245,16 @@ class App extends Component {
       setUser               : this.setUser,
       socket                : this.state.socket,
       socketUser            : this.state.socketUser,
+      getSearchResults      : this.getSearchResults,
+      results               : this.state.results,
+      resultType            : this.state.resultType,
     };
     var style = {
       display: 'flex',
     }
+    // if (this.state.results && this.state.resultType) {
+    //   return (<Link to="/searchResults" />
+    // }
     return (
       <div className="App-setup">
       <div className="App-container">
@@ -263,6 +285,8 @@ class App extends Component {
         {console.log("Childprops: ")}
         {console.log("Test for re-render")}
         {console.info(childProps)}
+        {this.state.results && this.state.resultType ?
+          <Redirect push to="/searchResults" /> : null}
         <div className="App-content">
           <Routes childProps={childProps} />
         </div>
