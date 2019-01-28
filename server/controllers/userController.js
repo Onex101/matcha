@@ -521,6 +521,18 @@ exports.user_logout = function(req, res){
     })
 }
 
+exports.linked_details = function(req, res){
+	let user = new User('');
+	user.linked(req.params.id, function(err, results){
+		if (err){
+            res.send(err)
+        }
+        else{
+            res.send(results);
+        }
+	})
+}
+
 exports.get_tmp = function(req, res){
 	let user = new User('')
 	user.getByUsername(req.params.user_name, function(err, results){
