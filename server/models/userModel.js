@@ -4,6 +4,7 @@ var schemas = require("../schemas.js");
 var _ = require("lodash");
 var mysql = require('mysql');
 var mail = require('../mail.js');
+var match = require('../matchFunctions.js');
 
 const SELECT_ALL_USERS_QUERY = 'SELECT * FROM users';
 
@@ -350,6 +351,34 @@ User.prototype.exists = function (callback){
 		}
 		else{
 			callback(null, results);
+		}
+	})
+}
+
+User.prototype.getMatchDetails = function(user_id, match_id, callback){
+	var query = `SELECT user_name, fame, birth_date, gps_lat, gps_lon, COUNT(*) AS visits FROM users JOIN history ON id = viewed_id WHERE viewed_id = ${match_id} GROUP BY user_name, fame, birth_date, gps_lat, gps_lon;`;
+	db.query(query, function(err, results){
+		if (err){
+			callback(err, null);
+		}
+		else{
+			var age = match.getAge(results[0].birth_date);
+			let user = new User('');
+			user.getById(user_id, function (err, result){
+				if (err){callback(err, null);}
+				else{
+					var dist = match.getDistance(results[0].gps_lat, results[0].gps_lon,result[0].gps_lat, result[0].gps_lon);
+					var final_query = `SELECT user_name, fame, ${age} AS age, ${dist} as distance, COUNT(*) AS visits FROM users JOIN history ON id = viewed_id WHERE viewed_id = ${match_id} GROUP BY user_name, fame, birth_date, gps_lat, gps_lon;`;
+					db.query(final_query, function (err, fresults) {
+						if (err){
+							callback(err, null);
+						}
+						else{
+							callback(null, fresults);
+						}
+					})
+				}
+			});
 		}
 	})
 }

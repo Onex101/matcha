@@ -87,7 +87,7 @@ router.get('/user/:id/getliked', user_controller.get_liked);
 router.get('/interest/:user_id/:interest_name', user_controller.set_interest_by_name);
 
 //GET request to get user's info by id. Needs to return: Fame, Visits, Name, Surname, Distance, Age
-//router.get('/match/details/:user_id/:match_id', user_controller.get_match_details);
+router.get('/match/details/:user_id/:match_id', user_controller.get_match_details);
 
 //GET request that adds +1 visit to user's profile (by user_id or username). Front end will send this every time someone clicks on a username of a usercard to see the profile
 router.get('/user/visit/:viewer_id/:viewee_id', user_controller.add_visit);

@@ -489,6 +489,16 @@ exports.add_visit = function(req, res){
 	})
 }
 
+exports.get_match_details = function(req, res){
+	let user = new User('');
+	user.getMatchDetails(req.params.user_id, req.params.match_id, function(err, results){
+		if(err){res.send(err);}
+		else{
+			res.send(results)
+		}
+	})
+}
+
 //sorting function to sort by match score
 function sortFunction(a, b) {
     if (a['match'] === b['match']) {
