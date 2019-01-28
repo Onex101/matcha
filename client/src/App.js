@@ -98,7 +98,10 @@ class App extends Component {
 		console.log ('The socket will be initalized with:', name, id, this.state.userInfo)
 		socket.on('connect', ()=>{
 			console.log("Connected " + name);
-		})
+    })
+    socket.on('notification', ()=>{
+      
+    })
 		this.setState({socket: socket})
 		socket.emit(VERIFY_USER, id, name, this.verifyUser)
 	}
