@@ -146,7 +146,10 @@ module.exports = function(socket){
 		}
 	})
 
-	socket.on(GET_PREVIOUS_MESSAGES, ({chat})=>{
+	socket.on('notification', (message, sender, receiver)=>{
+		if (receiver in connectedUsers){
+			reciversocketconnectedUsers[receiver].socketId
+		}
 		// if(chat.id === communityChat.id){
 		// 	console.log("sending old messages")
 		// 	communityMessages.forEach(function (test, index){
