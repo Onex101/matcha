@@ -479,6 +479,26 @@ exports.update_gps = function(req, res){
 	})
 }
 
+exports.add_visit = function(req, res){
+	let user = new User('');
+	user.addVisit(req.params.viewer_id, req.params.viewee_id, function(err, results){
+		if(err){res.send(err);}
+		else{
+			res.send(results)
+		}
+	})
+}
+
+exports.get_match_details = function(req, res){
+	let user = new User('');
+	user.getMatchDetails(req.params.user_id, req.params.match_id, function(err, results){
+		if(err){res.send(err);}
+		else{
+			res.send(results)
+		}
+	})
+}
+
 //sorting function to sort by match score
 function sortFunction(a, b) {
     if (a['match'] === b['match']) {
@@ -499,6 +519,18 @@ exports.user_logout = function(req, res){
             res.send("Logged out");
         }
     })
+}
+
+exports.linked_details = function(req, res){
+	let user = new User('');
+	user.linked(req.params.id, function(err, results){
+		if (err){
+            res.send(err)
+        }
+        else{
+            res.send(results);
+        }
+	})
 }
 
 exports.get_tmp = function(req, res){

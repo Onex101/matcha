@@ -15,6 +15,16 @@ export default class Home extends Component {
     }
   }
 
+  resetSort = (e) => {
+    e.preventDefault()
+
+    try {
+      this.setState({matches: this.props.userMatches})
+    } catch (e) {
+      alert(e.message);
+    }
+  }
+
   sort_by(field, reverse, primer) {
     var key = primer ? 
        function(x) {return primer(x[field])} : 
@@ -32,10 +42,25 @@ export default class Home extends Component {
     
     try {
       var ageSort = this.state.matches;
+      // console.log("AGE SORT:")
+      // console.info(ageSort)
       if (ageSort) {
-        [].slice.call(ageSort).sort(this.sort_by('birth_date_diff', true, false));
-        console.log("GPSSort = " + JSON.stringify(ageSort));
-        this.setState({matches: ageSort});
+        var result = [];
+        for(var i in ageSort){
+            var keys = Object.keys(ageSort[i]);
+            var values = Object.values(ageSort[i]);
+            var temp = [];
+            for(var i in keys){
+              temp[keys[i]] = values[i];
+            }
+            result.push(temp);
+        }
+        // console.log("AGE RESULT:")
+        // console.info(result)
+       result.sort(this.sort_by('birth_date_diff', false, false));
+        // console.log("AGESORT FINAL = ");
+        // console.info(result)
+        this.setState({matches: result});
       }
     } catch (e) {
       alert(e.message);
@@ -121,6 +146,12 @@ export default class Home extends Component {
                       bsSize="large"
                       onClick={this.sortByTags}
                   >Tags</Button>
+              </ButtonGroup>
+              <ButtonGroup>
+                  <Button
+                      bsSize="large"
+                      onClick={this.resetSort}
+                  >Reset</Button>
               </ButtonGroup>
               </ButtonToolbar>
             </div>
