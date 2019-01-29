@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import "./SearchBar.css";
+import { Link } from "react-router-dom";
 
 export default class SearchBar extends Component {
   constructor(props) {
@@ -104,6 +105,9 @@ export default class SearchBar extends Component {
     }
 
     var results;
+    var type;
+
+
     if (searchType === "user") {
       //Do user call
     } else if (searchType === "tag") {
@@ -122,7 +126,8 @@ export default class SearchBar extends Component {
           console.log("SEARCH TAGS RESULTS:")
           console.info(responseJSON)
           results = responseJSON;
-          this.props.getSearchResults(results, "These are the users who have the tag you searched for");
+          type = 'These are the users who have the tag "' + item.name + '":'
+          this.props.getSearchResults(results, type);
           this.setState({search: null})
           this.refs.search.value = '';
         })
@@ -137,6 +142,10 @@ export default class SearchBar extends Component {
     } else {
       //Do all call
     }
+
+    // this.props.getSearchResults(results, type);
+    // this.setState({search: null})
+    // this.refs.search.value = '';
   }
 
   list() {
@@ -174,6 +183,7 @@ export default class SearchBar extends Component {
   render(){
     return (
       <div className="filter-list">
+        <Link to="/searchResults" className="App-logo">
         <form className="form">
         <fieldset className="form-group">
         <input 
@@ -185,6 +195,7 @@ export default class SearchBar extends Component {
         </fieldset>
         </form>
         {this.state.items ? <div className="list">{this.list()}</div> :null}
+        </Link>
       </div>
     );
   }

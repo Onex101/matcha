@@ -1,18 +1,20 @@
 import React, { Component } from "react";
-import "./Likes.css";
+import "./SearchResults.css";
 import {ControlLabel } from "react-bootstrap";
 import Modal from 'react-responsive-modal';
 import ControlledTabs from "./Tabs";
 import UserLabel from "./UserLabel";
+import { Link, Redirect } from "react-router-dom";
 
 export default class SearchResults extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            userInfo:   null,
-            results:      null,
-            open:       false,
+            // userInfo:   null,
+            results     : null,
+            type        : null,
+            open        : false,
         }
     }
 
@@ -27,13 +29,7 @@ export default class SearchResults extends Component {
         this.setState({ open: false });
     };
 
-    // Gets user images
-    getUserProfile(){
-        //For if wwe no longer return the profile pic on user Info
-    }
-
     avatar(image, width, height) {
-        // console.log(image)
         var image = image,
             style = {
               width: width || 50,
@@ -43,58 +39,32 @@ export default class SearchResults extends Component {
         return (<img className="avatar" style={style} src={image} />);
     }
 
-    componentDidMount() {      
-        // if (this.state.userInfo === null && this.props.userInfo && this.props.userInfo.id  ){
-        //     this.setState({userInfo: this.props.userInfo,})
-        // }
-        // temporary fixs
-        if (this.state.results === null && this.props.results !== null)
-            this.setState({results: this.props.results})
-        // if (this.state.likes === null && this.state.userInfo && this.state.userInfo.id) {
-            // Make back end call to get list of user's likes
-            // try {
-            //     fetch('/uaer/likes' + this.state.userInfo.id, {
-            //       method: "GET",
-            //       headers: {
-            //         "Content-Type": "application/json; charset=utf-8",
-            //       },
-            //     })
-            //     .then(response => response.json())
-            //     .then((responseJSON) => {  
-            //         this.setState({likes: responseJSON["data"]})
-            //     })
-            //     .catch(err => console.error(err))
-            // } catch (e) {
-            //   alert(e.message);
-            // }
-        // }
+    componentDidMount() { 
+        if (this.props.results === null && this.props.resultType === null && this.props.userInfo && this.props.userInfo.id)
+            return <Redirect push to="/" />
+        if (this.state.type === null && this.props.resultType !== null) {
+            this.setState({type: this.props.resultType})
+        }
+        if (this.state.results === null) {
+            if (this.props.results !== null)
+                this.setState({results: this.props.results})
+            else
+                this.setState({results: "empty"})
+
+        }
     }
 
     componentDidUpdate() {
-        if (this.state.userInfo === null && this.props.userInfo && this.props.userInfo.id  ){
-            this.setState({userInfo: this.props.userInfo,})
+        if (this.props.results === null && this.props.resultType === null && this.props.userInfo && this.props.userInfo.id)
+            return <Redirect push to="/" />
+        if (this.state.type === null && this.props.resultType !== null) {
+            this.setState({type: this.props.resultType})
         }
-        // temporary fixs
-        if (this.state.results === null && this.props.results !== null)
+        if (this.state.results === null && this.props.results !== null) {
+            if (this.props.results !== null)
             this.setState({results: this.props.results})
-        // if (this.state.likes === null && this.state.userInfo && this.state.userInfo.id) {
-            // Make back end call to get list of user's likes
-            // try {
-            //     fetch('/uaer/likes' + this.state.userInfo.id, {
-            //       method: "GET",
-            //       headers: {
-            //         "Content-Type": "application/json; charset=utf-8",
-            //       },
-            //     })
-            //     .then(response => response.json())
-            //     .then((responseJSON) => {  
-            //         this.setState({likes: responseJSON["data"]})
-            //     })
-            //     .catch(err => console.error(err))
-            // } catch (e) {
-            //   alert(e.message);
-            // }
-        // }
+        else
+            this.setState({results: "empty"})        }
     }
 
     renderUsername(user) {
@@ -129,10 +99,12 @@ export default class SearchResults extends Component {
         console.info(results)
 
         //Do a check if there's a result type, then either show that, or show loading
-        return (this.state.results ?
-          <div id="likes">
-            <div className="list">{this.renderResults(results)}</div>
-          </div>
+        return (this.state.type && this.state.results?
+            <div id="results"><h2>{this.state.type}</h2><hr />
+          <div >
+            {this.state.results !== "empty" ? <div className="list">{this.renderResults(results)}</div>
+            : <h2>There were no results matching your search :(</h2>}
+          </div></div>
           : <ControlLabel> Loading ... </ControlLabel>
         )
       }

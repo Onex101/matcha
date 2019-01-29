@@ -231,6 +231,7 @@ class App extends Component {
     // if (this.state.redirect) {
       this.setState({results: results})
       this.setState({resultType: type})
+      // return (<Link to="/searchResults" className="App-logo"/>)
       // return <Redirect push to="/searchResults" />;
     // }
   }
@@ -285,8 +286,8 @@ class App extends Component {
         {console.log("Childprops: ")}
         {console.log("Test for re-render")}
         {console.info(childProps)}
-        {this.state.results && this.state.resultType ?
-          <Redirect push to="/searchResults" /> : null}
+        {/* {this.state.resultType ?
+          <Redirect push to="/searchResults" /> : null} */}
         <div className="App-content">
           <Routes childProps={childProps} />
         </div>
