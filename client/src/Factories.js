@@ -28,6 +28,14 @@ const createChat = ({id, messages = [], name = "Community", users = [], isCommun
 	}
 )
 
+const createNotification = ({message="", sender=""} = {})=>(
+	{
+		id:uuidv4(),
+		message,
+		sender
+	}
+)
+
 const createChatNameFromUsers = (users, excludedUser = "")=>{
 	return users.filter(u => u !== excludedUser).join(' & ') || "Empty Users"
 }
@@ -36,10 +44,13 @@ const getTime = (date)=>{
 	return `${date.getHours()}:${("0"+date.getMinutes()).slice(-2)}`
 }
 
+
+
 module.exports = {
 	createChat,
 	createMessage,
 	createChatNameFromUsers,
-	createUser
+	createUser,
+	createNotification
 }
 
