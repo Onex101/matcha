@@ -11,7 +11,7 @@ import chat from './containers/imgs/chat.png';
 import notification from './containers/imgs/notification.png';
 
 import io from 'socket.io-client';
-import {USER_CONNECTED, LOGOUT, VERIFY_USER} from './Events';
+import {USER_CONNECTED, LOGOUT, VERIFY_USER, NOTIFICATION} from './Events';
 const socketUrl = "http://localhost:4000"
 
 class App extends Component {
@@ -28,6 +28,7 @@ class App extends Component {
       socketUser            : null,
       results               : null,
       resultType            : null,
+      notifications         : [],
     };
     this.renderUser = this.renderUser.bind(this);
   }
@@ -59,10 +60,6 @@ class App extends Component {
           console.log("response : ")
           console.info(responseJSON["data"])
           this.setState({ userInfo: responseJSON["data"] }, this.initSocket());
-          // if(!this.state.socket){
-          //   console.log("component will mount init socket")
-          //   this.initSocket();
-          // }
           // console.log("User = " + JSON.stringify(this.state.userInfo));
         })
         .catch(err => console.error(err))
@@ -79,16 +76,6 @@ class App extends Component {
     
   }
 
-  componentDidUpdate(){
-    // console.log(this.state.userInfo)
-
-    //Socket test
-    // if(!this.state.socket){
-		// 	console.log("Component DID mount init Socket")
-		// 	this.initSocket();
-		// }
-  }
-
   //Socket test
   initSocket = ()=>{
 		console.log('connecting user')
@@ -101,8 +88,10 @@ class App extends Component {
 		socket.on('connect', ()=>{
 			console.log("Connected " + name);
     })
-    socket.on('notification', ()=>{
-      
+    socket.on(NOTIFICATION, (notification)=>{
+      console.log('NOTIFICATION CAUGHT')
+      this.state.notifications.push(notification)
+      console.log(this.state.notifications)
     })
 		this.setState({socket: socket})
 		socket.emit(VERIFY_USER, id, name, this.verifyUser)

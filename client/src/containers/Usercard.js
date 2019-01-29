@@ -4,6 +4,8 @@ import heart from './imgs/heart.png';
 import x from './imgs/x.png';
 import Modal from 'react-responsive-modal';
 import ControlledTabs from "./Tabs";
+import { Socket } from "net";
+import {NOTIFICATION} from "../Events";
 
 export default class Usercard extends Component {
     constructor(props) {
@@ -37,6 +39,9 @@ export default class Usercard extends Component {
     }
 
     like(e){
+      console.log(this.props)
+      const socket = this.props.socket;
+      socket.emit(NOTIFICATION, 'Somone has liked you', this.props.userInfo.user_name);
       e.preventDefault();
       console.log("Yay")
     }

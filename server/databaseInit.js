@@ -271,7 +271,9 @@ connection.connect(function (err) {
 	for (var i = 101; i <= 200; i++){
 		var fame = Math.floor(Math.random() * 21);
 		connection.query(`UPDATE users SET fame = ${fame} WHERE id = ${i}`);
+		connection.query(`INSERT INTO history (viewer_id, viewed_id) VALUES (${i},${i})`);
 	}
+
 
 	console.log('Sucess!');
 	console.log('Exiting...');

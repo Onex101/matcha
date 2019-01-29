@@ -375,7 +375,26 @@ User.prototype.tag_search = function(id, interest, callback){
 	WHERE NOT id = ${id}
 	GROUP BY user_name, id ORDER BY id) y
 	WHERE interests LIKE "%${interest}%"`;
-	console.log(query);
+	db.query(query,function (err, results) {
+		if (err){
+			callback(err, null);
+		}
+		else{
+			callback(null, results);
+		}
+	})
+}
+
+User.prototype.search_fame = function(x, id, callback){
+	var query = `SELECT id, user_name, birth_date, gender, pref, gps_lat, gps_lon, bio, pic, fame, profile_pic_id, GROUP_CONCAT(interest) AS interests FROM\
+	(SELECT users.id, user_name,interest, birth_date, gender, pref, gps_lat, gps_lon, bio, pic, fame, verified, profile_pic_id FROM user_interests\
+	RIGHT JOIN users ON user_interests.user_id = users.id\
+	LEFT JOIN interests ON user_interests.interest_id = interests.id\
+	LEFT JOIN likes ON users.id = user2_id\
+	LEFT JOIN pictures ON profile_pic_id = pictures.id\
+	WHERE likes.link_code IS NULL AND verified IS NOT NULL AND pic IS NOT NULL
+	AND fame >= ${x}) x\
+	WHERE NOT id = ${id} GROUP BY user_name, id ORDER BY id`
 	db.query(query,function (err, results) {
 		if (err){
 			callback(err, null);
@@ -425,23 +444,41 @@ User.prototype.getMatchDetails = function(user_id, match_id, callback){
 			callback(err, null);
 		}
 		else{
-			var age = match.getAge(results[0].birth_date);
-			let user = new User('');
-			user.getById(user_id, function (err, result){
-				if (err){callback(err, null);}
-				else{
-					var dist = match.getDistance(results[0].gps_lat, results[0].gps_lon,result[0].gps_lat, result[0].gps_lon);
-					var final_query = `SELECT user_name, fame, ${age} AS age, ${dist} as distance, COUNT(*) AS visits FROM users JOIN history ON id = viewed_id WHERE viewed_id = ${match_id} GROUP BY user_name, fame, birth_date, gps_lat, gps_lon;`;
-					db.query(final_query, function (err, fresults) {
-						if (err){
-							callback(err, null);
-						}
-						else{
-							callback(null, fresults);
-						}
-					})
-				}
-			});
+			if(results.length){
+				var age = match.getAge(results[0].birth_date);
+				let user = new User('');
+				user.getById(user_id, function (err, result){
+					if (err){callback(err, null);}
+					else{
+						var dist = match.getDistance(results[0].gps_lat, results[0].gps_lon,result[0].gps_lat, result[0].gps_lon);
+						var final_query = `SELECT user_name, fame, ${age} AS age, ${dist} as distance, COUNT(*) AS visits FROM users JOIN history ON id = viewed_id WHERE viewed_id = ${match_id} GROUP BY user_name, fame, birth_date, gps_lat, gps_lon;`;
+						db.query(final_query, function (err, fresults) {
+							if (err){
+								callback(err, null);
+							}
+							else{
+								callback(null, fresults);
+							}
+						})
+					}
+				})
+			}
+			else{
+				callback("This Error", null)
+			}
+		}
+	})
+}
+
+User.prototype.getUserDetails = function(id, callback){
+	var query = `SELECT user_name, fame, birth_date, gender, pref, COUNT(*) AS visits, FLOOR(DATEDIFF(NOW(),birth_date)/365) AS age FROM users JOIN history ON id = viewed_id WHERE viewed_id = ${id} GROUP BY user_name, fame, birth_date, gps_lat, gps_lon, gender, pref`;
+	db.query(query,function (err, results) {
+		if (err){
+			callback(err, null);
+		}
+		else{
+			console.log(results);
+			callback(null, results);
 		}
 	})
 }

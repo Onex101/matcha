@@ -107,7 +107,8 @@ export default class Home extends Component {
       for (var elem in this.state.matches) {
           rows.push(<Usercard  userInfo = {this.state.matches[elem].data}
                 key={elem}
-                pic = {this.state.matches[elem].data.pic} />);
+                pic = {this.state.matches[elem].data.pic} 
+                socket = {this.props.socket}/>);
       }
       return <div>{rows}</div>;
     }
