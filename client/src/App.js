@@ -28,6 +28,7 @@ class App extends Component {
       socketUser            : null,
       results               : null,
       resultType            : null,
+      redirect              : false,
       notifications         : [],
     };
     this.renderUser = this.renderUser.bind(this);
@@ -211,18 +212,23 @@ class App extends Component {
       return(<SearchBar getSearchResults={this.getSearchResults}/>)
   }
 
-  // getSearchResults(results, type) {
   getSearchResults = (results, type ) => {
-
     console.log("RECEIVED RESULTS:")
+    console.info(type)
     console.info(results)
-    //Make the route that passes the results and type to the props
-    // if (this.state.redirect) {
-      this.setState({results: results})
-      this.setState({resultType: type})
-      // return (<Link to="/searchResults" className="App-logo"/>)
-      // return <Redirect push to="/searchResults" />;
-    // }
+
+    this.setState({results: results})
+    this.setState({resultType: type})
+    this.setState({redirect: true})
+  }
+
+  gotResults = (response) => {
+
+    if (response === false) {
+      this.setState({redirect: response})
+      this.setState({results: null})
+      this.setState({resultType: null})
+    }
   }
 
   render() {
@@ -236,15 +242,14 @@ class App extends Component {
       socket                : this.state.socket,
       socketUser            : this.state.socketUser,
       getSearchResults      : this.getSearchResults,
+      gotResults            : this.gotResults,
       results               : this.state.results,
       resultType            : this.state.resultType,
     };
     var style = {
       display: 'flex',
     }
-    // if (this.state.results && this.state.resultType) {
-    //   return (<Link to="/searchResults" />
-    // }
+
     return (
       <div className="App-setup">
       <div className="App-container">
@@ -275,8 +280,8 @@ class App extends Component {
         {console.log("Childprops: ")}
         {console.log("Test for re-render")}
         {console.info(childProps)}
-        {/* {this.state.resultType ?
-          <Redirect push to="/searchResults" /> : null} */}
+        {this.state.redirect ?
+          <Redirect push to="/searchResults" /> : null}
         <div className="App-content">
           <Routes childProps={childProps} />
         </div>
