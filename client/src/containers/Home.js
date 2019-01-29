@@ -105,10 +105,12 @@ export default class Home extends Component {
     if (this.state.matches !== null) {
       var rows = [];
       for (var elem in this.state.matches) {
-          rows.push(<Usercard  userInfo = {this.state.matches[elem].data}
-                key={elem}
-                pic = {this.state.matches[elem].data.pic} 
-                socket = {this.props.socket}/>);
+          rows.push(<Usercard  
+                    userInfo = {this.state.matches[elem].data}
+                    key={elem}
+                    pic = {this.state.matches[elem].data.pic} 
+                    socket = {this.props.socket}
+                  />);
       }
       return <div>{rows}</div>;
     }
