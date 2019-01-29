@@ -499,6 +499,16 @@ exports.get_match_details = function(req, res){
 	})
 }
 
+exports.search_minfame = function(req, res){
+	let user = new User('');
+	user.search_fame(req.params.x, req.params.user_id, function(err, results){
+		if(err){res.send(err);}
+		else{
+			res.send(results)
+		}
+	})
+}
+
 //sorting function to sort by match score
 function sortFunction(a, b) {
     if (a['match'] === b['match']) {
