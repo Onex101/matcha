@@ -43,7 +43,7 @@ export default class SearchResults extends Component {
             this.setState({type: this.props.resultType})
         }
         if (this.state.results === null) {
-            if (this.props.results !== null)
+            if (this.props.results && this.props.results.length !== 0)
                 this.setState({results: this.props.results})
             else
                 this.setState({results: "empty"})
@@ -62,7 +62,7 @@ export default class SearchResults extends Component {
             this.setState({type: this.props.resultType})
         }
         if (this.state.results === null && this.props.results !== null) {
-            if (this.props.results !== null)
+            if (this.props.results && this.props.results.length !== 0)
                 this.setState({results: this.props.results})
             else
                 this.setState({results: "empty"})
@@ -111,8 +111,8 @@ export default class SearchResults extends Component {
                    : this.state.type && this.state.results ?
                         <div id="results"><h2>{this.state.type}</h2><hr />
                         <div >
-                            {this.state.results !== "empty" ? <div className="list">{this.renderResults(results)}</div>
-                                                            : <h2>There were no results matching your search :(</h2>}
+                            {this.state.results !== "empty" && (this.state.results && this.state.results.length > 0) ? <div className="list">{this.renderResults(results)}</div>
+                                                            : <h3>There were no results matching your search :(</h3>}
                         </div></div>
                         : <ControlLabel> Loading ... </ControlLabel>);
       }

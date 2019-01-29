@@ -17,6 +17,15 @@ export default class SearchBar extends Component {
 
 //Check serverside for matching info
 //Split by each hash
+  // handleSubmit() {
+
+  //   var search = this.refs.search.value.toLowerCase();
+
+  //   var item = [{id: null, name: search}]
+
+  //   this.searchThis.bind(this, item[0])
+
+  // }
   filterList = event => {
     // var updatedList = this.state.initialItems;
     var search = event.target.value.toLowerCase();
@@ -92,26 +101,17 @@ export default class SearchBar extends Component {
 
   searchThis(item, e){
     e.preventDefault()
-
-    //Test
-    var searchType;
-    if (this.state.search[0] === '@') {
-      searchType = "user";
-    } else if (this.state.search[0] === '#') {
-      searchType = "tag";
-    } else if (this.state.search[0] === '$') {
-      searchType = "fame";
-    } else {
-      searchType = "all";
+    console.log("ITEMS TEST 1:")
+    console.info(item)
+    if (item.name[0] === '@' || item.name[0] === '#' || item.name[0] === '$') {
+      item.name = item.name.substring(1);
     }
-
     var results;
     var type;
 
-
-    if (searchType === "user") {
+    if (this.state.search[0] === '@') {
       //Do user call
-    } else if (searchType === "tag") {
+    } else if (this.state.search[0] === '#') {
       //Do tag call
 
       try {
@@ -130,7 +130,6 @@ export default class SearchBar extends Component {
           this.props.getSearchResults(results, type);
           this.setState({search: null})
           this.refs.search.value = '';
-
         })
         .catch(err => console.error(err))
         } catch (e) {
@@ -138,7 +137,7 @@ export default class SearchBar extends Component {
         }
 
 
-    } else if (searchType === "fame") {
+    } else if (this.state.search[0] === '$') {
       //Do fame call
     } else {
       //Do all call
@@ -184,7 +183,7 @@ export default class SearchBar extends Component {
   render(){
     return (
       <div className="filter-list">
-        <form className="form">
+        <form className="form" onSubmit={this.refs.search && this.refs.search.value ? this.searchThis.bind(this, {id: null, name: this.refs.search.value.toLowerCase()}) : null}>
         <fieldset className="form-group">
         <input 
           type="text"
