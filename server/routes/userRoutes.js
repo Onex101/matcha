@@ -89,6 +89,9 @@ router.get('/interest/:user_id/:interest_name', user_controller.set_interest_by_
 //GET request to get user's info by id. Needs to return: Fame, Visits, Name, Surname, Distance, Age
 router.get('/match/details/:user_id/:match_id', user_controller.get_match_details);
 
+//GET request to get more details when given the ID. return: Fame, Visits, Name, Surname, Age
+router.get('/user/details/:user_id', user_controller.get_user_details);
+
 //GET request that adds +1 visit to user's profile (by user_id or username). Front end will send this every time someone clicks on a username of a usercard to see the profile
 router.get('/user/visit/:viewer_id/:viewee_id', user_controller.add_visit);
 
@@ -100,6 +103,9 @@ router.get('/usersearch/:user_id/:search_name', user_controller.search_username)
 
 //GET request for users with the tag matching the search (using suggestion system like in normal tags creating)
 router.get('/tagsearch/:user_id/:interest', user_controller.search_tags);
+
+//GET request for users with a fame rating of at least x
+router.get('/famesearch/:user_id/:x', user_controller.search_minfame);
 
 router.get('/user/tmp/:user_name', user_controller.get_tmp);
 
