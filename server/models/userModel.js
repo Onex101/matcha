@@ -470,6 +470,19 @@ User.prototype.getMatchDetails = function(user_id, match_id, callback){
 	})
 }
 
+User.prototype.getUserDetails = function(id, callback){
+	var query = `SELECT user_name, fame, birth_date, gender, pref, COUNT(*) AS visits, FLOOR(DATEDIFF(NOW(),birth_date)/365) AS age FROM users JOIN history ON id = viewed_id WHERE viewed_id = ${id} GROUP BY user_name, fame, birth_date, gps_lat, gps_lon, gender, pref`;
+	db.query(query,function (err, results) {
+		if (err){
+			callback(err, null);
+		}
+		else{
+			console.log(results);
+			callback(null, results);
+		}
+	})
+}
+
 User.prototype.getEmailById = function (callback){
 	db.query(`SELECT email FROM users WHERE id = '${this.data.id}'`, function (err, results) {
 		if (err){
