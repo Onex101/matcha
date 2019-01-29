@@ -38,10 +38,11 @@ export default class Likes extends Component {
     renderUsername(user) {
         const { open } = this.state;
         return (<div className="userNameLabel">
-            <div className="username"><p onClick={this.onOpenModal}>{user.data.user_name}</p></div>
+            {user.user_name ? <div className="username"><p onClick={this.onOpenModal}>{user.user_name}</p></div>
+                            : <div className="username"><p onClick={this.onOpenModal}>{user.data.user_name}</p></div>}
             <div>
                 <Modal open={open} onClose={this.onCloseModal} center>
-                    <ControlledTabs userInfo={user.data} />
+                    {user.data ? <ControlledTabs userInfo={user.data} /> :<ControlledTabs userInfo={user} />}
                 </Modal>
             </div></div>
         )
@@ -49,7 +50,7 @@ export default class Likes extends Component {
 
     render() {    
         const user = this.props.user
-        if (user && user.pic && user.data.user_name) {
+        if (user && user.pic && (user.user_name || (user.data && user.data.user_name))) {
             return (<div className="userLabel">
                     {this.avatar(user.pic, 60, 60)}
                     {this.renderUsername(user)}
