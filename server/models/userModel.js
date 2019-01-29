@@ -445,7 +445,7 @@ User.prototype.getMatchDetails = function(user_id, match_id, callback){
 				})
 			}
 			else{
-				callback("Error", null)
+				callback("This Error", null)
 			}
 		}
 	})
