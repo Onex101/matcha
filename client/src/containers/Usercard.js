@@ -41,13 +41,43 @@ export default class Usercard extends Component {
     like(e){
       console.log(this.props)
       const socket = this.props.socket;
-      socket.emit(NOTIFICATION, 'Somone has liked you', this.props.userInfo.user_name);
+      socket.emit(NOTIFICATION, 'Some one has liked you', this.props.userInfo.user_name);
       e.preventDefault();
+      try {
+        fetch('/like/' + localStorage.getItem('id') + '/' + this.props.userInfo.id, {
+          method: "GET",
+          headers: {
+          "Content-Type": "application/json; charset=utf-8",
+          },
+        })
+        .then(response => response.json())
+        .then((responseJSON) => {
+          console.log(responseJSON)
+        })
+        .catch(err => console.error(err))
+        } catch (e) {
+          alert(e.message);
+        }
       console.log("Yay")
     }
 
     dislike(e){
       e.preventDefault();
+      try {
+        fetch('/dislike/' + localStorage.getItem('id') + '/' + this.props.userInfo.id, {
+          method: "GET",
+          headers: {
+          "Content-Type": "application/json; charset=utf-8",
+          },
+        })
+        .then(response => response.json())
+        .then((responseJSON) => {
+          console.log(responseJSON)
+        })
+        .catch(err => console.error(err))
+        } catch (e) {
+          alert(e.message);
+        }
       console.log("Nay")
     }
 
