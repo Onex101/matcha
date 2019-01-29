@@ -56,17 +56,17 @@ export default class SearchBar extends Component {
         
       }
       else if (search.indexOf('@') === 0){
-        //Search users
+        //Search users (user matches as suggestions)
         this.setState({items: ["Search users"]});
       }
       else if (search.indexOf('$') === 0){
-        //Search fame by no. given
+        //Search fame by no. given No suggestions
         //Prompt "give minimum fame to prompt"
         var ret = ["Search fame", "numbers!"];
         this.setState({items: ret});
       }
       else {
-        // search all the things
+        // search all the things join tags and matches somehow?
         this.setState({items: ["Search all the things"]});
       }
     }
