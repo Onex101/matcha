@@ -11,7 +11,7 @@ import chat from './containers/imgs/chat.png';
 import notification from './containers/imgs/notification.png';
 
 import io from 'socket.io-client';
-import {USER_CONNECTED, LOGOUT, VERIFY_USER} from './Events';
+import {USER_CONNECTED, LOGOUT, VERIFY_USER, NOTIFICATION} from './Events';
 const socketUrl = "http://localhost:4000"
 
 class App extends Component {
@@ -28,6 +28,8 @@ class App extends Component {
       socketUser            : null,
       results               : null,
       resultType            : null,
+      redirect              : false,
+      notifications         : [],
     };
     this.renderUser = this.renderUser.bind(this);
   }
@@ -59,10 +61,6 @@ class App extends Component {
           console.log("response : ")
           console.info(responseJSON["data"])
           this.setState({ userInfo: responseJSON["data"] }, this.initSocket());
-          // if(!this.state.socket){
-          //   console.log("component will mount init socket")
-          //   this.initSocket();
-          // }
           // console.log("User = " + JSON.stringify(this.state.userInfo));
         })
         .catch(err => console.error(err))
@@ -79,16 +77,6 @@ class App extends Component {
     
   }
 
-  componentDidUpdate(){
-    // console.log(this.state.userInfo)
-
-    //Socket test
-    // if(!this.state.socket){
-		// 	console.log("Component DID mount init Socket")
-		// 	this.initSocket();
-		// }
-  }
-
   //Socket test
   initSocket = ()=>{
 		console.log('connecting user')
@@ -101,8 +89,10 @@ class App extends Component {
 		socket.on('connect', ()=>{
 			console.log("Connected " + name);
     })
-    socket.on('notification', ()=>{
-      
+    socket.on(NOTIFICATION, (notification)=>{
+      console.log('NOTIFICATION CAUGHT')
+      this.state.notifications.push(notification)
+      console.log(this.state.notifications)
     })
 		this.setState({socket: socket})
 		socket.emit(VERIFY_USER, id, name, this.verifyUser)
@@ -222,17 +212,23 @@ class App extends Component {
       return(<SearchBar getSearchResults={this.getSearchResults}/>)
   }
 
-  // getSearchResults(results, type) {
   getSearchResults = (results, type ) => {
-
     console.log("RECEIVED RESULTS:")
+    console.info(type)
     console.info(results)
-    //Make the route that passes the results and type to the props
-    // if (this.state.redirect) {
-      this.setState({results: results})
-      this.setState({resultType: type})
-      // return <Redirect push to="/searchResults" />;
-    // }
+
+    this.setState({results: results})
+    this.setState({resultType: type})
+    this.setState({redirect: true})
+  }
+
+  gotResults = (response) => {
+
+    if (response === false) {
+      this.setState({redirect: response})
+      this.setState({results: null})
+      this.setState({resultType: null})
+    }
   }
 
   render() {
@@ -246,15 +242,14 @@ class App extends Component {
       socket                : this.state.socket,
       socketUser            : this.state.socketUser,
       getSearchResults      : this.getSearchResults,
+      gotResults            : this.gotResults,
       results               : this.state.results,
       resultType            : this.state.resultType,
     };
     var style = {
       display: 'flex',
     }
-    // if (this.state.results && this.state.resultType) {
-    //   return (<Link to="/searchResults" />
-    // }
+
     return (
       <div className="App-setup">
       <div className="App-container">
@@ -285,7 +280,7 @@ class App extends Component {
         {console.log("Childprops: ")}
         {console.log("Test for re-render")}
         {console.info(childProps)}
-        {this.state.results && this.state.resultType ?
+        {this.state.redirect ?
           <Redirect push to="/searchResults" /> : null}
         <div className="App-content">
           <Routes childProps={childProps} />

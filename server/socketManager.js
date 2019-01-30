@@ -1,7 +1,7 @@
 var socketIO = require('./index.js');
 const request = require('supertest');
-const {GET_PREVIOUS_MESSAGES, VERIFY_USER, USER_CONNECTED, USER_DISCONNECTED, LOGOUT, COMMUNITY_CHAT, MESSAGE_RECEIVED, MESSAGE_SENT, TYPING, PRIVATE_MESSAGE} = require('../client/src/Events')
-const {createUser, createMessage, createChat} = require('../client/src/Factories')
+const {NOTIFICATION, VERIFY_USER, USER_CONNECTED, USER_DISCONNECTED, LOGOUT, COMMUNITY_CHAT, MESSAGE_RECEIVED, MESSAGE_SENT, TYPING, PRIVATE_MESSAGE} = require('../client/src/Events')
+const {createNotification, createUser, createMessage, createChat} = require('../client/src/Factories')
 
 let connectedUsers = {}
 
@@ -33,6 +33,7 @@ module.exports = function(socket){
 		connectedUsers = addUser(connectedUsers, user)
 		socket.user = user
 		// console.log("Connected Users: " + JSON.stringify(connectedUsers));
+		sendNotificationToUser = sendNotification(user.name)
 		sendMessageToChatFromUser = sendMessageToChat(user)
 		sendTypingFromUser = sendTypingToChat(user.name)
 		getUsersChat = getChat(user)
@@ -146,17 +147,9 @@ module.exports = function(socket){
 		}
 	})
 
-	socket.on('notification', (message, sender, receiver)=>{
-		if (receiver in connectedUsers){
-			reciversocketconnectedUsers[receiver].socketId
-		}
-		// if(chat.id === communityChat.id){
-		// 	console.log("sending old messages")
-		// 	communityMessages.forEach(function (test, index){
-		// 			socketIO.io.to(socket.id).emit(`${MESSAGE_RECEIVED}-${chat.id}`, test)
-		// 		}
-		// 	)
-		// }
+	socket.on(NOTIFICATION, (message, receiver)=>{
+		console.log('Notification received and sending it', receiver)
+		sendNotificationToUser(message, receiver)
 	})
 }
 
@@ -216,5 +209,16 @@ function getChat(sender){
 			if (err) throw err;
 			else callback(res);
 		});
+	}
+}
+
+function sendNotification(sender){
+	return (message, receiver)=>{
+		if (receiver in connectedUsers){
+			const receiverSocket = connectedUsers[receiver].socketId
+			const newNotification = createNotification({message: message, sender: sender})
+			console.log("Socket is emmiting notification")
+			socketIO.io.to(receiverSocket).emit(NOTIFICATION, newNotification)
+		}
 	}
 }

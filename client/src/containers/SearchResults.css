@@ -1,0 +1,116 @@
+body {
+    color: black;
+    /* background-color: #6b0a3a; */
+    padding: 5px;
+    font-family: Calibri;
+}
+
+#results {
+  width: 60%;
+  margin: 5px auto 5px;
+  border-radius: 5px;
+  text-align: center;
+  overflow: hidden;
+  padding: 3%;
+  background-color: #eaeaea;
+  background-size: 60px 60px;
+  font-family: Calibri;
+  background-position: 0 0, 30px 30px;
+}
+
+#results .list {
+    text-align: left;
+    margin: 4% 20%;
+}
+#results hr {
+  /* margin: 20px auto; */
+  width: 50px;
+  border: 1px solid #6b0a3a;
+  background-color: transparent;
+}
+#results h1, #results h2, #results h3, #results h4, #results h5, #results h6, #results p {
+  margin: 0;
+}
+#results h1 {
+  font-size: 15px;
+}
+#results h2 {
+  font-size: 24px;
+  font-family: Calibri;
+}
+#results h3 {
+  font-size: 18px;
+  color: rgb(75, 75, 75);
+  font-family: Calibri;
+}
+#results h4 {
+  font-family: Calibri;
+  font-size: 24px;
+}
+#results p {
+  font-size: 14px;
+}
+
+#results .userLabel {
+    margin: 2% 5%;
+}
+
+#results .userNameLabel {
+    display: inline-block;
+}
+
+#results .username{
+    margin-left: 5%;
+}
+
+@media screen and (max-width: 770px) {
+    #results{
+        min-width: 405px;
+    }
+    .top{
+        align-content: center;
+    }
+    .top .left {
+        width: 45%;
+        float: none;
+        margin:auto;
+        padding-bottom: 10px;
+    }
+    .top .right {
+        width: 55%;
+        float: none;
+        min-width: 329px;
+        margin: auto;
+        /* padding-bottom: 10px; */
+    }
+    .user-info {margin: 5%;}
+}
+
+.user-info {
+    margin-left: 10%;
+    text-align: left;
+}
+
+.results-pic {
+    margin: 0 18%;
+}
+#results .user-images {
+    display: inline;
+    overflow: hidden;
+    margin: 2px;
+}
+
+.username{
+  font-weight: bold;
+  cursor: pointer;
+}
+
+#results .avatar{
+    display: inline;
+    margin: 2px;
+    margin-right: 2%;
+    border-radius: 50%;
+    border: 1px solid #000;
+    object-fit: cover; /* Equivalent of the background-size: cover; of a background-image */
+    object-position: center;
+}

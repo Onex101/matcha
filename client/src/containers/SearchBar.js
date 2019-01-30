@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import "./SearchBar.css";
+import { Link, Redirect } from "react-router-dom";
 
 export default class SearchBar extends Component {
   constructor(props) {
@@ -8,13 +9,23 @@ export default class SearchBar extends Component {
       this.state = {
           initialItems: '',
           items: [],
-          search: null
+          search: null,
+          // redirect: false
       }
       this.saveAndContinue = this.saveAndContinue.bind(this);
   }
 
 //Check serverside for matching info
 //Split by each hash
+  // handleSubmit() {
+
+  //   var search = this.refs.search.value.toLowerCase();
+
+  //   var item = [{id: null, name: search}]
+
+  //   this.searchThis.bind(this, item[0])
+
+  // }
   filterList = event => {
     // var updatedList = this.state.initialItems;
     var search = event.target.value.toLowerCase();
@@ -45,17 +56,17 @@ export default class SearchBar extends Component {
         
       }
       else if (search.indexOf('@') === 0){
-        //Search users
+        //Search users (user matches as suggestions)
         this.setState({items: ["Search users"]});
       }
       else if (search.indexOf('$') === 0){
-        //Search fame by no. given
+        //Search fame by no. given No suggestions
         //Prompt "give minimum fame to prompt"
         var ret = ["Search fame", "numbers!"];
         this.setState({items: ret});
       }
       else {
-        // search all the things
+        // search all the things join tags and matches somehow?
         this.setState({items: ["Search all the things"]});
       }
     }
@@ -90,27 +101,20 @@ export default class SearchBar extends Component {
 
   searchThis(item, e){
     e.preventDefault()
-
-    //Test
-    var searchType;
-    if (this.state.search[0] === '@') {
-      searchType = "user";
-    } else if (this.state.search[0] === '#') {
-      searchType = "tag";
-    } else if (this.state.search[0] === '$') {
-      searchType = "fame";
-    } else {
-      searchType = "all";
+    console.log("ITEMS TEST 1:")
+    console.info(item)
+    if (item.name[0] === '@' || item.name[0] === '#' || item.name[0] === '$') {
+      item.name = item.name.substring(1);
     }
-
     var results;
-    if (searchType === "user") {
+    var type;
+
+    if (this.state.search[0] === '@') {
       //Do user call
-    } else if (searchType === "tag") {
+    } else if (this.state.search[0] === '#') {
       //Do tag call
 
       try {
-        // const user = this.state;
         fetch(`/tagsearch/` + localStorage.getItem('id') + `/` + item.name, {
           method: "GET",
           headers: {
@@ -122,7 +126,8 @@ export default class SearchBar extends Component {
           console.log("SEARCH TAGS RESULTS:")
           console.info(responseJSON)
           results = responseJSON;
-          this.props.getSearchResults(results, "These are the users who have the tag you searched for");
+          type = 'These are the users who have the tag "' + item.name + '":'
+          this.props.getSearchResults(results, type);
           this.setState({search: null})
           this.refs.search.value = '';
         })
@@ -132,11 +137,15 @@ export default class SearchBar extends Component {
         }
 
 
-    } else if (searchType === "fame") {
+    } else if (this.state.search[0] === '$') {
       //Do fame call
     } else {
       //Do all call
     }
+
+    // this.props.getSearchResults(results, type);
+    // this.setState({search: null})
+    // this.refs.search.value = '';
   }
 
   list() {
@@ -174,7 +183,7 @@ export default class SearchBar extends Component {
   render(){
     return (
       <div className="filter-list">
-        <form className="form">
+        <form className="form" onSubmit={this.refs.search && this.refs.search.value ? this.searchThis.bind(this, {id: null, name: this.refs.search.value.toLowerCase()}) : null}>
         <fieldset className="form-group">
         <input 
           type="text"

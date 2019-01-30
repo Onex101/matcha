@@ -3,7 +3,7 @@ import SideBar from './sidebar/SideBar';
 import ChatHeading from './ChatHeading';
 import Messages from '../messages/Messages';
 import MessageInput from '../messages/MessageInput';
-import {COMMUNITY_CHAT, MESSAGE_SENT, MESSAGE_RECEIVED, TYPING, PRIVATE_MESSAGE, USER_CONNECTED, USER_DISCONNECTED, GET_PREVIOUS_MESSAGES} from '../../Events';
+import {NOTIFICATION, COMMUNITY_CHAT, MESSAGE_SENT, MESSAGE_RECEIVED, TYPING, PRIVATE_MESSAGE, USER_CONNECTED, USER_DISCONNECTED, GET_PREVIOUS_MESSAGES} from '../../Events';
 import {values} from 'lodash';
 
 export default class ChatContainer extends Component{
@@ -45,7 +45,7 @@ export default class ChatContainer extends Component{
 			// console.log(users)
 			this.getLikedPeople(users)
 			this.setState({users: values(users)})
-		})
+		}) 
 		socket.on(USER_DISCONNECTED, (users)=>{
 			this.setState({users:values(users)})
 		})
@@ -98,6 +98,7 @@ export default class ChatContainer extends Component{
 		console.log("sending private message")
 		console.log(receiver, user)
 		socket.emit(PRIVATE_MESSAGE, {receiver, sender: user, activeChat})
+		socket.emit(NOTIFICATION, "Some one has started a chat with you", receiver.name)
 	}
 
 	resetChat = (chat)=>{

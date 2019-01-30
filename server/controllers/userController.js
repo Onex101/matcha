@@ -440,7 +440,7 @@ exports.like_userId = function(req, res){
 			res.send(err)
 		}
 		else{
-			res.send("Update complete");
+			res.send({success: "Update complete"});
 		}
 	})
 }
@@ -453,7 +453,7 @@ exports.dislike_userId = function(req, res){
 			res.send(err)
 		}
 		else{
-			res.send("Update complete");
+			res.send({success: "Update complete"});
 		}
 	})
 }

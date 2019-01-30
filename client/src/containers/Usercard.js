@@ -4,6 +4,8 @@ import heart from './imgs/heart.png';
 import x from './imgs/x.png';
 import Modal from 'react-responsive-modal';
 import ControlledTabs from "./Tabs";
+import { Socket } from "net";
+import {NOTIFICATION} from "../Events";
 
 export default class Usercard extends Component {
     constructor(props) {
@@ -37,12 +39,45 @@ export default class Usercard extends Component {
     }
 
     like(e){
+      console.log(this.props)
+      const socket = this.props.socket;
+      socket.emit(NOTIFICATION, 'Some one has liked you', this.props.userInfo.user_name);
       e.preventDefault();
+      try {
+        fetch('/like/' + localStorage.getItem('id') + '/' + this.props.userInfo.id, {
+          method: "GET",
+          headers: {
+          "Content-Type": "application/json; charset=utf-8",
+          },
+        })
+        .then(response => response.json())
+        .then((responseJSON) => {
+          console.log(responseJSON)
+        })
+        .catch(err => console.error(err))
+        } catch (e) {
+          alert(e.message);
+        }
       console.log("Yay")
     }
 
     dislike(e){
       e.preventDefault();
+      try {
+        fetch('/dislike/' + localStorage.getItem('id') + '/' + this.props.userInfo.id, {
+          method: "GET",
+          headers: {
+          "Content-Type": "application/json; charset=utf-8",
+          },
+        })
+        .then(response => response.json())
+        .then((responseJSON) => {
+          console.log(responseJSON)
+        })
+        .catch(err => console.error(err))
+        } catch (e) {
+          alert(e.message);
+        }
       console.log("Nay")
     }
 
