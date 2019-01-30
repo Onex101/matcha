@@ -47,7 +47,7 @@ User.prototype.deleteById = function (id, callback) {
 
 User.prototype.getById = function (data, callback) {
 	var query = `SELECT id, password,user_name, birth_date, gender, pref, gps_lat, gps_lon,bio, profile_pic_id, pic, fame, GROUP_CONCAT(interest) AS interests FROM\
-	(SELECT users.id, user_name, password,interest, birth_date, gender, pref, gps_lat, gps_lon, bio, profile_pic_id, fame, pic FROM user_interests\
+	(SELECT users.id, user_name, password,interest, birth_date, gender, pref, gps_lat, gps_lon, bio, profile_pic_id, (SELECT COUNT(user1_id) FROM likes WHERE (user1_id = ${data} OR user2_id = ${data}) AND link_code = 1) as fame, pic FROM user_interests\
 	RIGHT JOIN users ON user_interests.user_id = users.id\
 	LEFT JOIN interests ON user_interests.interest_id = interests.id\
 	LEFT JOIN pictures ON profile_pic_id = pictures.id) x\
@@ -73,12 +73,11 @@ User.prototype.linked_users = function(id, callback){
 
 User.prototype.getByUsername = function (data, callback) {
     data = mysql.escape(data);
-	// var query = `SELECT * FROM users WHERE user_name = ${data}`;
-	var query = `SELECT id, password,user_name, birth_date, gender, pref, gps_lat, gps_lon,bio, profile_pic_id, pic, fame, veri_code, GROUP_CONCAT(interest) AS interests FROM\
-	(SELECT users.id, user_name, password,interest, birth_date, gender, pref, gps_lat, gps_lon, bio, profile_pic_id, fame, pic, veri_code FROM user_interests\
-	RIGHT JOIN users ON user_interests.user_id = users.id\
-	LEFT JOIN interests ON user_interests.interest_id = interests.id\
-	LEFT JOIN pictures ON profile_pic_id = pictures.id) x\
+	var query = `SELECT id, password,user_name, birth_date, gender, pref, gps_lat, gps_lon,bio, profile_pic_id, pic, fame, veri_code, GROUP_CONCAT(interest) AS interests FROM
+	(SELECT users.id, user_name, password,interest, birth_date, gender, pref, gps_lat, gps_lon, bio, profile_pic_id, fame, pic, veri_code FROM user_interests
+	RIGHT JOIN users ON user_interests.user_id = users.id
+	LEFT JOIN interests ON user_interests.interest_id = interests.id
+	LEFT JOIN pictures ON profile_pic_id = pictures.id) x
 	WHERE user_name = ${data} GROUP BY user_name, id`;
     db.query(query, function (err, result) {
         if (err) {callback(err, null);}
@@ -365,29 +364,32 @@ User.prototype.user_search = function(id, search_name, callback){
 }
 
 User.prototype.tag_search = function(id, interest, callback){
-	var query = `SELECT 
-	id, user_name, birth_date, gender, pref, gps_lat, gps_lon, bio, pic, fame, profile_pic_id, interests FROM 
-(SELECT 
-	id, user_name, birth_date, gender, pref, gps_lat, gps_lon, bio, pic, fame, profile_pic_id, GROUP_CONCAT(interest) AS interests FROM
-(SELECT 
-	users.id, user_name,interest, birth_date, gender, pref, gps_lat, gps_lon, bio, pic, fame, verified, profile_pic_id FROM user_interests
-RIGHT JOIN
-	users ON user_interests.user_id = users.id
-LEFT JOIN
-	interests ON user_interests.interest_id = interests.id
-LEFT JOIN
-	likes ON users.id = user2_id
-LEFT JOIN
-	pictures ON profile_pic_id = pictures.id
-WHERE
-	verified IS NOT NULL AND pic IS NOT NULL) x
-WHERE
-	NOT id = ${id}
-GROUP BY
-	user_name, id
-ORDER BY
-	id) y
-WHERE id IN (SELECT user_id FROM user_interests JOIN interests ON interest_id = id WHERE interest = "${interest}")`;
+	var query = 
+	`SELECT 
+		id, user_name, birth_date, gender, pref, gps_lat, gps_lon, bio, pic, fame, profile_pic_id, interests 
+	FROM 
+		(SELECT 
+			id, user_name, birth_date, gender, pref, gps_lat, gps_lon, bio, pic, fame, profile_pic_id, GROUP_CONCAT(interest) AS interests
+				FROM
+					(SELECT 
+						users.id, user_name,interest, birth_date, gender, pref, gps_lat, gps_lon, bio, pic, fame, verified, profile_pic_id FROM user_interests
+					RIGHT JOIN
+						users ON user_interests.user_id = users.id
+					LEFT JOIN
+						interests ON user_interests.interest_id = interests.id
+					LEFT JOIN
+						likes ON users.id = user2_id
+					LEFT JOIN
+						pictures ON profile_pic_id = pictures.id
+					WHERE
+						verified IS NOT NULL AND pic IS NOT NULL) x
+				WHERE
+					NOT id = ${id}
+				GROUP BY
+					user_name, id
+				ORDER BY
+					id) y
+	WHERE id IN (SELECT user_id FROM user_interests JOIN interests ON interest_id = id WHERE interest = "${interest}")`;
 	db.query(query,function (err, results) {
 		if (err){
 			callback(err, null);
