@@ -4,6 +4,7 @@ import Settings from "./Settings";
 import Profile from "./Profile";
 import Likes from "./Likes";
 
+
 export default class ControlledTabs extends Component {
     constructor(props) {
       super(props);
@@ -110,7 +111,10 @@ export default class ControlledTabs extends Component {
           id="controlled-tab-example" >
         {validity === true ?
           <Tab eventKey={1} title="Profile" >
-            <Profile userInfo = {this.state.userInfo} />
+            <Profile 
+                userInfo = {this.state.userInfo}
+                socket = {this.props.socket}
+                getMatches={this.props.getMatches} />
           </Tab>
           : <Tab eventKey={1} title="Profile" disabled ></Tab>}
           

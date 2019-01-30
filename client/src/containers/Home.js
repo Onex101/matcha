@@ -99,6 +99,9 @@ export default class Home extends Component {
     if (this.state.matches === null){
       this.getMatches();
     }
+    else if (this.state.matches !== null && this.props.userMatches !== null && this.state.matches !== this.props.userMatches)
+      this.setState({matches: this.props.userMatches});
+      
   }
 
   getMatchCards() {
@@ -110,6 +113,7 @@ export default class Home extends Component {
                     key={elem}
                     pic = {this.state.matches[elem].data.pic} 
                     socket = {this.props.socket}
+                    getMatches = {this.props.getMatches}
                   />);
       }
       return <div>{rows}</div>;

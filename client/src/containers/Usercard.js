@@ -53,12 +53,15 @@ export default class Usercard extends Component {
         .then(response => response.json())
         .then((responseJSON) => {
           console.log(responseJSON)
+          this.props.getMatches();
+
         })
         .catch(err => console.error(err))
         } catch (e) {
           alert(e.message);
         }
       console.log("Yay")
+      // this.props.getMatches();
     }
 
     dislike(e){
@@ -73,6 +76,7 @@ export default class Usercard extends Component {
         .then(response => response.json())
         .then((responseJSON) => {
           console.log(responseJSON)
+          this.props.getMatches();
         })
         .catch(err => console.error(err))
         } catch (e) {
