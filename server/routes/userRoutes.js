@@ -116,6 +116,8 @@ router.get('/tagsearch/:user_id/:interest', user_controller.search_tags);
 //GET request for users with a fame rating of at least x
 router.get('/famesearch/:user_id/:x', user_controller.search_minfame);
 
+//GET request to verify if the user and verification code are correct and allow the request to continue to change the password of the user
+router.get('/password_rest/:user_name/:veri_code', user_controller.check_password_reset)
 //GET request for matching users with a maximum age gap of x
 router.get('/agesearch/:user_id/:x', user_controller.get_matches_age);
 

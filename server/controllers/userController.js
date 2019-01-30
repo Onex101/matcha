@@ -91,10 +91,13 @@ exports.check_email = function(req,res){
 		}
 		else{
 			if (results.length){
-				res.send('User verified')
+				user_name = results[0].user_name;
+				veri_code = results[0].veri_code;
+				mail.sendPasswordReset(user_name, veri_code, req.body.data['email'])
+				res.send({error: null})
 			}
 			else{
-				res.send('Error')
+				res.send({error: 'email does not exist'})
 			}
 		}
 	})
@@ -635,6 +638,28 @@ exports.get_tmp = function(req, res){
         }
         else{
             res.send(results);
+        }
+    })
+}
+
+exports.check_password_reset = function(req, res){
+	let user = new User('')
+	user.getByUsername(req.params.user_name, function(err, results){
+        if (err){
+            res.send(err)
+        }
+        else{
+			user.data = results[0];
+			if (results.length)
+				if (user.data.veri_code == req.params.veri_code){
+					res.send({error: null})
+				}
+				else{
+					res.send({error: 'verification code failed'})
+				}
+			else{
+				res.send({error: 'no user exists'})
+			}
         }
     })
 }
