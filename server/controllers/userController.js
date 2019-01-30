@@ -599,11 +599,23 @@ exports.search_tags = function(req,res){
 	let user = new User('');
 	user.tag_search(req.params.user_id, req.params.interest, function(err, results){
 		if (err){
-            res.send(err)
-        }
-        else{
-            res.send(results);
-        }
+			res.send(err)
+		}
+		else{
+			res.send(results);
+		}
+	})
+}
+
+exports.get_matches_age = function(req,res){
+	let user = new User('');
+	user.getMaxAgeGapMatch(req.params.user_id, req.params.x, function(err, results){
+		if (err){
+			res.send(err)
+		}
+		else{
+			res.send(results);
+		}
 	})
 }
 
