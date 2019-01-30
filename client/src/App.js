@@ -108,8 +108,9 @@ class App extends Component {
 		socket.emit(USER_CONNECTED, user);
 	}
 
-  getMatches() {
-    // console.log("Getting matches")
+  getMatches = () => {
+    // getMatches() {
+    console.log("Getting matches")
     // Get Matches
     try {
       fetch('/user/match/' + localStorage.getItem('id'), {
@@ -245,6 +246,7 @@ class App extends Component {
       gotResults            : this.gotResults,
       results               : this.state.results,
       resultType            : this.state.resultType,
+      getMatches            : this.getMatches
     };
     var style = {
       display: 'flex',

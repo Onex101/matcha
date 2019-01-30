@@ -7,6 +7,8 @@ import {ControlLabel } from "react-bootstrap";
 import temp from './imgs/profile-placeholder.png';
 import female from './imgs/female_logo/favicon-32x32.png';
 import male from './imgs/male_logo/favicon-32x32.png';
+import {NOTIFICATION} from "../Events";
+import { Socket } from "net";
 
 export default class Profile extends Component {
     constructor(props) {
@@ -173,14 +175,51 @@ export default class Profile extends Component {
     }
 
     like(e){
-      e.preventDefault();
-      console.log("Yay")
-    }
-
-    dislike(e){
-      e.preventDefault();
-      console.log("Nay")
-    }
+        console.log(this.props)
+        const socket = this.props.socket;
+        socket.emit(NOTIFICATION, 'Some one has liked you', this.props.userInfo.user_name);
+        e.preventDefault();
+        try {
+          fetch('/like/' + localStorage.getItem('id') + '/' + this.props.userInfo.id, {
+            method: "GET",
+            headers: {
+            "Content-Type": "application/json; charset=utf-8",
+            },
+          })
+          .then(response => response.json())
+          .then((responseJSON) => {
+            console.log(responseJSON)
+            this.props.getMatches();
+  
+          })
+          .catch(err => console.error(err))
+          } catch (e) {
+            alert(e.message);
+          }
+        console.log("Yay")
+        // this.props.getMatches();
+      }
+  
+      dislike(e){
+        e.preventDefault();
+        try {
+          fetch('/dislike/' + localStorage.getItem('id') + '/' + this.props.userInfo.id, {
+            method: "GET",
+            headers: {
+            "Content-Type": "application/json; charset=utf-8",
+            },
+          })
+          .then(response => response.json())
+          .then((responseJSON) => {
+            console.log(responseJSON)
+            this.props.getMatches();
+          })
+          .catch(err => console.error(err))
+          } catch (e) {
+            alert(e.message);
+          }
+        console.log("Nay")
+      }
 
     componentDidMount() {
         // console.log("Profile INFO 1: " +JSON.stringify(this.props.userInfo))
