@@ -115,7 +115,7 @@ export default class Likes extends Component {
         for (var elem = 0; likes[elem]; elem++) {
             if (likes[elem] && likes[elem].pic && likes[elem].data.user_name) {
                 likedUsers.push(
-                   <UserLabel user={likes[elem]} />
+                   <UserLabel user={likes[elem]} key={elem} />
                 )
             }
         }

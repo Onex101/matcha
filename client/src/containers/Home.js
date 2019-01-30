@@ -12,6 +12,7 @@ export default class Home extends Component {
 
     this.state = {
       matches: props.userMatches,
+      order:    false
     }
   }
 
@@ -19,6 +20,7 @@ export default class Home extends Component {
     e.preventDefault()
 
     try {
+      this.setState({order: false})
       this.setState({matches: this.props.userMatches})
     } catch (e) {
       alert(e.message);
@@ -42,8 +44,8 @@ export default class Home extends Component {
     
     try {
       var ageSort = this.state.matches;
-      // console.log("AGE SORT:")
-      // console.info(ageSort)
+      console.log("AGE SORT:")
+      console.info(ageSort)
       if (ageSort) {
         var result = [];
         for(var i in ageSort){
@@ -55,11 +57,12 @@ export default class Home extends Component {
             }
             result.push(temp);
         }
-        // console.log("AGE RESULT:")
-        // console.info(result)
+        console.log("AGE RESULT:")
+        console.info(result)
        result.sort(this.sort_by('birth_date_diff', false, false));
-        // console.log("AGESORT FINAL = ");
-        // console.info(result)
+        console.log("AGESORT FINAL = ");
+        console.info(result)
+        this.setState({order: true})
         this.setState({matches: result});
       }
     } catch (e) {
@@ -88,6 +91,7 @@ export default class Home extends Component {
         result.sort(this.sort_by('dist_raw', false, false));
         // console.log("GPSSort = ");
         // console.info(result);
+        this.setState({order: true})
         this.setState({matches: result});
       }
     }  catch (e) {
@@ -99,9 +103,12 @@ export default class Home extends Component {
     if (this.state.matches === null){
       this.getMatches();
     }
-    else if (this.state.matches !== null && this.props.userMatches !== null && this.state.matches !== this.props.userMatches)
-      this.setState({matches: this.props.userMatches});
-      
+    else if (this.state.matches !== null && this.props.userMatches !== null && this.state.matches !== this.props.userMatches) {
+      if ( this.state.order !== true) {
+        this.setState({matches: this.props.userMatches});
+      // Need to set up a check for after liking and dissliking things while things have been sorted
+      }
+    }
   }
 
   getMatchCards() {
