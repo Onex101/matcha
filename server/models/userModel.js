@@ -678,6 +678,18 @@ User.prototype.addVisit = function(viewer_id, viewee_id, callback){
 	})
 }
 
+User.prototype.getVisits = function(id, callback){
+	var query = `SELECT user_name, timestamp FROM history LEFT JOIN users ON viewer_id = id WHERE viewed_id = ${id} AND NOT viewer_id = ${id}`;
+	db.query(query, function(err, results){
+		if (err){
+			callback(err, null);
+		}
+		else{
+			callback(null, results);
+		}
+	})
+}
+
 User.prototype.logout = function(id, callback){
 	var now = new Date();
 	console.log('UserId loginout ' + id)

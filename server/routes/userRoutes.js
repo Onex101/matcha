@@ -95,6 +95,9 @@ router.get('/user/details/:user_id', user_controller.get_user_details);
 //GET request that adds +1 visit to user's profile (by user_id or username). Front end will send this every time someone clicks on a username of a usercard to see the profile
 router.get('/user/visit/:viewer_id/:viewee_id', user_controller.add_visit);
 
+//GET list of users who have visited your page
+router.get('/user/:id/history', user_controller.get_visits);
+
 //GET request that reutrns the people the user has liked (return the same stuff as getMatches
 router.get('/user/:id/liked', user_controller.linked_details);
 
