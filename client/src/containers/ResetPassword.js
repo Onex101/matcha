@@ -5,16 +5,35 @@ export default class ResetPassword extends Component {
     super();
 
     this.state = {
-      username: '',
+      user_name: '',
       password: '',
       confirmPassword: '',
       update: false,
       isLoading: true,
-      error: false,
+	  error: false,
+	  errorMessage: '',
     };
   }
 
   componentDidMount() {
+	const {user_name, vericode} = this.state
+	fetch(`/password_reset/` + user_name + '/' + vericode, {
+		method: "GET",
+		headers: {
+			"Content-Type": "application/json; charset=utf-8",
+		},
+		body: JSON.stringify({
+		  email: this.state.email
+		})
+		})
+		.then(response => response.json())
+		.then((responseJSON) => {
+			if (responseJSON.error){
+				this.setState({error: true, errorMessage: error})
+			}
+			console.log(responseJSON);
+		})
+	  .catch(err => console.error(err))
     // get user info from link sent - check if code is the same
   }
 
@@ -26,11 +45,31 @@ export default class ResetPassword extends Component {
 
   updatePassword = e => {
     e.preventDefault();
-    // changeg password on submit
+	// changeg password on submit
+	fetch(`/user/forgotpassword`, {
+		method: "POST",
+		headers: {
+			"Content-Type": "application/json; charset=utf-8",
+		},
+		body: JSON.stringify({
+		  email: this.state.email
+		})
+		})
+		.then(response => response.json())
+		.then((responseJSON) => {
+			if (responseJSON.error){
+				this.setState({showError: true})
+			}
+			else{
+				this.setState({messageFromServer: 'recovery email sent'})
+			}
+			console.log(responseJSON);
+		})
+	  .catch(err => console.error(err))
   };
 
   render() {
-    const { password, error, isLoading, updated } = this.state;
+    const { password, error, isLoading, updated, errorMessage} = this.state;
 
     if (error) {
       return (
@@ -58,7 +97,7 @@ export default class ResetPassword extends Component {
               value={password}
               type="password"
             />
-            <SubmitButtons
+            <SubmitButton
               buttonStyle={updateButton}
               buttonText={'Update Password'}
             />
