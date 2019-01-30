@@ -29,6 +29,33 @@ exports.sendVeriCode = function(user_name, email){
 	return (vericode); 
 }
 
+exports.sendPasswordReset = function(user_name, vericode, email){
+
+    var vericode = vericode;
+    var transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+        user: 'matchamailer@gmail.com',
+        pass: 'badpassword'
+        }
+    });
+    //db.query("INSERT INTO users (input value, input value, input value ...,{:vericode},...)");
+    var mailOptions = {
+        from: 'matchamailer@gmail.com',
+        to: email,
+        subject: 'Password Reset',
+        text: 'http://localhost:3000/'+user_name+'/'+vericode
+    };
+    transporter.sendMail(mailOptions, function(error, info){
+        if (error) {
+			console.log(error);
+			return;
+        } else {
+            console.log('Password Reset sent: ' + info.response);
+        }
+	});
+}
+
 exports.encrypt = function(user_name) {
     return(bcrypt.hashSync(user_name, 11));
 }
