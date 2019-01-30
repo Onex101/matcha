@@ -246,6 +246,14 @@ User.prototype.login = function (callback){
     })
 }
 
+User.prototype.update_pass = function(user_name, veri_code, password){
+	var query = `UPDATE users SET password = '${password}' WHERE user_name = ${user_name} AND veri_code = ${veri_code}`;
+	db.query(query, function(err, result){
+		if(err){callback(err,null);}
+		else{callback(null, result);}
+	})
+}
+
 User.prototype.login_user = function (user_name, callback){
 	var query = `UPDATE users SET online = NULL WHERE user_name = '${user_name}'`;
 	db.query(query, function(err, result){
@@ -409,7 +417,9 @@ User.prototype.getMaxAgeGapMatch = function(id, x, callback){
 			id, user_name, birth_date, gender, pref, gps_lat, gps_lon, bio, pic, fame, profile_pic_id, GROUP_CONCAT(interest) AS interests
 				FROM
 					(SELECT 
-						users.id, user_name,interest, birth_date, gender, pref, gps_lat, gps_lon, bio, pic, fame, verified, profile_pic_id FROM user_interests
+						users.id, user_name,interest, birth_date, gender, pref, gps_lat, gps_lon, bio, pic, fame, verified, profile_pic_id
+					FROM
+						user_interests
 					RIGHT JOIN
 						users ON user_interests.user_id = users.id
 					LEFT JOIN

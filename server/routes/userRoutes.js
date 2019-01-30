@@ -44,6 +44,9 @@ router.get('/users', user_controller.user_list);
 // GET request for mtached users against userID - working
 router.get('/user/match/:id', user_controller.user_match_get);
 
+//POST update password for given username
+router.post('/user/update/password', user_controller.user_update_password);
+
 // POST request for matched users against userID
 router.post('/user/match', user_controller.user_match_post);
 

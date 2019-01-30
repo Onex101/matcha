@@ -123,6 +123,17 @@ exports.user_create_post = function(req, res) {
     // res.send('NOT IMPLEMENTED: User create POST');
 };
 
+exports.user_update_password = function(req,res){
+	let user = new User('');
+	hpass = bcrypt.hashSync(req.body.data['password'], 10);
+	user.update_pass(req.body.data['user_name'], req.body.data['veri_code'], hpass, function(err, results){
+		if (err)
+            res.send(err);
+        else
+            res.send('Password updated');
+	})
+}
+
 // Display User delete form on GET.
 exports.user_delete_get = function(req, res) {
     let user = new User('');
