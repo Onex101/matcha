@@ -387,7 +387,7 @@ GROUP BY
 	user_name, id
 ORDER BY
 	id) y
-WHERE id IN (SELECT user_id FROM user_interests JOIN interests ON interest_id = id WHERE interest = ${interest})`;
+WHERE id IN (SELECT user_id FROM user_interests JOIN interests ON interest_id = id WHERE interest = "${interest}")`;
 	db.query(query,function (err, results) {
 		if (err){
 			callback(err, null);
