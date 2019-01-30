@@ -247,7 +247,7 @@ User.prototype.login = function (callback){
 }
 
 User.prototype.update_pass = function(user_name, veri_code, password){
-	var query = `UPDATE users SET password = '${password}' WHERE user_name = ${user_name} AND veri_code = ${veri_code}`;
+	var query = `UPDATE users SET password = '${password}' WHERE user_name = '${user_name}' AND veri_code = '${veri_code}'`;
 	db.query(query, function(err, result){
 		if(err){callback(err,null);}
 		else{callback(null, result);}
