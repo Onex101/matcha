@@ -690,6 +690,18 @@ User.prototype.getVisits = function(id, callback){
 	})
 }
 
+User.prototype.checkEmail = function(email, callback){
+	var query = `SELECT user_name, veri_code FROM users WHERE email = "${email}"`;
+	db.query(query, function(err, results){
+		if (err){
+			callback(err, null);
+		}
+		else{
+			callback(null, results);
+		}
+	})
+}
+
 User.prototype.logout = function(id, callback){
 	var now = new Date();
 	console.log('UserId loginout ' + id)

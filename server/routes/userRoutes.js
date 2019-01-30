@@ -26,6 +26,9 @@ router.get('/user/:id/update', user_controller.user_update_get);
 // POST request to update user. User object must contain: id, bio, gender, pref
 router.post('/user/update', user_controller.user_update_post);
 
+//POST request to check if an email exists and if it does returns user_name and veri_code
+router.post('/email/check', user_controller.check_email);
+
 // GET request for one user. - working
 router.get('/user/:id', user_controller.user_detail);
 

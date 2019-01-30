@@ -83,6 +83,23 @@ exports.user_create_get = function(req, res) {
     res.send('NOT IMPLEMENTED: User create GET');
 };
 
+exports.check_email = function(req,res){
+	let user = new User('');
+	user.checkEmail(req.body.data['email'], function(err,results){
+		if (err){
+			res.send(err)
+		}
+		else{
+			if (results.length){
+				res.send('User verified')
+			}
+			else{
+				res.send('Error')
+			}
+		}
+	})
+}
+
 // Handle User create on POST.
 exports.user_create_post = function(req, res) {
     // console.log(req.body);
