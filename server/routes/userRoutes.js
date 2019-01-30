@@ -113,6 +113,9 @@ router.get('/tagsearch/:user_id/:interest', user_controller.search_tags);
 //GET request for users with a fame rating of at least x
 router.get('/famesearch/:user_id/:x', user_controller.search_minfame);
 
+//GET request for matching users with a maximum age gap of x
+router.get('/agesearch/:user_id/:x', user_controller.get_matches_age);
+
 router.get('/user/tmp/:user_name', user_controller.get_tmp);
 
 module.exports = router;
