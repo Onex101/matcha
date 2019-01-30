@@ -281,7 +281,7 @@ export default class Settings extends Component {
             // console.info(this.state.tags)
             //Make tag add call
             try {
-                fetch(`/interests/new/` + this.state.id + `/` + tag.name, {
+                fetch(`/interest/` + this.state.id + `/` + tag.name, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json; charset=utf-8",

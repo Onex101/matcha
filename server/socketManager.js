@@ -90,6 +90,8 @@ module.exports = function(socket){
 	socket.on(MESSAGE_SENT, ({chatId, message})=>{
 		// console.log("MESSAGE SENT " + message + " " + " " + chatId)
 		console.log(chatId)
+		if (message == 'paki')
+			message = 'Sorry your message was not sent'
 		sendMessageToChatFromUser(chatId, message)
 	})
 
