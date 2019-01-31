@@ -133,7 +133,7 @@ exports.user_update_password = function(req,res){
 		if (err)
             res.send(err);
         else
-            res.send('Password updated');
+            res.send({success: 'Password updated'});
 	})
 }
 

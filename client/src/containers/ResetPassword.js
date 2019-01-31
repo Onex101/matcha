@@ -8,7 +8,7 @@ export default class ResetPassword extends Component {
       user_name: '',
       password: '',
       confirmPassword: '',
-      update: false,
+      updated: false,
       isLoading: true,
 	  error: false,
 	  errorMessage: '',
@@ -46,22 +46,24 @@ export default class ResetPassword extends Component {
   updatePassword = e => {
     e.preventDefault();
 	// changeg password on submit
-	fetch(`/user/forgotpassword`, {
+	fetch(`/user/update/password`, {
 		method: "POST",
 		headers: {
 			"Content-Type": "application/json; charset=utf-8",
 		},
 		body: JSON.stringify({
-		  email: this.state.email
+      user_name: this.state.user_name,
+      veri_code: this.state.veri_code,
+      password: this.state.password
 		})
 		})
 		.then(response => response.json())
 		.then((responseJSON) => {
 			if (responseJSON.error){
-				this.setState({showError: true})
+				this.setState({error: true})
 			}
 			else{
-				this.setState({messageFromServer: 'recovery email sent'})
+				this.setState({updated: true})
 			}
 			console.log(responseJSON);
 		})
