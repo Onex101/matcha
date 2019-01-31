@@ -276,10 +276,10 @@ exports.user_match_get = function(req, res) {
                             while(results[i]){
                                 dist = Match.getD_coff(user.data.gps_lat, user.data.gps_lon, results[i].gps_lat, results[i].gps_lon)
                                 dist_raw = Match.getDistance(user.data.gps_lat, user.data.gps_lon, results[i].gps_lat, results[i].gps_lon)
-                                birth_date = Match.getA_coff(user.data.birth_date, results[i].birth_date)
+                                ageCoff = Match.getA_coff(user.data.birth_date, results[i].birth_date)
                                 pref = Match.getP_coff(user.data.gender, user.data.pref, results[i].gender, results[i].pref)
                                 like = Match.getL_coff(user.data.interests, results[i].interests);
-                                var matchC =  (dist) +  (birth_date) +  (5*pref) + (like) //weightings can be adjusted as needed here
+                                var matchC =  (dist) +  (ageCoff) +  (5*pref) + (like) //weightings can be adjusted as needed here
                                 let new_data = results[i]
                                 if(matchC > 4){ //4 is an arb number to exclude any matches that fall too far because of gender/pref differential
 									new_user = new User(new_data);
@@ -292,6 +292,7 @@ exports.user_match_get = function(req, res) {
 									new_user.interests = results[i].interests;
 									new_user.pic = results[i].pic;
 									new_user.profile_pic_id = results[i].profile_pic_id;
+									new_user.tagMatch = like * 10;
                                     array.push(new_user);
                                 }
                                 i++;

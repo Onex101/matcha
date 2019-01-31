@@ -18,7 +18,8 @@ var schemas = {
 		profile_pic_id: null,
 		pic:null,
 		interests:null,
-		age:null
+		age:null,
+		tagMatch:null
 	},
 	message: {
 		id: null,
