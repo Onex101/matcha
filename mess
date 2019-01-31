@@ -1,6 +1,36 @@
-SELECT (FLOOR(DATEDIFF(NOW(),birth_date)/365) AS age FROM users WHERE id = 105);
-105 = user_id
+SELECT interest_id FROM user_interests WHERE user_id = 105;
 
-SELECT user_name, FLOOR(DATEDIFF(NOW(),birth_date)/365) AS age FROM users WHERE ABS(FLOOR(DATEDIFF(NOW(),birth_date)/365) - (SELECT FLOOR(DATEDIFF(NOW(),birth_date)/365) FROM users WHERE id = 105)) < 5;
+SELECT
+	COUNT(DISTINCT interest_id) AS tagMatch
+FROM
+	user_interests
+WHERE interest_id IN (
+    SELECT interest_id FROM user_interests WHERE user_id = 105)
+AND interest_id IN (
+    SELECT interest_id FROM user_interests WHERE user_id = 109);
 
-(SELECT id FROM users WHERE ABS(FLOOR(DATEDIFF(NOW(),birth_date)/365) - (SELECT FLOOR(DATEDIFF(NOW(),birth_date)/365) FROM users WHERE id = ${id})) < ${x});
+
+
+`SELECT
+	id, user_name, birth_date, gender, pref, gps_lat, gps_lon, bio, pic, fame, profile_pic_id, GROUP_CONCAT(interest) AS interests
+FROM
+	(SELECT
+		users.id, user_name,interest, birth_date, gender, pref, gps_lat, gps_lon, bio, pic, fame, verified, profile_pic_id,() AS tagMatch
+		FROM
+			user_interests
+		RIGHT JOIN
+			users ON user_interests.user_id = users.id
+		LEFT JOIN
+			interests ON user_interests.interest_id = interests.id
+		LEFT JOIN
+			likes ON users.id = user2_id
+		LEFT JOIN
+			pictures ON profile_pic_id = pictures.id
+		WHERE
+			likes.link_code IS NULL AND verified IS NOT NULL AND pic IS NOT NULL) x
+	WHERE NOT
+		id = ${id}
+	GROUP BY
+		user_name, id
+	ORDER BY
+		id`

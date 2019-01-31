@@ -65,7 +65,6 @@ exports.user_exists = function(req, res) {
 		else{
 			if(result.length > 0){
 				row = result[0];
-				console.log(row);
 				if (row["user_name"] === user.data.user_name)
 					res.json({exists: 'user_name'});
 				else if (row["email"] === user.data.email)
@@ -105,14 +104,12 @@ exports.check_email = function(req,res){
 
 // Handle User create on POST.
 exports.user_create_post = function(req, res) {
-    // console.log(req.body);
 	var new_user = new User(req.body);
 	new_user.data['birth_date'] = new_user.data['birth_date'].substring(0, 10);
 	new_user.data['password'] = bcrypt.hashSync(new_user.data['password'], 10);
 	new_user.data['fame'] = 0;
 	new_user.data['verified'] = 0;
 	new_user.data['veri_code'] = mail.sendVeriCode(new_user.data['user_name'], new_user.data['email']);
-	console.log(new_user);
 	new_user.save(function(err, results){
 		if (err){
 			// throw err;
@@ -123,7 +120,6 @@ exports.user_create_post = function(req, res) {
 			res.end();
 		}
 	})
-    // res.send('NOT IMPLEMENTED: User create POST');
 };
 
 exports.user_update_password = function(req,res){
@@ -133,7 +129,7 @@ exports.user_update_password = function(req,res){
 		if (err)
             res.send(err);
         else
-            res.send('Password updated');
+            res.send({success: 'Password updated'});
 	})
 }
 
@@ -146,7 +142,6 @@ exports.user_delete_get = function(req, res) {
         else
             res.send('Succesfully deleted user');
     })
-    // res.send('NOT IMPLEMENTED: User delete GET');
 };
 
 // Handle User delete on POST.
@@ -223,9 +218,8 @@ exports.user_login_post = function(req, res) {
 					}
 				})
             }else{
-                // res.status(204);
-                res.send({
-                    success:"Username does not exist"
+				res.send({
+				success:"Username does not exist"
                 });
             }
         }
@@ -276,10 +270,10 @@ exports.user_match_get = function(req, res) {
                             while(results[i]){
                                 dist = Match.getD_coff(user.data.gps_lat, user.data.gps_lon, results[i].gps_lat, results[i].gps_lon)
                                 dist_raw = Match.getDistance(user.data.gps_lat, user.data.gps_lon, results[i].gps_lat, results[i].gps_lon)
-                                birth_date = Match.getA_coff(user.data.birth_date, results[i].birth_date)
+                                ageCoff = Match.getA_coff(user.data.birth_date, results[i].birth_date)
                                 pref = Match.getP_coff(user.data.gender, user.data.pref, results[i].gender, results[i].pref)
                                 like = Match.getL_coff(user.data.interests, results[i].interests);
-                                var matchC =  (dist) +  (birth_date) +  (5*pref) + (like) //weightings can be adjusted as needed here
+                                var matchC =  (dist) +  (ageCoff) +  (5*pref) + (like) //weightings can be adjusted as needed here
                                 let new_data = results[i]
                                 if(matchC > 4){ //4 is an arb number to exclude any matches that fall too far because of gender/pref differential
 									new_user = new User(new_data);
@@ -292,12 +286,12 @@ exports.user_match_get = function(req, res) {
 									new_user.interests = results[i].interests;
 									new_user.pic = results[i].pic;
 									new_user.profile_pic_id = results[i].profile_pic_id;
+									new_user.tagMatch = like * 10;
                                     array.push(new_user);
                                 }
                                 i++;
 							}
 							array.sort(sortFunction);
-							// console.log(array);
                             obj = {};
                             for (var key in array) {
                                 obj[key] = array[key]
@@ -337,29 +331,21 @@ exports.user_checkVerify = function(req, res){
 // Verify user
 exports.user_verify = function(req, res){
 	let user = new User('');
-	console.log("Verification test1");
-	console.log(req.body.user_name);
 	user.getByUsername(req.body.user_name, function(err, results){
-		console.log(results);
         user = new User(results);
 		if (err){
-            console.log("Verification test2");
             res.send(err)
 		}
 		else{
-			console.log("Verification test3");
 			console.log(req.body['veri_code'] + "\n"+ results[0].veri_code);
 			if (results[0] === null){
 				res.send({error:'no results'})
 			}
 			else if(req.body['veri_code'] != results[0].veri_code){
-                console.log('Not Verified');
 				res.send({error: 'veri-code is incorrect', success: null});
             }
             else{
-                console.log('Verified');
                 user.data['verified'] = 1;
-                console.log(user.data['verified'] + "HELLO")
                 user.update(function(err, result){
                     if (err){
                         res.send({error:'verification update fail', success: null});
