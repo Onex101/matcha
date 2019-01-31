@@ -46,17 +46,32 @@ User.prototype.deleteById = function (id, callback) {
 }
 
 User.prototype.getById = function (data, callback) {
-	var query = `SELECT id, password,user_name, birth_date, gender, pref, gps_lat, gps_lon,bio, profile_pic_id, pic, fame, GROUP_CONCAT(interest) AS interests FROM\
-	(SELECT users.id, user_name, password,interest, birth_date, gender, pref, gps_lat, gps_lon, bio, profile_pic_id, (SELECT COUNT(user1_id) FROM likes WHERE (user1_id = ${data} OR user2_id = ${data}) AND link_code = 1) as fame, pic FROM user_interests\
-	RIGHT JOIN users ON user_interests.user_id = users.id\
-	LEFT JOIN interests ON user_interests.interest_id = interests.id\
-	LEFT JOIN pictures ON profile_pic_id = pictures.id) x\
-	WHERE id = ${data} GROUP BY user_name, id`;
+	var query = 
+	`SELECT
+		id, password,user_name, birth_date, gender, pref, gps_lat, gps_lon,bio, profile_pic_id, pic, fame, GROUP_CONCAT(interest) AS interests
+	FROM
+		(SELECT
+			users.id, user_name, password,interest, birth_date, gender, pref, gps_lat, gps_lon, bio, profile_pic_id, 
+				(SELECT
+					COUNT(user1_id) FROM likes WHERE (user1_id = ${data} OR user2_id = ${data}) AND link_code = 1) as fame, pic
+				FROM
+					user_interests
+		RIGHT JOIN
+			users ON user_interests.user_id = users.id
+		LEFT JOIN
+			interests ON user_interests.interest_id = interests.id
+		LEFT JOIN
+			pictures ON profile_pic_id = pictures.id) x
+		WHERE
+			id = ${data}
+		GROUP BY
+			user_name, id`;
+
     db.query(query, function (err, result) {
-        if (err) {callback(err, null);}
-        else{
+		if (err) {callback(err, null);}
+		else{
 			callback(null, result); 
-        }
+		}
     });
 }
 
@@ -73,12 +88,25 @@ User.prototype.linked_users = function(id, callback){
 
 User.prototype.getByUsername = function (data, callback) {
     data = mysql.escape(data);
-	var query = `SELECT id, password,user_name, birth_date, gender, pref, gps_lat, gps_lon,bio, profile_pic_id, pic, fame, veri_code, GROUP_CONCAT(interest) AS interests FROM
-	(SELECT users.id, user_name, password,interest, birth_date, gender, pref, gps_lat, gps_lon, bio, profile_pic_id, fame, pic, veri_code FROM user_interests
-	RIGHT JOIN users ON user_interests.user_id = users.id
-	LEFT JOIN interests ON user_interests.interest_id = interests.id
-	LEFT JOIN pictures ON profile_pic_id = pictures.id) x
-	WHERE user_name = ${data} GROUP BY user_name, id`;
+	var query = 
+	`SELECT
+		id, password,user_name, birth_date, gender, pref, gps_lat, gps_lon,bio, profile_pic_id, pic, fame, veri_code, GROUP_CONCAT(interest) AS interests
+	FROM
+		(SELECT
+			users.id, user_name, password,interest, birth_date, gender, pref, gps_lat, gps_lon, bio, profile_pic_id, fame, pic, veri_code
+		FROM
+			user_interests
+		RIGHT JOIN
+			users ON user_interests.user_id = users.id
+		LEFT JOIN
+			interests ON user_interests.interest_id = interests.id
+		LEFT JOIN
+			pictures ON profile_pic_id = pictures.id) x
+	WHERE
+		user_name = ${data}
+	GROUP BY
+		user_name, id`;
+
     db.query(query, function (err, result) {
         if (err) {callback(err, null);}
         else{
@@ -92,7 +120,16 @@ User.prototype.getByUsername = function (data, callback) {
 //Retrieves a list interests of a given users user_id
 User.prototype.getInterestsById = function (id, callback) {
 	id = mysql.escape(id);
-	var query = `SELECT interest FROM interests JOIN user_interests ON interests.id=user_interests.interest_id WHERE user_id = ${id}`;
+	var query =
+	`SELECT
+		interest
+	FROM
+		interests
+	JOIN
+		user_interests ON interests.id=user_interests.interest_id
+	WHERE
+		user_id = ${id}`;
+
 	db.query(query, function (err, result) {
 		if (err) {callback(err, null);}
 		else{
@@ -104,57 +141,56 @@ User.prototype.getInterestsById = function (id, callback) {
 }
 
 User.prototype.update = function (callback) {
-    for (var key in this.data) {
-        if (this.data.hasOwnProperty(key)) {
-            key = mysql.escape(key);
-        }
-    }
-    this.data = this.clean(this.data);
-    console.log(this.data ['verified']);
-    var tmp = [this.data['first_name'], 
-            this.data['last_name'], 
-            this.data['user_name'],
-            this.data['birth_date'],
-            this.data['gender'],
-            this.data['pref'],
-            this.data['gps_lat'],
-            this.data['gps_lon'],
-            this.data['bio'],
-            this.data['fame'],
-            this.data['email'], 
+	for (var key in this.data) {
+		if (this.data.hasOwnProperty(key)) {
+			key = mysql.escape(key);
+		}
+	}
+	this.data = this.clean(this.data);
+	//console.log(this.data ['verified']);
+	var tmp = [this.data['first_name'], 
+			this.data['last_name'], 
+			this.data['user_name'],
+			this.data['birth_date'],
+			this.data['gender'],
+			this.data['pref'],
+			this.data['gps_lat'],
+			this.data['gps_lon'],
+			this.data['bio'],
+			this.data['fame'],
+			this.data['email'], 
 			this.data['password'],
 			this.data['veri_code'],
 			this.data ['verified']]
-    var id = this.data['id'];
-    db.query(`UPDATE 
-               users 
-            SET 
-                first_name = ?,
-                last_name = ?, 
-                user_name = ?,
-                birth_date = ?,
-                gender = ?,
-                pref = ?,
-                gps_lat = ?,
-                gps_lon = ?,
-                bio = ?,
-                fame = ?,
-                email = ?, 
+	var id = this.data['id'];
+	db.query(`UPDATE 
+				users 
+			SET 
+				first_name = ?,
+				last_name = ?, 
+				user_name = ?,
+				birth_date = ?,
+				gender = ?,
+				pref = ?,
+				gps_lat = ?,
+				gps_lon = ?,
+				bio = ?,
+				fame = ?,
+				email = ?, 
 				password = ?,
 				veri_code = ?,
 				verified = ?
-            WHERE
-                id = ${id}`, tmp, function (err, result, rows){
-        if (err){
-            callback(err, null);
-        }
-        else{
-            if (typeof callback === "function"){
-                // console.log(result);
-                callback(null, result);
-            }
-        }
-    })
+			WHERE
+				id = ${id}`, tmp, function (err, result, rows){
+		if (err){
+			callback(err, null);
+		}
+		else{
+			if (typeof callback === "function"){
+				callback(null, result);
+			}
+		}
+	})
 }
 
 User.prototype.save = function (callback) {
@@ -166,8 +202,6 @@ User.prototype.save = function (callback) {
         }
     }
     this.data = this.clean(this.data);
-	console.log("Tryin to save");
-    console.log(this.data);
     db.query(`INSERT 
                users 
             ( 
@@ -234,10 +268,8 @@ User.prototype.login = function (callback){
         else{
 			let newUser = new User('')
             newUser.login_user(self.data.user_name, function(err, result){
-				console.log(err)
 				if(err){callback(err,null);}
 				else{
-					console.log(results)
 					callback(null, results);
 				}
 			});
@@ -367,16 +399,30 @@ User.prototype.match = function (id, callback){
 }
 
 User.prototype.user_search = function(id, search_name, callback){
-	var query = `SELECT id, user_name, birth_date, gender, pref, gps_lat, gps_lon, bio, pic, fame, profile_pic_id, GROUP_CONCAT(interest) AS interests FROM\
-	(SELECT users.id, user_name,interest, birth_date, gender, pref, gps_lat, gps_lon, bio, pic, fame, verified, profile_pic_id FROM user_interests\
-	RIGHT JOIN users ON user_interests.user_id = users.id
-	LEFT JOIN interests ON user_interests.interest_id = interests.id
-	LEFT JOIN likes ON users.id = user2_id
-	LEFT JOIN pictures ON profile_pic_id = pictures.id\
-	WHERE verified IS NOT NULL AND pic IS NOT NULL) x
-	WHERE user_name LIKE "%${search_name}%" AND NOT id = ${id}
-	GROUP BY user_name, id ORDER BY id`;
-	console.log(query);
+	var query =
+	`SELECT
+		id, user_name, birth_date, gender, pref, gps_lat, gps_lon, bio, pic, fame, profile_pic_id, GROUP_CONCAT(interest) AS interests
+	FROM
+		(SELECT
+			users.id, user_name,interest, birth_date, gender, pref, gps_lat, gps_lon, bio, pic, fame, verified, profile_pic_id
+		FROM
+			user_interests
+		RIGHT JOIN
+			users ON user_interests.user_id = users.id
+		LEFT JOIN
+			interests ON user_interests.interest_id = interests.id
+		LEFT JOIN
+			likes ON users.id = user2_id
+		LEFT JOIN
+			pictures ON profile_pic_id = pictures.id
+		WHERE
+			verified IS NOT NULL AND pic IS NOT NULL) x
+	WHERE
+		user_name LIKE "%${search_name}%" AND NOT id = ${id}
+	GROUP BY
+		user_name, id
+	ORDER BY
+		id`;
 	db.query(query,function (err, results) {
 		if (err){
 			callback(err, null);
@@ -475,15 +521,30 @@ User.prototype.getMaxAgeGapMatch = function(id, x, callback){
 }
 
 User.prototype.search_fame = function(x, id, callback){
-	var query = `SELECT id, user_name, birth_date, gender, pref, gps_lat, gps_lon, bio, pic, fame, profile_pic_id, GROUP_CONCAT(interest) AS interests FROM\
-	(SELECT users.id, user_name,interest, birth_date, gender, pref, gps_lat, gps_lon, bio, pic, fame, verified, profile_pic_id FROM user_interests\
-	RIGHT JOIN users ON user_interests.user_id = users.id\
-	LEFT JOIN interests ON user_interests.interest_id = interests.id\
-	LEFT JOIN likes ON users.id = user2_id\
-	LEFT JOIN pictures ON profile_pic_id = pictures.id\
-	WHERE likes.link_code IS NULL AND verified IS NOT NULL AND pic IS NOT NULL
-	AND fame >= ${x}) x\
-	WHERE NOT id = ${id} GROUP BY user_name, id ORDER BY id`
+	var query = 
+	`SELECT
+		id, user_name, birth_date, gender, pref, gps_lat, gps_lon, bio, pic, fame, profile_pic_id, GROUP_CONCAT(interest) AS interests
+	FROM
+		(SELECT
+			users.id, user_name,interest, birth_date, gender, pref, gps_lat, gps_lon, bio, pic, fame, verified, profile_pic_id
+		FROM
+			user_interests
+		RIGHT JOIN
+			users ON user_interests.user_id = users.id
+		LEFT JOIN
+			interests ON user_interests.interest_id = interests.id
+		LEFT JOIN
+			likes ON users.id = user2_id
+		LEFT JOIN
+			pictures ON profile_pic_id = pictures.id
+		WHERE
+			likes.link_code IS NULL AND verified IS NOT NULL AND pic IS NOT NULL AND fame >= ${x}) x
+	WHERE
+		NOT id = ${id}
+	GROUP BY
+		user_name, id
+	ORDER BY
+		id`
 	db.query(query,function (err, results) {
 		if (err){
 			callback(err, null);
@@ -496,14 +557,30 @@ User.prototype.search_fame = function(x, id, callback){
 
 
 User.prototype.linked = function(id,callback){
-	var query = `SELECT id, user_name, birth_date, gender, pref, gps_lat, gps_lon, bio, pic, fame, profile_pic_id, GROUP_CONCAT(interest) AS interests FROM\
-	(SELECT users.id, user_name,interest, birth_date, gender, pref, gps_lat, gps_lon, bio, pic, fame, verified, profile_pic_id FROM user_interests\
-	RIGHT JOIN users ON user_interests.user_id = users.id\
-	LEFT JOIN interests ON user_interests.interest_id = interests.id\
-	LEFT JOIN likes ON users.id = user2_id\
-	LEFT JOIN pictures ON profile_pic_id = pictures.id\
-	WHERE likes.link_code = 1 AND verified IS NOT NULL AND pic IS NOT NULL) x\
-	WHERE NOT id = ${id} GROUP BY user_name, id ORDER BY id`;
+	var query =
+	`SELECT
+		id, user_name, birth_date, gender, pref, gps_lat, gps_lon, bio, pic, fame, profile_pic_id, GROUP_CONCAT(interest) AS interests
+	FROM
+		(SELECT
+			users.id, user_name,interest, birth_date, gender, pref, gps_lat, gps_lon, bio, pic, fame, verified, profile_pic_id
+		FROM
+			user_interests
+		RIGHT JOIN
+			users ON user_interests.user_id = users.id
+		LEFT JOIN
+			interests ON user_interests.interest_id = interests.id
+		LEFT JOIN
+			likes ON users.id = user2_id
+		LEFT JOIN
+			pictures ON profile_pic_id = pictures.id
+		WHERE
+			likes.link_code = 1 AND verified IS NOT NULL AND pic IS NOT NULL) x
+	WHERE
+		NOT id = ${id}
+	GROUP BY
+		user_name, id
+	ORDER BY
+		id`;
 	db.query(query,function (err, results) {
 		if (err){
 			callback(err, null);
@@ -515,8 +592,15 @@ User.prototype.linked = function(id,callback){
 }
 
 User.prototype.exists = function (callback){
-    console.log(this.data);
-	db.query(`SELECT user_name, email FROM users WHERE user_name = '${this.data.user_name}' OR email = '${this.data.email}'`, function (err, results) {
+	var query = 
+	`SELECT
+		user_name, email
+	FROM
+		users
+	WHERE
+		user_name = '${this.data.user_name}' OR email = '${this.data.email}'`
+
+	db.query(query, function (err, results) {
 		if (err){
 			callback(err, null);
 		}
@@ -527,7 +611,18 @@ User.prototype.exists = function (callback){
 }
 
 User.prototype.getMatchDetails = function(user_id, match_id, callback){
-	var query = `SELECT user_name, fame, birth_date, gps_lat, gps_lon, COUNT(*) AS visits FROM users JOIN history ON id = viewed_id WHERE viewed_id = ${match_id} GROUP BY user_name, fame, birth_date, gps_lat, gps_lon;`;
+	var query =
+	`SELECT
+		user_name, fame, birth_date, gps_lat, gps_lon, COUNT(*) AS visits
+	FROM
+		users
+	JOIN
+		history ON id = viewed_id
+	WHERE
+		viewed_id = ${match_id}
+	GROUP BY
+		user_name, fame, birth_date, gps_lat, gps_lon;`;
+
 	db.query(query, function(err, results){
 		if (err){
 			callback(err, null);
@@ -560,13 +655,23 @@ User.prototype.getMatchDetails = function(user_id, match_id, callback){
 }
 
 User.prototype.getUserDetails = function(id, callback){
-	var query = `SELECT user_name, fame, birth_date, gender, pref, COUNT(*) AS visits, FLOOR(DATEDIFF(NOW(),birth_date)/365) AS age FROM users JOIN history ON id = viewed_id WHERE viewed_id = ${id} GROUP BY user_name, fame, birth_date, gps_lat, gps_lon, gender, pref`;
+	var query = 
+	`SELECT
+		user_name, fame, birth_date, gender, pref, COUNT(*) AS visits, FLOOR(DATEDIFF(NOW(),birth_date)/365) AS age
+	FROM
+		users
+	JOIN
+		history ON id = viewed_id 
+	WHERE
+		viewed_id = ${id} 
+	GROUP BY
+		user_name, fame, birth_date, gps_lat, gps_lon, gender, pref`;
+
 	db.query(query,function (err, results) {
 		if (err){
 			callback(err, null);
 		}
 		else{
-			console.log(results);
 			callback(null, results);
 		}
 	})
@@ -607,7 +712,16 @@ User.prototype.setInterestByIds = function (user_id, interest_id, callback){
 }
 
 User.prototype.getInterestById = function (user_id, callback){
-	var query = `SELECT id, interest AS name FROM user_interests JOIN interests ON user_interests.interest_id = interests.id WHERE user_id = ${user_id}`;
+	var query = 
+	`SELECT
+		id, interest AS name
+	FROM
+		user_interests
+	JOIN
+		interests ON user_interests.interest_id = interests.id 
+	WHERE
+		user_id = ${user_id}`;
+
 	db.query(query , function (err, results) {
 		if (err){
 			callback(err, null);
