@@ -1,6 +1,7 @@
 @media all and (min-width: 480px) {
     .Signup {
-      padding: 60px 0;
+      /* padding: 60px 0; */
+      padding: 6% 2%;
     }
   
     .Signup form {
@@ -10,7 +11,10 @@
   }
   
 
-
+  .Signup {
+    /* padding: 60px 0; */
+    padding: 6% 2%;
+  }
   input[type=range] {
     -webkit-appearance: none;
     width: 100%;
