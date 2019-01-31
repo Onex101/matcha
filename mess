@@ -1,21 +1,5 @@
-SELECT interest_id FROM user_interests WHERE user_id = 105;
-
 SELECT
-	COUNT(DISTINCT interest_id) AS tagMatch
-FROM
-	user_interests
-WHERE interest_id IN (
-    SELECT interest_id FROM user_interests WHERE user_id = 105)
-AND interest_id IN (
-    SELECT interest_id FROM user_interests WHERE user_id = 109);
-
-
-
-`SELECT
-	id, user_name, birth_date, gender, pref, gps_lat, gps_lon, bio, pic, fame, profile_pic_id, GROUP_CONCAT(interest) AS interests
-FROM
-	(SELECT
-		users.id, user_name,interest, birth_date, gender, pref, gps_lat, gps_lon, bio, pic, fame, verified, profile_pic_id,() AS tagMatch
+			users.id, user_name,interest, birth_date, gender, pref, gps_lat, gps_lon, bio, fame, verified, profile_pic_id,link_code
 		FROM
 			user_interests
 		RIGHT JOIN
@@ -27,10 +11,6 @@ FROM
 		LEFT JOIN
 			pictures ON profile_pic_id = pictures.id
 		WHERE
-			likes.link_code IS NULL AND verified IS NOT NULL AND pic IS NOT NULL) x
-	WHERE NOT
-		id = ${id}
-	GROUP BY
-		user_name, id
-	ORDER BY
-		id`
+			verified IS NOT NULL AND pic IS NOT NULL;
+
+			SELECT user2_id FROM likes WHERE user1_id = 201;

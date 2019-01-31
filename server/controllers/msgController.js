@@ -9,7 +9,6 @@ exports.test = function(req, res){
 exports.sendMessage = function(req, res) {
 	let data = req.body;
 	let msg = new Msg(data);
-	console.log(msg)
 	msg.create(function(err, results){
 		if (err){
 			res.send(err);
@@ -22,8 +21,6 @@ exports.sendMessage = function(req, res) {
 
 exports.getConversation = function(req, res) {
 	data = req.params;
-	// console.log("test")
-	// console.log(data)
 	let conversation = new Conversation(data);
 	let msg = new Msg('');
 	if (data.user2 == 1){
@@ -39,7 +36,6 @@ exports.getConversation = function(req, res) {
 	}
 	else{
 		msg.getByMessagesByUserIds(conversation.data.user1, conversation.data.user2, function (err, result){
-			// console.log(result);
 			if (err){
 				res.send(err);
 			}
