@@ -387,7 +387,14 @@ User.prototype.match = function (id, callback){
 			FROM
 				likes
 			WHERE
-				user1_id = ${id})
+				user1_id = ${id}
+			UNION
+			SELECT
+				user1_id
+			FROM
+				likes
+			WHERE
+				user2_id = ${id} AND (link_code = 1 OR link_code = 2))
 	GROUP BY
 		user_name, id
 	ORDER BY
