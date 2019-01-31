@@ -54,7 +54,6 @@ export default class Usercard extends Component {
         .then((responseJSON) => {
           console.log(responseJSON)
           this.props.getMatches();
-
         })
         .catch(err => console.error(err))
         } catch (e) {
@@ -110,7 +109,7 @@ export default class Usercard extends Component {
             <div className="username"><br/><h1 onClick={this.onOpenModal}>{info.userInfo.user_name}</h1></div>
                   <div>
                     <Modal open={open} onClose={this.onCloseModal} center>
-                      <ControlledTabs userInfo={info.userInfo} />
+                      <ControlledTabs userInfo={info.userInfo} socket={this.props.socket} getMatches={this.props.getMatches}/>
                     </Modal>
                   </div>
               <hr />
