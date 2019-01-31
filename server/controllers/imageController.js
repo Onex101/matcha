@@ -7,9 +7,7 @@ exports.image_create_get = function(req, res){
 
 exports.image_create_post = function(req, res){
 	data = req.body;
-	// console.log(data)
 	let image = new Image(data);
-	// console.log(image)
 	image.savePic(function (err, result){
 		if (err){
 			res.send('Couldnt not save image');
@@ -19,7 +17,6 @@ exports.image_create_post = function(req, res){
 			res.send('Image saved');
 		}
 	})
-	// res.send('NOT IMPLEMENTED: image create post');
 }
 
 exports.image_delete_get = function(req, res){
@@ -42,7 +39,6 @@ exports.images_fetch_get = function(req, res){
 	user_id = req.params.user_id;
 	let image = new Image('')
 	image.getAllPics(user_id, function(err, result){
-		// console.log(result);
 		if (err){
 			res.send({
 						error: 'failed to get pics',
@@ -129,7 +125,6 @@ exports.new_profile_pic = function(req,res){
 
 exports.image_replace = function(req, res){
 	data = req.body;
-	// console.log(data)
 	let image = new Image(data);
 	image.replacePic(function (err, result){
 		if (err){
