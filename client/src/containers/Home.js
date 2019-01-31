@@ -39,9 +39,7 @@ export default class Home extends Component {
     } 
   }
 
-  sortByAge = (e) => {
-    e.preventDefault()
-    
+  ageSort() {
     try {
       var ageSort = this.state.matches;
       console.log("AGE SORT:")
@@ -62,16 +60,21 @@ export default class Home extends Component {
        result.sort(this.sort_by('birth_date_diff', false, false));
         console.log("AGESORT FINAL = ");
         console.info(result)
-        this.setState({order: true})
+        this.setState({order: "age"})
         this.setState({matches: result});
       }
     } catch (e) {
       alert(e.message);
     }
   }
-
-  sortByLocation = (e) => {
+  
+  sortByAge = (e) => {
     e.preventDefault()
+    this.ageSort();
+   
+  }
+
+  locationSort() {
     try {
       // Make obj into array to sort
       var gpsSort = this.state.matches;
@@ -99,18 +102,121 @@ export default class Home extends Component {
     }
   }
 
+  sortByLocation = (e) => {
+    e.preventDefault()
+    this.locationSort()
+  }
+
+  tagsSort() {
+    try {
+      // Make obj into array to sort
+      var gpsSort = this.state.matches;
+      if (gpsSort) {
+        var result = [];
+        for(var i in gpsSort){
+            var keys = Object.keys(gpsSort[i]);
+            var values = Object.values(gpsSort[i]);
+            var temp = [];
+            for(var i in keys){
+              temp[keys[i]] = values[i];
+            }
+            result.push(temp);
+        }
+        // console.log("Result =");
+        // console.info(result[0]);
+        result.sort(this.sort_by('dist_raw', false, false));
+        // console.log("GPSSort = ");
+        // console.info(result);
+        this.setState({order: "tags"})
+        this.setState({matches: result});
+      }
+    }  catch (e) {
+      alert(e.message);
+    }
+  }
+
+  sortByTags = (e) => {
+    e.preventDefault()
+    this.tagsSort();
+  }
+
+  fameSort() {
+    try {
+      // Make obj into array to sort
+      var gpsSort = this.state.matches;
+      if (gpsSort) {
+        var result = [];
+        for(var i in gpsSort){
+            var keys = Object.keys(gpsSort[i]);
+            var values = Object.values(gpsSort[i]);
+            var temp = [];
+            for(var i in keys){
+              temp[keys[i]] = values[i];
+            }
+            result.push(temp);
+        }
+        // console.log("Result =");
+        // console.info(result[0]);
+        result.sort(this.sort_by('dist_raw', false, false));
+        // console.log("GPSSort = ");
+        // console.info(result);
+        this.setState({order: "fame"})
+        this.setState({matches: result});
+      }
+    }  catch (e) {
+      alert(e.message);
+    }
+  }
+
+  sortByFame = (e) => {
+    e.preventDefault()
+    this.fameSort();
+  }
+
   componentDidUpdate(){
+    // if (this.state.matches) {
+      console.log("State matches = ")
+      console.info(this.state.matches)
+    // }
+    // if (this.props.userMatches) {
+      console.log("Props matches = ")
+      console.info(this.props.userMatches)
+    // }
     if (this.state.matches === null){
       this.getMatches();
     }
-    else if (this.state.matches !== null && this.props.userMatches !== null && this.state.matches !== this.props.userMatches) {
-      if ( this.state.order !== true) {
-        this.setState({matches: this.props.userMatches});
-      // Need to set up a check for after liking and dissliking things while things have been sorted
+    else if (this.state.order === false && this.state.matches !== null && this.props.userMatches !== null && this.state.matches !== this.props.userMatches) {
+      this.setState({matches: this.props.userMatches});
+    }
+    else if (this.state.order !== false && this.state.matches !== null && this.props.userMatches !== null) {
+      console.log("State matches length = ")
+      console.info(this.state.matches.length)
+      console.info(Object.keys(this.state.matches).length)
+      console.log("Props matches length = ")
+      console.info( Object.keys(this.props.userMatches).length)
+      if (this.state.matches.length && this.state.matches.length !== Object.keys(this.props.userMatches).length) {
+        // if ( this.state.order === false) {
+        console.log("Updating Matches")
+        console.log("Order: " + this.state.order)
+        this.setState({matches: this.props.userMatches},
+        console.log("State set:"),
+        console.info(this.state.matches),this.sortNewList()
+          );
+        // }
       }
     }
   }
 
+  sortNewList () {
+    if (this.state.order === "age")
+      this.ageSort();
+    else if (this.state.order === "location")
+      this.locationSort();
+    else if (this.state.order === "tags")
+      this.tagsSort();
+    else if (this.state.order === "fame")
+      this.fameSort();
+  }
   getMatchCards() {
     if (this.state.matches !== null) {
       var rows = [];
