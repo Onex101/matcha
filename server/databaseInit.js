@@ -1,9 +1,12 @@
 const mysql = require('mysql');
 
+//UPDATE mysql.user SET host='%' WHERE user='root';
+//FLUSH PRIVILEGES;
+
 const connection = mysql.createConnection({
   host: 'localhost',
   user: 'root',
-  password: 'admin',
+  password: 'admin1',
 });
 
 

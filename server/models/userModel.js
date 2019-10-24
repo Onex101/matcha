@@ -194,6 +194,7 @@ User.prototype.update = function (callback) {
 }
 
 User.prototype.save = function (callback) {
+	console.log("INSERTING USER\n");
     var self = this;
     for (var key in this.data) {
         if (this.data.hasOwnProperty(key)) {
@@ -239,9 +240,11 @@ User.prototype.save = function (callback) {
             )`, function (err, result){
                     if (typeof callback === "function"){
                         if (err){
+							console.log(err)
                             callback(err, null);
                         }
                         else{
+							console.log("LOL SOMETHING ELSE IS BROKEN\n")
                             self.data['id'] = result.insertId;
                             callback(null, result);
                         }

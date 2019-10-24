@@ -7,8 +7,8 @@ exports.sendVeriCode = function(user_name, email){
     var transporter = nodemailer.createTransport({
         service: 'gmail',
         auth: {
-        user: 'matchamailer@gmail.com',
-        pass: 'badpassword'
+        user: 'samamander404@gmail.com',
+        pass: 'PineappleExpress1@'
         }
     });
     //db.query("INSERT INTO users (input value, input value, input value ...,{:vericode},...)");
@@ -35,8 +35,8 @@ exports.sendPasswordReset = function(user_name, vericode, email){
     var transporter = nodemailer.createTransport({
         service: 'gmail',
         auth: {
-        user: 'matchamailer@gmail.com',
-        pass: 'badpassword'
+            user: 'samamander404@gmail.com',
+            pass: 'PineappleExpress1@'
         }
     });
     //db.query("INSERT INTO users (input value, input value, input value ...,{:vericode},...)");
