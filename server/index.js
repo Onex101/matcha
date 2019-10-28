@@ -14,6 +14,7 @@ const cors = require('cors');
 var userRoutes = require('./routes/userRoutes.js');
 var imgRoutes = require('./routes/imageRoutes.js');
 var msgRoutes = require('./routes/messageRoutes.js');
+var notRoutes = require('./routes/notificationRoutes.js');
 
 var bodyParser = require('body-parser');
 app.use(bodyParser.json({limit: "10mb"}));
@@ -28,6 +29,7 @@ app.get('/', (req, res) => {
 app.use(userRoutes);
 app.use(imgRoutes);
 app.use(msgRoutes);
+app.use(notRoutes);
 
 // io.on('connection', socket => {
 // 	console.log('User connected')

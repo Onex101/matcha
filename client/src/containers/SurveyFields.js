@@ -20,9 +20,14 @@ export default class SurveyFields extends Component {
         // this.geoFindMe = this.geoFindMe.bind(this);
     }
     
-    geoFindMe = () => {     
+    geoFindMe = () => {
+
+        fetch('https://json.geoiplookup.io/')
+        .then(response => response.json())
+        .then(data => this.setState({ gps_lat: data.latitude, gps_lon: data.longitude }));
+
         if (!navigator.geolocation){
-          console.log("Geolocation is not supported by your browser");
+          console.log("Geolocation is not supported by your browser");          
           return;
         }
       

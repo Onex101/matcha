@@ -49,26 +49,26 @@ export default class Likes extends Component {
             this.setState({userInfo: this.props.userInfo,})
         }
         // temporary fixs
-        if (this.state.likes === null && this.props.userMatches !== null)
-            this.setState({likes: this.props.userMatches})
-        // if (this.state.likes === null && this.state.userInfo && this.state.userInfo.id) {
-            // Make back end call to get list of user's likes
-            // try {
-            //     fetch('/uaer/likes' + this.state.userInfo.id, {
-            //       method: "GET",
-            //       headers: {
-            //         "Content-Type": "application/json; charset=utf-8",
-            //       },
-            //     })
-            //     .then(response => response.json())
-            //     .then((responseJSON) => {  
-            //         this.setState({likes: responseJSON["data"]})
-            //     })
-            //     .catch(err => console.error(err))
-            // } catch (e) {
-            //   alert(e.message);
-            // }
-        // }
+        // if (this.state.likes === null && this.props.userMatches !== null)
+        //     this.setState({likes: this.props.userMatches})
+        if (this.state.likes === null && this.state.userInfo && this.state.userInfo.id) {
+            try {
+                fetch('/user/' + this.state.userInfo.id + '/getliked', {
+                  method: "GET",
+                  headers: {
+                    "Content-Type": "application/json; charset=utf-8",
+                  },
+                })
+                .then(response => response.json())
+                .then((responseJSON) => {
+                    console.log(responseJSON)
+                    this.setState({likes: responseJSON})
+                })
+                .catch(err => console.error(err))
+            } catch (e) {
+              alert(e.message);
+            }
+        }
     }
 
     componentDidUpdate() {
@@ -76,26 +76,25 @@ export default class Likes extends Component {
             this.setState({userInfo: this.props.userInfo,})
         }
         // temporary fixs
-        if (this.state.likes === null && this.props.userMatches !== null)
-            this.setState({likes: this.props.userMatches})
-        // if (this.state.likes === null && this.state.userInfo && this.state.userInfo.id) {
-            // Make back end call to get list of user's likes
-            // try {
-            //     fetch('/uaer/likes' + this.state.userInfo.id, {
-            //       method: "GET",
-            //       headers: {
-            //         "Content-Type": "application/json; charset=utf-8",
-            //       },
-            //     })
-            //     .then(response => response.json())
-            //     .then((responseJSON) => {  
-            //         this.setState({likes: responseJSON["data"]})
-            //     })
-            //     .catch(err => console.error(err))
-            // } catch (e) {
-            //   alert(e.message);
-            // }
-        // }
+        // if (this.state.likes === null && this.props.userMatches !== null)
+        //     this.setState({likes: this.props.userMatches})
+        if (this.state.likes === null && this.state.userInfo && this.state.userInfo.id) {
+            try {
+                fetch('/user/' + this.state.userInfo.id + '/getliked', {
+                  method: "GET",
+                  headers: {
+                    "Content-Type": "application/json; charset=utf-8",
+                  },
+                })
+                .then(response => response.json())
+                .then((responseJSON) => {
+                    this.setState({likes: responseJSON})
+                })
+                .catch(err => console.error(err))
+            } catch (e) {
+              alert(e.message);
+            }
+        }
     }
 
     renderUsername(user) {
@@ -111,9 +110,8 @@ export default class Likes extends Component {
     }
     renderLikes(likes) {
         var likedUsers = []
-
-        for (var elem = 0; likes[elem]; elem++) {
-            if (likes[elem] && likes[elem].pic && likes[elem].data.user_name) {
+        for (var elem = 0; elem < likes.length; elem++) {
+            if (likes[elem] && likes[elem].pic && likes[elem].user_name) {
                 likedUsers.push(
                    <UserLabel user={likes[elem]} key={elem} />
                 )

@@ -10,6 +10,13 @@ import male from './imgs/male_logo/favicon-32x32.png';
 import {NOTIFICATION} from "../Events";
 import { Socket } from "net";
 
+function _calculateAge(birth_date) { // birthday is a date
+    var birthday = new Date(birth_date);
+    var ageDifMs = Date.now() - birthday.getTime();
+    var ageDate = new Date(ageDifMs); // miliseconds from epoch
+    return Math.abs(ageDate.getUTCFullYear() - 1970);
+}
+
 export default class Profile extends Component {
     constructor(props) {
         super(props);
@@ -27,6 +34,7 @@ export default class Profile extends Component {
             gps_lat: null,
             gps_lon: null,
             tags: null,
+            visits: [],
             dist_compare:  null,
             userDetails: null
         }
@@ -42,6 +50,7 @@ export default class Profile extends Component {
             gps_lat: this.props.userInfo.gps_lat,
             gps_lon: this.props.userInfo.gps_lon,
             profile: this.props.userInfo.pic,
+            fame: this.props.userInfo.fame,
              });
         var tags = this.props.userInfo.interests
         if (tags !== null && tags !== "null")
@@ -51,9 +60,27 @@ export default class Profile extends Component {
         this.setState({tags: tags})
     }
 
+    getVisits(){
+        try {
+            fetch('/user/'+ this.props.userInfo.id +'/history' , {
+              method: "GET",
+              headers: {
+                "Content-Type": "application/json; charset=utf-8",
+              },
+            })
+            .then(response => response.json())
+            .then((responseJSON) => {
+                console.log(responseJSON);
+                this.setState({visits: responseJSON})
+            })
+            .catch(err => console.error(err))
+            } catch (e) {
+              alert(e.message);
+            }
+    }
+
     getUserDetails() {
         if (this.state.id){
-            console.log("DETAILS TEST 1")
             if (this.state.id === localStorage.getItem('id')) {
                 // try {
                 //     fetch('/image/' + this.state.id, {
@@ -221,11 +248,16 @@ export default class Profile extends Component {
         console.log("Nay")
       }
 
+      report(e){
+
+      }
+
     componentDidMount() {
         // console.log("Profile INFO 1: " +JSON.stringify(this.props.userInfo))
         
         if (this.state.id === null && this.props.userInfo && this.props.userInfo.id  ){
             this.getInfo();
+            this.getVisits();
         }
         if (this.state.id && !this.state.pictures[0]){
         //get more info
@@ -248,6 +280,7 @@ export default class Profile extends Component {
         }
         if (this.props.userInfo && this.props.userInfo.id && !this.state.id){
             this.getInfo();
+            this.getVisits();
         }
         if (this.state.id && !this.state.pictures[0]){
         //get more info
@@ -257,7 +290,6 @@ export default class Profile extends Component {
         if (this.state.userDetails == null) {
             //Make server call to get all information for the profile
             // Fame, Visits, Name, Surname, Distance, Age
-            console.log("DETAILS TEST 1")
             this.getUserDetails()
         }
     }
@@ -266,6 +298,7 @@ export default class Profile extends Component {
         // console.log("INFO 2:");
         // console.info(this.props)
         const info = this.state;
+        // console.log(info)
         // console.log("STATE INFO: " +JSON.stringify(this.state.tags))
         var width=150
         var height=150
@@ -287,7 +320,7 @@ export default class Profile extends Component {
                     <div className="profile-info">
                         <h4>Fame : {info.fame}</h4>
                         <br/>
-                        <h4>Visits : {info.visits}</h4>
+                        <h4>Visits : {this.state.visits.length}</h4>
                     </div>
                 </div>
                 <div className="right">
@@ -296,8 +329,8 @@ export default class Profile extends Component {
                     <hr />
                     <div className="user-info">
                     <br />
-                        {this.props.userInfo.name ? 
-                            <h3>{this.props.userInfo.name} {this.props.userInfo.surname} | {this.props.userInfo.age}</h3>
+                        {this.props.userInfo.first_name && this.props.userInfo.last_name && this.props.userInfo.birth_date?
+                            <h3>{this.props.userInfo.first_name} {this.props.userInfo.last_name} | {_calculateAge(this.props.userInfo.birth_date)}</h3>
                             : <h3>Firstname Surname | Age</h3>}
                         <br />
                         {info.id != localStorage.getItem('id') ?

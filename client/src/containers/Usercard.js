@@ -17,17 +17,31 @@ export default class Usercard extends Component {
     }
 
     
-  onOpenModal = () => {
+  onOpenModal = (viewee_id) => {
+
     this.setState({ open: true });
     //Add to the visits
-
+    try {
+      fetch('/user/visit/'+ localStorage.getItem('id') +'/' + viewee_id , {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json; charset=utf-8",
+            },
+          })
+          .then(response => response.json())
+          .then((responseJSON) => {
+              this.setState({likes: responseJSON})
+          })
+          .catch(err => console.error(err))
+      } catch (e) {
+        alert(e.message);
+      }
     // this.props.userInfo.id
   };
  
   onCloseModal = () => {
     this.setState({ open: false });
   };
-
     avatar(image, width, height) {
         var image = image,
             style = {
@@ -41,8 +55,25 @@ export default class Usercard extends Component {
     like(e){
       console.log(this.props)
       const socket = this.props.socket;
-      socket.emit(NOTIFICATION, 'Some one has liked you', this.props.userInfo.user_name);
-      e.preventDefault();
+      const message = 'Some one has liked you';
+      socket.emit(NOTIFICATION, message, this.props.userInfo);
+      try {
+        fetch('/notification/'+this.props.userInfo.id+'/'+message+'/set', {
+          method: "POST",
+          headers: {
+          "Content-Type": "application/json; charset=utf-8",
+          },
+        })
+        .then(response => response.json())
+        .then((responseJSON) => {
+          console.log(responseJSON)
+        })
+        .catch(err => console.error(err))
+        } 
+      catch (e) {
+        alert(e.message);
+      }
+
       try {
         fetch('/like/' + localStorage.getItem('id') + '/' + this.props.userInfo.id, {
           method: "GET",
@@ -53,7 +84,7 @@ export default class Usercard extends Component {
         .then(response => response.json())
         .then((responseJSON) => {
           console.log(responseJSON)
-          this.props.getMatches();
+          // this.props.getMatches();
         })
         .catch(err => console.error(err))
         } catch (e) {
@@ -106,7 +137,7 @@ export default class Usercard extends Component {
          <div>
             <div className="top">
                 {this.avatar(info.pic, width, height)}
-            <div className="username"><br/><h1 onClick={this.onOpenModal}>{info.userInfo.user_name}</h1></div>
+            <div className="username"><br/><h1 onClick={(e) => this.onOpenModal(info.userInfo.id)}>{info.userInfo.user_name}</h1></div>
                   <div>
                     <Modal open={open} onClose={this.onCloseModal} center>
                       <ControlledTabs userInfo={info.userInfo} socket={this.props.socket} getMatches={this.props.getMatches}/>

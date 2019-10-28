@@ -150,8 +150,11 @@ module.exports = function(socket){
 	})
 
 	socket.on(NOTIFICATION, (message, receiver)=>{
-		console.log('Notification received and sending it', receiver)
-		sendNotificationToUser(message, receiver)
+		console.log('Notification received and sending it to', receiver)
+		if (isUser(connectedUsers, receiver.user_name) ){
+			const receiverSocket = connectedUsers[receiver.user_name].socketId
+			socket.to(receiverSocket).emit(NOTIFICATION, message)
+		}
 	})
 }
 

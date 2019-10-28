@@ -592,8 +592,8 @@ export default class Settings extends Component {
     }
 
     render() {
-        console.log("PROPS")
-        console.info(this.props.userInfo)
+        // console.log("PROPS")
+        // console.info(this.props.userInfo)
         // if (this.state.id !== null && !this.state.pictures[0]){
         //     this.getUserImages();
         // }

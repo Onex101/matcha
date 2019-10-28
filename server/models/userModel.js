@@ -48,10 +48,10 @@ User.prototype.deleteById = function (id, callback) {
 User.prototype.getById = function (data, callback) {
 	var query = 
 	`SELECT
-		id, password,user_name, birth_date, gender, pref, gps_lat, gps_lon,bio, profile_pic_id, pic, fame, GROUP_CONCAT(interest) AS interests
+		id, password,user_name, first_name, last_name, birth_date, gender, pref, gps_lat, gps_lon,bio, profile_pic_id, pic, fame, GROUP_CONCAT(interest) AS interests
 	FROM
 		(SELECT
-			users.id, user_name, password,interest, birth_date, gender, pref, gps_lat, gps_lon, bio, profile_pic_id, 
+			users.id, user_name, first_name, last_name, password,interest, birth_date, gender, pref, gps_lat, gps_lon, bio, profile_pic_id, 
 				(SELECT
 					COUNT(user1_id) FROM likes WHERE (user1_id = ${data} OR user2_id = ${data}) AND link_code = 1) as fame, pic
 				FROM
@@ -76,8 +76,8 @@ User.prototype.getById = function (data, callback) {
 }
 
 User.prototype.linked_users = function(id, callback){
-	var query = `SELECT user1_id AS id FROM likes WHERE user2_id = ${id} AND link_code = 1
-		UNION SELECT user2_id FROM likes WHERE user1_id = ${id} AND link_code = 1`;
+	var query = `SELECT *, pic FROM users INNER JOIN (SELECT user1_id AS id FROM likes WHERE user2_id = ${id} AND link_code = 1
+		UNION SELECT user2_id FROM likes WHERE user1_id = ${id} AND link_code = 1) AS lst ON lst.id = users.id INNER JOIN pictures ON users.profile_pic_id = pictures.id`;
 	db.query(query, function(err,result){
 		if (err) {callback(err, null);}
         else{
@@ -90,7 +90,7 @@ User.prototype.getByUsername = function (data, callback) {
     data = mysql.escape(data);
 	var query = 
 	`SELECT
-		id, password,user_name, birth_date, gender, pref, gps_lat, gps_lon,bio, profile_pic_id, pic, fame, veri_code, GROUP_CONCAT(interest) AS interests
+		id, password, user_name,first_name, last_name, birth_date, gender, pref, gps_lat, gps_lon,bio, profile_pic_id, pic, fame, veri_code, GROUP_CONCAT(interest) AS interests
 	FROM
 		(SELECT
 			users.id, user_name, password,interest, birth_date, gender, pref, gps_lat, gps_lon, bio, profile_pic_id, fame, pic, veri_code
@@ -366,10 +366,10 @@ User.prototype.dislike = function (user_id, target_id, callback){
 User.prototype.match = function (id, callback){
 	var query = 
 	`SELECT
-		id, user_name, birth_date, gender, pref, gps_lat, gps_lon, bio, pic, fame, profile_pic_id, GROUP_CONCAT(interest) AS interests
+		id, user_name, first_name, last_name, birth_date, gender, pref, gps_lat, gps_lon, bio, pic, fame, profile_pic_id, GROUP_CONCAT(interest) AS interests
 	FROM
 		(SELECT
-			users.id, user_name,interest, birth_date, gender, pref, gps_lat, gps_lon, bio, pic, fame, verified, profile_pic_id
+			users.id, user_name, first_name, last_name, interest, birth_date, gender, pref, gps_lat, gps_lon, bio, pic, fame, verified, profile_pic_id
 		FROM
 			user_interests
 		RIGHT JOIN
