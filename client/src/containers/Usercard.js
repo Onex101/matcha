@@ -55,7 +55,7 @@ export default class Usercard extends Component {
     like(e){
       console.log(this.props)
       const socket = this.props.socket;
-      const message = 'Some one has liked you';
+      const message = this.props.userInfo.user_name + ' has liked you';
       socket.emit(NOTIFICATION, message, this.props.userInfo);
       try {
         fetch('/notification/send', {

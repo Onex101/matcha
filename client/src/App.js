@@ -89,9 +89,6 @@ class App extends Component {
 
   componentDidMount () {
     this.getNotifications();
-  }
-
-  componentWillMount(){
     // Get User
     console.log("Local user:", localStorage.getItem('user'))
     console.log("Local id:", localStorage.getItem('id'))
@@ -122,6 +119,10 @@ class App extends Component {
     this.getMatches();
 
     //Socket test
+  }
+
+  componentWillMount(){
+    
     
   }
 
@@ -226,10 +227,9 @@ class App extends Component {
     
     return(<Navbar.Collapse><Nav pullRight>
             <Fragment>
-               <NavDropdown eventKey={3} title={<img src={notification} className="nav-icon" id="Notification"/>} id="basic-nav-dropdown">
-                    {this.showNotifications()}
-                  </NavDropdown>
-              
+              <NavDropdown eventKey={3} title={<><img src={notification} className="nav-icon" id="Notification"/>{this.state.notifications.length}</>} id="basic-nav-dropdown">
+                {this.showNotifications()}
+              </NavDropdown>
               <LinkContainer to="/Chat">
                 {this.state.userInfo && this.state.userInfo.profile_pic_id
                     ? <NavItem><img src={chat} className="nav-icon" id="Chat"/></NavItem>
