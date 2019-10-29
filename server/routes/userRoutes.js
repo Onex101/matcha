@@ -32,9 +32,6 @@ router.post('/email/check', user_controller.check_email);
 // GET request for one user. - working
 router.get('/user/:id', user_controller.user_detail);
 
-// GET request to login user.
-router.get('/login', user_controller.user_login_get);
-
 // POST request to login user. - working
 router.post('/login', user_controller.user_login_post);
 

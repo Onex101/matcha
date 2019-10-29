@@ -35,11 +35,49 @@ class App extends Component {
   }
 
   getNotifications(){
+    try {
+      fetch('/notification/'+localStorage.getItem('id')+'/unread', {
+        method: "GET",
+        headers: {
+        "Content-Type": "application/json; charset=utf-8",
+        }
+      })
+      .then(response => response.json())
+      .then((responseJSON) => {
+        console.log(responseJSON)
+        this.setState({notifications: responseJSON})
+      })
+      .catch(err => console.error(err))
+      }
+    catch (e) {
+      alert(e.message);
+    }
     //Make server call to get number of notifications
   }
 
-  showNotifications() {
-    // Make server call to show a list of the user's notifications
+  // showNotifications() {
+  //   this.state.notifications.map((val)=>{
+  //     console.log("NOTIFICATION PRINTING")
+  //     return <NavDropdown.Item key={val.id}>val.noti</NavDropdown.Item>
+  //   }) 
+  //   // Make server call to show a list of the user's notifications
+  // }
+
+  showNotifications () {
+    // console.log(this.state.notifications)
+    // if (this.state.notifications.lenth > 0)
+    //   return <div>
+    //           {this.state.notifications.map( (noti)=> (
+    //             <NavDropdown.Item key={noti.id}>{noti.noti}</NavDropdown.Item>
+    //           ))}
+    //         </div>
+    // else
+    //   return  <div><NavDropdown.Item key={0}>No notifications</NavDropdown.Item></div>
+
+  };
+
+  componentDidMount () {
+    // this.getNotifications();
   }
 
   componentWillMount(){
@@ -71,7 +109,6 @@ class App extends Component {
     // Get profile info
     // Get Matches
     this.getMatches();
-    this.getNotifications();
 
     //Socket test
     
@@ -178,12 +215,10 @@ class App extends Component {
     
     return(<Navbar.Collapse><Nav pullRight>
             <Fragment>
-              {this.state.userInfo && this.state.userInfo.profile_pic_id
-                ? <NavDropdown eventKey={3} title={<img src={notification} className="nav-icon" id="Notification"/>} id="basic-nav-dropdown">
-                    {/* {this.showNotifications()} */}
+               <NavDropdown eventKey={3} title={<img src={notification} className="nav-icon" id="Notification"/>} id="basic-nav-dropdown">
+                    {this.showNotifications()}
                   </NavDropdown>
-                : <NavDropdown disabled eventKey={3} title={<img src={notification} className="nav-icon" id="Notification"/>} id="basic-nav-dropdown">
-                  </NavDropdown>}
+              
               <LinkContainer to="/Chat">
                 {this.state.userInfo && this.state.userInfo.profile_pic_id
                     ? <NavItem><img src={chat} className="nav-icon" id="Chat"/></NavItem>

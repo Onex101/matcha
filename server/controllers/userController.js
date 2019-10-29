@@ -178,6 +178,7 @@ exports.user_login_post = function(req, res) {
     let user = new User(req.body);
     user.login(function(err, results){
         if (err) {
+			console.log(err)
             res.send({
               "status":400,
               "failed":"error ocurred"

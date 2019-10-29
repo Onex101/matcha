@@ -175,12 +175,12 @@ export default class Home extends Component {
 
   componentDidUpdate(){
     // if (this.state.matches) {
-      console.log("State matches = ")
-      console.info(this.state.matches)
+      // console.log("State matches = ")
+      // console.info(this.state.matches)
     // }
     // if (this.props.userMatches) {
-      console.log("Props matches = ")
-      console.info(this.props.userMatches)
+      // console.log("Props matches = ")
+      // console.info(this.props.userMatches)
     // }
     if (this.state.matches === null){
       this.getMatches();

@@ -90,10 +90,10 @@ User.prototype.getByUsername = function (data, callback) {
     data = mysql.escape(data);
 	var query = 
 	`SELECT
-		id, password, user_name,first_name, last_name, birth_date, gender, pref, gps_lat, gps_lon,bio, profile_pic_id, pic, fame, veri_code, GROUP_CONCAT(interest) AS interests
+		id, password, user_name, first_name, last_name, birth_date, gender, pref, gps_lat, gps_lon,bio, profile_pic_id, pic, fame, veri_code, GROUP_CONCAT(interest) AS interests
 	FROM
 		(SELECT
-			users.id, user_name, password,interest, birth_date, gender, pref, gps_lat, gps_lon, bio, profile_pic_id, fame, pic, veri_code
+			users.id, user_name, first_name, last_name, password,interest, birth_date, gender, pref, gps_lat, gps_lon, bio, profile_pic_id, fame, pic, veri_code
 		FROM
 			user_interests
 		RIGHT JOIN
@@ -412,10 +412,10 @@ User.prototype.match = function (id, callback){
 User.prototype.user_search = function(id, search_name, callback){
 	var query =
 	`SELECT
-		id, user_name, birth_date, gender, pref, gps_lat, gps_lon, bio, pic, fame, profile_pic_id, GROUP_CONCAT(interest) AS interests
+		id, user_name, first_name, last_name, birth_date, gender, pref, gps_lat, gps_lon, bio, pic, fame, profile_pic_id, GROUP_CONCAT(interest) AS interests
 	FROM
 		(SELECT
-			users.id, user_name,interest, birth_date, gender, pref, gps_lat, gps_lon, bio, pic, fame, verified, profile_pic_id
+			users.id, user_name, first_name, last_name, interest, birth_date, gender, pref, gps_lat, gps_lon, bio, pic, fame, verified, profile_pic_id
 		FROM
 			user_interests
 		RIGHT JOIN
@@ -447,13 +447,13 @@ User.prototype.user_search = function(id, search_name, callback){
 User.prototype.tag_search = function(id, interest, callback){
 	var query = 
 	`SELECT 
-		id, user_name, birth_date, gender, pref, gps_lat, gps_lon, bio, pic, fame, profile_pic_id, interests 
+		id, user_name, first_name, last_name, birth_date, gender, pref, gps_lat, gps_lon, bio, pic, fame, profile_pic_id, interests 
 	FROM 
 		(SELECT 
-			id, user_name, birth_date, gender, pref, gps_lat, gps_lon, bio, pic, fame, profile_pic_id, GROUP_CONCAT(interest) AS interests
+			id, user_name, birth_date, first_name, last_name, gender, pref, gps_lat, gps_lon, bio, pic, fame, profile_pic_id, GROUP_CONCAT(interest) AS interests
 				FROM
 					(SELECT 
-						users.id, user_name,interest, birth_date, gender, pref, gps_lat, gps_lon, bio, pic, fame, verified, profile_pic_id FROM user_interests
+						users.id, user_name, first_name, last_name, interest, birth_date, gender, pref, gps_lat, gps_lon, bio, pic, fame, verified, profile_pic_id FROM user_interests
 					RIGHT JOIN
 						users ON user_interests.user_id = users.id
 					LEFT JOIN
@@ -484,13 +484,13 @@ User.prototype.tag_search = function(id, interest, callback){
 User.prototype.getMaxAgeGapMatch = function(id, x, callback){
 	var query = 
 	`SELECT 
-		id, user_name, birth_date, gender, pref, gps_lat, gps_lon, bio, fame, profile_pic_id, interests 
+		id, user_name, first_name, last_name, birth_date, gender, pref, gps_lat, gps_lon, bio, fame, profile_pic_id, interests 
 	FROM 
 		(SELECT 
-			id, user_name, birth_date, gender, pref, gps_lat, gps_lon, bio, pic, fame, profile_pic_id, GROUP_CONCAT(interest) AS interests
+			id, user_name, first_name, last_name, birth_date, gender, pref, gps_lat, gps_lon, bio, pic, fame, profile_pic_id, GROUP_CONCAT(interest) AS interests
 				FROM
 					(SELECT 
-						users.id, user_name,interest, birth_date, gender, pref, gps_lat, gps_lon, bio, pic, fame, verified, profile_pic_id
+						users.id, user_name, first_name, last_name, interest, birth_date, gender, pref, gps_lat, gps_lon, bio, pic, fame, verified, profile_pic_id
 					FROM
 						user_interests
 					RIGHT JOIN
@@ -534,10 +534,10 @@ User.prototype.getMaxAgeGapMatch = function(id, x, callback){
 User.prototype.search_fame = function(x, id, callback){
 	var query = 
 	`SELECT
-		id, user_name, birth_date, gender, pref, gps_lat, gps_lon, bio, pic, fame, profile_pic_id, GROUP_CONCAT(interest) AS interests
+		id, user_name, first_name, last_name, birth_date, gender, pref, gps_lat, gps_lon, bio, pic, fame, profile_pic_id, GROUP_CONCAT(interest) AS interests
 	FROM
 		(SELECT
-			users.id, user_name,interest, birth_date, gender, pref, gps_lat, gps_lon, bio, pic, fame, verified, profile_pic_id
+			users.id, user_name, first_name, last_name, interest, birth_date, gender, pref, gps_lat, gps_lon, bio, pic, fame, verified, profile_pic_id
 		FROM
 			user_interests
 		RIGHT JOIN
@@ -570,10 +570,10 @@ User.prototype.search_fame = function(x, id, callback){
 User.prototype.linked = function(id,callback){
 	var query =
 	`SELECT
-		id, user_name, birth_date, gender, pref, gps_lat, gps_lon, bio, pic, fame, profile_pic_id, GROUP_CONCAT(interest) AS interests
+		id, user_name, first_name, last_name, birth_date, gender, pref, gps_lat, gps_lon, bio, pic, fame, profile_pic_id, GROUP_CONCAT(interest) AS interests
 	FROM
 		(SELECT
-			users.id, user_name,interest, birth_date, gender, pref, gps_lat, gps_lon, bio, pic, fame, verified, profile_pic_id
+			users.id, user_name, first_name, last_name, interest, birth_date, gender, pref, gps_lat, gps_lon, bio, pic, fame, verified, profile_pic_id
 		FROM
 			user_interests
 		RIGHT JOIN
@@ -624,7 +624,7 @@ User.prototype.exists = function (callback){
 User.prototype.getMatchDetails = function(user_id, match_id, callback){
 	var query =
 	`SELECT
-		user_name, fame, birth_date, gps_lat, gps_lon, COUNT(*) AS visits
+		user_name, first_name, last_name, fame, birth_date, gps_lat, gps_lon, COUNT(*) AS visits
 	FROM
 		users
 	JOIN
@@ -632,7 +632,7 @@ User.prototype.getMatchDetails = function(user_id, match_id, callback){
 	WHERE
 		viewed_id = ${match_id}
 	GROUP BY
-		user_name, fame, birth_date, gps_lat, gps_lon;`;
+		user_name, first_name, last_name, fame, birth_date, gps_lat, gps_lon;`;
 
 	db.query(query, function(err, results){
 		if (err){
@@ -646,7 +646,7 @@ User.prototype.getMatchDetails = function(user_id, match_id, callback){
 					if (err){callback(err, null);}
 					else{
 						var dist = match.getDistance(results[0].gps_lat, results[0].gps_lon,result[0].gps_lat, result[0].gps_lon);
-						var final_query = `SELECT user_name, fame, ${age} AS age, ${dist} as distance, COUNT(*) AS visits FROM users JOIN history ON id = viewed_id WHERE viewed_id = ${match_id} GROUP BY user_name, fame, birth_date, gps_lat, gps_lon;`;
+						var final_query = `SELECT user_name, first_name, last_name, fame, ${age} AS age, ${dist} as distance, COUNT(*) AS visits FROM users JOIN history ON id = viewed_id WHERE viewed_id = ${match_id} GROUP BY user_name, fame, birth_date, gps_lat, gps_lon;`;
 						db.query(final_query, function (err, fresults) {
 							if (err){
 								callback(err, null);
@@ -668,7 +668,7 @@ User.prototype.getMatchDetails = function(user_id, match_id, callback){
 User.prototype.getUserDetails = function(id, callback){
 	var query = 
 	`SELECT
-		user_name, fame, birth_date, gender, pref, COUNT(*) AS visits, FLOOR(DATEDIFF(NOW(),birth_date)/365) AS age
+		user_name, first_name, last_name, fame, birth_date, gender, pref, COUNT(*) AS visits, FLOOR(DATEDIFF(NOW(),birth_date)/365) AS age
 	FROM
 		users
 	JOIN
@@ -676,7 +676,7 @@ User.prototype.getUserDetails = function(id, callback){
 	WHERE
 		viewed_id = ${id} 
 	GROUP BY
-		user_name, fame, birth_date, gps_lat, gps_lon, gender, pref`;
+		user_name, first_name, last_name, fame, birth_date, gps_lat, gps_lon, gender, pref`;
 
 	db.query(query,function (err, results) {
 		if (err){

@@ -58,11 +58,15 @@ export default class Usercard extends Component {
       const message = 'Some one has liked you';
       socket.emit(NOTIFICATION, message, this.props.userInfo);
       try {
-        fetch('/notification/'+this.props.userInfo.id+'/'+message+'/set', {
+        fetch('/notification/send', {
           method: "POST",
           headers: {
           "Content-Type": "application/json; charset=utf-8",
           },
+          body: JSON.stringify({
+            id: this.props.userInfo.id,
+            message: message,
+          })
         })
         .then(response => response.json())
         .then((responseJSON) => {
