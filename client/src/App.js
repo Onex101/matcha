@@ -64,7 +64,18 @@ class App extends Component {
   // }
 
   showNotifications () {
-    // console.log(this.state.notifications)
+    console.log("Notifications")
+    console.log(this.state.notifications)
+
+    // if (this.state.notifications !== null) {
+      var rows = [];
+      for (var elem in this.state.notifications) {
+        console.log("Elem: " + this.state.notifications[elem])
+        console.log("Key: " + this.state.notifications[elem].id + "    Text: " + this.state.notifications[elem].noti)
+          rows.push(<MenuItem key={this.state.notifications[elem].id}>{this.state.notifications[elem].noti}</MenuItem>);
+      }
+      return <div>{rows}</div>;
+    // }
     // if (this.state.notifications.lenth > 0)
     //   return <div>
     //           {this.state.notifications.map( (noti)=> (
@@ -77,7 +88,7 @@ class App extends Component {
   };
 
   componentDidMount () {
-    // this.getNotifications();
+    this.getNotifications();
   }
 
   componentWillMount(){
