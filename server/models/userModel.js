@@ -76,7 +76,7 @@ User.prototype.getById = function (data, callback) {
 }
 
 User.prototype.linked_users = function(id, callback){
-	var query = `SELECT *, pic FROM users INNER JOIN (SELECT user1_id AS id FROM likes WHERE user2_id = ${id} AND link_code = 1
+	var query = `SELECT users.*, pictures.pic FROM users INNER JOIN (SELECT user1_id AS id FROM likes WHERE user2_id = ${id} AND link_code = 1
 		UNION SELECT user2_id FROM likes WHERE user1_id = ${id} AND link_code = 1) AS lst ON lst.id = users.id INNER JOIN pictures ON users.profile_pic_id = pictures.id`;
 	db.query(query, function(err,result){
 		if (err) {callback(err, null);}
