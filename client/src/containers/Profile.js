@@ -204,7 +204,7 @@ export default class Profile extends Component {
     like(e){
         console.log(this.props)
         const socket = this.props.socket;
-        socket.emit(NOTIFICATION, 'Some one has liked you', this.props.userInfo.user_name);
+        socket.emit(NOTIFICATION, localStorage.getItem('name') + ' has liked you', this.props.userInfo.user_name);
         e.preventDefault();
         try {
           fetch('/like/' + localStorage.getItem('id') + '/' + this.props.userInfo.id, {
