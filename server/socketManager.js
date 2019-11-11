@@ -92,11 +92,16 @@ module.exports = function(socket){
 		console.log(chatId)
 		if (message == 'paki')
 			message = 'Sorry your message was not sent'
-		sendMessageToChatFromUser(chatId, message)
+		if ((typeof sendMessageToChatFromUser) == "function"){
+			sendMessageToChatFromUser(chatId, message)
+		}
 	})
 
 	socket.on(TYPING, ({chatId, isTyping})=>{
-		sendTypingFromUser(chatId, isTyping)
+		if ((typeof sendTypingFromUser) == "function"){
+			sendTypingFromUser(chatId, isTyping)
+			console.log("Is Typing")
+		}
 	})
 
 	socket.on(PRIVATE_MESSAGE, ({receiver, sender, activeChat})=>{
