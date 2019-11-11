@@ -70,8 +70,8 @@ class App extends Component {
     // if (this.state.notifications !== null) {
       var rows = [];
       for (var elem in this.state.notifications) {
-        console.log("Elem: " + this.state.notifications[elem])
-        console.log("Key: " + this.state.notifications[elem].id + "    Text: " + this.state.notifications[elem].noti)
+        // console.log("Elem: " + this.state.notifications[elem])
+        // console.log("Key: " + this.state.notifications[elem].id + "    Text: " + this.state.notifications[elem].noti)
           rows.push(<MenuItem key={this.state.notifications[elem].id}>{this.state.notifications[elem].noti}</MenuItem>);
       }
       return <div>{rows}</div>;
