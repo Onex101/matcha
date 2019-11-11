@@ -21,7 +21,7 @@ export default class SideBar extends Component{
 		e.preventDefault()
 		const {receiver} = this.state
 		const {onSendPrivateMessage} = this.props
-		console.log(receiver)
+		// console.log(receiver)
 		onSendPrivateMessage(receiver)
 		this.setState({receiver:""})
 	}
@@ -79,9 +79,9 @@ export default class SideBar extends Component{
 						{
 							activeSideBar === SideBar.type.CHATS ?
 							chats.map((chat)=>{
-								console.log(user)
+								// console.log(user)
 								if(chat.name){
-									console.log(chat)
+									// console.log(chat)
 									const lastMessage = chat.messages[chat.messages.length - 1];
 									const chatSideName = chat.users.find((name)=>{
 										console.log("Name and user_name")
@@ -105,7 +105,7 @@ export default class SideBar extends Component{
 						
 						:
 							differenceBy(users, [user], 'name').map((otherUser)=>{
-								console.log(users)
+								// console.log(users)
 								return(
 									<SideBarOption
 										key = {otherUser.id}
