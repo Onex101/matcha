@@ -76,14 +76,15 @@ export default class ChatContainer extends Component{
 				console.log('Getting liked people')
 				console.log(responseJSON)
 				responseJSON.forEach(element => {
-					console.log(element.id)
 					for (var user in users){
 						console.log(element.id, parseInt(users[user].id))
 						if (element.id == parseInt(users[user].id))
 							newList[users[user].name] = users[user]
 					}
 				});
+				
 				this.setState({ likedUsers: values(newList) });
+				console.log(newList)
 				// console.log("APP Matches = " + JSON.stringify(this.state.userMatches));
 			})
 			.catch(err => console.error(err))
@@ -98,7 +99,7 @@ export default class ChatContainer extends Component{
 		console.log("sending private message")
 		console.log(receiver, user)
 		socket.emit(PRIVATE_MESSAGE, {receiver, sender: user, activeChat})
-		socket.emit(NOTIFICATION, "Some one has started a chat with you", receiver.name)
+		socket.emit(NOTIFICATION, receiver.name + " has started a chat with you", receiver)
 	}
 
 	resetChat = (chat)=>{
@@ -121,8 +122,8 @@ export default class ChatContainer extends Component{
 	addChat = (chat, reset = false) => {
 		const {socket} = this.props
 		const {chats} = this.state
-		console.log("Adding Chat: " + JSON.stringify(chat))
-		console.log("Current chats: " + JSON.stringify(chats))
+		// console.log("Adding Chat: " + JSON.stringify(chat))
+		// console.log("Current chats: " + JSON.stringify(chats))
 		if (!(this.containsObject(chat, chats))){
 			const newChats = reset ? [chat]:[...chats, chat]
 			this.setState({chats:newChats, activeChat:reset ? chat : this.state.activeChat})
@@ -132,13 +133,13 @@ export default class ChatContainer extends Component{
 
 			socket.on(typingEvent, this.updateTypingInChat(chat.id))
 			socket.on(messageEvent, this.addMessageToChat(chat.id))
-			console.log("Current chats: " + JSON.stringify(chats))
+			// console.log("Current chats: " + JSON.stringify(chats))
 		}
 	}
 
 	addMessageToChat = (chatId)=>{
 		return message => {
-			console.log("Message Recieved adding to chat")
+			// console.log("Message Recieved adding to chat")
 			const {chats} = this.state
 			let newChats = chats.map((chat)=>{
 				if(chat.id === chatId)
@@ -173,9 +174,10 @@ export default class ChatContainer extends Component{
 
 	sendMessage = (chatId, message)=>{
 		const {socket} = this.props
-		console.log("sendMessage to socket: " + message)
+		// console.log("sendMessage to socket: " + message)
 
 		socket.emit(MESSAGE_SENT, {chatId, message})
+		socket.emit(NOTIFICATION, "You received a message", {});
 	}
 
 	sendTyping = (chatId, isTyping)=>{
@@ -191,6 +193,7 @@ export default class ChatContainer extends Component{
 		const {user} = this.props;
 
 		const {chats, activeChat, users, likedUsers} = this.state;
+		// console.log(activeChat)
 		return(
 			<div className="chat-container">
 				<SideBar
