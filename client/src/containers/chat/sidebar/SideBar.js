@@ -38,7 +38,7 @@ export default class SideBar extends Component{
 	render() {
 		const {chats, activeChat, user, setActiveChat, users} = this.props
 		const {receiver, activeSideBar} = this.state
-		console.log(users, user, chats)
+		// console.log(users, user, chats)
 		return(
 			<div id="side-bar">
 				<div className="heading">
@@ -79,17 +79,14 @@ export default class SideBar extends Component{
 						{
 							activeSideBar === SideBar.type.CHATS ?
 							chats.map((chat)=>{
-								// console.log(user)
 								if(chat.name){
-									// console.log(chat)
 									const lastMessage = chat.messages[chat.messages.length - 1];
 									const chatSideName = chat.users.find((name)=>{
-										console.log("Name and user_name")
-										console.log(name, user)
+										// console.log("Name and user_name")
+										// console.log(name, user)
 										return name !== user
 									}) || "Community"
 									const classNames = (activeChat && activeChat.id === chat.id) ? 'active' : ''
-									
 									return(
 										<SideBarOption
 											key = {chat.id}
