@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import {NOTIFICATION} from '../../Events';
 
 export default class MessageInput extends Component {
 	
@@ -19,6 +20,13 @@ export default class MessageInput extends Component {
 
 	sendMessage = ()=>{
 		this.props.sendMessage(this.state.message)
+		let receiver = this.props.receiver;
+		if (receiver){
+			console.log("IM GOING TO SEND A MESSAGE", receiver)
+			receiver.user_name = receiver.name;
+			this.props.socket.emit(NOTIFICATION, "You have been sent a message", receiver);
+		}
+		
 	}
 
 	componentWillUnmount() {
