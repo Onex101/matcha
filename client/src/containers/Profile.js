@@ -8,7 +8,6 @@ import temp from './imgs/profile-placeholder.png';
 import female from './imgs/female_logo/favicon-32x32.png';
 import male from './imgs/male_logo/favicon-32x32.png';
 import {NOTIFICATION} from "../Events";
-import { Socket } from "net";
 
 function _calculateAge(birth_date) { // birthday is a date
     var birthday = new Date(birth_date);
@@ -248,7 +247,7 @@ export default class Profile extends Component {
         console.log("Nay")
       }
 
-      report(e){
+      report(){
 
       }
 
@@ -380,7 +379,7 @@ export default class Profile extends Component {
                 <div className="choices">
                     <img src={x} alt="Dislike" className="dislike" onClick={(e) => this.dislike(e)}/>
                     <img src={heart} alt="Like" className="like" onClick={(e) => this.like(e)} />
-                    <img src={report} alt="Report" className="report" onClick={(e) => this.report(e)} />
+                    <img src={report} alt="Report" className="report" onClick={(e) => this.report()} />
                 </div>
                 : null}
             {/* {this.mainPanel(this.props.props)} */}
