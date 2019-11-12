@@ -121,7 +121,7 @@ export default class Chat extends Component {
 	render(){
 		// console.log("PROPS and or localStorage")
 		// console.info(this.props)
-		// console.info(localStorage)
+		console.info(this.props)
 		const {socket, user} = this.state
 		console.log("Does user exist: ")
 		console.log(this.state)
