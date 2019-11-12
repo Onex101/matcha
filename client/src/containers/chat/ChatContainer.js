@@ -14,7 +14,8 @@ export default class ChatContainer extends Component{
 			chats:[],
 			users:[],
 			likedUsers: [],
-			activeChat:null
+			activeChat:null,
+			receiver: null
 		}
 	}
 
@@ -73,18 +74,18 @@ export default class ChatContainer extends Component{
 			.then(response => response.json())
 			.then((responseJSON) => {
 				// console.log("JSON match test = " + JSON.stringify(responseJSON));
-				console.log('Getting liked people')
-				console.log(responseJSON)
+				// console.log('Getting liked people')
+				// console.log(responseJSON)
 				responseJSON.forEach(element => {
 					for (var user in users){
-						console.log(element.id, parseInt(users[user].id))
+						// console.log(element.id, parseInt(users[user].id))
 						if (element.id == parseInt(users[user].id))
 							newList[users[user].name] = users[user]
 					}
 				});
 				
 				this.setState({ likedUsers: values(newList) });
-				console.log(newList)
+				// console.log(newList)
 				// console.log("APP Matches = " + JSON.stringify(this.state.userMatches));
 			})
 			.catch(err => console.error(err))
@@ -96,8 +97,9 @@ export default class ChatContainer extends Component{
 	sendOpenPrivateMessage = (receiver) => {
 		const {socket, user} = this.props
 		const {activeChat} = this.state
+		this.setState({receiver: receiver})
 		console.log("sending private message")
-		console.log(receiver, user)
+		// console.log(receiver, user)
 		socket.emit(PRIVATE_MESSAGE, {receiver, sender: user, activeChat})
 		socket.emit(NOTIFICATION, receiver.name + " has started a chat with you", receiver)
 	}
@@ -177,7 +179,6 @@ export default class ChatContainer extends Component{
 		// console.log("sendMessage to socket: " + message)
 
 		socket.emit(MESSAGE_SENT, {chatId, message})
-		socket.emit(NOTIFICATION, "You received a message", {});
 	}
 
 	sendTyping = (chatId, isTyping)=>{
@@ -216,6 +217,8 @@ export default class ChatContainer extends Component{
 							<MessageInput
 								sendMessage={(message)=>{this.sendMessage(activeChat.id, message)}}
 								sendTyping={(isTyping)=>{this.sendTyping(activeChat.id, isTyping)}}
+								receiver={this.state.receiver}
+								socket={this.props.socket}
 							/>
 						</div>
 					) :
