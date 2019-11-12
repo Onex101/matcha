@@ -140,8 +140,15 @@ class App extends Component {
     })
     socket.on(NOTIFICATION, (notification)=>{
       console.log('NOTIFICATION CAUGHT')
-      this.state.notifications.push(notification)
+      let newNoti = {
+        id: this.state.notifications[(this.state.notifications.length - 1)].id + 1,
+        user_id: -1,
+        noti: notification,
+        viewed_status: 0,
+      }
+      this.setState({notifications: [...this.state.notifications, newNoti]})
       console.log(this.state.notifications)
+      
     })
 		this.setState({socket: socket})
 		socket.emit(VERIFY_USER, id, name, this.verifyUser)
