@@ -84,10 +84,10 @@ export default class Login extends Component {
             block
             bsSize="large"
             disabled={!this.validateForm()}
-            type="submit"
-          >
+            type="submit">
             Login
           </Button>
+          <br/><a href="#" id="forgot">Forgot Password?</a>
         </form>
       </div>
     );
