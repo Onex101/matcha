@@ -55,14 +55,6 @@ class App extends Component {
     //Make server call to get number of notifications
   }
 
-  // showNotifications() {
-  //   this.state.notifications.map((val)=>{
-  //     console.log("NOTIFICATION PRINTING")
-  //     return <NavDropdown.Item key={val.id}>val.noti</NavDropdown.Item>
-  //   }) 
-  //   // Make server call to show a list of the user's notifications
-  // }
-
   showNotifications () {
     console.log("Notifications")
     console.log(this.state.notifications)

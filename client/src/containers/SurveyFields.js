@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { ButtonGroup, ButtonToolbar, Button, FormGroup, FormControl, ControlLabel } from "react-bootstrap";
-// require('../mail.js')
 import female from './imgs/female_logo/favicon-32x32.png';
 import male from './imgs/male_logo/favicon-32x32.png';
 import "./SurveyFields.css";
