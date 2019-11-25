@@ -59,6 +59,11 @@ export default class Login extends Component {
       }
   }
 
+  forgotPassword = async event => {
+    event.preventDefault();
+    this.props.history.push("/forgot");
+  }
+
   render() {
     return (
       <div className="Login">
@@ -84,10 +89,10 @@ export default class Login extends Component {
             block
             bsSize="large"
             disabled={!this.validateForm()}
-            type="submit"
-          >
+            type="submit">
             Login
           </Button>
+          <br/><a onClick={this.forgotPassword} id="forgot">Forgot Password?</a>
         </form>
       </div>
     );
