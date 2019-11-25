@@ -128,5 +128,5 @@ export default class Likes extends Component {
           </div>
           : <ControlLabel> Loading ... </ControlLabel>
         )
-      }
+    }
 }
