@@ -52,7 +52,8 @@ export default class Profile extends Component {
             fame: this.props.userInfo.fame,
              });
         var tags = this.props.userInfo.interests
-        if (tags !== null && tags !== "null")
+        console.log(tags)
+        if (tags != null && tags != "null")
             tags = tags.split(",")
         else
              tags = null
@@ -301,6 +302,7 @@ export default class Profile extends Component {
         // console.log("STATE INFO: " +JSON.stringify(this.state.tags))
         var width=150
         var height=150
+        console.log(this.props.userInfo);
         return (
             this.state.id  && this.state.pictures[0] ?
             // this.props.userInfo && this.props.userInfo.id && this.state.id && this.state.pictures[0] ?
@@ -333,7 +335,7 @@ export default class Profile extends Component {
                             : <h3>Firstname Surname | Age</h3>}
                         <br />
                         {info.id != localStorage.getItem('id') ?
-                            <h3>{info.dist_compare} from you.</h3>
+                            <h3>{this.props.userInfo.last_name} from you.</h3>
                             : null}
                         <br/>
                         <h3>Gender</h3>
