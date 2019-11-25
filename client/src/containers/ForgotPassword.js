@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import { TextField, inputStyle, SubmitButton, forgotButton} from "react-bootstrap";
+
 
 class ForgotPassword extends Component {
 	constructor() {

@@ -4,7 +4,7 @@ import Home from "./containers/Home";
 import NotFound from "./containers/NotFound";
 import Login from "./containers/Login";
 import Signup from "./containers/Signup";
-import ForgotPasswordEmail from "./containers/ForgotPasswordEmail";
+import ForgotPassword from "./containers/ForgotPassword";
 // import Settings from "./containers/Settings";
 // import Profile from "./containers/Profile";
 import Chat from "./containers/Chat";
@@ -27,6 +27,6 @@ export default ({ childProps }) =>
 	  <AppliedRoute path="/chat" exact component={Chat} props={childProps} />
     { /* Finally, catch all unmatched routes */ }
     <AppliedRoute path="/searchResults" exact component={SearchResults} props={childProps} />
-    <AppliedRoute path="/forgot" exact component={ForgotPasswordEmail} props={childProps} />
+    <AppliedRoute path="/forgot" exact component={ForgotPassword} props={childProps} />
     <Route component={NotFound} />
   </Switch>;
