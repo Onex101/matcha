@@ -224,6 +224,7 @@ export default class Profile extends Component {
           }
         console.log("Yay")
         // this.props.getMatches();
+        //TODO: close modal and refresh page
       }
   
       dislike(e){
@@ -245,6 +246,7 @@ export default class Profile extends Component {
             alert(e.message);
           }
         console.log("Nay")
+        // this.props.getMatches();
       }
 
       report(){

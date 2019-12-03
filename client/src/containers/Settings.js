@@ -379,12 +379,16 @@ export default class Settings extends Component {
               console.log(responseJSON);
               if (responseJSON["success"]) {
                 // Successfully sent
+                window.location.reload();
+
               }
           })
           .catch(err => console.error(err))
           } catch (e) {
             alert("Settings 2: " + e.message);
           }
+          window.location.reload();
+
     }
 
     getInterests(){

@@ -88,14 +88,14 @@ export default class Usercard extends Component {
         .then(response => response.json())
         .then((responseJSON) => {
           console.log(responseJSON)
-          // this.props.getMatches();
+          this.props.getMatches();
         })
         .catch(err => console.error(err))
         } catch (e) {
           alert(e.message);
         }
       console.log("Yay")
-      // this.props.getMatches();
+      this.props.getMatches();
     }
 
     dislike(e){
@@ -117,6 +117,7 @@ export default class Usercard extends Component {
           alert(e.message);
         }
       console.log("Nay")
+      this.props.getMatches();
     }
 
     openProfile(e){
