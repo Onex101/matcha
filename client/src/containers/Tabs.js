@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Tabs, Tab, ControlLabel} from "react-bootstrap";
 import Settings from "./Settings";
 import Profile from "./Profile";
-import Likes from "./Likes";
+import Matches from "./Matches";
 
 
 export default class ControlledTabs extends Component {
@@ -123,9 +123,9 @@ export default class ControlledTabs extends Component {
           {console.info(this.state.userInfo)}
             <Profile userInfo = {this.state.userInfo} />
           </Tab> */}
-          {validity === true ? <Tab eventKey={2} title="Likes"><Likes userInfo={this.props.userInfo} userMatches={this.props.userMatches}/></Tab>
-              :<Tab eventKey={2} title="Likes" disabled></Tab>}
-          {/* <Tab eventKey={2} title="Likes">
+          {validity === true ? <Tab eventKey={2} title="Matches"><Matches userInfo={this.props.userInfo} userMatches={this.props.userMatches}/></Tab>
+              :<Tab eventKey={2} title="Matches" disabled></Tab>}
+          {/* <Tab eventKey={2} title="Matches">
             Tab 2 content
           </Tab> */}
           {this.state.userInfo.id == localStorage.getItem("id") ?

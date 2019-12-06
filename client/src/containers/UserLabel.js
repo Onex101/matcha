@@ -1,10 +1,10 @@
 import React, { Component } from "react";
-import "./Likes.css";
+import "./Matches.css";
 import {ControlLabel } from "react-bootstrap";
 import Modal from 'react-responsive-modal';
 import ControlledTabs from "./Tabs";
 
-export default class Likes extends Component {
+export default class Matches extends Component {
     constructor(props) {
         super(props);
 
