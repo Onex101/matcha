@@ -377,11 +377,11 @@ export default class Settings extends Component {
           .then(response => response.json())
           .then((responseJSON) => {
               console.log(responseJSON);
-              if (responseJSON["success"]) {
+            //   if (responseJSON["success"]) {
                 // Successfully sent
                 window.location.reload();
 
-              }
+            //   }
           })
           .catch(err => console.error(err))
           } catch (e) {
