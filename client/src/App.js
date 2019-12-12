@@ -12,6 +12,7 @@ import notification from './containers/imgs/notification.png';
 
 import io from 'socket.io-client';
 import {USER_CONNECTED, LOGOUT, VERIFY_USER, NOTIFICATION} from './Events';
+import NotificationIcon from "./components/NotificationIcon";
 const socketUrl = "http://localhost:4000"
 
 class App extends Component {
@@ -221,12 +222,18 @@ class App extends Component {
   renderUser() {
     const session = localStorage.getItem('user');
 
+    // const notifficationProps = {
+    //   count       : this.state.notifications.length
+    // };
+    console.log("NOTIF COUNT = " + this.state.notifications.length);
+
     if (session != null){
       console.log("Getting username = " + session);
     
     return(<Navbar.Collapse><Nav pullRight>
             <Fragment>
-              <NavDropdown eventKey={3} title={<><img src={notification} className="nav-icon" id="Notification"/>{this.state.notifications.length}</>} id="basic-nav-dropdown">
+              {/* <NavDropdown eventKey={3} title={<><img src={notification} className="nav-icon" id="Notification"/>{this.state.notifications.length}</>} id="basic-nav-dropdown"> */}
+              <NavDropdown eventKey={3} title={<><img src={notification} className="nav-icon" id="Notification"/><NotificationIcon count={this.state.notifications.length} /></>} id="basic-nav-dropdown">
                 {this.showNotifications()}
               </NavDropdown>
               <LinkContainer to="/Chat">
