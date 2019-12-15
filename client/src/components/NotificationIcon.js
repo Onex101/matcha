@@ -1,4 +1,5 @@
 import React, {Component} from "react";
+import "./NotificationIcon.css";
 
 class NotificationIcon extends Component {
     constructor(props) {
@@ -37,7 +38,9 @@ class NotificationIcon extends Component {
 
         return ( 
             <div id="notification-icon">
-                {this.state.count}
+                <div id="badge">
+                    {this.state.count}
+                </div>
             </div>
          );
     }
