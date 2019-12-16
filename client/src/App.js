@@ -232,7 +232,6 @@ class App extends Component {
     
     return(<Navbar.Collapse><Nav pullRight>
             <Fragment>
-              {/* <NavDropdown eventKey={3} title={<><img src={notification} className="nav-icon" id="Notification"/>{this.state.notifications.length}</>} id="basic-nav-dropdown"> */}
               <NavDropdown eventKey={3} title={<><NotificationIcon count={this.state.notifications.length} /><img src={notification} className="nav-icon" id="Notification"/></>} id="basic-nav-dropdown">
                 {this.showNotifications()}
               </NavDropdown>
