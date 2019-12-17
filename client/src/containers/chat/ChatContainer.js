@@ -15,7 +15,8 @@ export default class ChatContainer extends Component{
 			users:[],
 			likedUsers: [],
 			activeChat:null,
-			receiver: null
+			receiver: null,
+			sidebarOpen: true
 		}
 	}
 
@@ -190,6 +191,10 @@ export default class ChatContainer extends Component{
 		this.setState({activeChat})
 	}
 
+	onSetSidebar(open) {
+		this.setState({ sidebarOpen: open });
+	}
+
 	render() {
 		const {user} = this.props;
 
@@ -204,11 +209,16 @@ export default class ChatContainer extends Component{
 					activeChat={activeChat}
 					setActiveChat={this.setActiveChat}
 					onSendPrivateMessage ={this.sendOpenPrivateMessage}
+					open={this.state.sidebarOpen}
+					onSetSidebar={this.onSetSidebar.bind(this)}
 				/>
 				<div className="chat-room-container">
 					{activeChat !== null ? (
 						<div className="chat-room">
-							<ChatHeading name={activeChat.name} />
+							<ChatHeading 
+								name={<><button onClick={() => this.onSetSidebar(!this.state.sidebarOpen)}>
+								Open sidebar
+							  </button>{activeChat.name}</>} />
 							<Messages
 								messages={activeChat.messages}
 								user={user}

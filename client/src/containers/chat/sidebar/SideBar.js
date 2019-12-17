@@ -13,8 +13,15 @@ export default class SideBar extends Component{
 
 		this.state = {
 			receiver:"",
-			activeSideBar: SideBar.type.CHATS
+			activeSideBar: SideBar.type.CHATS,
+			open: true
 		};
+		// this.props.onSetSidebar = this.props.onSetSidebar.bind(this)
+	}
+
+	componentDidUpdate() {
+		if (this.props.open !== null && this.state.open !== this.props.open)
+			this.setState({open: this.props.open})
 	}
 
 	handleSubmit = (e)=>{
@@ -34,15 +41,20 @@ export default class SideBar extends Component{
 	setActiveSideBar = (newSideBar) =>{
 		this.setState({activeSideBar:newSideBar})
 	}
+	
 
 	render() {
 		const {chats, activeChat, user, setActiveChat, users} = this.props
 		const {receiver, activeSideBar} = this.state
 		// console.log(users, user, chats)
-		return(
+		return(<div>
+			{this.state.open ? 
 			<div id="side-bar">
 				<div className="heading">
 					<div className="heading">
+					<button onClick={() => this.props.onSetSidebar(!this.state.open)}>
+								Close sidebar
+							  </button>>
 						<div className="app-name">Chat App</div>
 						<div className="menu">
 							Menu
@@ -119,6 +131,9 @@ export default class SideBar extends Component{
 						<span>{user.name}</span>
 				</div>
 			</div>
+			: <div></div>
+			}</div>
+		
 		)
 	}
 }

@@ -20,32 +20,21 @@ export default class Chat extends Component {
 	}
 
 	componentDidMount(){
-		// console.log("Did mount Props:")
-		// console.info(this.props)
 		if(!this.state.socket && this.props.socket){
-			// console.log("Test 2")
 			this.setState({socket: this.props.socket})
 		}
 		if (!this.state.user && this.props.socketUser) {
 			this.setState({user: this.props.socketUser})
-			// console.log("Did mount state:")
-			// console.info(this.state)
-			// this.initSocket();
 		}
 	}
 
 	componentWillMount(){
-		// console.log("Will mount Props:")
-		// console.info(this.props)
 		if(!this.state.socket && this.props.socket){
 			// console.log("Test 2")
 			this.setState({socket: this.props.socket})
 		}
 		if (!this.state.user && this.props.socketUser) {
 			this.setState({user: this.props.socketUser})
-			// console.log("Will mount state:")
-			// console.info(this.state)
-			// this.initSocket();
 		}
 	}
 
