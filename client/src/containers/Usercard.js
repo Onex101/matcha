@@ -17,8 +17,6 @@ export default class Usercard extends Component {
 	}
 
 	onOpenModal = (viewee_id) => {
-		console.log("OPEN modal")
-
 		this.setState({ open: true });
 		//Add to the visits
 		try {
@@ -56,8 +54,6 @@ export default class Usercard extends Component {
 	like(e){
 		e.preventDefault();
 		console.log(this.props)
-		this.setState({ open: false });
-
 		const socket = this.props.socket;
 		const message = localStorage.getItem('user') + ' has liked you';
 		socket.emit(NOTIFICATION, message, this.props.userInfo);
@@ -103,7 +99,6 @@ export default class Usercard extends Component {
 
 	dislike(e){
 	  e.preventDefault();
-	  this.setState({ open: false });
 	  try {
 		fetch('/dislike/' + localStorage.getItem('id') + '/' + this.props.userInfo.id, {
 		  method: "GET",
@@ -143,7 +138,6 @@ export default class Usercard extends Component {
 		var width=100
 		var height=100
 		const { open } = this.state;
-		console.log("MODAL STATE: " + this.state.open)
 		return (
 			<div>
 				<div className="top">
@@ -151,7 +145,11 @@ export default class Usercard extends Component {
 					<div className="username"><br/><h1 onClick={(e) => this.onOpenModal(info.userInfo.id)}>{info.userInfo.user_name}</h1></div>
 							<div>
 								<Modal open={open} onClose={this.onCloseModal} center>
-									<ControlledTabs userInfo={info.userInfo} socket={this.props.socket} getMatches={this.props.getMatches}/>
+									<ControlledTabs 
+										userInfo={info.userInfo} 
+										socket={this.props.socket} 
+										getMatches={this.props.getMatches}
+										closeModal={this.onCloseModal}/>
 								</Modal>
 							</div>
 						<hr />

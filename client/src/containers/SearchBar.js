@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import "./SearchBar.css";
-import { Link, Redirect } from "react-router-dom";
 
 export default class SearchBar extends Component {
   constructor(props) {

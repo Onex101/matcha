@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import "./Matches.css";
 import {ControlLabel } from "react-bootstrap";
-import temp from './imgs/profile-placeholder.png';
 import Modal from 'react-responsive-modal';
 import ControlledTabs from "./Tabs";
 import UserLabel from "./UserLabel";
@@ -35,13 +34,13 @@ export default class Matches extends Component {
 
     avatar(image, width, height) {
         // console.log(image)
-        var image = image,
+        var avatarImage = image,
             style = {
               width: width || 50,
               height: height || 50
             }; 
-        if (!image) return null;
-        return (<img className="avatar" style={style} src={image} />);
+        if (!avatarImage) return null;
+        return (<img className="avatar" style={style} src={avatarImage} alt=""/>);
     }
 
     componentDidMount() {      

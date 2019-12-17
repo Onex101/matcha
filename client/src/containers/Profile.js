@@ -191,17 +191,18 @@ export default class Profile extends Component {
 
     avatar(image, width, height) {
         // console.log(image)
-        var image = image,
+        var avatarImage = image,
             style = {
-              width: width || 50,
-              height: height || 50
+                width: width || 50,
+                height: height || 50
             }; 
-        if (!image) return null;
-        return (<img className="avatar" style={style} src={image} />);
+        if (!avatarImage) return null;
+        return (<img className="avatar" style={style} src={avatarImage} alt=""/>);
     }
 
     like(e){
         console.log(this.props)
+        this.props.closeModal();
         const socket = this.props.socket;
         socket.emit(NOTIFICATION, localStorage.getItem('name') + ' has liked you', this.props.userInfo.user_name);
         e.preventDefault();
@@ -229,6 +230,7 @@ export default class Profile extends Component {
   
       dislike(e){
         e.preventDefault();
+        this.props.closeModal();
         try {
           fetch('/dislike/' + localStorage.getItem('id') + '/' + this.props.userInfo.id, {
             method: "GET",
@@ -334,7 +336,7 @@ export default class Profile extends Component {
                             <h3>{this.props.userInfo.first_name} {this.props.userInfo.last_name} | {_calculateAge(this.props.userInfo.birth_date)}</h3>
                             : <h3>Firstname Surname | Age</h3>}
                         <br />
-                        {info.id != localStorage.getItem('id') ?
+                        {info.id !== localStorage.getItem('id') ?
                             <h3>{info.dist_compare} from you.</h3>
                             : null}
                         <br/>
@@ -370,14 +372,14 @@ export default class Profile extends Component {
             
             <div className="bottom">
                 <hr /><br/>
-                {info.bio != "null" ? <div><h4>Bio</h4>
+                {info.bio !== "null" ? <div><h4>Bio</h4>
                                         {info.bio}</div> : null}
                 <br /><br />
                 {info.tags !== null  ? <div><h4>Tags</h4><br/>
                                         {this.renderTags()}</div>
                                         : null}
             </div>
-            {this.props.userInfo.id != localStorage.getItem('id') ? 
+            {this.props.userInfo.id !== localStorage.getItem('id') ? 
                 <div className="choices">
                     <img src={x} alt="Dislike" className="dislike" onClick={(e) => this.dislike(e)}/>
                     <img src={heart} alt="Like" className="like" onClick={(e) => this.like(e)} />

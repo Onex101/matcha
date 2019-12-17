@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { ButtonGroup, ButtonToolbar, Button, Thumbnail} from "react-bootstrap";
+import { ButtonGroup, ButtonToolbar, Button } from "react-bootstrap";
 import "./UserList.css";
 import Usercard from "../containers/Usercard";
 import {ControlLabel } from "react-bootstrap";
@@ -20,20 +20,20 @@ class UserList extends Component {
 	}
 
 	componentDidUpdate() {
-		if (this.props.matches != null && (this.state.matches == null || Object.keys(this.state.matches).length != Object.keys(this.props.matches).length)) {
+		if (this.props.matches !== null && (this.state.matches == null || Object.keys(this.state.matches).length !== Object.keys(this.props.matches).length)) {
 			this.setState({matches: this.props.matches})
 		}
 	}
 
 	sortNewList () {
 		if (this.state.order === "age")
-		  this.ageSort();
+			this.ageSort();
 		else if (this.state.order === "location")
-		  this.locationSort();
+			this.locationSort();
 		else if (this.state.order === "tags")
-		  this.tagsSort();
+			this.tagsSort();
 		else if (this.state.order === "fame")
-		  this.fameSort();
+			this.fameSort();
 	}
 
 	resetSort = (e) => {
@@ -52,7 +52,7 @@ class UserList extends Component {
 			function(x) {return x[field]};
 		reverse = !reverse ? 1 : -1;
 		return function (a, b) {
-			return a = key(a), b = key(b), reverse * ((a > b) - (b > a));
+			return (a = key(a), b = key(b), reverse * ((a > b) - (b > a)));
 		} 
 	}
    
@@ -68,8 +68,8 @@ class UserList extends Component {
 				var keys = Object.keys(ageSort[i]);
 				var values = Object.values(ageSort[i]);
 				var temp = [];
-				for(var i in keys){
-					temp[keys[i]] = values[i];
+				for(var j in keys){
+					temp[keys[j]] = values[j];
 				}
 				result.push(temp);
 			}
@@ -97,8 +97,8 @@ class UserList extends Component {
 				var keys = Object.keys(gpsSort[i]);
 				var values = Object.values(gpsSort[i]);
 				var temp = [];
-				for(var i in keys){
-					temp[keys[i]] = values[i];
+				for(var j in keys){
+					temp[keys[j]] = values[j];
 				}
 				result.push(temp);
 			}
@@ -122,8 +122,8 @@ class UserList extends Component {
 				var keys = Object.keys(gpsSort[i]);
 				var values = Object.values(gpsSort[i]);
 				var temp = [];
-				for(var i in keys){
-					temp[keys[i]] = values[i];
+				for(var j in keys){
+					temp[keys[j]] = values[j];
 				}
 				result.push(temp);
 			}
@@ -147,8 +147,8 @@ class UserList extends Component {
 				var keys = Object.keys(gpsSort[i]);
 				var values = Object.values(gpsSort[i]);
 				var temp = [];
-				for(var i in keys){
-					temp[keys[i]] = values[i];
+				for(var j in keys){
+					temp[keys[j]] = values[j];
 				}
 				result.push(temp);
 			}

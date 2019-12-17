@@ -269,7 +269,6 @@ export default class Settings extends Component {
         }
     }
     
-
     // Handle Addition of Tag to user profile    
     handleAddition (tag) {
         const tags = this.state.tags;
@@ -361,7 +360,7 @@ export default class Settings extends Component {
         // event.preventDefault();
   
         try {
-          const user = this.state;
+        //   const user = this.state;
           fetch(`/user/update`, {
             method: "POST",
             headers: {
@@ -475,7 +474,7 @@ export default class Settings extends Component {
         if (this.state.id)
             user_id = this.state.id;
         for (var i = 0; i < pics.length; i++) { 
-            if (i == 0 && pics[i].id === null && pics[i].pic) {
+            if (i === 0 && pics[i].id === null && pics[i].pic) {
                 //profile pic new
                 console.log("HERE");
                 fetch(`/image/ProfilePic/new`, {
@@ -490,7 +489,7 @@ export default class Settings extends Component {
                   })
                   .catch(err => console.error(err))
             }
-            else if (i != 0 && pics[i].id === null && pics[i].pic) {
+            else if (i !== 0 && pics[i].id === null && pics[i].pic) {
                 console.log("Making new image");
                 //Send new image and user id
                 fetch(`/image/create`, {
@@ -641,7 +640,6 @@ export default class Settings extends Component {
                             min="0" max="1" step="0.01" 
                             defaultValue={ this.state.gender } 
                             onChange={this.handleChange} 
-                            onChange={({target}) => this.setState({gender: target.value})}
                             />
                             <img src={male} alt="Male" />
                         </div>
@@ -657,7 +655,6 @@ export default class Settings extends Component {
                             min="0" max="1" step="0.01"
                             defaultValue={this.state.pref} 
                             onChange={this.handleChange} 
-                            onChange={({target}) => this.setState({pref: target.value})}
                             />
                             <img src={male} alt="Male" />
                         </div>

@@ -29,13 +29,13 @@ export default class SearchResults extends Component {
     };
 
     avatar(image, width, height) {
-        var image = image,
+        var avatarImage = image,
             style = {
               width: width || 50,
               height: height || 50
             }; 
-        if (!image) return null;
-        return (<img className="avatar" style={style} src={image} />);
+        if (!avatarImage) return null;
+        return (<img className="avatar" style={style} src={avatarImage} alt="" />);
     }
 
     componentDidMount() { 

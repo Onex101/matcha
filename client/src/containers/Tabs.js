@@ -51,14 +51,13 @@ export default class ControlledTabs extends Component {
 		  // console.log("WU Props userinfo exists")
 		  this.setState({userInfo: this.props.userInfo})
 		} else if (this.props.userInfo && this.props.userInfo.data && this.props.userInfo.data.id){
-		  // console.log("WU Props data userinfo exists")
 		  this.setState({userInfo: this.props.userInfo.data})
 		} else {
 		  // console.log("WU Props is empty")
 		}
 	  }
 	  if (this.state.key === null && this.state.userInfo && this.state.userInfo.id) {
-		if (this.state.userInfo.id == localStorage.getItem("id") && !this.state.userInfo.profile_pic_id){
+		if (this.state.userInfo.id === localStorage.getItem("id") && !this.state.userInfo.profile_pic_id){
 			this.setState({key: 3});
 		} else {
 		  this.setState({key: 1});
@@ -88,28 +87,16 @@ export default class ControlledTabs extends Component {
 			<Profile 
 				userInfo = {this.state.userInfo}
 				socket = {this.props.socket}
-				getMatches={this.props.getMatches} />
+				getMatches={this.props.getMatches} 
+				closeModal={this.props.closeModal}/>
 		  </Tab>
 		  : <Tab eventKey={1} title="Profile" disabled ></Tab>}
-		  
-		  {/* <Tab eventKey={1} title="Profile">
-		  {console.log("In tabs test:")}
-		  {console.info(this.state.userInfo)}
-			<Profile userInfo = {this.state.userInfo} />
-		  </Tab> */}
 		  {validity === true ? <Tab eventKey={2} title="Matches"><Matches userInfo={this.props.userInfo} userMatches={this.props.userMatches}/></Tab>
 			  :<Tab eventKey={2} title="Matches" disabled></Tab>}
-		  {/* <Tab eventKey={2} title="Matches">
-			Tab 2 content
-		  </Tab> */}
 		  {this.state.userInfo.id == localStorage.getItem("id") ?
 			<Tab eventKey={3} title="Settings">
 				<Settings 
-				// isAuthenticated = {this.props.isAuthenticated}
-				// userHasAuthenticated  = {this.props.userHasAuthenticated}
 				userInfo = {this.props.userInfo}
-				// userProfile = {this.props.userProfile}
-				// userMatches = {this.props.userMatches}
 				setUser = {this.props.setUser} 
 				/>
 			</Tab> 

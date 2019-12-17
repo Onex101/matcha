@@ -14,7 +14,7 @@ class NotificationIcon extends Component {
         //     console.log("COUNT 1")
         //     console.log(this.props.count)
         // }
-        if (this.state.count != this.props.count) {
+        if (this.state.count !== this.props.count) {
             this.setState({count: this.props.count})
             console.log("COUNT")
             console.log(this.state.count)
