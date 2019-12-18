@@ -51,7 +51,7 @@ export default class Matches extends Component {
                                     closeModal={this.onCloseModal}
                                     showLike={false}
                                     />
-                             :<ControlledTabs 
+                             : <ControlledTabs 
                                     userInfo={user} 
                                     socket={this.props.socket} 
                                     closeModal={this.onCloseModal}
