@@ -33,6 +33,10 @@ export default class Matches extends Component {
         if (!avatarImage) return null;
         return (<img className="avatar" style={style} src={avatarImage} alt =""/>);
     }
+     
+    onCloseModal = () => {
+		this.setState({ open: false });
+    }
 
     renderUsername(user) {
         const { open } = this.state;
@@ -41,12 +45,23 @@ export default class Matches extends Component {
                             : <div className="username"><p onClick={this.onOpenModal}>{user.data.user_name}</p></div>}
             <div>
                 <Modal open={open} onClose={this.onCloseModal} center>
-                    {user.data ? <ControlledTabs userInfo={user.data} /> :<ControlledTabs userInfo={user} />}
+                    {user.data ? <ControlledTabs 
+                                    userInfo={user.data}
+                                    socket={this.props.socket} 
+                                    closeModal={this.onCloseModal}
+                                    showLike={false}
+                                    />
+                             :<ControlledTabs 
+                                    userInfo={user} 
+                                    socket={this.props.socket} 
+                                    closeModal={this.onCloseModal}
+                                    showLike={false}
+                                    />}
                 </Modal>
             </div></div>
         )
     }
-
+    
     render() {    
         const user = this.props.user
         if (user && user.pic && (user.user_name || (user.data && user.data.user_name))) {

@@ -55,7 +55,24 @@ class App extends Component {
   }
 
   removeNotification (id) {
-	console.log("Removing notification: " + this.state.notifications[id].noti)
+	console.log("Removing notification : " + this.state.notifications[id].noti)
+	try {
+		fetch('/notification/'+this.state.notifications[id].id+'/read', {
+		  method: "GET",
+		  headers: {
+		  "Content-Type": "application/json; charset=utf-8",
+		  }
+		})
+		.then(response => response.json())
+		.then((responseJSON) => {
+		  console.log(responseJSON)
+		})
+		.catch(err => console.error(err))
+		}
+	  catch (e) {
+		alert(e.message);
+	  }
+	  this.getNotifications();
   }
 
   showNotifications () {
@@ -63,7 +80,8 @@ class App extends Component {
 	console.log(this.state.notifications)
 	  var rows = [];
 	  for (var elem in this.state.notifications) {
-		  rows.push(<MenuItem key={this.state.notifications[elem].id} onClick={this.removeNotification(elem)}>{this.state.notifications[elem].noti}</MenuItem>);
+		  if (this.state.notifications[elem].viewed_status == 0)
+		  	rows.push(<MenuItem key={this.state.notifications[elem].id} onClick={() => this.removeNotification(elem)}>{this.state.notifications[elem].noti}</MenuItem>);
 	  }
 	  return <div>{rows}</div>;
 	// }
@@ -110,11 +128,6 @@ class App extends Component {
 	this.getMatches();
 
 	//Socket test
-  }
-
-  componentWillMount(){
-	
-	
   }
 
   //Socket test
@@ -168,10 +181,7 @@ class App extends Component {
 	  })
 	  .then(response => response.json())
 	  .then((responseJSON) => {
-		// console.log("JSON match test = ");
-		// console.info(responseJSON);
 		this.setState({ userMatches: responseJSON });
-		// console.log("APP Matches = " + JSON.stringify(this.state.userMatches));
 	  })
 	  .catch(err => console.error(err))
 	  } catch (e) {

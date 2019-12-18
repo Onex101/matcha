@@ -10,10 +10,6 @@ class NotificationIcon extends Component {
     }
 
     componentDidUpdate() {
-        // if (this.props.count != null) {
-        //     console.log("COUNT 1")
-        //     console.log(this.props.count)
-        // }
         if (this.state.count !== this.props.count) {
             this.setState({count: this.props.count})
             console.log("COUNT")
@@ -29,14 +25,11 @@ class NotificationIcon extends Component {
         }
     }
     render() { 
-        // this.setState({count: this.props.count})
-        // if (this.state.count <= 0) {
-        // if (this.state.count == null) {
-        //     return (<div></div>)
-        // }
-        // console.log("ICON COUNT : " + this.props.count)
+        if (this.state.count == null || this.state.count == 0) {
+            return (<div></div>)
+        }
 
-        return ( 
+        return (
             <div id="notification-icon">
                 <div id="badge">
                     {this.state.count}

@@ -35,7 +35,8 @@ export default class Profile extends Component {
             tags: null,
             visits: [],
             dist_compare:  null,
-            userDetails: null
+            userDetails: null,
+            showLike: null
         }
     }
 
@@ -52,7 +53,7 @@ export default class Profile extends Component {
             fame: this.props.userInfo.fame,
              });
         var tags = this.props.userInfo.interests
-        if (tags !== null && tags !== "null")
+        if (tags != null && tags != "null")
             tags = tags.split(",")
         else
              tags = null
@@ -273,6 +274,10 @@ export default class Profile extends Component {
             console.log("DETAILS TEST 1")
             this.getUserDetails()
         }
+        if (this.props.showLike != null && this.props.showLike == false) {
+            this.setState({showLike: this.props.showLike})
+            console.log("NO LIKE BUTTON");
+        }
     }
 
     componentDidUpdate() {
@@ -294,6 +299,10 @@ export default class Profile extends Component {
             //Make server call to get all information for the profile
             // Fame, Visits, Name, Surname, Distance, Age
             this.getUserDetails()
+        }
+        if (this.props.showLike != null && this.props.showLike == false && this.state.showLike == null) {
+            this.setState({showLike: this.props.showLike})
+            console.log("NO LIKE BUTTON")
         }
     }
 
@@ -382,7 +391,8 @@ export default class Profile extends Component {
             {this.props.userInfo.id !== localStorage.getItem('id') ? 
                 <div className="choices">
                     <img src={x} alt="Dislike" className="dislike" onClick={(e) => this.dislike(e)}/>
-                    <img src={heart} alt="Like" className="like" onClick={(e) => this.like(e)} />
+                    {this.state.showLike != null && this.state.showLike == false ? <div style={{}} ></div>
+                    : <img src={heart} alt="Like" className="like" onClick={(e) => this.like(e)} />}
                     <img src={report} alt="Report" className="report" onClick={(e) => this.report()} />
                 </div>
                 : null}

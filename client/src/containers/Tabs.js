@@ -88,7 +88,8 @@ export default class ControlledTabs extends Component {
 				userInfo = {this.state.userInfo}
 				socket = {this.props.socket}
 				getMatches={this.props.getMatches} 
-				closeModal={this.props.closeModal}/>
+				closeModal={this.props.closeModal}
+				showLike = {this.props.showLike}/>
 		  </Tab>
 		  : <Tab eventKey={1} title="Profile" disabled ></Tab>}
 		  {validity === true ? <Tab eventKey={2} title="Matches"><Matches userInfo={this.props.userInfo} userMatches={this.props.userMatches}/></Tab>

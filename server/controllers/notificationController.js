@@ -3,9 +3,10 @@ const Notification = require('../models/notificationModel');
 exports.notification_set_post = function(req, res) {
 	let noti = new Notification(req.body);
 }
+
 exports.notification_read_get = function(req, res) {
 	let noti = new Notification({});
-	noti.notification_read_get( req.params.id, function(err, results){
+	noti.setRead( req.params.id, function(err, results){
 		if (err){
 			console.log(err)
 			res.send(err);
