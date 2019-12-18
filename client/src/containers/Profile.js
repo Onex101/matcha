@@ -388,10 +388,10 @@ export default class Profile extends Component {
                                         {this.renderTags()}</div>
                                         : null}
             </div>
-            {this.props.userInfo.id !== localStorage.getItem('id') ? 
+            {this.props.userInfo.id != localStorage.getItem('id') ? 
                 <div className="choices">
                     <img src={x} alt="Dislike" className="dislike" onClick={(e) => this.dislike(e)}/>
-                    {this.state.showLike != null && this.state.showLike == false ? <div style={{}} ></div>
+                    {this.state.showLike != null && this.state.showLike == false ? null
                     : <img src={heart} alt="Like" className="like" onClick={(e) => this.like(e)} />}
                     <img src={report} alt="Report" className="report" onClick={(e) => this.report()} />
                 </div>
