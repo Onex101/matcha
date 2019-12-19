@@ -156,7 +156,7 @@ class UserList extends Component {
 				result.push(temp);
 			}
 			//TODO: change this to Fame search
-			result.sort(this.sort_fame_by(false, false));
+			result.sort(this.sort_fame_by(false, true));
 			this.setState({order: "fame"})
 			this.setState({matches: result});
 			}
