@@ -182,11 +182,14 @@ class App extends Component {
 	  .then(response => response.json())
 	  .then((responseJSON) => {
 		this.setState({ userMatches: responseJSON });
+		console.log("USERMATCHES")
+	  console.info(this.state.userMatches)
 	  })
 	  .catch(err => console.error(err))
 	  } catch (e) {
 		alert(e.message);
 	  }
+	  
   }
   
   userHasAuthenticated = authenticated => {

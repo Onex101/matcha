@@ -241,7 +241,8 @@ exports.user_match_get = function(req, res) {
         if (err)
             res.send(err);
         else{
-            row = result[0];
+			row = result[0];
+			console.log(row)
             if (row){
                 user.data = {
                     id: row.id,
@@ -278,8 +279,8 @@ exports.user_match_get = function(req, res) {
                                 let new_data = results[i]
                                 if(matchC > 4){ //4 is an arb number to exclude any matches that fall too far because of gender/pref differential
 									new_user = new User(new_data);
-									new_user.data.gps_lat = 0;
-									new_user.data.gps_lon = 0;
+									new_user.data.gps_lat = results[i].gps_lat;
+									new_user.data.gps_lon =  results[i].gps_lon;
                                     new_user.match = matchC;
                                     new_user.like = like  * 100;
                                     new_user.dist_raw = dist_raw;
@@ -296,7 +297,9 @@ exports.user_match_get = function(req, res) {
                             obj = {};
                             for (var key in array) {
                                 obj[key] = array[key]
-                            }
+							}
+							// console.log("RESULTS")
+							// console.log(obj)
                             res.json(obj);
                         }
                     })

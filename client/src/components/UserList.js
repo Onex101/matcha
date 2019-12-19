@@ -192,6 +192,8 @@ class UserList extends Component {
 	getUserCards() {
 		if (this.state.matches !== null) {
 		  var rows = [];
+		  console.log("MATCHES")
+		  console.info(this.state.matches)
 		  for (var elem in this.state.matches) {
 			  rows.push(<Usercard  
 						userInfo = {this.state.matches[elem].data}

@@ -42,6 +42,8 @@ export default class Profile extends Component {
 
     // Gets user info
     getInfo(){
+        console.log("userINFO")
+        console.info(this.props)
         this.setState({id: this.props.userInfo.id,
             user_name: this.props.userInfo.user_name,
             gender: this.props.userInfo.gender,
