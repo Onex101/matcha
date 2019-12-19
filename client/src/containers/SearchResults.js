@@ -93,7 +93,9 @@ export default class SearchResults extends Component {
 
         for (var elem = 0; results[elem]; elem++) {
             if (results[elem] && results[elem].pic && results[elem].user_name) {
-                resultUsers.push(<UserLabel user={results[elem]} key={elem}/>)
+                resultUsers.push(<UserLabel user={results[elem]}
+                   socket={this.props.socket}
+                   key={elem}/>)
             }
         }
         return resultUsers;

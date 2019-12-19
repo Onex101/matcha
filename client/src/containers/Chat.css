@@ -44,7 +44,7 @@
         width:100%
     }#side-bar{
         box-sizing:border-box;
-        width:33.75%;
+        /* width:33.75%; */
         height:100%;
         display:flex;
         justify-content:space-around;

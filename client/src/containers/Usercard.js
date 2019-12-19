@@ -34,6 +34,29 @@ export default class Usercard extends Component {
 			} catch (e) {
 			alert(e.message);
 			}
+		//Send Notification
+		const socket = this.props.socket;
+		const message = localStorage.getItem('user') + ' visited your profile';
+		socket.emit(NOTIFICATION, message, this.props.userInfo);
+		try {
+			fetch('/notification/send', {
+				method: "POST",
+				headers: {
+				"Content-Type": "application/json; charset=utf-8",
+				},
+				body: JSON.stringify({
+					id: this.props.userInfo.id,
+					message: message,
+				})
+			})
+			.then(response => response.json())
+			.then((responseJSON) => {
+				console.log(responseJSON)
+			})
+			.catch(err => console.error(err))
+		} catch (e) {
+			alert(e.message);
+		}
 		// this.props.userInfo.id
 	}
 

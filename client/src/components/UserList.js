@@ -26,13 +26,13 @@ class UserList extends Component {
 	}
 
 	sortNewList () {
-		if (this.state.order === "age")
+		if (this.state.order == "age")
 			this.ageSort();
-		else if (this.state.order === "location")
+		else if (this.state.order == "location")
 			this.locationSort();
-		else if (this.state.order === "tags")
+		else if (this.state.order == "tags")
 			this.tagsSort();
-		else if (this.state.order === "fame")
+		else if (this.state.order == "fame")
 			this.fameSort();
 	}
 

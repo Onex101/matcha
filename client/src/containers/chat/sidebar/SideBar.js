@@ -52,9 +52,7 @@ export default class SideBar extends Component{
 			<div id="side-bar">
 				<div className="heading">
 					<div className="heading">
-					<button onClick={() => this.props.onSetSidebar(!this.state.open)}>
-								Close sidebar
-							  </button>>
+					<button onClick={() => this.props.onSetSidebar(!this.state.open)}>x</button>
 						<div className="app-name">Chat App</div>
 						<div className="menu">
 							Menu
