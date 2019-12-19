@@ -60,8 +60,6 @@ class UserList extends Component {
 		e.preventDefault()
 		try {
 			var ageSort = this.state.matches;
-			console.log("AGE SORT:")
-			console.info(ageSort)
 			if (ageSort) {
 			var result = [];
 			for(var i in ageSort){
@@ -73,11 +71,7 @@ class UserList extends Component {
 				}
 				result.push(temp);
 			}
-			console.log("AGE RESULT:")
-			console.info(result)
 			result.sort(this.sort_by('birth_date_diff', false, false));
-			console.log("AGESORT FINAL = ");
-			console.info(result)
 			this.setState({order: "age"})
 			this.setState({matches: result});
 			}
@@ -127,7 +121,7 @@ class UserList extends Component {
 				}
 				result.push(temp);
 			}
-			result.sort(this.sort_by('dist_raw', false, false));
+			result.sort(this.sort_by('tagMatch', true, false));
 			this.setState({order: "tags"})
 			this.setState({matches: result});
 			}
@@ -144,13 +138,10 @@ class UserList extends Component {
 			if (fameSort) {
 			var result = [];
 			for(var i in fameSort){
-				console.log("FAMESORT")
-				console.info(fameSort)
 				var keys = Object.keys(fameSort[i]);
 				var values = Object.values(fameSort[i]);
 				var temp = [];
 				for(var j in keys){
-					console.log("key: " + keys[j] + "  value: " + values[j])
 					temp[keys[j]] = values[j];
 				}
 				result.push(temp);
@@ -201,8 +192,6 @@ class UserList extends Component {
 	getUserCards() {
 		if (this.state.matches !== null) {
 		  var rows = [];
-		  console.log("MATCHES")
-		  console.info(this.state.matches)
 		  for (var elem in this.state.matches) {
 			  rows.push(<Usercard  
 						userInfo = {this.state.matches[elem].data}
