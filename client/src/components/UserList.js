@@ -140,26 +140,38 @@ class UserList extends Component {
 		e.preventDefault()
 		try {
 			// Make obj into array to sort
-			var gpsSort = this.state.matches;
-			if (gpsSort) {
+			var fameSort = this.state.matches;
+			if (fameSort) {
 			var result = [];
-			for(var i in gpsSort){
-				var keys = Object.keys(gpsSort[i]);
-				var values = Object.values(gpsSort[i]);
+			for(var i in fameSort){
+				console.log("FAMESORT")
+				console.info(fameSort)
+				var keys = Object.keys(fameSort[i]);
+				var values = Object.values(fameSort[i]);
 				var temp = [];
 				for(var j in keys){
+					console.log("key: " + keys[j] + "  value: " + values[j])
 					temp[keys[j]] = values[j];
 				}
 				result.push(temp);
 			}
 			//TODO: change this to Fame search
-			result.sort(this.sort_by('dist_raw', false, false));
+			result.sort(this.sort_fame_by(false, false));
 			this.setState({order: "fame"})
 			this.setState({matches: result});
 			}
 		}  catch (e) {
 			alert(e.message);
 		}
+	}
+	sort_fame_by(field, reverse, primer) {
+		var key = primer ? 
+			function(x) {return primer(x["data"]["fame"])} : 
+			function(x) {return x["data"]["fame"]};
+		reverse = !reverse ? 1 : -1;
+		return function (a, b) {
+			return (a = key(a), b = key(b), reverse * ((a > b) - (b > a)));
+		} 
 	}
 
 	buttonsRender() {
@@ -189,6 +201,8 @@ class UserList extends Component {
 	getUserCards() {
 		if (this.state.matches !== null) {
 		  var rows = [];
+		  console.log("MATCHES")
+		  console.info(this.state.matches)
 		  for (var elem in this.state.matches) {
 			  rows.push(<Usercard  
 						userInfo = {this.state.matches[elem].data}
