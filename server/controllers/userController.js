@@ -84,7 +84,8 @@ exports.user_create_get = function(req, res) {
 
 exports.check_email = function(req,res){
 	let user = new User('');
-	user.checkEmail(req.body.data['email'], function(err,results){
+	console.log(req.body)
+	user.checkEmail(req.body['email'], function(err,results){
 		if (err){
 			res.send(err)
 		}
@@ -92,7 +93,7 @@ exports.check_email = function(req,res){
 			if (results.length){
 				user_name = results[0].user_name;
 				veri_code = results[0].veri_code;
-				mail.sendPasswordReset(user_name, veri_code, req.body.data['email'])
+				mail.sendPasswordReset(user_name, veri_code, req.body['email'])
 				res.send({error: null})
 			}
 			else{

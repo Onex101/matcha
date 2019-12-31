@@ -23,11 +23,12 @@ export default class ForgotPasswordEmail extends Component {
     }
 
     validateEmail(mail) {
-        if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(mail)) {
+        // if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(mail)) {
+            console.log(mail)
             return (true)
-        }
-        alert("You have entered an invalid email address!")
-        return (false)
+        // }
+        // alert("You have entered an invalid email address!")
+        // return (false)
     }
 
     handleSubmit = async event => {
@@ -35,44 +36,39 @@ export default class ForgotPasswordEmail extends Component {
         if (this.validateEmail(this.state.email)) {
             //   Verify and Send password reset email
 
-            // 1 checck if email is in the database
-            // 2 if so, send verification email
-
-            // try {
-            //   const user = this.state;
-            //   fetch(`/login`, {
-            //     method: "POST",
-            //     headers: {
-            //         "Content-Type": "application/json; charset=utf-8",
-            //     },
-            //     body: JSON.stringify({
-            //       user_name:  user.user_name,
-            //       password:   user.password,
-            //     })
-            //   })
-            //   .then(response => response.json())
-            //   .then((responseJSON) => {
-            //       console.log(responseJSON);
-            //       if (responseJSON["success"]) {
-            //         if (responseJSON["success"] === "login sucessfull") {
-            //           this.props.userHasAuthenticated(true);
-            //           this.props.setUser(responseJSON["user"]);
-            //           this.props.history.push("/");
-            //         } else if (responseJSON["success"] === "Username and password does not match"){
-            //           alert(responseJSON["success"]);
-            //         } else if (responseJSON["success"] === "Username does not exist"){
-            //           alert(responseJSON["success"]);}
-            //       }
-            //       else
-            //       alert("Something went wrong :(");
-            //   })
-            //   .catch(err => console.error(err))
-            //   } catch (e) {
-            //     alert(e.message);
-            //   }
+            //Tutorial: https://itnext.io/password-reset-emails-in-your-react-app-made-easy-with-nodemailer-bb27968310d7
+            try {
+                const data = this.state;
+                fetch(`/email/check`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json; charset=utf-8",
+                    },
+                    body: JSON.stringify({
+                        email: data.email
+                    })
+                })
+                    .then(response => response.json())
+                    .then((responseJSON) => {
+                        console.log(responseJSON);
+                        if (responseJSON["error"] === null) {
+                            // if (responseJSON["success"] === "login sucessfull") {
+                                this.setState({emailSent: true});
+                            // } else if (responseJSON["success"] === "Invalid email") {
+                            //     alert(responseJSON["success"]);
+                            // } else {
+                            //     alert(responseJSON["success"]);
+                            // }
+                        }
+                        else
+                            alert("Something went wrong :(\n" + responseJSON["error"]);
+                    })
+                    .catch(err => console.error(err))
+            } catch (e) {
+                alert(e.message);
+            }
             this.setState({ emailSent: true });
         }
-       
     }
 
     render() {

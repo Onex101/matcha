@@ -4,7 +4,7 @@ import Home from "./containers/Home";
 import NotFound from "./containers/NotFound";
 import Login from "./containers/Login";
 import Signup from "./containers/Signup";
-import ForgotPassword from "./containers/ForgotPassword";
+import ForgotPassword from "./containers/ForgotPasswordEmail";
 // import Settings from "./containers/Settings";
 // import Profile from "./containers/Profile";
 import Chat from "./containers/Chat";
