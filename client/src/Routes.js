@@ -11,6 +11,7 @@ import Chat from "./containers/Chat";
 import ControlledTabs from "./containers/Tabs";
 import SearchResults from "./containers/SearchResults";
 import AppliedRoute from "./components/AppliedRoute";
+import ResetPassword from "./containers/ResetPassword";
 
 // Switch rebders the first matching route that is defined within it
 export default ({ childProps }) =>
@@ -28,5 +29,6 @@ export default ({ childProps }) =>
     { /* Finally, catch all unmatched routes */ }
     <AppliedRoute path="/searchResults" exact component={SearchResults} props={childProps} />
     <AppliedRoute path="/forgot" exact component={ForgotPassword} props={childProps} />
+    <AppliedRoute path="/ResetPassword" exact component={ResetPassword} props={childProps} />
     <Route component={NotFound} />
   </Switch>;

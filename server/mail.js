@@ -44,7 +44,7 @@ exports.sendPasswordReset = function(user_name, vericode, email){
         from: 'matchamailer@gmail.com',
         to: email,
         subject: 'Password Reset',
-        text: 'http://localhost:3000/'+user_name+'/'+vericode
+        text: 'Hello '+user_name+'\n'+vericode+'A pawwsord reset request has been made to this account.\nPlease follow this link to reset your password:\nhttp://localhost:3000/ResetPassword'
     };
     // A pawwsord reset request has been made to this account.\nPlease follow this link to reset your password:\nhttp://localhost:3000/ResetPassword
     transporter.sendMail(mailOptions, function(error, info){

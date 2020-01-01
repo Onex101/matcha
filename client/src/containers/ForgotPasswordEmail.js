@@ -24,8 +24,8 @@ export default class ForgotPasswordEmail extends Component {
 
     validateEmail(mail) {
         // if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(mail)) {
-            console.log(mail)
-            return (true)
+        console.log(mail)
+        return (true)
         // }
         // alert("You have entered an invalid email address!")
         // return (false)
@@ -52,13 +52,7 @@ export default class ForgotPasswordEmail extends Component {
                     .then((responseJSON) => {
                         console.log(responseJSON);
                         if (responseJSON["error"] === null) {
-                            // if (responseJSON["success"] === "login sucessfull") {
-                                this.setState({emailSent: true});
-                            // } else if (responseJSON["success"] === "Invalid email") {
-                            //     alert(responseJSON["success"]);
-                            // } else {
-                            //     alert(responseJSON["success"]);
-                            // }
+                            this.setState({ emailSent: true });
                         }
                         else
                             alert("Something went wrong :(\n" + responseJSON["error"]);
