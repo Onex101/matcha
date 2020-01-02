@@ -125,8 +125,9 @@ exports.user_create_post = function(req, res) {
 
 exports.user_update_password = function(req,res){
 	let user = new User('');
-	hpass = bcrypt.hashSync(req.body.data['password'], 10);
-	user.update_pass(req.body.data['user_name'], req.body.data['veri_code'], hpass, function(err, results){
+	console.log(req.body)
+	let hpass = bcrypt.hashSync(req.body['password'], 10);
+	user.update_pass(req.body['user_name'], req.body['veri_code'], hpass, function(err, results){
 		if (err)
             res.send(err);
         else

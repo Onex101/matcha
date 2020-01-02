@@ -3,7 +3,10 @@ const bcrypt = require('bcrypt');
 
 exports.sendVeriCode = function(user_name, email){
 
-    var vericode = (this.encrypt(user_name));
+    var vericode_check = (this.encrypt(user_name));
+
+    var vericode = vericode_check.replace("/", "_");
+
     var transporter = nodemailer.createTransport({
         service: 'gmail',
         auth: {
@@ -44,7 +47,7 @@ exports.sendPasswordReset = function(user_name, vericode, email){
         from: 'matchamailer@gmail.com',
         to: email,
         subject: 'Password Reset',
-        text: 'Hello '+user_name+'\n'+vericode+'A pawwsord reset request has been made to this account.\nPlease follow this link to reset your password:\nhttp://localhost:3000/ResetPassword'
+        text: 'Hello '+user_name+'\nA password reset request has been made to this account.\nPlease follow this link to reset your password:\nhttp://localhost:3000/ResetPassword?user=' + user_name + '&origin=' + vericode
     };
     // A pawwsord reset request has been made to this account.\nPlease follow this link to reset your password:\nhttp://localhost:3000/ResetPassword
     transporter.sendMail(mailOptions, function(error, info){

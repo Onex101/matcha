@@ -30,6 +30,7 @@ export default class ResetPassword extends Component {
 
     console.log(values.user) // "top"
     console.log(values.origin) // "im"
+    this.setState({user_name: values.user, veri_code: values.origin});
 
     // try {
     //   fetch(`/password_reset/` + values.user + '/' + values.origin, {
@@ -65,6 +66,8 @@ export default class ResetPassword extends Component {
       .then((responseJSON) => {
         if (responseJSON["error"]) {
           this.setState({ error: true, errorMessage: responseJSON["error"] })
+        } else {
+          this.setState({ isLoading: false})
         }
         console.log(responseJSON);
       })
@@ -83,6 +86,7 @@ export default class ResetPassword extends Component {
 
   updatePassword = e => {
     e.preventDefault();
+    console.log("PASSWORD: " + this.state.password)
     // changeg password on submit
     fetch(`/user/update/password`, {
       method: "POST",
