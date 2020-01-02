@@ -167,7 +167,7 @@ export default class Usercard extends Component {
 					{this.avatar(info.pic, width, height)}
 					<div className="username"><br/><h1 onClick={(e) => this.onOpenModal(info.userInfo.id)}>{info.userInfo.user_name}</h1></div>
 							<div>
-								<Modal open={open} onClose={this.onCloseModal} center>
+								<Modal id="userModal" open={open} onClose={this.onCloseModal} center>
 									<ControlledTabs 
 										userInfo={info.userInfo} 
 										socket={this.props.socket} 

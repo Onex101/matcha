@@ -103,7 +103,8 @@ export default class Profile extends Component {
             })
                 .then(response => response.json())
                 .then((responseJSON) => {
-                    console.log(responseJSON);
+                    // console.log("VISITS TEST");
+                    // console.log(responseJSON);
                     this.setState({ visits: responseJSON })
                 })
                 .catch(err => console.error(err))
@@ -291,7 +292,7 @@ export default class Profile extends Component {
 
     componentDidMount() {
         // console.log("Profile INFO 1: " +JSON.stringify(this.props.userInfo))
-
+console.log("THE PROFILE HAS MOUNTED")
         if (this.state.id === null && this.props.userInfo && this.props.userInfo.id) {
             this.getInfo();
             this.getVisits();
