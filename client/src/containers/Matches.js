@@ -13,7 +13,8 @@ export default class Matches extends Component {
             userInfo: null,
             likes: null,
             open: false,
-            visits: null
+            visits: null,
+            liked: null,
         }
     }
 
@@ -45,8 +46,28 @@ export default class Matches extends Component {
     }
 
     getVisits() {
+        // try {
+        //     fetch('/user/' + this.props.userInfo.id + '/history', {
+        //         method: "GET",
+        //         headers: {
+        //             "Content-Type": "application/json; charset=utf-8",
+        //         },
+        //     })
+        //         .then(response => response.json())
+        //         .then((responseJSON) => {
+        //             console.log("VISITS TEST");
+        //             console.log(responseJSON);
+        //             this.setState({ visits: responseJSON })
+        //         })
+        //         .catch(err => console.error(err))
+        // } catch (e) {
+        //     alert(e.message);
+        // }
+    }
+
+    getLikes() {
         try {
-            fetch('/user/' + this.props.userInfo.id + '/history', {
+            fetch('/user/' + this.props.userInfo.id + '/liked', {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json; charset=utf-8",
@@ -54,9 +75,9 @@ export default class Matches extends Component {
             })
                 .then(response => response.json())
                 .then((responseJSON) => {
-                    console.log("VISITS TEST");
+                    console.log("LIKED TEST");
                     console.log(responseJSON);
-                    this.setState({ visits: responseJSON })
+                    this.setState({ liked: responseJSON })
                 })
                 .catch(err => console.error(err))
         } catch (e) {
@@ -70,6 +91,10 @@ export default class Matches extends Component {
         }
         if (this.state.userInfo && !this.state.visits) {
             this.getVisits()
+        }
+
+        if (this.state.userInfo && !this.state.liked) {
+            this.getLikes()
         }
         // temporary fixs
         // if (this.state.likes === null && this.props.userMatches !== null)
@@ -100,6 +125,10 @@ export default class Matches extends Component {
         }
         if (this.state.userInfo && !this.state.visits) {
             this.getVisits()
+        }
+
+        if (this.state.userInfo && !this.state.liked) {
+            this.getLikes()
         }
         // temporary fixs
         // if (this.state.likes === null && this.props.userMatches !== null)
@@ -154,27 +183,26 @@ export default class Matches extends Component {
         var visitedUsers = []
         
         if (visits) {
-
-            let unique = {};
-            visits.forEach(function (i) {
-                if (!unique[i]) {
-                    unique[i] = true;
-                }
-            });
-            console.log("UNIQUE");
-            console.info(visits.keys(unique))
+            // let unique = {};
+            // visits.forEach(function (i) {
+            //     if (!unique[i]) {
+            //         unique[i] = true;
+            //     }
+            // });
+            // console.log("UNIQUE");
+            // console.info(visits.keys(unique))
             // return Object.keys(unique);
 
-            for (var elem = 0; elem < unique.length; elem++) {
-                visitedUsers.push(<p key={elem}>{unique[elem].user_name}</p>)
+            for (var elem = 0; elem < visits.length; elem++) {
+                // visitedUsers.push(<p key={elem}>{visits[elem].user_name}</p>)
 
-                // if (visits[elem] && visits[elem].pic && visits[elem].user_name) {
-                //     visitedUsers.push(
-                //         <UserLabel user={likes[elem]}
-                //             socket={this.props.socket}
-                //             key={elem} />
-                //     )
-                // }
+                if (visits[elem] && visits[elem].pic && visits[elem].user_name) {
+                    visitedUsers.push(
+                        <UserLabel user={visits[elem]}
+                            socket={this.props.socket}
+                            key={elem} />
+                    )
+                }
             }
         }
         return visitedUsers;
@@ -186,7 +214,7 @@ export default class Matches extends Component {
         return (this.state.userInfo ?
             <div id="connections">
                 <ControlLabel>Matches</ControlLabel>
-                <div id="matches">
+                <div id="likes">
                     <div className="list">{this.renderLikes(likes)}</div>
                 </div>
                 <br />
@@ -196,7 +224,7 @@ export default class Matches extends Component {
                 </div>
                 <br />
                 <ControlLabel>Visits</ControlLabel>
-                <div id="visits">
+                <div id="likes">
                     <div className="list">{this.renderVisits(this.state.visits)}</div>
                 </div>
             </div>

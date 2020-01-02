@@ -57,10 +57,10 @@ export default class ControlledTabs extends Component {
 		}
 	  }
 	  if (this.state.key === null && this.state.userInfo && this.state.userInfo.id) {
-		if (this.state.userInfo.id === localStorage.getItem("id") && !this.state.userInfo.profile_pic_id){
+		if (this.state.userInfo.id == localStorage.getItem("id") && this.state.userInfo.profile_pic_id === null){
 			this.setState({key: 3});
 		} else {
-		  this.setState({key: 1});
+			this.setState({key: 1});
 		}
 	  }
 	}
