@@ -86,6 +86,16 @@ User.prototype.linked_users = function(id, callback){
 	})
 }
 
+User.prototype.getUsersThatLikeCurrentUser = function(id, callback){
+	var query = `SELECT users.*, pictures.pic FROM users INNER JOIN (SELECT user1_id AS id FROM likes WHERE user2_id = ${id} AND link_code = 1) AS lst ON lst.id = users.id INNER JOIN pictures ON users.profile_pic_id = pictures.id`;
+	db.query(query, function(err,result){
+		if (err) {callback(err, null);}
+        else{
+			callback(null, result); 
+        }
+	})
+}
+
 User.prototype.getByUsername = function (data, callback) {
     data = mysql.escape(data);
 	var query = 
@@ -878,7 +888,7 @@ User.prototype.addVisit = function(viewer_id, viewee_id, callback){
 }
 
 User.prototype.getVisits = function(id, callback){
-	var query = `SELECT user_name, timestamp FROM history LEFT JOIN users ON viewer_id = id WHERE viewed_id = ${id} AND NOT viewer_id = ${id}`;
+	var query = `SELECT DISTINCT users.* , timestamp, pictures.pic FROM history LEFT JOIN users ON viewer_id = users.id LEFT JOIN pictures ON pictures.id = users.profile_pic_id WHERE viewed_id = ${id} AND NOT viewer_id = ${id}`;
 	db.query(query, function(err, results){
 		if (err){
 			callback(err, null);
