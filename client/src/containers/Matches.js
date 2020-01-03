@@ -100,7 +100,7 @@ export default class Matches extends Component {
         }
 
         try {
-            fetch('/user/' + this.props.userInfo.id + '/liked', {
+            fetch('/user/' + this.props.userInfo.id + '/getliked', {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json; charset=utf-8",
@@ -108,7 +108,7 @@ export default class Matches extends Component {
             })
                 .then(response => response.json())
                 .then((responseJSON) => {
-                    console.log("LIKED TEST");
+                    console.log("GETLIKED TEST");
                     console.log(responseJSON);
                     this.setState({ liked: responseJSON })
                 })
