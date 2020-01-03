@@ -44,20 +44,20 @@ export default class Matches extends Component {
         if (!avatarImage) return null;
         return (<img className="avatar" style={style} src={avatarImage} alt="" />);
     }
-    
+
     removeDuplicates(originalArray, prop) {
-         var newArray = [];
-         var lookupObject  = {};
-    
-         for(var i in originalArray) {
+        var newArray = [];
+        var lookupObject = {};
+
+        for (var i in originalArray) {
             lookupObject[originalArray[i][prop]] = originalArray[i];
-         }
-    
-         for(i in lookupObject) {
-             newArray.push(lookupObject[i]);
-         }
-          return newArray;
-     }
+        }
+
+        for (i in lookupObject) {
+            newArray.push(lookupObject[i]);
+        }
+        return newArray;
+    }
 
     getVisits() {
         try {
@@ -81,6 +81,24 @@ export default class Matches extends Component {
     }
 
     getLikes() {
+        try {
+            fetch('/user/' + this.props.userInfo.id + '/liked', {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json; charset=utf-8",
+                },
+            })
+                .then(response => response.json())
+                .then((responseJSON) => {
+                    console.log("LIKED TEST");
+                    console.log(responseJSON);
+                    this.setState({ liked: responseJSON })
+                })
+                .catch(err => console.error(err))
+        } catch (e) {
+            alert(e.message);
+        }
+
         try {
             fetch('/user/' + this.props.userInfo.id + '/liked', {
                 method: "GET",
@@ -178,6 +196,7 @@ export default class Matches extends Component {
             </div></div>
         )
     }
+    
     renderLikes(likes) {
         var likedUsers = []
         if (likes) {
@@ -197,59 +216,44 @@ export default class Matches extends Component {
     timeSince(date) {
 
         var seconds = Math.floor((new Date() - date) / 1000);
-      
+
         var interval = Math.floor(seconds / 31536000);
-      
+
         if (interval > 1) {
-          return interval + " years";
+            return interval + " years";
         }
         interval = Math.floor(seconds / 2592000);
         if (interval > 1) {
-          return interval + " months";
+            return interval + " months";
         }
         interval = Math.floor(seconds / 86400);
         if (interval > 1) {
-          return interval + " days";
+            return interval + " days";
         }
         interval = Math.floor(seconds / 3600);
         if (interval > 1) {
-          return interval + " hours";
+            return interval + " hours";
         }
         interval = Math.floor(seconds / 60);
         if (interval > 1) {
-          return interval + " minutes";
+            return interval + " minutes";
         }
         return Math.floor(seconds) + " seconds";
-      }
-    //   var aDay = 24*60*60*1000
-    //   console.log(timeSince(new Date(Date.now()-aDay)));
-    //   console.log(timeSince(new Date(Date.now()-aDay*2)));
+    }
 
     renderVisits(visits) {
         var visitedUsers = []
-        
+
         if (visits) {
-            // let unique = {};
-            // visits.forEach(function (i) {
-            //     if (!unique[i]) {
-            //         unique[i] = true;
-            //     }
-            // });
-            // console.log("UNIQUE");
-            // console.info(visits.keys(unique))
-            // return Object.keys(unique);
-
             for (var elem = 0; elem < visits.length; elem++) {
-                // visitedUsers.push(<p key={elem}>{visits[elem].user_name}</p>)
-
                 if (visits[elem] && visits[elem].pic && visits[elem].user_name) {
                     var time = this.timeSince(new Date(visits[elem].timestamp));
                     visitedUsers.push(<div id='visitsList' key={elem}>
                         <div id="listLabel">
-                        <UserLabel user={visits[elem]}
-                            socket={this.props.socket}
-                            key={elem} /></div>
-                            <p id='visitTime'>{time}</p></div>
+                            <UserLabel user={visits[elem]}
+                                socket={this.props.socket}
+                                key={elem} /></div>
+                        <p id='visitTime'>{time}</p></div>
                     )
                 }
             }
