@@ -888,7 +888,15 @@ User.prototype.addVisit = function(viewer_id, viewee_id, callback){
 }
 
 User.prototype.getVisits = function(id, callback){
+	// var query = `SELECT user_name, timestamp FROM history LEFT JOIN users ON viewer_id = id WHERE viewed_id = ${id} AND NOT viewer_id = ${id}`;
+	// var query = `SELECT DISTINCT viewer_id, user_name, timestamp, pictures.pic FROM history LEFT JOIN users ON viewer_id = users.id LEFT JOIN pictures ON pictures.id = users.profile_pic_id WHERE viewed_id = ${id} AND NOT viewer_id = ${id};`;
 	var query = `SELECT DISTINCT users.* , timestamp, pictures.pic FROM history LEFT JOIN users ON viewer_id = users.id LEFT JOIN pictures ON pictures.id = users.profile_pic_id WHERE viewed_id = ${id} AND NOT viewer_id = ${id}`;
+	// var query = `SELECT users.*, pictures.pic FROM users INNER JOIN (SELECT user1_id `/
+	// + `AS id FROM likes WHERE user2_id = ${id} AND link_code = 1 ` /
+	// 	+ `UNION SELECT user2_id FROM likes WHERE user1_id = ${id} AND link_code = 1) `/
+	// 	+ `AS lst ON lst.id = users.id INNER JOIN pictures ON users.profile_pic_id = pictures.id`;
+	
+	
 	db.query(query, function(err, results){
 		if (err){
 			callback(err, null);

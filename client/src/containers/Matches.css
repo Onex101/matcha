@@ -5,6 +5,20 @@ body {
     font-family: Calibri;
 }
 
+#visitsList {
+  width: 100%;
+  overflow: hidden;
+}
+
+#listLabel {
+  width: 60%;
+  float: left;
+}
+
+#visitTime {
+  margin: 25px 0px  !important;
+}
+
 #connections {
   width: 95%;
   margin: 5px auto 5px;
