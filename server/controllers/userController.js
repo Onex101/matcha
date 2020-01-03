@@ -492,6 +492,17 @@ exports.get_liked = function(req, res){
 	})
 }
 
+//Get list of people that like the current user
+exports.getUsersThatLikeCurrentUser = function(req, res){
+	let user = new User('');
+	user.getUsersThatLikeCurrentUser(req.params.id,function(err, results){
+		if(err){res.send(err);}
+		else{
+			res.send(results)
+		}
+	})
+}
+
 exports.update_gps = function(req, res){
 	let user = new User('');
 	user.set_gps(req.params.id, req.params.lat, req.params.lon, function(err, results){

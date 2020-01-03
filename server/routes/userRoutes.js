@@ -104,6 +104,9 @@ router.get('/user/:id/history', user_controller.get_visits);
 //GET request that reutrns the people the user has liked (return the same stuff as getMatches
 router.get('/user/:id/liked', user_controller.linked_details);
 
+//GET request that reutrns the people that like the user
+router.get('/users/like/:id', user_controller.getUsersThatLikeCurrentUser);
+
 //GET request for users with the same characters in their username
 router.get('/usersearch/:user_id/:search_name', user_controller.search_username);
 
