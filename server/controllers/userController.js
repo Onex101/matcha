@@ -244,7 +244,7 @@ exports.user_match_get = function(req, res) {
             res.send(err);
         else{
 			row = result[0];
-			console.log(row)
+			// console.log(row)
             if (row){
                 user.data = {
                     id: row.id,
