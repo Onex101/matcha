@@ -194,6 +194,37 @@ export default class Matches extends Component {
         return likedUsers;
     }
 
+    timeSince(date) {
+
+        var seconds = Math.floor((new Date() - date) / 1000);
+      
+        var interval = Math.floor(seconds / 31536000);
+      
+        if (interval > 1) {
+          return interval + " years";
+        }
+        interval = Math.floor(seconds / 2592000);
+        if (interval > 1) {
+          return interval + " months";
+        }
+        interval = Math.floor(seconds / 86400);
+        if (interval > 1) {
+          return interval + " days";
+        }
+        interval = Math.floor(seconds / 3600);
+        if (interval > 1) {
+          return interval + " hours";
+        }
+        interval = Math.floor(seconds / 60);
+        if (interval > 1) {
+          return interval + " minutes";
+        }
+        return Math.floor(seconds) + " seconds";
+      }
+    //   var aDay = 24*60*60*1000
+    //   console.log(timeSince(new Date(Date.now()-aDay)));
+    //   console.log(timeSince(new Date(Date.now()-aDay*2)));
+
     renderVisits(visits) {
         var visitedUsers = []
         
@@ -212,10 +243,13 @@ export default class Matches extends Component {
                 // visitedUsers.push(<p key={elem}>{visits[elem].user_name}</p>)
 
                 if (visits[elem] && visits[elem].pic && visits[elem].user_name) {
-                    visitedUsers.push(
+                    var time = this.timeSince(new Date(visits[elem].timestamp));
+                    visitedUsers.push(<div id='visitsList' key={elem}>
+                        <div id="listLabel">
                         <UserLabel user={visits[elem]}
                             socket={this.props.socket}
-                            key={elem} />
+                            key={elem} /></div>
+                            <p id='visitTime'>{time}</p></div>
                     )
                 }
             }
