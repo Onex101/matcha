@@ -116,6 +116,24 @@ export default class Matches extends Component {
         } catch (e) {
             alert(e.message);
         }
+
+        try {
+            fetch('/users/like/' + this.props.userInfo.id, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json; charset=utf-8",
+                },
+            })
+                .then(response => response.json())
+                .then((responseJSON) => {
+                    console.log("LIKES TEST");
+                    console.log(responseJSON);
+                    this.setState({ liked: responseJSON })
+                })
+                .catch(err => console.error(err))
+        } catch (e) {
+            alert(e.message);
+        }
     }
 
     componentDidMount() {
