@@ -60,9 +60,11 @@ module.exports = function (socket) {
 
 	//User logsout
 	socket.on(LOGOUT, () => {
-		connectedUsers = removeUser(connectedUsers, socket.user.name)
-		socketIO.io.emit(USER_DISCONNECTED, connectedUsers)
-		console.log("Disconnect", connectedUsers);
+		if (socket.user && socket.user.name) {
+			connectedUsers = removeUser(connectedUsers, socket.user.name)
+			socketIO.io.emit(USER_DISCONNECTED, connectedUsers)
+			console.log("Disconnect", connectedUsers);
+		}
 	})
 
 	//Get Community Chat
