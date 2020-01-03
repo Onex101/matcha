@@ -79,9 +79,9 @@ export default class Matches extends Component {
     }
 
     componentDidUpdate() {
-        console.log("PROPS USERINFO: " + this.props.user);
-        console.info(this.props.user);
-        console.log("STATE INFOID: " + this.state.infoID);
+        // console.log("PROPS USERINFO: " + this.props.user);
+        // console.info(this.props.user);
+        // console.log("STATE INFOID: " + this.state.infoID);
         if (this.props.user != null && this.state.infoID == null) {
             this.setState({infoID: this.props.user.id}) 
         }
@@ -89,7 +89,7 @@ export default class Matches extends Component {
 
     renderUsername(user) {
         const { open, infoID } = this.state;
-        console.log({infoID});
+        // console.log({infoID});
         if (this.state.infoID != null) {
             return (<div className="userNameLabel">
                 {user.user_name ? <div className="username"><p onClick={(e) => this.onOpenModal(this.state.infoID)}>{user.user_name}</p></div>

@@ -44,25 +44,40 @@ export default class Matches extends Component {
         if (!avatarImage) return null;
         return (<img className="avatar" style={style} src={avatarImage} alt="" />);
     }
+    
+    removeDuplicates(originalArray, prop) {
+         var newArray = [];
+         var lookupObject  = {};
+    
+         for(var i in originalArray) {
+            lookupObject[originalArray[i][prop]] = originalArray[i];
+         }
+    
+         for(i in lookupObject) {
+             newArray.push(lookupObject[i]);
+         }
+          return newArray;
+     }
 
     getVisits() {
-        // try {
-        //     fetch('/user/' + this.props.userInfo.id + '/history', {
-        //         method: "GET",
-        //         headers: {
-        //             "Content-Type": "application/json; charset=utf-8",
-        //         },
-        //     })
-        //         .then(response => response.json())
-        //         .then((responseJSON) => {
-        //             console.log("VISITS TEST");
-        //             console.log(responseJSON);
-        //             this.setState({ visits: responseJSON })
-        //         })
-        //         .catch(err => console.error(err))
-        // } catch (e) {
-        //     alert(e.message);
-        // }
+        try {
+            fetch('/user/' + this.props.userInfo.id + '/history', {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json; charset=utf-8",
+                },
+            })
+                .then(response => response.json())
+                .then((responseJSON) => {
+                    // console.log("VISITS TEST");
+                    // console.log(responseJSON);
+                    var cleanVisits = this.removeDuplicates(responseJSON, "id")
+                    this.setState({ visits: cleanVisits })
+                })
+                .catch(err => console.error(err))
+        } catch (e) {
+            alert(e.message);
+        }
     }
 
     getLikes() {
