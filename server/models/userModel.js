@@ -96,6 +96,16 @@ User.prototype.getUsersThatLikeCurrentUser = function(id, callback){
 	})
 }
 
+User.prototype.getUsersThatCurrentUserLikes = function(id, callback){
+	var query = `SELECT users.*, pictures.pic FROM users JOIN (SELECT user2_id AS id FROM likes WHERE user1_id = ${id} AND link_code = 0) AS lst ON lst.id = users.id INNER JOIN pictures ON users.profile_pic_id = pictures.id`;
+	db.query(query, function(err,result){
+		if (err) {callback(err, null);}
+        else{
+			callback(null, result); 
+        }
+	})
+}
+
 User.prototype.getByUsername = function (data, callback) {
     data = mysql.escape(data);
 	var query = 
