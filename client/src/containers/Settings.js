@@ -378,8 +378,8 @@ export default class Settings extends Component {
 					bio: this.state.bio,
 					gender: this.state.gender,
 					pref: this.state.pref,
-					firstname: this.state.firstname,
-					lastname: this.state.lastname,
+					first_name: this.state.firstname,
+					last_name: this.state.lastname,
 					email: this.state.email,
 				})
 			})
@@ -537,8 +537,18 @@ export default class Settings extends Component {
 
 	saveChanges(e) {
 		e.preventDefault();
-		this.updateImages();
-		this.updateInfo();
+		if (this.state.firstname && this.state.lastname && this.state.email) {
+			this.updateImages();
+			this.updateInfo();
+		} else {
+			if (!this.state.firstname) {
+				alert("First Name cannot be empty");
+			} else if (!this.state.lastname) {
+				alert("Last Name cannot be empty");
+			} else if (!this.state.email) {
+				alert("Email cannot be empty");
+			} 
+		}
 
 		//Figure out a way to refresh the page nicely once save changes is pressed
 		// this.setState({id: null})
