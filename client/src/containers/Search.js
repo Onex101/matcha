@@ -44,7 +44,10 @@ export default class Search extends Component {
     searchAge = async event => {
         event.preventDefault();
         console.log(this.state.searchAgeInput)
-        if (Number.isInteger(this.state.searchAgeInput)) {
+        var num = parseInt(this.state.searchAgeInput)
+        if (isNaN(num)) {
+            console.log("NOT A NUM")
+        } else {
             console.log("SUCCESS")
         }
     }
