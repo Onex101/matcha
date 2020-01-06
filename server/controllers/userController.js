@@ -167,7 +167,11 @@ exports.user_update_get = function(req, res) {
 // Handle User update on POST.
 exports.user_update_post = function(req, res) {
 	let user = new User(req.body);
-	user.update_data(user.data.bio, user.data.gender, user.data.pref, user.data.id, function (err, results){
+	// if (!user.data.bio || user.data.gender || user.data.pref || user.data.id || user.data.first_name || user.data.last_name || user.data.email){
+	// 	res.send({error: "Not all user values are present", user: user});
+	// 	return;
+	// }
+	user.update_data(user.data.bio, user.data.gender, user.data.pref, user.data.id, user.data.first_name, user.data.last_name, user.data.email, function (err, results){
 		if(err){res.send(err)}
 		else{
 			res.send({success: "Update sucessfull"});
