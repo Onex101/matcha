@@ -82,42 +82,6 @@ export default class Matches extends Component {
 
     getLikes() {
         try {
-            fetch('/user/' + this.props.userInfo.id + '/liked', {
-                method: "GET",
-                headers: {
-                    "Content-Type": "application/json; charset=utf-8",
-                },
-            })
-                .then(response => response.json())
-                .then((responseJSON) => {
-                    console.log("LIKED TEST");
-                    console.log(responseJSON);
-                    this.setState({ liked: responseJSON })
-                })
-                .catch(err => console.error(err))
-        } catch (e) {
-            alert(e.message);
-        }
-
-        try {
-            fetch('/user/' + this.props.userInfo.id + '/getliked', {
-                method: "GET",
-                headers: {
-                    "Content-Type": "application/json; charset=utf-8",
-                },
-            })
-                .then(response => response.json())
-                .then((responseJSON) => {
-                    console.log("GETLIKED TEST");
-                    console.log(responseJSON);
-                    this.setState({ liked: responseJSON })
-                })
-                .catch(err => console.error(err))
-        } catch (e) {
-            alert(e.message);
-        }
-
-        try {
             fetch('/users/like/' + this.props.userInfo.id, {
                 method: "GET",
                 headers: {
@@ -281,6 +245,7 @@ export default class Matches extends Component {
 
     render() {
         const likes = this.state.likes;
+        const liked = this.state.liked;
         // return (this.state.likes && this.state.userInfo ?
         return (this.state.userInfo ?
             <div id="connections">
@@ -289,9 +254,9 @@ export default class Matches extends Component {
                     <div className="list">{this.renderLikes(likes)}</div>
                 </div>
                 <br />
-                <ControlLabel>Likes</ControlLabel>
+                <ControlLabel>Liked by</ControlLabel>
                 <div id="likes">
-                    <div className="list">{this.renderLikes(likes)}</div>
+                    <div className="list">{this.renderLikes(liked)}</div>
                 </div>
                 <br />
                 <ControlLabel>Visits</ControlLabel>
