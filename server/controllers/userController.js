@@ -168,6 +168,7 @@ exports.user_update_get = function(req, res) {
 exports.user_update_post = function(req, res) {
 	let user = new User(req.body);
 	if (!user.data.bio || !user.data.gender || !user.data.pref || !user.data.id || !user.data.first_name || !user.data.last_name || !user.data.email){
+		console.log(user)
 		res.send({error: "Not all user values are present", user: user});
 		return;
 	}
