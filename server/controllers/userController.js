@@ -200,6 +200,7 @@ exports.user_login_post = function(req, res) {
 					}
 					else{
 						row = results[0];
+						user.login_user(row.user_name);
 						if (row) 
 							user.data = {
 								id: row.id,
