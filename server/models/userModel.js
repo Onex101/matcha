@@ -48,10 +48,10 @@ User.prototype.deleteById = function (id, callback) {
 User.prototype.getById = function (data, callback) {
 	var query = 
 	`SELECT
-		id, password,user_name, first_name, last_name, birth_date, gender, pref, gps_lat, gps_lon, bio, profile_pic_id, pic, fame, GROUP_CONCAT(interest) AS interests
+		id, password,user_name, first_name, last_name, birth_date, gender, pref, gps_lat, gps_lon, bio, profile_pic_id, email, pic, fame, GROUP_CONCAT(interest) AS interests
 	FROM
 		(SELECT
-			users.id, user_name, first_name, last_name, password,interest, birth_date, gender, pref, users.gps_lat, users.gps_lon, bio, profile_pic_id, 
+			users.id, user_name, first_name, last_name, password,interest, birth_date, gender, pref, users.gps_lat, users.gps_lon, bio, profile_pic_id, email
 				(SELECT
 					COUNT(user1_id) FROM likes WHERE (user1_id = ${data} OR user2_id = ${data}) AND link_code = 1) as fame, pic
 				FROM
