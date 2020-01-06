@@ -2,6 +2,7 @@ var socketIO = require('./index.js');
 const request = require('supertest');
 const { NOTIFICATION, VERIFY_USER, USER_CONNECTED, USER_DISCONNECTED, LOGOUT, COMMUNITY_CHAT, MESSAGE_RECEIVED, MESSAGE_SENT, TYPING, PRIVATE_MESSAGE } = require('../client/src/Events')
 const { createNotification, createUser, createMessage, createChat } = require('../client/src/Factories')
+var User = require('./models/userModel');
 
 let connectedUsers = {}
 
@@ -49,10 +50,12 @@ module.exports = function (socket) {
 
 	socket.on('disconnect', () => {
 		if ("user" in socket) {
+			let user = new User();
+			user.logout(socket.user.name);
 			console.log("Socket user:")
 			console.log(socket.user)
 			connectedUsers = removeUser(connectedUsers, socket.user.name)
-
+			
 			socketIO.io.emit(USER_DISCONNECTED, connectedUsers)
 			console.log("Disconnect", connectedUsers);
 		}

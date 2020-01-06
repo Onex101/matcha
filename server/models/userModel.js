@@ -48,10 +48,10 @@ User.prototype.deleteById = function (id, callback) {
 User.prototype.getById = function (data, callback) {
 	var query = 
 	`SELECT
-		id, password,user_name, first_name, last_name, birth_date, gender, pref, gps_lat, gps_lon, bio, profile_pic_id, email, pic, fame, GROUP_CONCAT(interest) AS interests
+		id, password,user_name, first_name, last_name, birth_date, gender, pref, gps_lat, gps_lon, bio, profile_pic_id, email, pic, fame, online, GROUP_CONCAT(interest) AS interests
 	FROM
 		(SELECT
-			users.id, user_name, first_name, last_name, password,interest, birth_date, gender, pref, users.gps_lat, users.gps_lon, bio, profile_pic_id, email,
+			users.id, user_name, first_name, last_name, password,interest, birth_date, gender, pref, users.gps_lat, users.gps_lon, bio, profile_pic_id, email, online,
 				(SELECT
 					COUNT(user1_id) FROM likes WHERE (user1_id = ${data} OR user2_id = ${data}) AND link_code = 1) as fame, pic
 				FROM
@@ -110,10 +110,10 @@ User.prototype.getByUsername = function (data, callback) {
     data = mysql.escape(data);
 	var query = 
 	`SELECT
-		id, password, user_name, first_name, last_name, birth_date, gender, pref, gps_lat, gps_lon,bio, profile_pic_id, pic, fame, veri_code, GROUP_CONCAT(interest) AS interests
+		id, password, user_name, first_name, last_name, birth_date, gender, pref, gps_lat, gps_lon,bio, profile_pic_id, pic, online, fame, veri_code, GROUP_CONCAT(interest) AS interests
 	FROM
 		(SELECT
-			users.id, user_name, first_name, last_name, password,interest, birth_date, gender, pref, users.gps_lat, users.gps_lon, bio, profile_pic_id, fame, pic, veri_code
+			users.id, user_name, first_name, last_name, password,interest, birth_date, gender, pref, users.gps_lat, users.gps_lon, bio, profile_pic_id, fame, pic, online, veri_code
 		FROM
 			user_interests
 		RIGHT JOIN
@@ -183,7 +183,7 @@ User.prototype.update = function (callback) {
 			this.data['veri_code'],
 			this.data ['verified']]
 	var id = this.data['id'];
-	db.query(`UPDATE 
+	db.query(`UPDATE
 				users 
 			SET 
 				first_name = ?,
@@ -386,10 +386,10 @@ User.prototype.dislike = function (user_id, target_id, callback){
 User.prototype.match = function (id, callback){
 	var query = 
 	`SELECT
-		id, user_name, first_name, last_name, birth_date, gender, pref, gps_lat, gps_lon, bio, pic, fame, profile_pic_id, GROUP_CONCAT(interest) AS interests
+		id, user_name, first_name, last_name, birth_date, gender, pref, gps_lat, gps_lon, bio, pic, online, fame, profile_pic_id, GROUP_CONCAT(interest) AS interests
 	FROM
 		(SELECT
-			users.id, user_name, first_name, last_name, interest, birth_date, gender, pref, users.gps_lat, users.gps_lon, bio, pic, fame, verified, profile_pic_id
+			users.id, user_name, first_name, last_name, interest, birth_date, gender, pref, online, users.gps_lat, users.gps_lon, bio, pic, fame, verified, profile_pic_id
 		FROM
 			user_interests
 		RIGHT JOIN
@@ -432,10 +432,10 @@ User.prototype.match = function (id, callback){
 User.prototype.user_search = function(id, search_name, callback){
 	var query =
 	`SELECT
-		id, user_name, first_name, last_name, birth_date, gender, pref, gps_lat, gps_lon, bio, pic, fame, profile_pic_id, GROUP_CONCAT(interest) AS interests
+		id, user_name, first_name, last_name, birth_date, gender, pref, gps_lat, gps_lon, bio, pic, fame, profile_pic_id, online, GROUP_CONCAT(interest) AS interests
 	FROM
 		(SELECT
-			users.id, user_name, first_name, last_name, interest, birth_date, gender, pref, users.gps_lat, users.gps_lon, bio, pic, fame, verified, profile_pic_id
+			users.id, user_name, first_name, last_name, interest, birth_date, gender, pref, users.gps_lat, users.gps_lon, bio, pic, fame, online, verified, profile_pic_id
 		FROM
 			user_interests
 		RIGHT JOIN
@@ -467,13 +467,13 @@ User.prototype.user_search = function(id, search_name, callback){
 User.prototype.tag_search = function(id, interest, callback){
 	var query = 
 	`SELECT 
-		id, user_name, first_name, last_name, birth_date, gender, pref, gps_lat, gps_lon, bio, pic, fame, profile_pic_id, interests 
+		id, user_name, first_name, last_name, birth_date, gender, pref, gps_lat, gps_lon, bio, pic, fame, online, profile_pic_id, interests 
 	FROM 
 		(SELECT 
-			id, user_name, birth_date, first_name, last_name, gender, pref, gps_lat, gps_lon, bio, pic, fame, profile_pic_id, GROUP_CONCAT(interest) AS interests
+			id, user_name, birth_date, first_name, last_name, gender, pref, gps_lat, gps_lon, bio, pic, fame, profile_pic_id, online, GROUP_CONCAT(interest) AS interests
 				FROM
 					(SELECT 
-						users.id, user_name, first_name, last_name, interest, birth_date, gender, pref, users.gps_lat, users.gps_lon, bio, pic, fame, verified, profile_pic_id FROM user_interests
+						users.id, user_name, first_name, last_name, interest, birth_date, gender, pref, users.gps_lat, users.gps_lon, bio, pic, online, fame, verified, profile_pic_id FROM user_interests
 					RIGHT JOIN
 						users ON user_interests.user_id = users.id
 					LEFT JOIN
@@ -504,13 +504,13 @@ User.prototype.tag_search = function(id, interest, callback){
 User.prototype.getMaxAgeGapMatch = function(id, x, callback){
 	var query = 
 	`SELECT 
-		id, user_name, first_name, last_name, birth_date, gender, pref, gps_lat, gps_lon, bio, fame, profile_pic_id, interests 
+		id, user_name, first_name, last_name, birth_date, gender, pref, gps_lat, gps_lon, bio, fame, profile_pic_id, online, interests 
 	FROM 
 		(SELECT 
-			id, user_name, first_name, last_name, birth_date, gender, pref, gps_lat, gps_lon, bio, pic, fame, profile_pic_id, GROUP_CONCAT(interest) AS interests
+			id, user_name, first_name, last_name, birth_date, gender, pref, gps_lat, gps_lon, bio, pic, fame, profile_pic_id, online, GROUP_CONCAT(interest) AS interests
 				FROM
 					(SELECT 
-						users.id, user_name, first_name, last_name, interest, birth_date, gender, pref, users.gps_lat, users.gps_lon, bio, pic, fame, verified, profile_pic_id
+						users.id, user_name, first_name, last_name, interest, birth_date, gender, pref, users.gps_lat, users.gps_lon, bio, pic, fame, verified, online, profile_pic_id
 					FROM
 						user_interests
 					RIGHT JOIN
@@ -554,10 +554,10 @@ User.prototype.getMaxAgeGapMatch = function(id, x, callback){
 User.prototype.search_fame = function(x, id, callback){
 	var query = 
 	`SELECT
-		id, user_name, first_name, last_name, birth_date, gender, pref, gps_lat, gps_lon, bio, pic, fame, profile_pic_id, GROUP_CONCAT(interest) AS interests
+		id, user_name, first_name, last_name, birth_date, gender, pref, gps_lat, gps_lon, bio, pic, fame, profile_pic_id, online, GROUP_CONCAT(interest) AS interests
 	FROM
 		(SELECT
-			users.id, user_name, first_name, last_name, interest, birth_date, gender, pref, users.gps_lat, users.gps_lon, bio, pic, fame, verified, profile_pic_id
+			users.id, user_name, first_name, last_name, interest, birth_date, gender, pref, users.gps_lat, users.gps_lon, bio, pic, fame, verified, online, profile_pic_id
 		FROM
 			user_interests
 		RIGHT JOIN
@@ -590,10 +590,10 @@ User.prototype.search_fame = function(x, id, callback){
 User.prototype.linked = function(id,callback){
 	var query =
 	`SELECT
-		id, user_name, first_name, last_name, birth_date, gender, pref, gps_lat, gps_lon, bio, pic, fame, profile_pic_id, GROUP_CONCAT(interest) AS interests
+		id, user_name, first_name, last_name, birth_date, gender, pref, gps_lat, gps_lon, bio, pic, fame, profile_pic_id, online, GROUP_CONCAT(interest) AS interests
 	FROM
 		(SELECT
-			users.id, user_name, first_name, last_name, interest, birth_date, gender, pref, users.gps_lat, users.gps_lon, bio, pic, fame, verified, profile_pic_id
+			users.id, user_name, first_name, last_name, interest, birth_date, gender, pref, users.gps_lat, users.gps_lon, bio, pic, fame, verified, online, profile_pic_id
 		FROM
 			user_interests
 		RIGHT JOIN
