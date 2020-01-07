@@ -682,6 +682,11 @@ exports.search_tags = function(req,res){
 	})
 }
 
+exports.tag_search = function (req, res){
+	console.log(req.body);
+	res.send("Not IMplemented yet");
+}
+
 
 
 exports.get_tmp = function(req, res){
@@ -764,6 +769,8 @@ exports.get_locations = function(req, res){
 		}
 	})
 }
+
+
 
 function matchAlgo(user, results){
 	var array = [];
