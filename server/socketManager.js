@@ -51,7 +51,7 @@ module.exports = function (socket) {
 	socket.on('disconnect', () => {
 		if ("user" in socket) {
 			let user = new User();
-			user.logout(socket.user.name);
+			user.logout(socket.user.name, () => {});
 			console.log("Socket user:")
 			console.log(socket.user)
 			connectedUsers = removeUser(connectedUsers, socket.user.name)

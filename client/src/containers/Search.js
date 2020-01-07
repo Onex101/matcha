@@ -41,14 +41,38 @@ export default class Search extends Component {
         });
     }
 
+    isInt(value) {
+        return !isNaN(value) &&
+            parseInt(Number(value)) == value &&
+            !isNaN(parseInt(value, 10));
+    }
+
     searchAge = async event => {
         event.preventDefault();
         console.log(this.state.searchAgeInput)
-        var num = parseInt(this.state.searchAgeInput)
-        if (isNaN(num)) {
-            console.log("NOT A NUM")
-        } else {
+        if (this.isInt(this.state.searchAgeInput) && this.props.userInfo.id) {
             console.log("SUCCESS")
+            console.log(this.props.userInfo.id)
+
+            // '/agesearch/:user_id/:x'
+
+            try {
+				fetch('/agesearch/' + this.props.userInfo.id + '/' + this.state.searchAgeInput, {
+					method: "GET",
+					headers: {
+						"Content-Type": "application/json; charset=utf-8",
+					},
+				})
+					.then(response => response.json())
+					.then((responseJSON) => {
+						console.log("Age search response: ", responseJSON)
+					})
+					.catch(err => console.error(err))
+			} catch (e) {
+				alert(e.message);
+			}
+        } else {
+            alert("Please insert a number.");
         }
     }
 
@@ -71,7 +95,7 @@ export default class Search extends Component {
                             onClick={(e) => this.searchAge(e)} >Search</Button>
                     </ButtonGroup>
                 </ButtonToolbar>
-                </div >)
+            </div >)
         } else if (this.state.searchType == "Fame") {
             return (<div>search by fame</div>)
         } else if (this.state.searchType == "Location") {
