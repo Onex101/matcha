@@ -4,6 +4,7 @@ import Dropdown from 'react-dropdown'
 import 'react-dropdown/style.css'
 
 import "./Search.css";
+const ReactTags = require('react-tag-autocomplete')
 
 export default class Search extends Component {
     constructor(props) {
@@ -14,9 +15,10 @@ export default class Search extends Component {
             searchAgeInput      :   "0",
             searchFameInput     :   "0",
             searchLocationInput :   null,
-            searchTagsInput     :   null,
+            searchTagsInput     :   [],
             searchResults       :   null,
             showResults         :   false,
+            tagSuggestions      :   null
         }
     }
 
@@ -30,11 +32,43 @@ export default class Search extends Component {
 
     // Stops the auto focus on the tags
     componentDidMount() {
-        window.scrollTo(0, 0);
+        if (this.state.tagSuggestions === null) {
+			try {
+				fetch('/interests/', {
+					method: "GET",
+					headers: {
+						"Content-Type": "application/json; charset=utf-8",
+					},
+				})
+					.then(response => response.json())
+					.then((responseJSON) => {
+						this.setState({ tagSuggestions: responseJSON })
+					})
+					.catch(err => console.error(err))
+			} catch (e) {
+				alert("Settings 3: " + e.message);
+			}
+		}
     }
 
     componentDidUpdate() {
-
+        if (this.state.tagSuggestions === null) {
+			try {
+				fetch('/interests/', {
+					method: "GET",
+					headers: {
+						"Content-Type": "application/json; charset=utf-8",
+					},
+				})
+					.then(response => response.json())
+					.then((responseJSON) => {
+						this.setState({ tagSuggestions: responseJSON })
+					})
+					.catch(err => console.error(err))
+			} catch (e) {
+				alert("Settings 3: " + e.message);
+			}
+		}
     }
 
     handleSearchChange = event => {
@@ -42,6 +76,25 @@ export default class Search extends Component {
             searchType: event.value
         });
     }
+    	// Handle Delete of Tag
+	handleDelete(i) {
+		const tagDelete = this.state.searchTagsInput[i]
+		console.log("Deleting tags: ")
+		console.info(tagDelete)
+		const tags = this.state.searchTagsInput.slice(0)
+		tags.splice(i, 1)
+		this.setState({ searchTagsInput: tags })
+	}
+
+	// Handle Addition of Tag to user profile    
+	handleAddition(tag) {
+		const tags = this.state.searchTagsInput;
+		tag.name = tag.name.toLowerCase();
+		if (tags.length < 10) {
+			tags.push({ id: tag.id, name: tag.name })
+			this.setState({ searchTagsInput: tags })
+		}
+	}
 
     isInt(value) {
         return !isNaN(value) &&
@@ -145,7 +198,17 @@ export default class Search extends Component {
         </div >)        } else if (this.state.searchType == "Location") {
             return (<div>search by location</div>)
         } else if (this.state.searchType == "Tags") {
-            return (<div>search by tags</div>)
+            // return (<div>search by tags</div>)
+            if (this.state.searchTagsInput && this.state.searchTagsInput.constructor === Array && this.state.tagSuggestions) {
+                return (<ReactTags
+                    allowNew={true}
+                    autofocus={false}
+                    placeholder='Add new/existing tag'
+                    tags={this.state.searchTagsInput}
+                    suggestions={this.state.tagSuggestions}
+                    handleDelete={this.handleDelete.bind(this)}
+                    handleAddition={this.handleAddition.bind(this)} />)
+            }
         }
     }
 
