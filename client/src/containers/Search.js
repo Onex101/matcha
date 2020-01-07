@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { ButtonGroup, ButtonToolbar, Button, FormGroup, FormControl, ControlLabel } from "react-bootstrap";
 import Dropdown from 'react-dropdown'
 import 'react-dropdown/style.css'
-
+import UserList from "../components/UserList";
 import "./Search.css";
 const ReactTags = require('react-tag-autocomplete')
 
@@ -11,14 +11,14 @@ export default class Search extends Component {
         super(props);
 
         this.state = {
-            searchType          :   null,
-            searchAgeInput      :   "0",
-            searchFameInput     :   "0",
-            searchLocationInput :   null,
-            searchTagsInput     :   [],
-            searchResults       :   null,
-            showResults         :   false,
-            tagSuggestions      :   null
+            searchType: null,
+            searchAgeInput: "0",
+            searchFameInput: "0",
+            searchLocationInput: null,
+            searchTagsInput: [],
+            searchResults: null,
+            showResults: false,
+            tagSuggestions: null
         }
     }
 
@@ -33,42 +33,42 @@ export default class Search extends Component {
     // Stops the auto focus on the tags
     componentDidMount() {
         if (this.state.tagSuggestions === null) {
-			try {
-				fetch('/interests/', {
-					method: "GET",
-					headers: {
-						"Content-Type": "application/json; charset=utf-8",
-					},
-				})
-					.then(response => response.json())
-					.then((responseJSON) => {
-						this.setState({ tagSuggestions: responseJSON })
-					})
-					.catch(err => console.error(err))
-			} catch (e) {
-				alert("Settings 3: " + e.message);
-			}
-		}
+            try {
+                fetch('/interests/', {
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json; charset=utf-8",
+                    },
+                })
+                    .then(response => response.json())
+                    .then((responseJSON) => {
+                        this.setState({ tagSuggestions: responseJSON })
+                    })
+                    .catch(err => console.error(err))
+            } catch (e) {
+                alert("Settings 3: " + e.message);
+            }
+        }
     }
 
     componentDidUpdate() {
         if (this.state.tagSuggestions === null) {
-			try {
-				fetch('/interests/', {
-					method: "GET",
-					headers: {
-						"Content-Type": "application/json; charset=utf-8",
-					},
-				})
-					.then(response => response.json())
-					.then((responseJSON) => {
-						this.setState({ tagSuggestions: responseJSON })
-					})
-					.catch(err => console.error(err))
-			} catch (e) {
-				alert("Settings 3: " + e.message);
-			}
-		}
+            try {
+                fetch('/interests/', {
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json; charset=utf-8",
+                    },
+                })
+                    .then(response => response.json())
+                    .then((responseJSON) => {
+                        this.setState({ tagSuggestions: responseJSON })
+                    })
+                    .catch(err => console.error(err))
+            } catch (e) {
+                alert("Settings 3: " + e.message);
+            }
+        }
     }
 
     handleSearchChange = event => {
@@ -76,25 +76,25 @@ export default class Search extends Component {
             searchType: event.value
         });
     }
-    	// Handle Delete of Tag
-	handleDelete(i) {
-		const tagDelete = this.state.searchTagsInput[i]
-		console.log("Deleting tags: ")
-		console.info(tagDelete)
-		const tags = this.state.searchTagsInput.slice(0)
-		tags.splice(i, 1)
-		this.setState({ searchTagsInput: tags })
-	}
+    // Handle Delete of Tag
+    handleDelete(i) {
+        const tagDelete = this.state.searchTagsInput[i]
+        console.log("Deleting tags: ")
+        console.info(tagDelete)
+        const tags = this.state.searchTagsInput.slice(0)
+        tags.splice(i, 1)
+        this.setState({ searchTagsInput: tags })
+    }
 
-	// Handle Addition of Tag to user profile    
-	handleAddition(tag) {
-		const tags = this.state.searchTagsInput;
-		tag.name = tag.name.toLowerCase();
-		if (tags.length < 10) {
-			tags.push({ id: tag.id, name: tag.name })
-			this.setState({ searchTagsInput: tags })
-		}
-	}
+    // Handle Addition of Tag to user profile    
+    handleAddition(tag) {
+        const tags = this.state.searchTagsInput;
+        tag.name = tag.name.toLowerCase();
+        if (tags.length < 10) {
+            tags.push({ id: tag.id, name: tag.name })
+            this.setState({ searchTagsInput: tags })
+        }
+    }
 
     isInt(value) {
         return !isNaN(value) &&
@@ -110,21 +110,21 @@ export default class Search extends Component {
             // console.log(this.props.userInfo.id)
 
             try {
-				fetch('/agesearch/' + this.props.userInfo.id + '/' + this.state.searchAgeInput, {
-					method: "GET",
-					headers: {
-						"Content-Type": "application/json; charset=utf-8",
-					},
-				})
-					.then(response => response.json())
-					.then((responseJSON) => {
+                fetch('/agesearch/' + this.props.userInfo.id + '/' + this.state.searchAgeInput, {
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json; charset=utf-8",
+                    },
+                })
+                    .then(response => response.json())
+                    .then((responseJSON) => {
                         console.log("Age search response: ", responseJSON)
-                        this.setState({showResults: true, searchResults: responseJSON})
-					})
-					.catch(err => console.error(err))
-			} catch (e) {
-				alert(e.message);
-			}
+                        this.setState({ showResults: true, searchResults: responseJSON })
+                    })
+                    .catch(err => console.error(err))
+            } catch (e) {
+                alert(e.message);
+            }
         } else {
             alert("Please insert a number.");
         }
@@ -137,23 +137,53 @@ export default class Search extends Component {
             // TODO Not returning valid results
 
             try {
-				fetch('/famesearch/' + this.props.userInfo.id + '/' + this.state.searchFameInput, {
-					method: "GET",
-					headers: {
-						"Content-Type": "application/json; charset=utf-8",
-					},
-				})
-					.then(response => response.json())
-					.then((responseJSON) => {
+                fetch('/famesearch/' + this.props.userInfo.id + '/' + this.state.searchFameInput, {
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json; charset=utf-8",
+                    },
+                })
+                    .then(response => response.json())
+                    .then((responseJSON) => {
                         console.log("Fame search response: ", responseJSON)
-                        this.setState({showResults: true, searchResults: responseJSON})
-					})
-					.catch(err => console.error(err))
-			} catch (e) {
-				alert(e.message);
-			}
+                        this.setState({ showResults: true, searchResults: responseJSON })
+                    })
+                    .catch(err => console.error(err))
+            } catch (e) {
+                alert(e.message);
+            }
         } else {
             alert("Please insert a number.");
+        }
+    }
+    searchLocation = async event => {
+        event.preventDefault();
+    }
+
+    searchTags = async event => {
+        event.preventDefault();
+        console.log(this.state.searchTagsInput)
+        if (this.state.searchTagsInput.length > 0 && this.props.userInfo.id) {
+            // TODO Not returning valid results
+
+            try {
+                fetch('/famesearch/' + this.props.userInfo.id + '/' + this.state.searchFameInput, {
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json; charset=utf-8",
+                    },
+                })
+                    .then(response => response.json())
+                    .then((responseJSON) => {
+                        console.log("Fame search response: ", responseJSON)
+                        this.setState({ showResults: true, searchResults: responseJSON })
+                    })
+                    .catch(err => console.error(err))
+            } catch (e) {
+                alert(e.message);
+            }
+        } else {
+            alert("Please insert at least one tag.");
         }
     }
 
@@ -179,36 +209,61 @@ export default class Search extends Component {
             </div >)
         } else if (this.state.searchType == "Fame") {
             return (<div id="fame-search">
-            <FormGroup controlId="searchFameInput" bsSize="small">
-                <ControlLabel>Fame</ControlLabel>
-                <FormControl
-                    componentClass="textarea"
-                    defaultValue={this.state.searchFameInput}
-                    onChange={this.handleChange}
-                />
-            </FormGroup>
-            <ButtonToolbar>
-                <ButtonGroup>
-                    <Button
-                        bsSize="large"
-                        className="submit_btn"
-                        onClick={(e) => this.searchFame(e)} >Search</Button>
-                </ButtonGroup>
-            </ButtonToolbar>
-        </div >)        } else if (this.state.searchType == "Location") {
-            return (<div>search by location</div>)
+                <FormGroup controlId="searchFameInput" bsSize="small">
+                    <ControlLabel>Fame</ControlLabel>
+                    <FormControl
+                        componentClass="textarea"
+                        defaultValue={this.state.searchFameInput}
+                        onChange={this.handleChange}
+                    />
+                </FormGroup>
+                <ButtonToolbar>
+                    <ButtonGroup>
+                        <Button
+                            bsSize="large"
+                            className="submit_btn"
+                            onClick={(e) => this.searchFame(e)} >Search</Button>
+                    </ButtonGroup>
+                </ButtonToolbar>
+            </div >)
+        } else if (this.state.searchType == "Location") {
         } else if (this.state.searchType == "Tags") {
             // return (<div>search by tags</div>)
             if (this.state.searchTagsInput && this.state.searchTagsInput.constructor === Array && this.state.tagSuggestions) {
-                return (<ReactTags
-                    allowNew={true}
-                    autofocus={false}
-                    placeholder='Add new/existing tag'
-                    tags={this.state.searchTagsInput}
-                    suggestions={this.state.tagSuggestions}
-                    handleDelete={this.handleDelete.bind(this)}
-                    handleAddition={this.handleAddition.bind(this)} />)
+                return (<div id="fame-search">
+                    <FormGroup controlId="searchTagsInput" bsSize="small">
+                        <ControlLabel>Tags</ControlLabel>
+                        <ReactTags
+                            allowNew={true}
+                            autofocus={false}
+                            placeholder='Add new/existing tag'
+                            tags={this.state.searchTagsInput}
+                            suggestions={this.state.tagSuggestions}
+                            handleDelete={this.handleDelete.bind(this)}
+                            handleAddition={this.handleAddition.bind(this)} />
+                    </FormGroup>
+                    <ButtonToolbar>
+                        <ButtonGroup>
+                            <Button
+                                bsSize="large"
+                                className="submit_btn"
+                                onClick={(e) => this.searchTags(e)} >Search</Button>
+                        </ButtonGroup>
+                    </ButtonToolbar>
+                </div >)
             }
+        }
+    }
+
+    updateSearch() {
+        if (this.state.searchType == "Age") {
+            this.searchAge()
+        } else if (this.state.searchType == "Fame") {
+            this.searchFame()            
+        } else if (this.state.searchType == "Location") {
+            this.searchLocation()
+        } else if (this.state.searchType == "Tags") {
+            this.searchTags()
         }
     }
 
@@ -227,7 +282,10 @@ export default class Search extends Component {
                 </div>
                 <div className="searchResults">
                     {this.state.showResults ? <div className="results">
-                        {this.state.searchResults ? <p>results!</p> : <ControlLabel> No results were found.</ControlLabel>}
+                        {this.state.searchResults ? <UserList
+                            matches={this.state.searchResults}
+                            socket={this.props.socket}
+                            getMatches={this.props.updateSearch} /> : <ControlLabel> No results were found.</ControlLabel>}
                     </div> : null}
                 </div>
             </div>
