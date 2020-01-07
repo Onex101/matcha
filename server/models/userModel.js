@@ -389,7 +389,7 @@ User.prototype.match = function (id, callback){
 		id, user_name, first_name, last_name, birth_date, gender, pref, gps_lat, gps_lon, bio, pic, online, fame, profile_pic_id, GROUP_CONCAT(interest) AS interests
 	FROM
 		(SELECT
-			users.id, user_name, first_name, last_name, interest, birth_date, gender, pref, online, users.gps_lat, users.gps_lon, bio, pic, fame, verified, profile_pic_id
+			users.id, user_name, first_name, last_name, interest, birth_date, gender, pref, online, users.gps_lat, users.gps_lon, bio, pictures.pic, fame, verified, profile_pic_id
 		FROM
 			user_interests
 		RIGHT JOIN
@@ -435,7 +435,7 @@ User.prototype.user_search = function(id, search_name, callback){
 		id, user_name, first_name, last_name, birth_date, gender, pref, gps_lat, gps_lon, bio, pic, fame, profile_pic_id, online, GROUP_CONCAT(interest) AS interests
 	FROM
 		(SELECT
-			users.id, user_name, first_name, last_name, interest, birth_date, gender, pref, users.gps_lat, users.gps_lon, bio, pic, fame, online, verified, profile_pic_id
+			users.id, user_name, first_name, last_name, interest, birth_date, gender, pref, users.gps_lat, users.gps_lon, bio, pictures.pic, fame, online, verified, profile_pic_id
 		FROM
 			user_interests
 		RIGHT JOIN
@@ -473,7 +473,7 @@ User.prototype.tag_search = function(id, interest, callback){
 			id, user_name, birth_date, first_name, last_name, gender, pref, gps_lat, gps_lon, bio, pic, fame, profile_pic_id, online, GROUP_CONCAT(interest) AS interests
 				FROM
 					(SELECT 
-						users.id, user_name, first_name, last_name, interest, birth_date, gender, pref, users.gps_lat, users.gps_lon, bio, pic, online, fame, verified, profile_pic_id FROM user_interests
+						users.id, user_name, first_name, last_name, interest, birth_date, gender, pref, users.gps_lat, users.gps_lon, bio, pictures.pic, online, fame, verified, profile_pic_id FROM user_interests
 					RIGHT JOIN
 						users ON user_interests.user_id = users.id
 					LEFT JOIN
@@ -593,7 +593,7 @@ User.prototype.linked = function(id,callback){
 		id, user_name, first_name, last_name, birth_date, gender, pref, gps_lat, gps_lon, bio, pic, fame, profile_pic_id, online, GROUP_CONCAT(interest) AS interests
 	FROM
 		(SELECT
-			users.id, user_name, first_name, last_name, interest, birth_date, gender, pref, users.gps_lat, users.gps_lon, bio, pic, fame, verified, online, profile_pic_id
+			users.id, user_name, first_name, last_name, interest, birth_date, gender, pref, users.gps_lat, users.gps_lon, bio, pictures.pic, fame, verified, online, profile_pic_id
 		FROM
 			user_interests
 		RIGHT JOIN
@@ -933,6 +933,18 @@ User.prototype.logout = function(id, callback){
 	var now = new Date();
 	console.log('UserId loginout ' + id)
 	var query = `UPDATE users SET online = '${now}' WHERE id = ${id}`;
+	db.query(query, function(err, results){
+		if (err){
+			callback(err, null);
+		}
+		else{
+			callback(null, results);
+		}
+	})
+}
+
+User.prototype.getLocations = function(callback){
+	var query = `SELECT gps_lat , gps_lon from users`;
 	db.query(query, function(err, results){
 		if (err){
 			callback(err, null);

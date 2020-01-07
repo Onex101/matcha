@@ -570,10 +570,33 @@ exports.get_user_details = function(req, res){
 
 exports.search_minfame = function(req, res){
 	let user = new User('');
-	user.search_fame(req.params.x, req.params.user_id, function(err, results){
-		if(err){res.send(err);}
-		else{
-			res.send(results)
+	user.getById(req.params.user_id, function(err, result){
+        if (err)
+            res.send(err);
+        else{
+			row = result[0];
+            if (row){
+                user.data = {
+                    id: row.id,
+                    first_name: row.first_name,
+                    last_name: row.last_name,
+                    user_name: row.user_name,
+                    birth_date: row.birth_date,
+                    gender: row.gender,
+                    pref: row.pref,
+                    gps_lat: row.gps_lat,
+                    gps_lon: row.gps_lat,
+                    bio: row.bio,
+					fame: row.fame,
+					interests: row.interests,
+					pic: row.pic}
+				}
+				user.search_fame(req.params.x, req.params.user_id, function(err, results){
+					if(err){res.send(err);}
+					else{
+						res.json(matchAlgo(user, results));
+					}
+				})
 		}
 	})
 }
@@ -626,14 +649,42 @@ exports.search_username = function(req,res){
 
 exports.search_tags = function(req,res){
 	let user = new User('');
-	user.tag_search(req.params.user_id, req.params.interest, function(err, results){
-		if (err){
-			res.send(err)
-		}
-		else{
-			res.send(results);
+	user.getById(req.params.user_id, function(err, result){
+        if (err)
+            res.send(err);
+        else{
+			row = result[0];
+            if (row){
+                user.data = {
+                    id: row.id,
+                    first_name: row.first_name,
+                    last_name: row.last_name,
+                    user_name: row.user_name,
+                    birth_date: row.birth_date,
+                    gender: row.gender,
+                    pref: row.pref,
+                    gps_lat: row.gps_lat,
+                    gps_lon: row.gps_lat,
+                    bio: row.bio,
+					fame: row.fame,
+					interests: row.interests,
+					pic: row.pic}
+				}
+				user.tag_search(req.params.user_id, req.params.interest, function(err, results){
+					if (err){
+						res.send(err)
+					}
+					else{
+						res.json(matchAlgo(user, results));
+					}
+				})
 		}
 	})
+}
+
+exports.tag_search = function (req, res){
+	console.log(req.body);
+	res.send("Not IMplemented yet");
 }
 
 
@@ -706,6 +757,20 @@ exports.get_matches_age = function(req,res){
 		}
 	})
 }
+
+exports.get_locations = function(req, res){
+	let user = new User('');
+	user.getLocations(function(err, result){
+		if (err){
+            res.send(err);
+		}
+		else{
+			res.send(result)
+		}
+	})
+}
+
+
 
 function matchAlgo(user, results){
 	var array = [];

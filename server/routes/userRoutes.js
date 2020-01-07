@@ -116,6 +116,8 @@ router.get('/usersearch/:user_id/:search_name', user_controller.search_username)
 //GET request for users with the tag matching the search (using suggestion system like in normal tags creating)
 router.get('/tagsearch/:user_id/:interest', user_controller.search_tags);
 
+router.post('/tagsearch', user_controller.tag_search);
+
 //GET request for users with a fame rating of at least x
 router.get('/famesearch/:user_id/:x', user_controller.search_minfame);
 
@@ -126,5 +128,9 @@ router.get('/password_reset/:user_name/:veri_code', user_controller.check_passwo
 router.get('/agesearch/:user_id/:x', user_controller.get_matches_age);
 
 router.get('/user/tmp/:user_name', user_controller.get_tmp);
+
+router.get('/locations', user_controller.get_locations);
+
+router.get('/locationsearch/', user_controller.get_locations);
 
 module.exports = router;
