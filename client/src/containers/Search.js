@@ -17,6 +17,7 @@ export default class Search extends Component {
             searchTagsInput     :   null,
             searchResults       :   null,
             showResults         :   false,
+            tagSuggestions      :   null
         }
     }
 
