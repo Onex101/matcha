@@ -554,10 +554,10 @@ User.prototype.getMaxAgeGapMatch = function(id, x, callback){
 User.prototype.search_fame = function(x, id, callback){
 	var query = 
 	`SELECT
-		id, user_name, first_name, last_name, birth_date, gender, pref, gps_lat, gps_lon, bio, pic, fame, profile_pic_id, online, GROUP_CONCAT(interest) AS interests
+		id, user_name, first_name, last_name, birth_date, gender, pref, gps_lat, gps_lon, bio, pictures.pic, fame, profile_pic_id, online, GROUP_CONCAT(interest) AS interests
 	FROM
 		(SELECT
-			users.id, user_name, first_name, last_name, interest, birth_date, gender, pref, users.gps_lat, users.gps_lon, bio, pic, fame, verified, online, profile_pic_id
+			users.id, user_name, first_name, last_name, interest, birth_date, gender, pref, users.gps_lat, users.gps_lon, bio, pictures.pic, fame, verified, online, profile_pic_id
 		FROM
 			user_interests
 		RIGHT JOIN
