@@ -131,6 +131,6 @@ router.get('/user/tmp/:user_name', user_controller.get_tmp);
 
 router.get('/locations', user_controller.get_locations);
 
-router.get('/locationsearch/', user_controller.get_locations);
+router.get('/locationsearch/:id/:gps_lat/:gps_lon', user_controller.get_users_by_location);
 
 module.exports = router;
