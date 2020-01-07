@@ -249,7 +249,10 @@ class App extends Component {
 			  <NavDropdown eventKey={3} title={(session)} id="basic-nav-dropdown">
 				<LinkContainer to="/settings">
 					<NavItem>Profile</NavItem>
-				</LinkContainer>  
+				</LinkContainer>
+				<LinkContainer to="/search">
+				  <NavItem>Search</NavItem>
+				</LinkContainer>
 				<MenuItem eventKey={3.2}>
 				  
 				</MenuItem>

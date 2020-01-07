@@ -368,6 +368,7 @@ export default class Settings extends Component {
 
 		try {
 			//   const user = this.state;
+			console.log(this.state.firstname + "   " + this.state.lastname + "   " + this.state.email)
 			fetch(`/user/update`, {
 				method: "POST",
 				headers: {
@@ -386,6 +387,7 @@ export default class Settings extends Component {
 				.then(response => response.json())
 				.then((responseJSON) => {
 					console.log(responseJSON);
+					console.log(responseJSON.user.data);
 					//   if (responseJSON["success"]) {
 					// Successfully sent
 					window.location.reload();

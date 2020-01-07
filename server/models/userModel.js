@@ -860,7 +860,7 @@ User.prototype.fetchInterestsList = function (callback){
 	})
 }
 
-User.prototype.update_data = function (bio, gender, pref, id, callback, first_name, last_name, email){
+User.prototype.update_data = function (bio, gender, pref, id, first_name, last_name, email, callback){
 	bio = mysql.escape(bio);
 	var query = `UPDATE users SET bio = ${bio}, gender = '${gender}', pref = '${pref}', first_name = '${first_name}', last_name = '${last_name}', email = '${email}' WHERE id = '${id}'`;
 	db.query(query, function (err, results) {

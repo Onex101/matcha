@@ -24,39 +24,42 @@ export default class Login extends Component {
 
   handleSubmit = async event => {
     event.preventDefault();
-  
+
     try {
       const user = this.state;
       fetch(`/login`, {
         method: "POST",
         headers: {
-            "Content-Type": "application/json; charset=utf-8",
+          "Content-Type": "application/json; charset=utf-8",
         },
         body: JSON.stringify({
-          user_name:  user.user_name,
-          password:   user.password,
+          user_name: user.user_name,
+          password: user.password,
         })
       })
-      .then(response => response.json())
-      .then((responseJSON) => {
+        .then(response => response.json())
+        .then((responseJSON) => {
           console.log(responseJSON);
           if (responseJSON["success"]) {
             if (responseJSON["success"] === "login sucessfull") {
               this.props.userHasAuthenticated(true);
               this.props.setUser(responseJSON["user"]);
               this.props.history.push("/");
-            } else if (responseJSON["success"] === "Username and password does not match"){
+              window.location.reload();
+
+            } else if (responseJSON["success"] === "Username and password does not match") {
               alert(responseJSON["success"]);
-            } else if (responseJSON["success"] === "Username does not exist"){
-              alert(responseJSON["success"]);}
+            } else if (responseJSON["success"] === "Username does not exist") {
+              alert(responseJSON["success"]);
+            }
           }
           else
-          alert("Something went wrong :(");
-      })
-      .catch(err => console.error(err))
-      } catch (e) {
-        alert(e.message);
-      }
+            alert("Something went wrong :(");
+        })
+        .catch(err => console.error(err))
+    } catch (e) {
+      alert(e.message);
+    }
   }
 
   forgotPassword = async event => {
@@ -92,7 +95,7 @@ export default class Login extends Component {
             type="submit">
             Login
           </Button>
-          <br/><a onClick={this.forgotPassword} id="forgot">Forgot Password?</a>
+          <br /><a onClick={this.forgotPassword} id="forgot">Forgot Password?</a>
         </form>
       </div>
     );
