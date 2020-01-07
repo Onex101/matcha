@@ -636,17 +636,7 @@ exports.search_tags = function(req,res){
 	})
 }
 
-exports.get_matches_age = function(req,res){
-	let user = new User('');
-	user.getMaxAgeGapMatch(req.params.user_id, req.params.x, function(err, results){
-		if (err){
-			res.send(err)
-		}
-		else{
-			res.send(results);
-		}
-	})
-}
+
 
 exports.get_tmp = function(req, res){
 	let user = new User('')
@@ -682,3 +672,72 @@ exports.check_password_reset = function(req, res){
     })
 }
 
+exports.get_matches_age = function(req,res){
+	let user = new User('');
+	user.getById(req.params.user_id, function(err, result){
+        if (err)
+            res.send(err);
+        else{
+			row = result[0];
+            if (row){
+                user.data = {
+                    id: row.id,
+                    first_name: row.first_name,
+                    last_name: row.last_name,
+                    user_name: row.user_name,
+                    birth_date: row.birth_date,
+                    gender: row.gender,
+                    pref: row.pref,
+                    gps_lat: row.gps_lat,
+                    gps_lon: row.gps_lat,
+                    bio: row.bio,
+					fame: row.fame,
+					interests: row.interests,
+					pic: row.pic}
+				}
+				user.getMaxAgeGapMatch(req.params.user_id, req.params.x, function(err, results){
+					if (err){
+						res.send(err)
+					}
+					else{
+						res.json(matchAlgo(user, results));
+						}
+					})
+		}
+	})
+}
+
+function matchAlgo(user, results){
+	var array = [];
+	var i = 0;
+	while(results[i]){
+		dist = Match.getD_coff(user.data.gps_lat, user.data.gps_lon, results[i].gps_lat, results[i].gps_lon)
+		dist_raw = Match.getDistance(user.data.gps_lat, user.data.gps_lon, results[i].gps_lat, results[i].gps_lon)
+		ageCoff = Match.getA_coff(user.data.birth_date, results[i].birth_date)
+		pref = Match.getP_coff(user.data.gender, user.data.pref, results[i].gender, results[i].pref)
+		like = Match.getL_coff(user.data.interests, results[i].interests);
+		var matchC =  (dist) +  (ageCoff) +  (5*pref) + (like) //weightings can be adjusted as needed here
+		let new_data = results[i]
+		if(matchC > 4){ //4 is an arb number to exclude any matches that fall too far because of gender/pref differential
+			new_user = new User(new_data);
+			new_user.data.gps_lat = results[i].gps_lat;
+			new_user.data.gps_lon =  results[i].gps_lon;
+			new_user.match = matchC;
+			new_user.like = like  * 100;
+			new_user.dist_raw = dist_raw;
+			new_user.birth_date_diff = Math.abs(Match.getAge(user.data.birth_date) - Match.getAge(results[i].birth_date));
+			new_user.interests = results[i].interests;
+			new_user.pic = results[i].pic;
+			new_user.profile_pic_id = results[i].profile_pic_id;
+			new_user.tagMatch = like * 10;
+			array.push(new_user);
+		}
+		i++;
+	}
+	array.sort(sortFunction);
+	obj = {};
+	for (var key in array) {
+		obj[key] = array[key]
+	}
+	return obj;
+}
