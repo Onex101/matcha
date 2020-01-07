@@ -146,6 +146,16 @@ export default class Search extends Component {
             return (<div>search by location</div>)
         } else if (this.state.searchType == "Tags") {
             return (<div>search by tags</div>)
+            // if (this.state.tags && this.state.tags.constructor === Array && this.state.suggestions) {
+            //     return (<ReactTags
+            //         allowNew={true}
+            //         autofocus={false}
+            //         placeholder='Add new/existing tag'
+            //         tags={this.state.tags}
+            //         suggestions={this.state.suggestions}
+            //         handleDelete={this.handleDelete.bind(this)}
+            //         handleAddition={this.handleAddition.bind(this)} />)
+            // }
         }
     }
 
