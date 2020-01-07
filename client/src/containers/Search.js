@@ -10,11 +10,13 @@ export default class Search extends Component {
         super(props);
 
         this.state = {
-            searchType: null,
-            searchAgeInput: 0,
-            searchFameInput: 0,
-            searchLocationInput: null,
-            searchTagsInput: null,
+            searchType          :   null,
+            searchAgeInput      :   "0",
+            searchFameInput     :   "0",
+            searchLocationInput :   null,
+            searchTagsInput     :   null,
+            searchResults       :   null,
+            showResults         :   false,
         }
     }
 
@@ -51,10 +53,8 @@ export default class Search extends Component {
         event.preventDefault();
         console.log(this.state.searchAgeInput)
         if (this.isInt(this.state.searchAgeInput) && this.props.userInfo.id) {
-            console.log("SUCCESS")
-            console.log(this.props.userInfo.id)
-
-            // '/agesearch/:user_id/:x'
+            // console.log("SUCCESS")
+            // console.log(this.props.userInfo.id)
 
             try {
 				fetch('/agesearch/' + this.props.userInfo.id + '/' + this.state.searchAgeInput, {
@@ -65,7 +65,35 @@ export default class Search extends Component {
 				})
 					.then(response => response.json())
 					.then((responseJSON) => {
-						console.log("Age search response: ", responseJSON)
+                        console.log("Age search response: ", responseJSON)
+                        this.setState({showResults: true, searchResults: responseJSON})
+					})
+					.catch(err => console.error(err))
+			} catch (e) {
+				alert(e.message);
+			}
+        } else {
+            alert("Please insert a number.");
+        }
+    }
+
+    searchFame = async event => {
+        event.preventDefault();
+        console.log(this.state.searchFameInput)
+        if (this.isInt(this.state.searchFameInput) && this.props.userInfo.id) {
+            // TODO Not returning valid results
+
+            try {
+				fetch('/famesearch/' + this.props.userInfo.id + '/' + this.state.searchFameInput, {
+					method: "GET",
+					headers: {
+						"Content-Type": "application/json; charset=utf-8",
+					},
+				})
+					.then(response => response.json())
+					.then((responseJSON) => {
+                        console.log("Fame search response: ", responseJSON)
+                        this.setState({showResults: true, searchResults: responseJSON})
 					})
 					.catch(err => console.error(err))
 			} catch (e) {
@@ -78,7 +106,7 @@ export default class Search extends Component {
 
     renderSearchType() {
         if (this.state.searchType == "Age") {
-            return (<div id="age-search">search by age
+            return (<div id="age-search">
                 <FormGroup controlId="searchAgeInput" bsSize="small">
                     <ControlLabel>Max Age Gap</ControlLabel>
                     <FormControl
@@ -97,8 +125,24 @@ export default class Search extends Component {
                 </ButtonToolbar>
             </div >)
         } else if (this.state.searchType == "Fame") {
-            return (<div>search by fame</div>)
-        } else if (this.state.searchType == "Location") {
+            return (<div id="fame-search">
+            <FormGroup controlId="searchFameInput" bsSize="small">
+                <ControlLabel>Fame</ControlLabel>
+                <FormControl
+                    componentClass="textarea"
+                    defaultValue={this.state.searchFameInput}
+                    onChange={this.handleChange}
+                />
+            </FormGroup>
+            <ButtonToolbar>
+                <ButtonGroup>
+                    <Button
+                        bsSize="large"
+                        className="submit_btn"
+                        onClick={(e) => this.searchFame(e)} >Search</Button>
+                </ButtonGroup>
+            </ButtonToolbar>
+        </div >)        } else if (this.state.searchType == "Location") {
             return (<div>search by location</div>)
         } else if (this.state.searchType == "Tags") {
             return (<div>search by tags</div>)
@@ -115,8 +159,13 @@ export default class Search extends Component {
                     <ControlLabel>Search by</ControlLabel>
                     <Dropdown options={options} onChange={this.handleSearchChange} value={this.state.searchType} placeholder="Select an option" ControlLabel="searchType" />
                 </div>
-                <div className="searchResults">
+                <div className="searchType">
                     {this.state.searchType ? this.renderSearchType() : null}
+                </div>
+                <div className="searchResults">
+                    {this.state.showResults ? <div className="results">
+                        {this.state.searchResults ? <p>results!</p> : <ControlLabel> No results were found.</ControlLabel>}
+                    </div> : null}
                 </div>
             </div>
             // this.state.id ?
