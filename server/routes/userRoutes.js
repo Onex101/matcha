@@ -127,4 +127,6 @@ router.get('/agesearch/:user_id/:x', user_controller.get_matches_age);
 
 router.get('/user/tmp/:user_name', user_controller.get_tmp);
 
+router.get('/locations', user_controller.get_locations);
+
 module.exports = router;
