@@ -19,6 +19,7 @@ export default class Search extends Component {
             searchResults: null,
             showResults: false,
             tagSuggestions: null,
+            locationCoordinates: null,
             locationSuggestions: null,
         }
     }
@@ -49,38 +50,53 @@ export default class Search extends Component {
         }
     }
 
-    convertCoordinates(lat, long) {
-        console.log("Lat: " + lat + " Long: " + long)
-        fetch('https://maps.googleapis.com/maps/api/geocode/json?address=' + lat + ',' + long + '&key=' + "AIzaSyDKEXlzFbGtbXxHkUy6GSdFCofq5BI_oVo")
-            .then((response) => response.json())
-            .then((responseJson) => {
-                console.log('ADDRESS GEOCODE is BACK!! => ' + JSON.stringify(responseJson));
-                var location = null;
-                for (var x in responseJson) {
-                    for (var y in responseJson[x]) {
-                        if (typeof responseJson[x][y] == "object" && "types" in responseJson[x][y]) {
-                            if (responseJson[x][y]["types"][0] == "administrative_area_level_2") {
-                                location = responseJson[x][y]["formatted_address"];
-                            }
-                        }
-                    }
-                }
-                if (location == null)
-                    for (var x in responseJson) {
-                        for (var y in responseJson[x]) {
-                            if (typeof responseJson[x][y] == "object" && "types" in responseJson[x][y]) {
-                                if (responseJson[x][y]["types"][0] == "establishment") {
-                                    location = responseJson[x][y]["formatted_address"];
+    getLocationSuggestions() {
+        if (this.state.locationCoordinates && this.state.locationCoordinates.constructor === Array &&
+            this.state.locationCoordinates.length > 0) {
+            var locations = [];
+            for (var elem in this.state.locationCoordinates) {
+                // var area = this.convertCoordinates(this.state.locationCoordinates[elem].gps_lat, this.state.locationCoordinates[elem].gps_lon);
+                var lat = this.state.locationCoordinates[elem].gps_lat;
+                var long = this.state.locationCoordinates[elem].gps_lon;
+                ////////////////
+                fetch('https://maps.googleapis.com/maps/api/geocode/json?address=' + lat + ',' + long + '&key=' + "AIzaSyDKEXlzFbGtbXxHkUy6GSdFCofq5BI_oVo")
+                    .then((response) => response.json())
+                    .then((responseJson) => {
+                        // console.log('ADDRESS GEOCODE is BACK!! => ' + JSON.stringify(responseJson));
+                        var location = null;
+                        for (var x in responseJson) {
+                            for (var y in responseJson[x]) {
+                                if (typeof responseJson[x][y] == "object" && "types" in responseJson[x][y]) {
+                                    if (responseJson[x][y]["types"][0] == "administrative_area_level_2") {
+                                        location = responseJson[x][y]["formatted_address"];
+                                    }
                                 }
                             }
                         }
-                    }
-                    console.log("Location: " + location)
-                return (location);
-            })
+                        if (location == null)
+                            for (var x in responseJson) {
+                                for (var y in responseJson[x]) {
+                                    if (typeof responseJson[x][y] == "object" && "types" in responseJson[x][y]) {
+                                        if (responseJson[x][y]["types"][0] == "establishment") {
+                                            location = responseJson[x][y]["formatted_address"];
+                                        }
+                                    }
+                                }
+                            }
+                        // console.log("Location: " + location)
+                        if (location !== null) {
+                            // console.log("AREA : " + location);
+                            locations.push(location);
+                        }
+                    })
+            }
+            // console.log(locations)
+
+            this.setState({ locationSuggestions: locations })
+        }
     }
 
-    getLocationSuggestions() {
+    getLocationCoordinates() {
         try {
             fetch('/locations/', {
                 method: "GET",
@@ -90,18 +106,23 @@ export default class Search extends Component {
             })
                 .then(response => response.json())
                 .then((responseJSON) => {
-                    // console.log("LOCATIONS: ")
+                    console.log("LOCATIONS: ")
                     console.info(responseJSON)
-                    var locations = [];
+                    // var locations = [];
                     // for (var elem in responseJSON) {
                     //     locations.push(this.convertCoordinates(responseJSON[elem].gps_lat, responseJSON[elem].gps_lon))
                     // }
-                    var ret = this.convertCoordinates(responseJSON[1].gps_lat, responseJSON[1].gps_lon);
-                    console.log("RET: " + ret)
-                    locations.push(ret)
+                    // var ret = this.convertCoordinates(responseJSON[1].gps_lat, responseJSON[1].gps_lon);
+                    // console.log("RET: " + ret)
+                    // locations.push(ret)
 
-                    console.log(locations);
-                    this.setState({ locationSuggestions: responseJSON })
+                    // console.log(locations);
+                    var coordinates = []
+                    for (var gps in responseJSON) {
+                        console.log(responseJSON[gps])
+                        coordinates.push(responseJSON[gps])
+                    }
+                    this.setState({ locationCoordinates: coordinates })
                 })
                 .catch(err => console.error(err))
         } catch (e) {
@@ -109,22 +130,62 @@ export default class Search extends Component {
         }
     }
 
+    removeDuplicates(originalArray, prop) {
+        var newArray = [];
+        var lookupObject = {};
+
+        for (var i in originalArray) {
+            lookupObject[originalArray[i][prop]] = originalArray[i];
+        }
+
+        for (i in lookupObject) {
+            newArray.push(lookupObject[i]);
+        }
+        return newArray;
+    }
+
     // Stops the auto focus on the tags
     componentDidMount() {
         if (this.state.tagSuggestions === null) {
             this.getInterests()
         }
-        if (this.state.locationSuggestions === null) {
-            this.getLocationSuggestions()
+        if (this.state.locationCoordinates === null) {
+            this.getLocationCoordinates()
         }
     }
+    removeDups(names) {
+        // console.log("NAMES")
+        // console.info(names)
 
+        let unique = {};
+        names.forEach(function(i) {
+          if(!unique[i]) {
+            unique[i] = true;
+          }
+        });
+        return Object.keys(unique);
+      }
     componentDidUpdate() {
         if (this.state.tagSuggestions === null) {
             this.getInterests()
         }
-        if (this.state.locationSuggestions === null) {
+
+        if (this.state.locationCoordinates !== null &&
+            this.state.locationCoordinates.length > 0 && this.state.locationSuggestions === null) {
+            console.log("LOCATIONS TEST")
             this.getLocationSuggestions()
+        }
+
+        //To remove
+        if (this.state.locationSuggestions !== null && this.state.locationSuggestions.length > 0){
+            console.log("SUGGESTIONS " + this.state.locationSuggestions)
+            console.info( this.state.locationSuggestions)
+            var cleanLocations = this.removeDups(this.state.locationSuggestions);
+            console.log("Clean " + cleanLocations)
+            console.info(cleanLocations)
+            if (cleanLocations.length != this.state.locationSuggestions.length) {
+                this.setState({locationSuggestions: cleanLocations})
+            }
         }
     }
 
@@ -133,6 +194,7 @@ export default class Search extends Component {
             searchType: event.value
         });
     }
+
     // Handle Delete of Tag
     handleDelete(i) {
         const tagDelete = this.state.searchTagsInput[i]
@@ -213,6 +275,7 @@ export default class Search extends Component {
             alert("Please insert a number.");
         }
     }
+
     searchLocation = async event => {
         event.preventDefault();
     }
