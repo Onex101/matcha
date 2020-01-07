@@ -772,12 +772,35 @@ exports.get_locations = function(req, res){
 
 exports.get_users_by_location = function(req, res){
 	let user = new User('');
-	user.getUsersByLocation(function(err, result){
-		if (err){
+	user.getById(req.params.id, function(err, result){
+        if (err)
             res.send(err);
-		}
-		else{
-			res.send(result)
+        else{
+			row = result[0];
+            if (row){
+                user.data = {
+                    id: row.id,
+                    first_name: row.first_name,
+                    last_name: row.last_name,
+                    user_name: row.user_name,
+                    birth_date: row.birth_date,
+                    gender: row.gender,
+                    pref: row.pref,
+                    gps_lat: row.gps_lat,
+                    gps_lon: row.gps_lat,
+                    bio: row.bio,
+					fame: row.fame,
+					interests: row.interests,
+					pic: row.pic}
+				}
+			user.getUsersByLocation(req.params.id, req.params.gps_lat, req.params.gps_lon, function(err, results){
+				if (err){
+					res.send(err);
+				}
+				else{
+					res.json(matchAlgo(user, results));
+				}
+			})
 		}
 	})
 }
