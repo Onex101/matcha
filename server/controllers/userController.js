@@ -770,6 +770,18 @@ exports.get_locations = function(req, res){
 	})
 }
 
+exports.get_users_by_location = function(req, res){
+	let user = new User('');
+	user.getUsersByLocation(function(err, result){
+		if (err){
+            res.send(err);
+		}
+		else{
+			res.send(result)
+		}
+	})
+}
+
 
 
 function matchAlgo(user, results){

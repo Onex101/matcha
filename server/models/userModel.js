@@ -873,6 +873,19 @@ User.prototype.update_data = function (bio, gender, pref, id, first_name, last_n
 	})
 }
 
+User.prototype.getUsersByLocation = function(gps_lat, gps_lon, callback){
+	var query = `SELECT * FROM users WHERE gps_lat = ${gps_lat} AND gps_lon = ${gps_lon}`;
+	db.query(query, function(err, results){
+		if (err){
+			callback(err, null);
+		}
+		else{
+			callback(null, results);
+		}
+	})
+}
+
+
 User.prototype.set_gps = function(id, lat, lon, callback){
 	var query = `UPDATE users SET gps_lat = ${lat}, gps_lon = ${lon} WHERE id = ${id}`;
 	db.query(query, function(err, results){
