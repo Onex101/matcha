@@ -18,7 +18,8 @@ export default class Search extends Component {
             searchTagsInput: [],
             searchResults: null,
             showResults: false,
-            tagSuggestions: null
+            tagSuggestions: null,
+            locationSuggestions: null,
         }
     }
 
@@ -30,44 +31,100 @@ export default class Search extends Component {
         });
     }
 
+    getInterests() {
+        try {
+            fetch('/interests/', {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json; charset=utf-8",
+                },
+            })
+                .then(response => response.json())
+                .then((responseJSON) => {
+                    this.setState({ tagSuggestions: responseJSON })
+                })
+                .catch(err => console.error(err))
+        } catch (e) {
+            alert(e.message);
+        }
+    }
+
+    convertCoordinates(lat, long) {
+        console.log("Lat: " + lat + " Long: " + long)
+        fetch('https://maps.googleapis.com/maps/api/geocode/json?address=' + lat + ',' + long + '&key=' + "AIzaSyDKEXlzFbGtbXxHkUy6GSdFCofq5BI_oVo")
+            .then((response) => response.json())
+            .then((responseJson) => {
+                console.log('ADDRESS GEOCODE is BACK!! => ' + JSON.stringify(responseJson));
+                var location = null;
+                for (var x in responseJson) {
+                    for (var y in responseJson[x]) {
+                        if (typeof responseJson[x][y] == "object" && "types" in responseJson[x][y]) {
+                            if (responseJson[x][y]["types"][0] == "administrative_area_level_2") {
+                                location = responseJson[x][y]["formatted_address"];
+                            }
+                        }
+                    }
+                }
+                if (location == null)
+                    for (var x in responseJson) {
+                        for (var y in responseJson[x]) {
+                            if (typeof responseJson[x][y] == "object" && "types" in responseJson[x][y]) {
+                                if (responseJson[x][y]["types"][0] == "establishment") {
+                                    location = responseJson[x][y]["formatted_address"];
+                                }
+                            }
+                        }
+                    }
+                    console.log("Location: " + location)
+                return (location);
+            })
+    }
+
+    getLocationSuggestions() {
+        try {
+            fetch('/locations/', {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json; charset=utf-8",
+                },
+            })
+                .then(response => response.json())
+                .then((responseJSON) => {
+                    // console.log("LOCATIONS: ")
+                    console.info(responseJSON)
+                    var locations = [];
+                    // for (var elem in responseJSON) {
+                    //     locations.push(this.convertCoordinates(responseJSON[elem].gps_lat, responseJSON[elem].gps_lon))
+                    // }
+                    var ret = this.convertCoordinates(responseJSON[1].gps_lat, responseJSON[1].gps_lon);
+                    console.log("RET: " + ret)
+                    locations.push(ret)
+
+                    console.log(locations);
+                    this.setState({ locationSuggestions: responseJSON })
+                })
+                .catch(err => console.error(err))
+        } catch (e) {
+            alert(e.message);
+        }
+    }
+
     // Stops the auto focus on the tags
     componentDidMount() {
         if (this.state.tagSuggestions === null) {
-            try {
-                fetch('/interests/', {
-                    method: "GET",
-                    headers: {
-                        "Content-Type": "application/json; charset=utf-8",
-                    },
-                })
-                    .then(response => response.json())
-                    .then((responseJSON) => {
-                        this.setState({ tagSuggestions: responseJSON })
-                    })
-                    .catch(err => console.error(err))
-            } catch (e) {
-                alert("Settings 3: " + e.message);
-            }
+            this.getInterests()
+        }
+        if (this.state.locationSuggestions === null) {
+            this.getLocationSuggestions()
         }
     }
 
     componentDidUpdate() {
         if (this.state.tagSuggestions === null) {
-            try {
-                fetch('/interests/', {
-                    method: "GET",
-                    headers: {
-                        "Content-Type": "application/json; charset=utf-8",
-                    },
-                })
-                    .then(response => response.json())
-                    .then((responseJSON) => {
-                        this.setState({ tagSuggestions: responseJSON })
-                    })
-                    .catch(err => console.error(err))
-            } catch (e) {
-                alert("Settings 3: " + e.message);
-            }
+            this.getInterests()
+        }
+        if (this.state.locationSuggestions === null) {
+            this.getLocationSuggestions()
         }
     }
 
@@ -259,7 +316,7 @@ export default class Search extends Component {
         if (this.state.searchType == "Age") {
             this.searchAge()
         } else if (this.state.searchType == "Fame") {
-            this.searchFame()            
+            this.searchFame()
         } else if (this.state.searchType == "Location") {
             this.searchLocation()
         } else if (this.state.searchType == "Tags") {
