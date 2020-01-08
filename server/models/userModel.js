@@ -570,7 +570,7 @@ User.prototype.search_fame = function(x, id, callback){
 		LEFT JOIN
 			pictures ON profile_pic_id = pictures.id
 		WHERE
-			likes.link_code IS NULL AND verified IS NOT NULL AND pic IS NOT NULL AND fame >= ${x}) x
+			likes.link_code IS NULL AND verified IS NOT NULL AND pic IS NOT NULL AND fame = ${x}) x
 	WHERE
 		NOT id = ${id}
 	GROUP BY
@@ -979,7 +979,19 @@ User.prototype.logout = function(id, callback){
 }
 
 User.prototype.getLocations = function(callback){
-	var query = `SELECT Distinct gps_lat , gps_lon from users`;
+	var query = `SELECT DISTINCT gps_lat , gps_lon from users`;
+	db.query(query, function(err, results){
+		if (err){
+			callback(err, null);
+		}
+		else{
+			callback(null, results);
+		}
+	})
+}
+
+User.prototype.blockUserById = function(user1, user2, callback){
+	var query = `INSERT INTO blocks (user1_id, user2_id) VALUES (${user1}, ${user2})`;
 	db.query(query, function(err, results){
 		if (err){
 			callback(err, null);

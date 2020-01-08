@@ -33,6 +33,7 @@ connection.connect(function (err) {
 	connection.query('DROP TABLE IF EXISTS conversations');
 	connection.query('DROP TABLE IF EXISTS interests');
 	connection.query('DROP TABLE IF EXISTS user_interests');
+	connection.query('DROP TABLE IF EXISTS blocks');
 
 	console.log('Initiating tables...')
 	connection.query("CREATE TABLE `users`\
@@ -100,6 +101,12 @@ connection.connect(function (err) {
 	msg varchar(1000),\
 	timestamp DATETIME DEFAULT NOW(),\
 	viewed int DEFAULT 0,\
+	PRIMARY KEY (`id`))');
+
+	connection.query('CREATE TABLE blocks\
+	(id int NOT NULL AUTO_INCREMENT,\
+	user1_id int NOT NULL,\
+	user2_id int NOT NULL,\
 	PRIMARY KEY (`id`))');
 
 	console.log('Creating fake profiles...')
