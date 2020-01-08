@@ -50,47 +50,40 @@ export default class Search extends Component {
         }
     }
 
-    getLocationSuggestions() {
+    async getLocationSuggestions() {
         if (this.state.locationCoordinates && this.state.locationCoordinates.constructor === Array &&
             this.state.locationCoordinates.length > 0) {
             var locations = [];
             for (var elem in this.state.locationCoordinates) {
                 var lat = this.state.locationCoordinates[elem].gps_lat;
                 var long = this.state.locationCoordinates[elem].gps_lon;
-                ////////////////
-                fetch('https://maps.googleapis.com/maps/api/geocode/json?address=' + lat + ',' + long + '&key=' + "AIzaSyDKEXlzFbGtbXxHkUy6GSdFCofq5BI_oVo")
-                    .then((response) => response.json())
-                    .then((responseJson) => {
-                        // console.log('ADDRESS GEOCODE is BACK!! => ' + JSON.stringify(responseJson));
-                        var location = null;
-                        for (var x in responseJson) {
-                            for (var y in responseJson[x]) {
-                                if (typeof responseJson[x][y] == "object" && "types" in responseJson[x][y]) {
-                                    if (responseJson[x][y]["types"][0] == "administrative_area_level_2") {
-                                        location = responseJson[x][y]["formatted_address"];
-                                    }
+                const response = await fetch('https://maps.googleapis.com/maps/api/geocode/json?address=' + lat + ',' + long + '&key=' + "AIzaSyDKEXlzFbGtbXxHkUy6GSdFCofq5BI_oVo");
+                const responseJson = await response.json();
+                // console.log('ADDRESS GEOCODE is BACK!! => ' + JSON.stringify(responseJson));
+                var location = null;
+                for (var x in responseJson) {
+                    for (var y in responseJson[x]) {
+                        if (typeof responseJson[x][y] == "object" && "types" in responseJson[x][y]) {
+                            if (responseJson[x][y]["types"][0] == "administrative_area_level_2") {
+                                location = responseJson[x][y]["formatted_address"];
+                            }
+                        }
+                    }
+                }
+                if (location == null)
+                    for (var x in responseJson) {
+                        for (var y in responseJson[x]) {
+                            if (typeof responseJson[x][y] == "object" && "types" in responseJson[x][y]) {
+                                if (responseJson[x][y]["types"][0] == "establishment") {
+                                    location = responseJson[x][y]["formatted_address"];
                                 }
                             }
                         }
-                        if (location == null)
-                            for (var x in responseJson) {
-                                for (var y in responseJson[x]) {
-                                    if (typeof responseJson[x][y] == "object" && "types" in responseJson[x][y]) {
-                                        if (responseJson[x][y]["types"][0] == "establishment") {
-                                            location = responseJson[x][y]["formatted_address"];
-                                        }
-                                    }
-                                }
-                            }
-                        // console.log("Location: " + location)
-                        if (location !== null) {
-                            // console.log("AREA : " + location);
-                            locations.push({location: location, gps_lat: lat, gps_lon: long});
-                        }
-                    })
+                    }
+                if (location !== null) {
+                    locations.push({ location: location, gps_lat: lat, gps_lon: long });
+                }
             }
-            // console.log(locations)
-
             this.setState({ locationSuggestions: locations })
         }
     }
@@ -143,38 +136,36 @@ export default class Search extends Component {
             this.getLocationCoordinates()
         }
     }
+
     removeDups(names) {
         // console.log("NAMES")
         // console.info(names)
 
         let unique = {};
-        names.forEach(function(i) {
-          if(!unique[i]) {
-            unique[i] = true;
-          }
+        names.forEach(function (i) {
+            if (!unique[i]) {
+                unique[i] = true;
+            }
         });
         return Object.keys(unique);
-      }
+    }
 
-      isEmpty(obj) {     
-        if (obj == null) 
+    isEmpty(obj) {
+        if (obj == null) {
             return true;
-        if (obj === undefined)
+        }
+        if (obj === undefined) {
             return true;
-
-        if (obj.length === 0)  
+        }
+        if (obj.length === 0) {
             return true;
-
-        if (obj.length > 0)    
+        }
+        if (obj.length > 0) {
             return false;
-
-        // for (var key in obj) {
-        //     if(obj.hasOwnProperty(prop))
-        //     return false;
-        // }
-
+        }
         return true;
     }
+
     componentDidUpdate() {
         if (this.state.tagSuggestions === null) {
             this.getInterests()
@@ -182,35 +173,32 @@ export default class Search extends Component {
 
         if (this.state.locationCoordinates !== null &&
             this.state.locationCoordinates.length > 0 && this.state.locationSuggestions === null) {
-            console.log("LOCATIONS TEST")
+            // console.log("LOCATIONS TEST")
             this.getLocationSuggestions()
-        } else {
-            console.log("Failed to get coordinates?")
-            // console.info(this.state.locationCoordinates)
-            // // console.info(this.state.locationCoordinates.length)
-            // console.info(this.state.locationSuggestions)
         }
 
         //To remove
-        if (this.state.locationSuggestions !== null && !this.isEmpty(this.state.locationSuggestions)){
-            console.log("SUGGESTIONS ")
-            console.info( this.state.locationSuggestions)
-            var cleanLocations = this.removeDups(this.state.locationSuggestions);
-            console.log("Clean ")
-            console.info(cleanLocations)
+        if (this.state.locationSuggestions !== null && !this.isEmpty(this.state.locationSuggestions)) {
+            // console.log("SUGGESTIONS ")
+            // console.info(this.state.locationSuggestions)
+            var cleanLocations = this.removeDuplicates(this.state.locationSuggestions, 'location');
+            // console.log("Clean ")
+            // console.info(cleanLocations)
             if (cleanLocations.length != this.state.locationSuggestions.length) {
-                this.setState({locationSuggestions: cleanLocations})
+                this.setState({ locationSuggestions: cleanLocations })
             }
-        } else {
-            console.log("Failed to get suggestions?")
-            console.log(this.state.locationSuggestions)
-            console.log(this.isEmpty(this.state.locationSuggestions))
         }
     }
 
     handleSearchChange = event => {
         this.setState({
             searchType: event.value
+        });
+    }
+
+    handleLocationSearchChange = event => {
+        this.setState({
+            searchLocationInput: event.value
         });
     }
 
@@ -295,8 +283,42 @@ export default class Search extends Component {
         }
     }
 
+    getLocationDetails() {
+        // console.info(this.state.locationSuggestions)
+        for (var i in this.state.locationSuggestions) {
+            // console.log(this.state.locationSuggestions[i].location + "(" + this.state.locationSuggestions[i].gps_lat + ";" + this.state.locationSuggestions[i].gps_lon + ")" + " ? " +  this.state.searchLocationInput)
+            if (this.state.locationSuggestions[i].location === this.state.searchLocationInput){
+                // console.log("Found the match!")
+                return (this.state.locationSuggestions[i])
+            }
+        }
+        return null;
+    }
+
     searchLocation = async event => {
         event.preventDefault();
+        if (this.state.searchLocationInput !== null && this.state.locationSuggestions !== null) {
+            var location = this.getLocationDetails();
+            console.log("TESTER")
+            console.log(location.gps_lat)
+            console.log(location.gps_lon)
+            try {
+                fetch('/locationsearch/' + this.props.userInfo.id + '/' + location.gps_lat + '/' + location.gps_lon, {
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json; charset=utf-8",
+                    },
+                })
+                    .then(response => response.json())
+                    .then((responseJSON) => {
+                        console.log("Location search response: ", responseJSON)
+                        this.setState({ showResults: true, searchResults: responseJSON })
+                    })
+                    .catch(err => console.error(err))
+            } catch (e) {
+                alert(e.message);
+            }
+        }
     }
 
     searchTags = async event => {
@@ -366,6 +388,38 @@ export default class Search extends Component {
                 </ButtonToolbar>
             </div >)
         } else if (this.state.searchType == "Location") {
+            if (!this.isEmpty(this.state.locationSuggestions)) {
+                var locations = []
+                for (var place in this.state.locationSuggestions) {
+                    locations.push(this.state.locationSuggestions[place].location)
+                }
+                return(<div id="location-search"><ControlLabel>Location</ControlLabel>
+                {!this.isEmpty(locations) ?     
+                    <Dropdown 
+                    options={locations} 
+                    onChange={this.handleLocationSearchChange} 
+                    value={this.state.searchLocationInput} 
+                    placeholder="Select an option" 
+                    ControlLabel="searchLocationInput" />
+                    : <Dropdown options={null} 
+                    onChange={this.handleLocationSearchChange} 
+                    value={this.state.searchLocationInput} 
+                    placeholder="No Location Available"
+                    ControlLabel="searchLocationInput" />
+                }
+                <ButtonToolbar>
+                    <ButtonGroup>
+                        <Button
+                            bsSize="large"
+                            className="submit_btn"
+                            onClick={(e) => this.searchLocation(e)} >Search</Button>
+                    </ButtonGroup>
+                </ButtonToolbar>
+                    </div>
+                )
+            } else {
+                return(<ControlLabel> Loading ... </ControlLabel>)
+            }
         } else if (this.state.searchType == "Tags") {
             // return (<div>search by tags</div>)
             if (this.state.searchTagsInput && this.state.searchTagsInput.constructor === Array && this.state.tagSuggestions) {
