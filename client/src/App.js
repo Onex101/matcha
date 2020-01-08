@@ -1,11 +1,12 @@
 import React, { Component, Fragment } from "react";
 import { Link, Redirect } from "react-router-dom";
-import { Nav, Navbar, NavItem, NavDropdown, MenuItem } from "react-bootstrap";
+import { Nav, Navbar, NavItem, NavDropdown, MenuItem, NavbarBrand } from "react-bootstrap";
 import "./App.css";
 import Routes from "./Routes";
 import SearchBar from "./containers/SearchBar";
 import { LinkContainer } from "react-router-bootstrap";
 import chat from './containers/imgs/chat.png';
+import footer from './containers/imgs/footer.png';
 import notification from './containers/imgs/notification.png';
 
 import io from 'socket.io-client';
@@ -338,6 +339,11 @@ class App extends Component {
 		  <Routes childProps={childProps} />
 		</div>
 	  </div>
+	  <div className="fixed-bottom">  
+            <Navbar color="dark" dark>
+                    <NavbarBrand><div><img src={footer} className="nav-icon" id="Foot" alt=""/></div></NavbarBrand>
+            </Navbar>
+        </div>
 	  </div>
 	);
   }  

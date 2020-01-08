@@ -91,7 +91,7 @@ export default class Verification extends Component {
           {updated && (
             <div>
               <p>
-                Your password has been successfully reset, please log in to find your Match!
+                You are ready to go! Please log in to find your Match!
               </p>
             </div>
           )}

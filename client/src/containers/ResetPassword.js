@@ -30,28 +30,28 @@ export default class ResetPassword extends Component {
 
     console.log(values.user) // "top"
     console.log(values.origin) // "im"
-    this.setState({user_name: values.user, veri_code: values.origin});
+    this.setState({ user_name: values.user, veri_code: values.origin });
 
     try {
       fetch(`/password_reset/` + values.user + '/' + values.origin, {
-          method: "GET",
-          headers: {
-              "Content-Type": "application/json; charset=utf-8",
-          },
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json; charset=utf-8",
+        },
       })
-      .then(response => response.json())
-      .then((responseJSON) => {
-        if (responseJSON["error"]) {
-          this.setState({ error: true, errorMessage: responseJSON["error"] })
-        } else {
-          this.setState({ isLoading: false})
-        }
-        console.log(responseJSON);
-      })
-      .catch(err => console.error(err))
-  } catch (e) {
+        .then(response => response.json())
+        .then((responseJSON) => {
+          if (responseJSON["error"]) {
+            this.setState({ error: true, errorMessage: responseJSON["error"] })
+          } else {
+            this.setState({ isLoading: false })
+          }
+          console.log(responseJSON);
+        })
+        .catch(err => console.error(err))
+    } catch (e) {
       alert("Settings 4: " + e.message);
-  }
+    }
 
   }
 
@@ -61,32 +61,45 @@ export default class ResetPassword extends Component {
     });
   };
 
+  validatePassword(inputtxt) {
+    var passw = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*(\W|_)).{5,}$/;
+    if (passw.test(inputtxt)) {
+      return true;
+    }
+    else {
+      alert('Invalid password! Please use a password more than 4 characters long, with at least one uppercase letter, lowercase letter, one digit and one special symbol')
+      return false;
+    }
+  }
+
   updatePassword = e => {
     e.preventDefault();
     console.log("PASSWORD: " + this.state.password)
-    // changeg password on submit
-    fetch(`/user/update/password`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json; charset=utf-8",
-      },
-      body: JSON.stringify({
-        user_name: this.state.user_name,
-        veri_code: this.state.veri_code,
-        password: this.state.password
+    if (this.validatePassword(this.state.password)) {
+      // changeg password on submit
+      fetch(`/user/update/password`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json; charset=utf-8",
+        },
+        body: JSON.stringify({
+          user_name: this.state.user_name,
+          veri_code: this.state.veri_code,
+          password: this.state.password
+        })
       })
-    })
-      .then(response => response.json())
-      .then((responseJSON) => {
-        if (responseJSON.error) {
-          this.setState({ error: true })
-        }
-        else {
-          this.setState({ updated: true })
-        }
-        console.log(responseJSON);
-      })
-      .catch(err => console.error(err))
+        .then(response => response.json())
+        .then((responseJSON) => {
+          if (responseJSON.error) {
+            this.setState({ error: true })
+          }
+          else {
+            this.setState({ updated: true })
+          }
+          console.log(responseJSON);
+        })
+        .catch(err => console.error(err))
+    }
   };
 
   render() {
