@@ -414,7 +414,13 @@ User.prototype.match = function (id, callback){
 		LEFT JOIN
 			pictures ON profile_pic_id = pictures.id
 		WHERE
-			verified IS NOT NULL AND pic IS NOT NULL) x
+			verified IS NOT NULL AND pic IS NOT NULL 
+		AND NOT EXISTS
+			(
+				SELECT  null 
+				FROM    blocks
+				WHERE   user1_id = ${id} AND user2_id = users.id
+			)) x
 	WHERE NOT
 		id = ${id} AND id NOT IN 
 			(SELECT
@@ -430,12 +436,6 @@ User.prototype.match = function (id, callback){
 				likes
 			WHERE
 				user2_id = ${id} AND (link_code = 1 OR link_code = 2))
-		AND NOT EXISTS
-        (
-            SELECT  null 
-            FROM    blocks
-            WHERE   user1_id = ${id} AND user2_id = id
-        )
 	GROUP BY
 		user_name, id
 	ORDER BY
@@ -468,15 +468,15 @@ User.prototype.user_search = function(id, search_name, callback){
 		LEFT JOIN
 			pictures ON profile_pic_id = pictures.id
 		WHERE
-			verified IS NOT NULL AND pic IS NOT NULL) x
+			verified IS NOT NULL AND pic IS NOT NULL
+			AND NOT EXISTS
+			(
+				SELECT  null 
+				FROM    blocks
+				WHERE   user1_id = ${id} AND user2_id = users.id
+			)) x
 	WHERE
 		user_name LIKE "%${search_name}%" AND NOT id = ${id}
-		AND NOT EXISTS
-        (
-            SELECT  null 
-            FROM    blocks
-            WHERE   user1_id = ${id} AND user2_id = id
-        )
 	GROUP BY
 		user_name, id
 	ORDER BY
@@ -514,17 +514,17 @@ User.prototype.tag_search = function(id, interests, callback){
 						verified IS NOT NULL AND pic IS NOT NULL) x
 				WHERE
 					NOT id = ${id}
+					AND NOT EXISTS
+					(
+						SELECT  null 
+						FROM    blocks
+						WHERE   user1_id = ${id} AND user2_id = users.id
+					)
 				GROUP BY
 					user_name, id
 				ORDER BY
 					id) y
-	WHERE id IN (SELECT user_id FROM user_interests JOIN interests ON interest_id = id WHERE interest in (${interestString}))
-	AND NOT EXISTS
-        (
-            SELECT  null 
-            FROM    blocks
-            WHERE   user1_id = ${id} AND user2_id = id
-        )`;
+	WHERE id IN (SELECT user_id FROM user_interests JOIN interests ON interest_id = id WHERE interest in (${interestString}))`;
 	db.query(query,function (err, results) {
 		if (err){
 			callback(err, null);
@@ -610,15 +610,15 @@ User.prototype.search_fame = function(x, id, callback){
 		LEFT JOIN
 			pictures ON profile_pic_id = pictures.id
 		WHERE
-			likes.link_code IS NULL AND verified IS NOT NULL AND pic IS NOT NULL AND fame = ${x}) x
-	WHERE
-		NOT id = ${id}
-		AND NOT EXISTS
+			likes.link_code IS NULL AND verified IS NOT NULL AND pic IS NOT NULL AND fame = ${x}
+			AND NOT EXISTS
         (
             SELECT  null 
             FROM    blocks
-            WHERE   user1_id = ${id} AND user2_id = id
-        )
+            WHERE   user1_id = ${id} AND user2_id = users.id
+        )) x
+	WHERE
+		NOT id = ${id}
 	GROUP BY
 		user_name, id
 	ORDER BY
@@ -652,15 +652,16 @@ User.prototype.linked = function(id,callback){
 		LEFT JOIN
 			pictures ON profile_pic_id = pictures.id
 		WHERE
-			likes.link_code = 1 AND verified IS NOT NULL AND pic IS NOT NULL) x
+			likes.link_code = 1 AND verified IS NOT NULL AND pic IS NOT NULL
+			AND NOT EXISTS
+			(
+				SELECT  null 
+				FROM    blocks
+				WHERE   user1_id = ${id} AND user2_id = users.id
+			)) x
 	WHERE
 		NOT id = ${id}
-		AND NOT EXISTS
-        (
-            SELECT  null 
-            FROM    blocks
-            WHERE   user1_id = ${id} AND user2_id = id
-        )
+		
 	GROUP BY
 		user_name, id
 	ORDER BY
