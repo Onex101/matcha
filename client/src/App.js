@@ -306,7 +306,7 @@ class App extends Component {
 	return (
 	  <div className="App-setup">
 	  <div className="App-container">
-		<Navbar fluid collapseOnSelect>
+		<Navbar fluid collapseOnSelect className="nav-top">
 		  <Navbar.Header>
 			<Navbar.Brand>
 			  <Link to="/" className="App-logo">Matcha</Link>
@@ -328,6 +328,7 @@ class App extends Component {
 					  </LinkContainer>
 					</Fragment>
 				  </Nav></Navbar.Collapse>
+				  
 			  }
 		</Navbar>
 		{console.log("Childprops: ")}
@@ -338,12 +339,13 @@ class App extends Component {
 		<div className="App-content">
 		  <Routes childProps={childProps} />
 		</div>
-	  </div>
-	  <div className="fixed-bottom">  
-            <Navbar color="dark" dark>
+		<div className="fixed-bottom">  
+            <Navbar color="dark" dark  className="nav-bottom">
                     <NavbarBrand><div><img src={footer} className="nav-icon" id="Foot" alt=""/></div></NavbarBrand>
             </Navbar>
         </div>
+	  </div>
+	  
 	  </div>
 	);
   }  
