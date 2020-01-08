@@ -32,10 +32,10 @@ export default class AccountFields extends Component {
 
     saveAndContinue(e) {
         e.preventDefault()
-        if (this.validateEmail(this.state.email)) {
+        if (this.validateEmail(this.state.email) && this.validatePassword(this.state.password)) {
             try {
                 const user = this.state;
-    
+
                 fetch(`/signup`, {
                     method: "POST",
                     headers: {
@@ -80,6 +80,17 @@ export default class AccountFields extends Component {
             } catch (e) {
                 alert(e.message);
             }
+        }
+    }
+
+    validatePassword(inputtxt) {
+        var passw = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*(\W|_)).{5,}$/;
+        if (passw.test(inputtxt)) {
+            return true;
+        }
+        else {
+            alert('Invalid password! Please use a password more than 4 characters long, with at least one uppercase letter, lowercase letter, one digit and one special symbol')
+            return false;
         }
     }
 
@@ -130,105 +141,105 @@ export default class AccountFields extends Component {
         }
     }
 
-render() {
-    const { onChange, onOpenChange, disabledDate } = this;
+    render() {
+        const { onChange, onOpenChange, disabledDate } = this;
 
-    const closedCal = {
-        margin: "0px 0px 50px 0px"
-    };
+        const closedCal = {
+            margin: "0px 0px 50px 0px"
+        };
 
-    return (
-        <div>
-            <ControlLabel>Account Details</ControlLabel>
-            <HelpBlock>Please fill in all the fields below.</HelpBlock>
-            <ul className="form-fields">
-                <FormGroup controlId="first_name" bsSize="large">
-                    <ControlLabel>First Name</ControlLabel>
-                    <FormControl
-                        autoFocus
-                        type="text"
-                        defaultValue={this.props.fieldValues.first_name}
-                        onChange={this.handleChange}
-                    />
-                </FormGroup>
-
-                <FormGroup controlId="last_name" bsSize="large">
-                    <ControlLabel>Surname</ControlLabel>
-                    <FormControl
-                        autoFocus
-                        type="text"
-                        defaultValue={this.props.fieldValues.last_name}
-                        onChange={({ target }) => this.setState({ last_name: target.value })}
-                    />
-                </FormGroup>
-
-                <FormGroup controlId="user_name" bsSize="large">
-                    <ControlLabel>Userame</ControlLabel>
-                    <FormControl
-                        autoFocus
-                        type="text"
-                        defaultValue={this.props.fieldValues.user_name}
-                        onChange={this.handleChange}
-                    />
-                </FormGroup>
-
-                <FormGroup controlId="password" bsSize="large">
-                    <ControlLabel>Password</ControlLabel>
-                    <FormControl
-                        autoFocus
-                        type="password"
-                        defaultValue={this.props.fieldValues.password}
-                        onChange={this.handleChange}
-                    />
-                </FormGroup>
-
-                <FormGroup controlId="confirmPassword" bsSize="large">
-                    <ControlLabel>Confirm Password</ControlLabel>
-                    <FormControl
-                        autoFocus
-                        type="password"
-                        defaultValue={this.props.fieldValues.confirmPassword}
-                        onChange={this.handleChange} />
-                </FormGroup>
-
-                <FormGroup controlId="email" bsSize="large">
-                    <ControlLabel>Email</ControlLabel>
-                    <FormControl
-                        autoFocus
-                        type="email"
-                        defaultValue={this.props.fieldValues.email}
-                        onChange={this.handleChange}
-                    />
-                </FormGroup>
-
-                <FormGroup controlId="birth_date" bsSize="large">
-                    <ControlLabel>Birthdate</ControlLabel>
-                    <div style={closedCal}>
-                        <Calendar
-                            onChange={onChange}
-                            allowClear={true}
-                            disabled={false}
-                            defaultValue={this.props.fieldValues.birth_date}
-                            format={'YYYY-MM-DD'}
-                            onOpenChange={onOpenChange}
-                            disabledDate={disabledDate}
+        return (
+            <div>
+                <ControlLabel>Account Details</ControlLabel>
+                <HelpBlock>Please fill in all the fields below.</HelpBlock>
+                <ul className="form-fields">
+                    <FormGroup controlId="first_name" bsSize="large">
+                        <ControlLabel>First Name</ControlLabel>
+                        <FormControl
+                            autoFocus
+                            type="text"
+                            defaultValue={this.props.fieldValues.first_name}
+                            onChange={this.handleChange}
                         />
-                    </div>
-                </FormGroup>
+                    </FormGroup>
 
-                <ButtonToolbar>
-                    <ButtonGroup>
-                        <Button
-                            bsSize="large"
-                            disabled={!this.validateForm()}
-                            onClick={this.saveAndContinue}
-                        >
-                            Save &amp; Continue
+                    <FormGroup controlId="last_name" bsSize="large">
+                        <ControlLabel>Surname</ControlLabel>
+                        <FormControl
+                            autoFocus
+                            type="text"
+                            defaultValue={this.props.fieldValues.last_name}
+                            onChange={({ target }) => this.setState({ last_name: target.value })}
+                        />
+                    </FormGroup>
+
+                    <FormGroup controlId="user_name" bsSize="large">
+                        <ControlLabel>Userame</ControlLabel>
+                        <FormControl
+                            autoFocus
+                            type="text"
+                            defaultValue={this.props.fieldValues.user_name}
+                            onChange={this.handleChange}
+                        />
+                    </FormGroup>
+
+                    <FormGroup controlId="password" bsSize="large">
+                        <ControlLabel>Password</ControlLabel>
+                        <FormControl
+                            autoFocus
+                            type="password"
+                            defaultValue={this.props.fieldValues.password}
+                            onChange={this.handleChange}
+                        />
+                    </FormGroup>
+
+                    <FormGroup controlId="confirmPassword" bsSize="large">
+                        <ControlLabel>Confirm Password</ControlLabel>
+                        <FormControl
+                            autoFocus
+                            type="password"
+                            defaultValue={this.props.fieldValues.confirmPassword}
+                            onChange={this.handleChange} />
+                    </FormGroup>
+
+                    <FormGroup controlId="email" bsSize="large">
+                        <ControlLabel>Email</ControlLabel>
+                        <FormControl
+                            autoFocus
+                            type="email"
+                            defaultValue={this.props.fieldValues.email}
+                            onChange={this.handleChange}
+                        />
+                    </FormGroup>
+
+                    <FormGroup controlId="birth_date" bsSize="large">
+                        <ControlLabel>Birthdate</ControlLabel>
+                        <div style={closedCal}>
+                            <Calendar
+                                onChange={onChange}
+                                allowClear={true}
+                                disabled={false}
+                                defaultValue={this.props.fieldValues.birth_date}
+                                format={'YYYY-MM-DD'}
+                                onOpenChange={onOpenChange}
+                                disabledDate={disabledDate}
+                            />
+                        </div>
+                    </FormGroup>
+
+                    <ButtonToolbar>
+                        <ButtonGroup>
+                            <Button
+                                bsSize="large"
+                                disabled={!this.validateForm()}
+                                onClick={this.saveAndContinue}
+                            >
+                                Save &amp; Continue
                             </Button>
-                    </ButtonGroup>
-                </ButtonToolbar>
-            </ul>
-        </div>
-    );
-}
+                        </ButtonGroup>
+                    </ButtonToolbar>
+                </ul>
+            </div>
+        );
+    }
 }
