@@ -55,7 +55,6 @@ export default class Search extends Component {
             this.state.locationCoordinates.length > 0) {
             var locations = [];
             for (var elem in this.state.locationCoordinates) {
-                // var area = this.convertCoordinates(this.state.locationCoordinates[elem].gps_lat, this.state.locationCoordinates[elem].gps_lon);
                 var lat = this.state.locationCoordinates[elem].gps_lat;
                 var long = this.state.locationCoordinates[elem].gps_lon;
                 ////////////////
@@ -86,7 +85,7 @@ export default class Search extends Component {
                         // console.log("Location: " + location)
                         if (location !== null) {
                             // console.log("AREA : " + location);
-                            locations.push(location);
+                            locations.push({location: location, gps_lat: lat, gps_lon: long});
                         }
                     })
             }
@@ -108,15 +107,6 @@ export default class Search extends Component {
                 .then((responseJSON) => {
                     console.log("LOCATIONS: ")
                     console.info(responseJSON)
-                    // var locations = [];
-                    // for (var elem in responseJSON) {
-                    //     locations.push(this.convertCoordinates(responseJSON[elem].gps_lat, responseJSON[elem].gps_lon))
-                    // }
-                    // var ret = this.convertCoordinates(responseJSON[1].gps_lat, responseJSON[1].gps_lon);
-                    // console.log("RET: " + ret)
-                    // locations.push(ret)
-
-                    // console.log(locations);
                     var coordinates = []
                     for (var gps in responseJSON) {
                         console.log(responseJSON[gps])
@@ -165,6 +155,26 @@ export default class Search extends Component {
         });
         return Object.keys(unique);
       }
+
+      isEmpty(obj) {     
+        if (obj == null) 
+            return true;
+        if (obj === undefined)
+            return true;
+
+        if (obj.length === 0)  
+            return true;
+
+        if (obj.length > 0)    
+            return false;
+
+        // for (var key in obj) {
+        //     if(obj.hasOwnProperty(prop))
+        //     return false;
+        // }
+
+        return true;
+    }
     componentDidUpdate() {
         if (this.state.tagSuggestions === null) {
             this.getInterests()
@@ -174,18 +184,27 @@ export default class Search extends Component {
             this.state.locationCoordinates.length > 0 && this.state.locationSuggestions === null) {
             console.log("LOCATIONS TEST")
             this.getLocationSuggestions()
+        } else {
+            console.log("Failed to get coordinates?")
+            // console.info(this.state.locationCoordinates)
+            // // console.info(this.state.locationCoordinates.length)
+            // console.info(this.state.locationSuggestions)
         }
 
         //To remove
-        if (this.state.locationSuggestions !== null && this.state.locationSuggestions.length > 0){
-            console.log("SUGGESTIONS " + this.state.locationSuggestions)
+        if (this.state.locationSuggestions !== null && !this.isEmpty(this.state.locationSuggestions)){
+            console.log("SUGGESTIONS ")
             console.info( this.state.locationSuggestions)
             var cleanLocations = this.removeDups(this.state.locationSuggestions);
-            console.log("Clean " + cleanLocations)
+            console.log("Clean ")
             console.info(cleanLocations)
             if (cleanLocations.length != this.state.locationSuggestions.length) {
                 this.setState({locationSuggestions: cleanLocations})
             }
+        } else {
+            console.log("Failed to get suggestions?")
+            console.log(this.state.locationSuggestions)
+            console.log(this.isEmpty(this.state.locationSuggestions))
         }
     }
 
