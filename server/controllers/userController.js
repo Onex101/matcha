@@ -683,8 +683,38 @@ exports.search_tags = function(req,res){
 }
 
 exports.tag_search = function (req, res){
-	console.log(req.body);
-	res.send("Not IMplemented yet");
+	let user = new User('');
+	user.getById(req.body.user_id, function(err, result){
+        if (err)
+            res.send(err);
+        else{
+			row = result[0];
+            if (row){
+                user.data = {
+                    id: row.id,
+                    first_name: row.first_name,
+                    last_name: row.last_name,
+                    user_name: row.user_name,
+                    birth_date: row.birth_date,
+                    gender: row.gender,
+                    pref: row.pref,
+                    gps_lat: row.gps_lat,
+                    gps_lon: row.gps_lat,
+                    bio: row.bio,
+					fame: row.fame,
+					interests: row.interests,
+					pic: row.pic}
+				}
+				user.tag_search(req.body.user_id, req.body.interests, function(err, results){
+					if (err){
+						res.send(err)
+					}
+					else{
+						res.json(matchAlgo(user, results));
+					}
+				})
+		}
+	})
 }
 
 
