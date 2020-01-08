@@ -1029,7 +1029,7 @@ User.prototype.checkEmail = function(email, callback){
 User.prototype.logout = function(id, callback){
 	var now = new Date();
 	console.log('UserId loginout ' + id)
-	var query = `UPDATE users SET online = '${now}' WHERE id = ${id}`;
+	var query = `UPDATE users SET online = NOW() WHERE id = ${id}`;
 	db.query(query, function(err, results){
 		if (err){
 			callback(err, null);
