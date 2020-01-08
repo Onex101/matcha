@@ -684,6 +684,13 @@ exports.search_tags = function(req,res){
 
 exports.tag_search = function (req, res){
 	let user = new User('');
+	let interests = [];
+	console.log(JSON.stringify(req.body))
+	req.body.interests.forEach(element => {
+		delete element.id
+		interests.push(element.name);
+	});
+	console.log(interests)
 	user.getById(req.body.user_id, function(err, result){
         if (err)
             res.send(err);
@@ -705,7 +712,7 @@ exports.tag_search = function (req, res){
 					interests: row.interests,
 					pic: row.pic}
 				}
-				user.tag_search(req.body.user_id, req.body.interests, function(err, results){
+				user.tag_search(req.body.user_id, interests, function(err, results){
 					if (err){
 						res.send(err)
 					}

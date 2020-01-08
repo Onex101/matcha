@@ -84,16 +84,6 @@ class App extends Component {
 		  	rows.push(<MenuItem key={this.state.notifications[elem].id} onClick={() => this.removeNotification(elem)}>{this.state.notifications[elem].noti}</MenuItem>);
 	  }
 	  return <div>{rows}</div>;
-	// }
-	// if (this.state.notifications.lenth > 0)
-	//   return <div>
-	//           {this.state.notifications.map( (noti)=> (
-	//             <NavDropdown.Item key={noti.id}>{noti.noti}</NavDropdown.Item>
-	//           ))}
-	//         </div>
-	// else
-	//   return  <div><NavDropdown.Item key={0}>No notifications</NavDropdown.Item></div>
-
   };
 
   componentDidMount () {
@@ -320,10 +310,10 @@ class App extends Component {
 			<Navbar.Brand>
 			  <Link to="/" className="App-logo">Matcha</Link>
 			</Navbar.Brand>
-			<div style={style}>
+			{/* <div style={style}>
 			{this.searchCheck()}
 			<Navbar.Toggle />
-			</div>
+			</div> */}
 		  </Navbar.Header>
 			  {localStorage.getItem('user')
 				? this.renderUser()
