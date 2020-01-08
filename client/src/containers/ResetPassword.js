@@ -32,29 +32,6 @@ export default class ResetPassword extends Component {
     console.log(values.origin) // "im"
     this.setState({user_name: values.user, veri_code: values.origin});
 
-    // try {
-    //   fetch(`/password_reset/` + values.user + '/' + values.origin, {
-    //     method: "GET",
-    //     headers: {
-    //       "Content-Type": "application/json; charset=utf-8",
-    //     },
-    //     // body: JSON.stringify({
-    //     //   email: this.state.email
-    //     // })
-    //   })
-    //     .then(response => response.json())
-    //     .then((responseJSON) => {
-    //       if (responseJSON["error"]) {
-    //         this.setState({ error: true, errorMessage: responseJSON["error"] })
-    //       }
-    //       console.log(responseJSON);
-    //     })
-    //     .catch(err => console.error(err))
-    //   // get user info from link sent - check if code is the same
-    // } catch (e) {
-    //   alert(e.message);
-    // }
-
     try {
       fetch(`/password_reset/` + values.user + '/' + values.origin, {
           method: "GET",
@@ -132,21 +109,6 @@ export default class ResetPassword extends Component {
     } else {
       return (
         <div>
-          {/* <form className="password-form" onSubmit={this.updatePassword}>
-            <TextField
-              style={inputStyle}
-              id="password"
-              label="password"
-              onChange={this.handleChange('password')}
-              value={password}
-              type="password"
-            />
-            <SubmitButton
-              buttonStyle={updateButton}
-              buttonText={'Update Password'}
-            />
-          </form> */}
-
           <form className="password-form" onSubmit={this.updatePassword}>
             <FormGroup controlId="password" bsSize="large">
               <ControlLabel>New Password</ControlLabel>

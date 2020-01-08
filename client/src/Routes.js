@@ -12,6 +12,7 @@ import ControlledTabs from "./containers/Tabs";
 import SearchResults from "./containers/SearchResults";
 import AppliedRoute from "./components/AppliedRoute";
 import ResetPassword from "./containers/ResetPassword";
+import Verification from "./containers/Verification";
 import Search from "./containers/Search";
 
 // Switch rebders the first matching route that is defined within it
@@ -31,6 +32,7 @@ export default ({ childProps }) =>
     <AppliedRoute path="/searchResults" exact component={SearchResults} props={childProps} />
     <AppliedRoute path="/forgot" exact component={ForgotPassword} props={childProps} />
     <AppliedRoute path="/ResetPassword" exact component={ResetPassword} props={childProps} />
+    <AppliedRoute path="/Verification" exact component={Verification} props={childProps} />
     <AppliedRoute path="/search" exact component={Search} props={childProps} />
     <Route component={NotFound} />
   </Switch>;

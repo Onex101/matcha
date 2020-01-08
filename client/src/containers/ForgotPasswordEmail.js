@@ -23,12 +23,13 @@ export default class ForgotPasswordEmail extends Component {
     }
 
     validateEmail(mail) {
-        // if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(mail)) {
-        console.log(mail)
-        return (true)
-        // }
-        // alert("You have entered an invalid email address!")
-        // return (false)
+        var re = /\S+@\S+\.\S+/;
+        if (re.test(mail)) {
+            console.log(mail)
+            return (true)
+        }
+        alert("You have entered an invalid email address!")
+        return (false)
     }
 
     handleSubmit = async event => {

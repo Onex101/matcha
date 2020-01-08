@@ -19,7 +19,7 @@ exports.sendVeriCode = function(user_name, email){
         from: 'matchamailer@gmail.com',
         to: email,
         subject: 'Verification Code',
-        text: vericode
+        text: 'Hello '+user_name+'\nWelcome to Matcha!\nYour account is almost ready, there is just one more step...\nPlease follow this link to reset your password:\nhttp://localhost:3000/Verification?user=' + user_name + '&origin=' + vericode
     };
     transporter.sendMail(mailOptions, function(error, info){
         if (error) {
