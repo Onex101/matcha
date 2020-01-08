@@ -285,7 +285,8 @@ exports.user_match_get = function(req, res) {
                                 var matchC =  (dist) +  (ageCoff) +  (5*pref) + (like) //weightings can be adjusted as needed here
                                 let new_data = results[i]
                                 if(matchC > 4){ //4 is an arb number to exclude any matches that fall too far because of gender/pref differential
-									new_user = new User(new_data);
+									new_user = new User(new_data); 
+									new_user.data.online = results[i].online;
 									new_user.data.gps_lat = results[i].gps_lat;
 									new_user.data.gps_lon =  results[i].gps_lon;
                                     new_user.match = matchC;
@@ -868,7 +869,8 @@ function matchAlgo(user, results){
 		var matchC =  (dist) +  (ageCoff) +  (5*pref) + (like) //weightings can be adjusted as needed here
 		let new_data = results[i]
 		if(matchC > 4){ //4 is an arb number to exclude any matches that fall too far because of gender/pref differential
-			new_user = new User(new_data);
+			new_user = new User(new_data); 
+			new_user.data.online = results[i].online
 			new_user.data.gps_lat = results[i].gps_lat;
 			new_user.data.gps_lon =  results[i].gps_lon;
 			new_user.match = matchC;
