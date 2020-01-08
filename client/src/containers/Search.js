@@ -84,7 +84,8 @@ export default class Search extends Component {
                     locations.push({ location: location, gps_lat: lat, gps_lon: long });
                 }
             }
-            this.setState({ locationSuggestions: locations })
+            var cleanLocations = this.removeDuplicates(locations, 'location');
+            this.setState({ locationSuggestions: cleanLocations })
         }
     }
 
@@ -164,12 +165,12 @@ export default class Search extends Component {
         }
 
         //To remove
-        if (this.state.locationSuggestions !== null && !this.isEmpty(this.state.locationSuggestions)) {
-            var cleanLocations = this.removeDuplicates(this.state.locationSuggestions, 'location');
-            if (cleanLocations.length != this.state.locationSuggestions.length) {
-                this.setState({ locationSuggestions: cleanLocations })
-            }
-        }
+        // if (this.state.locationSuggestions !== null && !this.isEmpty(this.state.locationSuggestions)) {
+        //     var cleanLocations = this.removeDuplicates(this.state.locationSuggestions, 'location');
+        //     if (cleanLocations.length != this.state.locationSuggestions.length) {
+        //         this.setState({ locationSuggestions: cleanLocations })
+        //     }
+        // }
     }
 
     handleSearchChange = event => {

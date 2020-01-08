@@ -3,6 +3,7 @@ import "./Profile.css";
 import heart from './imgs/heart.png';
 import x from './imgs/x.png';
 import report from './imgs/report.png';
+import block from './imgs/block.png';
 import { ControlLabel } from "react-bootstrap";
 import temp from './imgs/profile-placeholder.png';
 import female from './imgs/female_logo/favicon-32x32.png';
@@ -286,8 +287,13 @@ export default class Profile extends Component {
         // this.props.getMatches();
     }
 
-    report() {
+    report(e) {
+        e.preventDefault();
 
+    }
+
+    block(e) {
+        e.preventDefault();
     }
 
     componentDidMount() {
@@ -427,6 +433,7 @@ console.log("THE PROFILE HAS MOUNTED")
                             <img src={x} alt="Dislike" className="dislike" onClick={(e) => this.dislike(e)} />
                             {this.state.showLike != null && this.state.showLike == false ? null
                                 : <img src={heart} alt="Like" className="like" onClick={(e) => this.like(e)} />}
+                            <img src={block} alt="Block" className="report" onClick={(e) => this.block()} />
                             <img src={report} alt="Report" className="report" onClick={(e) => this.report()} />
                         </div>
                         : null}
