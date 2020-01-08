@@ -464,7 +464,8 @@ User.prototype.user_search = function(id, search_name, callback){
 	})
 }
 
-User.prototype.tag_search = function(id, interest, callback){
+User.prototype.tag_search = function(id, interests, callback){
+	let interestString = interests.map(function (a) { return "'" + a.replace("'", "''") + "'"; }).join();
 	var query = 
 	`SELECT 
 		id, user_name, first_name, last_name, birth_date, gender, pref, gps_lat, gps_lon, bio, pic, fame, online, profile_pic_id, interests 
@@ -490,7 +491,7 @@ User.prototype.tag_search = function(id, interest, callback){
 					user_name, id
 				ORDER BY
 					id) y
-	WHERE id IN (SELECT user_id FROM user_interests JOIN interests ON interest_id = id WHERE interest = "${interest}")`;
+	WHERE id IN (SELECT user_id FROM user_interests JOIN interests ON interest_id = id WHERE interest in (${interestString}))`;
 	db.query(query,function (err, results) {
 		if (err){
 			callback(err, null);
@@ -978,7 +979,7 @@ User.prototype.logout = function(id, callback){
 }
 
 User.prototype.getLocations = function(callback){
-	var query = `SELECT gps_lat , gps_lon from users`;
+	var query = `SELECT Distinct gps_lat , gps_lon from users`;
 	db.query(query, function(err, results){
 		if (err){
 			callback(err, null);

@@ -116,7 +116,9 @@ router.get('/usersearch/:user_id/:search_name', user_controller.search_username)
 //GET request for users with the tag matching the search (using suggestion system like in normal tags creating)
 router.get('/tagsearch/:user_id/:interest', user_controller.search_tags);
 
-router.post('/tagsearch', user_controller.tag_search);
+// router.post('/tagsearch', user_controller.tag_search);
+
+router.get('/tagsearch', user_controller.tag_search);
 
 //GET request for users with a fame rating of at least x
 router.get('/famesearch/:user_id/:x', user_controller.search_minfame);
