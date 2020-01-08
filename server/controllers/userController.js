@@ -47,6 +47,7 @@ exports.user_detail = function(req, res) {
 					password: row.password,
 					interests: row.interests,
 					profile_pic_id: row.profile_pic_id,
+					online: row.online,
 					pic: row.pic,
 					age: Match.getAge(row.birth_date)}
             res.json(user);
@@ -852,7 +853,6 @@ exports.get_block_user = function (req, res){
 			res.send({success: "Blocked succesfully"})
 		}
 	})
-	res.send("NOT IMPLEMENTED")
 }
 
 

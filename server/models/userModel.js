@@ -556,7 +556,13 @@ User.prototype.getMaxAgeGapMatch = function(id, x, callback){
 					LEFT JOIN
 						pictures ON profile_pic_id = pictures.id
 					WHERE
-						verified IS NOT NULL AND pic IS NOT NULL) x
+						verified IS NOT NULL AND pic IS NOT NULL
+					AND NOT EXISTS
+					(
+						SELECT  null 
+						FROM    blocks
+						WHERE   user1_id = ${id} AND user2_id = users.id
+					)	) x
 				WHERE
 					NOT id = ${id}
 				GROUP BY
@@ -575,12 +581,7 @@ User.prototype.getMaxAgeGapMatch = function(id, x, callback){
 				WHERE
 					id = ${id})
 			) < ${x})
-	AND NOT EXISTS
-	(
-		SELECT  null 
-		FROM    blocks
-		WHERE   user1_id = ${id} AND user2_id = id
-	)`;
+	`;
 	db.query(query,function (err, results) {
 		if (err){
 			callback(err, null);

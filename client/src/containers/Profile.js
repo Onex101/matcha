@@ -64,7 +64,7 @@ export default class Profile extends Component {
                     // console.log('ADDRESS GEOCODE is BACK!! => ' + JSON.stringify(responseJson));
                     var location = null;
                     for (var x in responseJson) {
-                        for (var y in responseJson[x]){
+                        for (var y in responseJson[x]) {
                             if (typeof responseJson[x][y] == "object" && "types" in responseJson[x][y]) {
                                 if (responseJson[x][y]["types"][0] == "administrative_area_level_2") {
                                     location = responseJson[x][y]["formatted_address"];
@@ -73,18 +73,18 @@ export default class Profile extends Component {
                         }
                     }
                     if (location == null)
-                    for (var x in responseJson) {
-                        for (var y in responseJson[x]){
-                            if (typeof responseJson[x][y] == "object" && "types" in responseJson[x][y]) {
-                                if (responseJson[x][y]["types"][0] == "establishment") {
-                                    location = responseJson[x][y]["formatted_address"];
+                        for (var x in responseJson) {
+                            for (var y in responseJson[x]) {
+                                if (typeof responseJson[x][y] == "object" && "types" in responseJson[x][y]) {
+                                    if (responseJson[x][y]["types"][0] == "establishment") {
+                                        location = responseJson[x][y]["formatted_address"];
+                                    }
                                 }
                             }
                         }
-                    }
-                    this.setState({dist_compare: location});
+                    this.setState({ dist_compare: location });
                 })
-            
+
         }
         var tags = this.props.userInfo.interests
         if (tags != null && tags != "null")
@@ -111,49 +111,6 @@ export default class Profile extends Component {
                 .catch(err => console.error(err))
         } catch (e) {
             alert(e.message);
-        }
-    }
-
-    getUserDetails() {
-        if (this.state.id) {
-            if (this.state.id === localStorage.getItem('id')) {
-                // try {
-                //     fetch('/image/' + this.state.id, {
-                //       // fetch('/images/' + '101', {
-                //       method: "GET",
-                //       headers: {
-                //         "Content-Type": "application/json; charset=utf-8",
-                //       },
-                //     })
-                //     .then(response => response.json())
-                //     .then((responseJSON) => {
-                //         // this.setState({userDetails: responseJSON["data"]})
-                //     })
-                //     .catch(err => console.error(err))
-                //     } catch (e) {
-                //       alert(e.message);
-                //     }
-            }
-            else {
-                // console.log("Trying to get userDetails of another user")
-                // try {
-                //     fetch(`/match/details/` + localStorage.getItem('id') + `/` + this.state.id, {
-                //     method: "GET",
-                //     headers: {
-                //         "Content-Type": "application/json; charset=utf-8",
-                //     },
-                //     })
-                //     .then(response => response.json())
-                //     .then((responseJSON) => {
-                //         console.log("User DETAILS:")
-                //         console.info(responseJSON)
-                //         // this.setState({userDetails: responseJSON["data"]})
-                //     })
-                //     .catch(err => console.error(err))
-                // } catch (e) {
-                //     alert(e.message);
-                // }
-            }
         }
     }
 
@@ -293,12 +250,30 @@ export default class Profile extends Component {
     }
 
     block(e) {
-        e.preventDefault();
+        e.preventDefault()
+        this.props.closeModal();
+        try {
+            fetch('/block/' + localStorage.getItem('id') + '/' + this.props.userInfo.id, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json; charset=utf-8",
+                },
+            })
+                .then(response => response.json())
+                .then((responseJSON) => {
+                    console.log(responseJSON)
+                    this.props.getMatches();
+                })
+                .catch(err => console.error(err))
+        } catch (e) {
+            alert(e.message);
+        }
+        console.log("Block")
     }
 
     componentDidMount() {
         // console.log("Profile INFO 1: " +JSON.stringify(this.props.userInfo))
-console.log("THE PROFILE HAS MOUNTED")
+        // console.log("THE PROFILE HAS MOUNTED")
         if (this.state.id === null && this.props.userInfo && this.props.userInfo.id) {
             this.getInfo();
             this.getVisits();
@@ -311,8 +286,8 @@ console.log("THE PROFILE HAS MOUNTED")
         if (this.state.userDetails == null) {
             //Make server call to get all information for the profile
             // Fame, Visits, Name, Surname, Distance, Age
-            console.log("DETAILS TEST 1")
-            this.getUserDetails()
+            // console.log("DETAILS TEST 1")
+            // this.getUserDetails()
         }
         if (this.props.showLike != null && this.props.showLike == false) {
             this.setState({ showLike: this.props.showLike })
@@ -335,14 +310,50 @@ console.log("THE PROFILE HAS MOUNTED")
             this.getUserImages();
         }
         // console.log("Profile State INFO 2: " +JSON.stringify(this.state))
-        if (this.state.userDetails == null) {
+        // if (this.state.userDetails == null) {
             //Make server call to get all information for the profile
             // Fame, Visits, Name, Surname, Distance, Age
-            this.getUserDetails()
-        }
+            // this.getUserDetails()
+        // }
         if (this.props.showLike != null && this.props.showLike == false && this.state.showLike == null) {
             this.setState({ showLike: this.props.showLike })
             console.log("NO LIKE BUTTON")
+        }
+    }
+
+    timeSince(date) {
+
+        var seconds = Math.floor((new Date() - date) / 1000);
+
+        var interval = Math.floor(seconds / 31536000);
+
+        if (interval > 1) {
+            return interval + " years";
+        }
+        interval = Math.floor(seconds / 2592000);
+        if (interval > 1) {
+            return interval + " months";
+        }
+        interval = Math.floor(seconds / 86400);
+        if (interval > 1) {
+            return interval + " days";
+        }
+        interval = Math.floor(seconds / 3600);
+        if (interval > 1) {
+            return interval + " hours";
+        }
+        interval = Math.floor(seconds / 60);
+        if (interval > 1) {
+            return interval + " minutes";
+        }
+        return Math.floor(seconds) + " seconds";
+    }
+
+    renderOnlineStatus() {
+        if (this.props.userInfo.online) {
+            return(<div id="online-status">Last seen {this.timeSince(new Date(this.props.userInfo.online))} ago</div>)
+        } else {
+            return(<div id="online-status">online</div>)
         }
     }
 
@@ -378,6 +389,7 @@ console.log("THE PROFILE HAS MOUNTED")
                         <div className="right">
                             <br />
                             <div className="username"><br /><h2 onClick={this.onOpenModal}>{info.user_name}</h2></div>
+                            {this.renderOnlineStatus()}
                             <hr />
                             <div className="user-info">
                                 <br />
@@ -433,8 +445,8 @@ console.log("THE PROFILE HAS MOUNTED")
                             <img src={x} alt="Dislike" className="dislike" onClick={(e) => this.dislike(e)} />
                             {this.state.showLike != null && this.state.showLike == false ? null
                                 : <img src={heart} alt="Like" className="like" onClick={(e) => this.like(e)} />}
-                            <img src={block} alt="Block" className="report" onClick={(e) => this.block()} />
-                            <img src={report} alt="Report" className="report" onClick={(e) => this.report()} />
+                            <img src={block} alt="Block" className="report" onClick={(e) => this.block(e)} />
+                            <img src={report} alt="Report" className="report" onClick={(e) => this.report(e)} />
                         </div>
                         : null}
                     {/* {this.mainPanel(this.props.props)} */}

@@ -90,8 +90,8 @@ export default class Matches extends Component {
             })
                 .then(response => response.json())
                 .then((responseJSON) => {
-                    console.log("LIKES TEST");
-                    console.log(responseJSON);
+                    // console.log("LIKES TEST");
+                    // console.log(responseJSON);
                     this.setState({ liked: responseJSON })
                 })
                 .catch(err => console.error(err))
