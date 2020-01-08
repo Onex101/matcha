@@ -64,6 +64,7 @@ module.exports = function (socket) {
 	//User logsout
 	socket.on(LOGOUT, () => {
 		if (socket.user && socket.user.name) {
+			new User().logout(socket.user.id, () => {})
 			connectedUsers = removeUser(connectedUsers, socket.user.name)
 			socketIO.io.emit(USER_DISCONNECTED, connectedUsers)
 			console.log("Disconnect", connectedUsers);
@@ -162,13 +163,19 @@ module.exports = function (socket) {
 	})
 
 	socket.on(NOTIFICATION, (message, receiver) => {
-		// console.log(receiver)
+		console.log(receiver)
+		let user = new User('');
+		user.hasBlocked(receiver.id, user.id, (err, result) => {
+			if (err){
+				console.log(err);
+			}
+			else if ( isUser(connectedUsers, receiver.user_name)) {
+				console.log("USER IS CONNECTED");
+				const receiverSocket = connectedUsers[receiver.user_name].socketId
+				socket.to(receiverSocket).emit(NOTIFICATION, message)
+			}
+		});
 		console.log('Notification received and sending it to', receiver.user_name)
-		if (isUser(connectedUsers, receiver.user_name)) {
-			console.log("USER IS CONNECTED");
-			const receiverSocket = connectedUsers[receiver.user_name].socketId
-			socket.to(receiverSocket).emit(NOTIFICATION, message)
-		}
 	})
 }
 
