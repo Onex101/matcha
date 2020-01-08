@@ -98,11 +98,11 @@ export default class Search extends Component {
             })
                 .then(response => response.json())
                 .then((responseJSON) => {
-                    console.log("LOCATIONS: ")
-                    console.info(responseJSON)
+                    // console.log("LOCATIONS: ")
+                    // console.info(responseJSON)
                     var coordinates = []
                     for (var gps in responseJSON) {
-                        console.log(responseJSON[gps])
+                        // console.log(responseJSON[gps])
                         coordinates.push(responseJSON[gps])
                     }
                     this.setState({ locationCoordinates: coordinates })
@@ -137,19 +137,6 @@ export default class Search extends Component {
         }
     }
 
-    removeDups(names) {
-        // console.log("NAMES")
-        // console.info(names)
-
-        let unique = {};
-        names.forEach(function (i) {
-            if (!unique[i]) {
-                unique[i] = true;
-            }
-        });
-        return Object.keys(unique);
-    }
-
     isEmpty(obj) {
         if (obj == null) {
             return true;
@@ -173,17 +160,12 @@ export default class Search extends Component {
 
         if (this.state.locationCoordinates !== null &&
             this.state.locationCoordinates.length > 0 && this.state.locationSuggestions === null) {
-            // console.log("LOCATIONS TEST")
             this.getLocationSuggestions()
         }
 
         //To remove
         if (this.state.locationSuggestions !== null && !this.isEmpty(this.state.locationSuggestions)) {
-            // console.log("SUGGESTIONS ")
-            // console.info(this.state.locationSuggestions)
             var cleanLocations = this.removeDuplicates(this.state.locationSuggestions, 'location');
-            // console.log("Clean ")
-            // console.info(cleanLocations)
             if (cleanLocations.length != this.state.locationSuggestions.length) {
                 this.setState({ locationSuggestions: cleanLocations })
             }
@@ -205,8 +187,8 @@ export default class Search extends Component {
     // Handle Delete of Tag
     handleDelete(i) {
         const tagDelete = this.state.searchTagsInput[i]
-        console.log("Deleting tags: ")
-        console.info(tagDelete)
+        // console.log("Deleting tags: ")
+        // console.info(tagDelete)
         const tags = this.state.searchTagsInput.slice(0)
         tags.splice(i, 1)
         this.setState({ searchTagsInput: tags })
@@ -230,7 +212,7 @@ export default class Search extends Component {
 
     searchAge = async event => {
         event.preventDefault();
-        console.log(this.state.searchAgeInput)
+        // console.log(this.state.searchAgeInput)
         if (this.isInt(this.state.searchAgeInput) && this.props.userInfo.id) {
             // console.log("SUCCESS")
             // console.log(this.props.userInfo.id)
@@ -244,7 +226,7 @@ export default class Search extends Component {
                 })
                     .then(response => response.json())
                     .then((responseJSON) => {
-                        console.log("Age search response: ", responseJSON)
+                        // console.log("Age search response: ", responseJSON)
                         this.setState({ showResults: true, searchResults: responseJSON })
                     })
                     .catch(err => console.error(err))
@@ -258,7 +240,7 @@ export default class Search extends Component {
 
     searchFame = async event => {
         event.preventDefault();
-        console.log(this.state.searchFameInput)
+        // console.log(this.state.searchFameInput)
         if (this.isInt(this.state.searchFameInput) && this.props.userInfo.id) {
             // TODO Not returning valid results
 
@@ -271,7 +253,7 @@ export default class Search extends Component {
                 })
                     .then(response => response.json())
                     .then((responseJSON) => {
-                        console.log("Fame search response: ", responseJSON)
+                        // console.log("Fame search response: ", responseJSON)
                         this.setState({ showResults: true, searchResults: responseJSON })
                     })
                     .catch(err => console.error(err))
@@ -287,7 +269,7 @@ export default class Search extends Component {
         // console.info(this.state.locationSuggestions)
         for (var i in this.state.locationSuggestions) {
             // console.log(this.state.locationSuggestions[i].location + "(" + this.state.locationSuggestions[i].gps_lat + ";" + this.state.locationSuggestions[i].gps_lon + ")" + " ? " +  this.state.searchLocationInput)
-            if (this.state.locationSuggestions[i].location === this.state.searchLocationInput){
+            if (this.state.locationSuggestions[i].location === this.state.searchLocationInput) {
                 // console.log("Found the match!")
                 return (this.state.locationSuggestions[i])
             }
@@ -299,9 +281,9 @@ export default class Search extends Component {
         event.preventDefault();
         if (this.state.searchLocationInput !== null && this.state.locationSuggestions !== null) {
             var location = this.getLocationDetails();
-            console.log("TESTER")
-            console.log(location.gps_lat)
-            console.log(location.gps_lon)
+            // console.log("TESTER")
+            // console.log(location.gps_lat)
+            // console.log(location.gps_lon)
             try {
                 fetch('/locationsearch/' + this.props.userInfo.id + '/' + location.gps_lat + '/' + location.gps_lon, {
                     method: "GET",
@@ -311,7 +293,7 @@ export default class Search extends Component {
                 })
                     .then(response => response.json())
                     .then((responseJSON) => {
-                        console.log("Location search response: ", responseJSON)
+                        // console.log("Location search response: ", responseJSON)
                         this.setState({ showResults: true, searchResults: responseJSON })
                     })
                     .catch(err => console.error(err))
@@ -323,20 +305,24 @@ export default class Search extends Component {
 
     searchTags = async event => {
         event.preventDefault();
-        console.log(this.state.searchTagsInput)
+        // console.log(this.state.searchTagsInput)
         if (this.state.searchTagsInput.length > 0 && this.props.userInfo.id) {
             // TODO Not returning valid results
 
             try {
-                fetch('/famesearch/' + this.props.userInfo.id + '/' + this.state.searchFameInput, {
-                    method: "GET",
+                fetch('/tagsearch', {
+                    method: "POST",
                     headers: {
                         "Content-Type": "application/json; charset=utf-8",
                     },
+                    body: JSON.stringify({
+                        user_id: this.props.userInfo.id,
+                        interests: this.state.searchTagsInput
+                    })
                 })
                     .then(response => response.json())
                     .then((responseJSON) => {
-                        console.log("Fame search response: ", responseJSON)
+                        // console.log("TAGS search response: ", responseJSON)
                         this.setState({ showResults: true, searchResults: responseJSON })
                     })
                     .catch(err => console.error(err))
@@ -393,32 +379,32 @@ export default class Search extends Component {
                 for (var place in this.state.locationSuggestions) {
                     locations.push(this.state.locationSuggestions[place].location)
                 }
-                return(<div id="location-search"><ControlLabel>Location</ControlLabel>
-                {!this.isEmpty(locations) ?     
-                    <Dropdown 
-                    options={locations} 
-                    onChange={this.handleLocationSearchChange} 
-                    value={this.state.searchLocationInput} 
-                    placeholder="Select an option" 
-                    ControlLabel="searchLocationInput" />
-                    : <Dropdown options={null} 
-                    onChange={this.handleLocationSearchChange} 
-                    value={this.state.searchLocationInput} 
-                    placeholder="No Location Available"
-                    ControlLabel="searchLocationInput" />
-                }
-                <ButtonToolbar>
-                    <ButtonGroup>
-                        <Button
-                            bsSize="large"
-                            className="submit_btn"
-                            onClick={(e) => this.searchLocation(e)} >Search</Button>
-                    </ButtonGroup>
-                </ButtonToolbar>
-                    </div>
+                return (<div id="location-search"><ControlLabel>Location</ControlLabel>
+                    {!this.isEmpty(locations) ?
+                        <Dropdown
+                            options={locations}
+                            onChange={this.handleLocationSearchChange}
+                            value={this.state.searchLocationInput}
+                            placeholder="Select an option"
+                            ControlLabel="searchLocationInput" />
+                        : <Dropdown options={null}
+                            onChange={this.handleLocationSearchChange}
+                            value={this.state.searchLocationInput}
+                            placeholder="No Location Available"
+                            ControlLabel="searchLocationInput" />
+                    }
+                    <ButtonToolbar>
+                        <ButtonGroup>
+                            <Button
+                                bsSize="large"
+                                className="submit_btn"
+                                onClick={(e) => this.searchLocation(e)} >Search</Button>
+                        </ButtonGroup>
+                    </ButtonToolbar>
+                </div>
                 )
             } else {
-                return(<ControlLabel> Loading ... </ControlLabel>)
+                return (<ControlLabel> Loading ... </ControlLabel>)
             }
         } else if (this.state.searchType == "Tags") {
             // return (<div>search by tags</div>)
@@ -482,114 +468,6 @@ export default class Search extends Component {
                     </div> : null}
                 </div>
             </div>
-            // this.state.id ?
-            // <div className="settings">
-            // 	<ControlLabel>Settings</ControlLabel>
-            // 	<ul className="form-fields">
-            // 		<FormGroup bsSize="large">
-            // 			<ControlLabel>Upload Images</ControlLabel>
-            // 			<div className="settings-pictures">
-            // 				{/* View and edit current images */}
-            // 				{this.pics()}
-            // 				<br />
-            // 				<FormControl
-            // 					autoFocus
-            // 					type="file"
-            // 					// defaultValue={this.props.fieldValues.first_name}
-            // 					onChange={(e) => this._handleImageChange(e)}
-            // 				/>
-            // 				<div className="imgPreview">{this.preview()}</div>
-            // 			</div>
-            // 		</FormGroup>
-            // 		<FormGroup controlId="firstname" bsSize="small">
-            // 			<ControlLabel>First Name</ControlLabel>
-            // 			<FormControl
-            // 				componentClass="textarea"
-            // 				defaultValue={this.state.firstname}
-            // 				onChange={this.handleChange}
-            // 			/>
-            // 		</FormGroup>
-            // 		<FormGroup controlId="lastname" bsSize="small">
-            // 			<ControlLabel>Last Name</ControlLabel>
-            // 			<FormControl
-            // 				componentClass="textarea"
-            // 				defaultValue={this.state.lastname}
-            // 				onChange={this.handleChange}
-            // 			/>
-            // 		</FormGroup><FormGroup controlId="email" bsSize="small">
-            // 			<ControlLabel>Email</ControlLabel>
-            // 			<FormControl
-            // 				componentClass="textarea"
-            // 				defaultValue={this.state.email}
-            // 				onChange={this.handleChange}
-            // 			/>
-            // 		</FormGroup>
-            // 		<FormGroup controlId="bio" bsSize="small">
-            // 			<ControlLabel>Biography</ControlLabel>
-            // 			<FormControl
-            // 				componentClass="textarea"
-            // 				placeholder="Tell us about yourself!"
-            // 				defaultValue={this.state.bio}
-            // 				onChange={this.handleChange}
-            // 			/>
-            // 		</FormGroup>
-            // 		<FormGroup controlId="gender" bsSize="small">
-            // 			<ControlLabel>Your gender</ControlLabel>
-            // 			<br />
-            // 			<div className="slider-grp">
-            // 				<img src={female} alt="Female" />
-            // 				<FormControl
-            // 					className="slider"
-            // 					autoFocus
-            // 					type="range"
-            // 					min="0" max="1" step="0.01"
-            // 					defaultValue={this.state.gender}
-            // 					onChange={this.handleChange}
-            // 				/>
-            // 				<img src={male} alt="Male" />
-            // 			</div>
-            // 		</FormGroup>
-            // 		<FormGroup controlId="pref" bsSize="small">
-            // 			<ControlLabel>Your Interest</ControlLabel>
-            // 			<br />
-            // 			<div className="slider-grp">
-            // 				<img src={female} className='gender' alt="Female" />
-            // 				<FormControl
-            // 					autoFocus
-            // 					type="range"
-            // 					min="0" max="1" step="0.01"
-            // 					defaultValue={this.state.pref}
-            // 					onChange={this.handleChange}
-            // 				/>
-            // 				<img src={male} alt="Male" />
-            // 			</div>
-            // 		</FormGroup>
-            // 		<FormGroup controlId="tags" bsSize="small">
-            // 			<ControlLabel>Your 10 Tags</ControlLabel>
-            // 			<br />
-            // 			{this.renderTags()}
-            // 		</FormGroup>
-            // 		<br />
-            // 		<ButtonToolbar>
-            // 			<ButtonGroup>
-            // 				<Button
-            // 					bsSize="large"
-            // 					className="submit_btn"
-            // 					onClick={this.geoFindMe} >Update Location!</Button>
-            // 			</ButtonGroup>
-            // 		</ButtonToolbar>
-            // 		<br />
-            // 		<ButtonToolbar>
-            // 			<ButtonGroup>
-            // 				<Button
-            // 					bsSize="large"
-            // 					className="submit_btn"
-            // 					onClick={(e) => this.saveChanges(e)} >Save Changes</Button>
-            // 			</ButtonGroup>
-            // 		</ButtonToolbar>
-            // 	</ul>
-            // </div>
-            // : <ControlLabel> Loading ... </ControlLabel>
         )
     }
 }
