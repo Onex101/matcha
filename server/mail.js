@@ -60,6 +60,8 @@ exports.sendPasswordReset = function(user_name, vericode, email){
 	});
 }
 
+
+
 exports.encrypt = function(user_name) {
     return(bcrypt.hashSync(user_name, 11));
 }
