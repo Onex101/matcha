@@ -990,4 +990,16 @@ User.prototype.getLocations = function(callback){
 	})
 }
 
+User.prototype.blockUserById = function(user1, user2, callback){
+	var query = `INSERT INTO blocks (user1_id, user2_id) VALUES (${user1}, ${user2})`;
+	db.query(query, function(err, results){
+		if (err){
+			callback(err, null);
+		}
+		else{
+			callback(null, results);
+		}
+	})
+}
+
 module.exports = User;

@@ -135,4 +135,8 @@ router.get('/locations', user_controller.get_locations);
 
 router.get('/locationsearch/:id/:gps_lat/:gps_lon', user_controller.get_users_by_location);
 
+//Get request user1 blocks user2
+router.get('/block/:user1/:user2', user_controller.get_block_user);
+
+
 module.exports = router;

@@ -835,6 +835,18 @@ exports.get_users_by_location = function(req, res){
 	})
 }
 
+exports.get_block_user = function (req, res){
+	let user = new User('');
+	user.blockUserById(req.params.user1, req.params.user2, function(err, result){
+		if (err)
+			res.send(err);
+		else{
+			res.send({success: "Blocked succesfully"})
+		}
+	})
+	res.send("NOT IMPLEMENTED")
+}
+
 
 
 function matchAlgo(user, results){
