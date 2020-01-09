@@ -340,7 +340,7 @@ class App extends Component {
 		  <Routes childProps={childProps} />
 		</div>
 		<div className="fixed-bottom">  
-            <Navbar color="dark" dark  className="nav-bottom">
+            <Navbar color="dark"  className="nav-bottom">
                     <NavbarBrand><div><img src={footer} className="nav-icon" id="Foot" alt=""/></div></NavbarBrand>
             </Navbar>
         </div>

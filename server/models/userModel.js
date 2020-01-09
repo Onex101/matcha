@@ -511,15 +511,16 @@ User.prototype.tag_search = function(id, interests, callback){
 					LEFT JOIN
 						pictures ON profile_pic_id = pictures.id
 					WHERE
-						verified IS NOT NULL AND pic IS NOT NULL) x
-				WHERE
-					NOT id = ${id}
-					AND NOT EXISTS
+						verified IS NOT NULL AND pic IS NOT NULL
+						AND NOT EXISTS
 					(
 						SELECT  null 
 						FROM    blocks
 						WHERE   user1_id = ${id} AND user2_id = users.id
-					)
+					)) x
+				WHERE
+					NOT id = ${id}
+					
 				GROUP BY
 					user_name, id
 				ORDER BY
@@ -943,15 +944,16 @@ User.prototype.getUsersByLocation = function(id, gps_lat, gps_lon, callback){
 					LEFT JOIN
 						pictures ON profile_pic_id = pictures.id
 					WHERE
-					gps_lat = ${gps_lat} AND gps_lon = ${gps_lon} AND verified IS NOT NULL AND pic IS NOT NULL) x
+					gps_lat = ${gps_lat} AND gps_lon = ${gps_lon} AND verified IS NOT NULL AND pic IS NOT NULL
+					AND NOT EXISTS
+					(
+						SELECT  null 
+						FROM    blocks
+						WHERE   user1_id = ${id} AND user2_id = users.id
+					)) x
 				WHERE
 					NOT id = ${id}
-				AND NOT EXISTS
-				(
-					SELECT  null 
-					FROM    blocks
-					WHERE   user1_id = ${id} AND user2_id = id
-				)
+				
 				GROUP BY
 					user_name, id
 				ORDER BY
