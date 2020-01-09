@@ -1066,4 +1066,32 @@ User.prototype.blockUserById = function(user1, user2, callback){
 	})
 }
 
+User.prototype.hasBlocked = function(user1, user2, callback){
+	console.log(user1, user2)
+	var query = `SELECT * FROM blocks WHERE user1_id = ${user1} AND user2_id = ${user2}`;
+	db.query(query, function(err, results){
+		if (err){
+			callback(err, null);
+		}
+		else{
+			callback(null, results);
+		}
+	})
+}
+
+User.prototype.getUsersLikeCode = function(user1, user2, callback){
+	var query = `SELECT
+				IF ((SELECT likes.link_code FROM likes WHERE user1_id = ${user1} AND user2_id = ${user2}) = 0 , 'true', 'false') as user1_likes_user2,
+				IF ((SELECT likes.link_code FROM likes WHERE user1_id = ${user2} AND user2_id = ${user1}) = 0 , 'true', 'false') as user2_likes_user1,
+				IF ((SELECT likes.link_code FROM likes WHERE user1_id = ${user1} AND user2_id = ${user2} OR user1_id = ${user2} AND user2_id = ${user1}) = 1 , 'true', 'false') as users_like_eachother`;
+	db.query(query, function(err, results){
+		if (err){
+			callback(err, null);
+		}
+		else{
+			callback(null, results);
+		}
+	})
+}
+
 module.exports = User;

@@ -165,7 +165,7 @@ module.exports = function (socket) {
 	socket.on(NOTIFICATION, (message, receiver) => {
 		console.log(receiver)
 		let user = new User('');
-		user.hasBlocked(receiver.id, user.id, (err, result) => {
+		user.hasBlocked(receiver.id, socket.user.id, (err, result) => {
 			if (err){
 				console.log(err);
 			}
@@ -248,3 +248,4 @@ function sendNotification(sender) {
 		}
 	}
 }
+
