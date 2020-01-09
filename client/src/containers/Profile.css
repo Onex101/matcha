@@ -93,7 +93,7 @@ body {
 
 @media screen and (max-width: 770px) {
   #profile{
-    min-width: 405px;
+    min-width: 80vw;
   }
   .top{
     align-content: center;
@@ -107,7 +107,7 @@ body {
   .top .right {
     width: 55%;
     float: none;
-    min-width: 329px;
+    min-width: 80% !important;
     margin: auto;
     /* padding-bottom: 10px; */
   }
