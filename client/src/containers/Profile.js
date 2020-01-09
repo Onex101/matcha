@@ -37,7 +37,8 @@ export default class Profile extends Component {
             visits: [],
             dist_compare: null,
             userDetails: null,
-            showLike: null
+            showLike: null,
+            choices: null,
         }
     }
 
@@ -193,7 +194,7 @@ export default class Profile extends Component {
         return (<img className="avatar" style={style} src={avatarImage} alt="" />);
     }
 
-    like(e) {
+    like(e, notify) {
         console.log(this.props)
         this.props.closeModal();
         const socket = this.props.socket;
@@ -219,9 +220,12 @@ export default class Profile extends Component {
         console.log("Yay")
         // this.props.getMatches();
         //TODO: close modal and refresh page
+        if (notify === true) {
+            console.log("Notify that like has liked back")
+        }
     }
 
-    dislike(e) {
+    dislike(e, notify) {
         e.preventDefault();
         this.props.closeModal();
         try {
@@ -241,6 +245,9 @@ export default class Profile extends Component {
             alert(e.message);
         }
         console.log("Nay")
+        if (notify === true) {
+            console.log("Notify that match has disliked")
+        }
         // this.props.getMatches();
     }
 
@@ -311,14 +318,16 @@ export default class Profile extends Component {
         }
         // console.log("Profile State INFO 2: " +JSON.stringify(this.state))
         // if (this.state.userDetails == null) {
-            //Make server call to get all information for the profile
-            // Fame, Visits, Name, Surname, Distance, Age
-            // this.getUserDetails()
+        //Make server call to get all information for the profile
+        // Fame, Visits, Name, Surname, Distance, Age
+        // this.getUserDetails()
         // }
         if (this.props.showLike != null && this.props.showLike == false && this.state.showLike == null) {
             this.setState({ showLike: this.props.showLike })
             console.log("NO LIKE BUTTON")
         }
+
+        if (this.props.userInfo.id != localStorage.getItem('id')) {this.getRelation()}
     }
 
     timeSince(date) {
@@ -351,11 +360,63 @@ export default class Profile extends Component {
 
     renderOnlineStatus() {
         if (this.props.userInfo.online) {
-            return(<div id="online-status">Last seen {this.timeSince(new Date(this.props.userInfo.online))} ago</div>)
+            return (<div id="online-status">Last seen {this.timeSince(new Date(this.props.userInfo.online))} ago</div>)
         } else {
-            return(<div id="online-status">online</div>)
+            return (<div id="online-status">online</div>)
         }
     }
+
+    getRelation() {
+        if (this.props.userInfo.id != localStorage.getItem('id')) {
+            var choices = [];
+            try {
+                fetch('/likecode/' + localStorage.getItem('id') + '/' + this.props.userInfo.id, {
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json; charset=utf-8",
+                    },
+                })
+                    .then(response => response.json())
+                    .then((responseJSON) => {
+                        console.log("RELATION TEST");
+                        console.log(responseJSON);
+                        console.log(responseJSON[0]);
+                        if (responseJSON[0].user1_likes_user2 === "false") {
+                            console.log("Show like button")
+                            if (responseJSON[0].user2_likes_user1 === "true") {
+                                console.log("Send likes likes notification")
+                                choices.push(<img src={heart} key="Like" alt="Like" className="like" onClick={(e) => this.like(e, true)} />);
+                            } else {
+                                choices.push(<img src={heart} key="Like" alt="Like" className="like" onClick={(e) => this.like(e, false)} />)
+                            }
+                        }
+                        // if (responseJSON[0].user1_dislikes_user2 === "false") {
+                        if (true) {
+                            if (responseJSON[0].users_like_eachother === "true") {
+                                console.log("Send match unlikes notification")
+                                choices.push(<img src={x} key="Dislike" alt="Dislike" className="dislike" onClick={(e) => this.dislike(e, true)} />)
+                            } else {
+                                choices.push(<img src={x} key="Dislike" alt="Dislike" className="dislike" onClick={(e) => this.dislike(e, false)} />)
+                            }
+                        }
+
+                        choices.push(<img src={block} key="Block" alt="Block" className="report" onClick={(e) => this.block(e)} />);
+                        choices.push(<img src={report} key="Report" alt="Report" className="report" onClick={(e) => this.report(e)} />);
+                        // return choices;
+                        this.setState({ choices: <div className="choices">{choices}</div> })
+                        // this.setState({ visits: responseJSON })
+                    })
+                    .catch(err => console.error(err))
+            } catch (e) {
+                alert(e.message);
+            }
+        }
+    }
+
+    // renderChoices() {
+    //     // this.getRelation();
+    //     // return ();
+    // }
 
     render() {
         // console.log("INFO 2:");
@@ -440,15 +501,10 @@ export default class Profile extends Component {
                             {this.renderTags()}</div>
                             : null}
                     </div>
-                    {this.props.userInfo.id != localStorage.getItem('id') ?
-                        <div className="choices">
-                            <img src={x} alt="Dislike" className="dislike" onClick={(e) => this.dislike(e)} />
-                            {this.state.showLike != null && this.state.showLike == false ? null
-                                : <img src={heart} alt="Like" className="like" onClick={(e) => this.like(e)} />}
-                            <img src={block} alt="Block" className="report" onClick={(e) => this.block(e)} />
-                            <img src={report} alt="Report" className="report" onClick={(e) => this.report(e)} />
-                        </div>
-                        : null}
+                    {/* {this.props.userInfo.id != localStorage.getItem('id') ?
+                        this.renderChoices()
+                        : null} */}
+                    {this.state.choices}
                     {/* {this.mainPanel(this.props.props)} */}
                 </div>
                 : <ControlLabel> Loading ... </ControlLabel>

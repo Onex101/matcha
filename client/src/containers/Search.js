@@ -461,12 +461,14 @@ export default class Search extends Component {
                     {this.state.searchType ? this.renderSearchType() : null}
                 </div>
                 <div className="searchResults">
-                    {this.state.showResults ? <div className="results">
-                        {this.state.searchResults ? <UserList
-                            matches={this.state.searchResults}
-                            socket={this.props.socket}
-                            getMatches={this.props.updateSearch} /> : <ControlLabel> No results were found.</ControlLabel>}
-                    </div> : null}
+                    {this.props.userInfo && this.props.userInfo.pic ? 
+                        this.state.showResults ? <div className="results">
+                            {this.state.searchResults ? <UserList
+                                matches={this.state.searchResults}
+                                socket={this.props.socket}
+                                getMatches={this.props.updateSearch} /> : <ControlLabel> No results were found.</ControlLabel>}
+                        </div> : null
+                    : <ControlLabel>You need a profile picture before you can see any results! Head over to your profile to fix that up!</ControlLabel>}
                 </div>
             </div>
         )
