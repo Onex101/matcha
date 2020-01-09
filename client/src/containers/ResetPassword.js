@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Button, FormGroup, FormControl, ControlLabel } from "react-bootstrap";
 import queryString from 'query-string'
+import "./ResetPassword.css";
 
 export default class ResetPassword extends Component {
   constructor() {

@@ -311,10 +311,10 @@ class App extends Component {
 			<Navbar.Brand>
 			  <Link to="/" className="App-logo">Matcha</Link>
 			</Navbar.Brand>
-			{/* <div style={style}>
-			{this.searchCheck()}
+			{/* <div style={style}> */}
+			{/* {this.searchCheck()} */}
 			<Navbar.Toggle />
-			</div> */}
+			{/* </div> */}
 		  </Navbar.Header>
 			  {localStorage.getItem('user')
 				? this.renderUser()

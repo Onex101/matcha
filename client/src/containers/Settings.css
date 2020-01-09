@@ -2,9 +2,10 @@ input[role=combobox] {
   width: 100% !important;
   text-transform: lowercase;
 }
-/* form input[type="text"] {
+input[type=file] {
   text-transform: lowercase;
-} */
+  border: 1px solid rgb(184, 184, 184);
+}
 .react-tags {
   position: relative;
   padding: 6px 0 0 6px;
