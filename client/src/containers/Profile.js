@@ -222,6 +222,8 @@ export default class Profile extends Component {
         //TODO: close modal and refresh page
         if (notify === true) {
             console.log("Notify that like has liked back")
+            const socket = this.props.socket;
+            socket.emit(NOTIFICATION, "Psst! " +  localStorage.getItem('user') + " has liked you back!" , this.props.userInfo.user_name);
         }
     }
 
@@ -247,8 +249,9 @@ export default class Profile extends Component {
         console.log("Nay")
         if (notify === true) {
             console.log("Notify that match has disliked")
+            const socket = this.props.socket;
+            socket.emit(NOTIFICATION, "Oh dear! Your Match " +  localStorage.getItem('user') + " has unliked you..." , this.props.userInfo.user_name);
         }
-        // this.props.getMatches();
     }
 
     report(e) {
