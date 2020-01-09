@@ -855,6 +855,17 @@ exports.get_block_user = function (req, res){
 	})
 }
 
+exports.get_users_like_Code = function (req, res){
+	let user = new User('');
+	user.getUsersLikeCode(req.params.user1, req.params.user2, function(err, result){
+		if (err)
+			res.send(err);
+		else{
+			res.send(result)
+		}
+	})
+}
+
 
 
 function matchAlgo(user, results){
