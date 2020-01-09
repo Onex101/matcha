@@ -1,5 +1,6 @@
 var nodemailer = require('nodemailer');
 const bcrypt = require('bcrypt');
+const { NOTIFICATION } = require('../client/src/Events')
 
 exports.sendVeriCode = function(user_name, email){
 
@@ -59,6 +60,36 @@ exports.sendPasswordReset = function(user_name, vericode, email){
         }
 	});
 }
+
+exports.reportUser = function(user_name, email, socket){
+
+    var vericode = vericode;
+    var transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+            user: 'samamander404@gmail.com',
+            pass: 'PineappleExpress1@'
+        }
+    });
+    var mailOptions = {
+        from: 'matchamailer@gmail.com',
+        to: email,
+        subject: 'Account has been reported',
+        text: 'Hello '+user_name+'\nYour account has bee reported by one of our users and will be investigated by our amazing Investigation Assitant (IA).\n If anything that goes against our policy is found by our IA, be warned that your account will be blocked.\n For any further information, we do not have any\n Thank you for your time and have a good day\n Your Friendly Neighbourhood Automated Emailer'
+    };
+    transporter.sendMail(mailOptions, function(error, info){
+        if (error) {
+			console.log(error);
+			return;
+        } else {
+            if (socket){
+                socket.on(NOTIFICATION, 'You have been reported', user_name);
+            }
+            console.log('Report Sent: ' + info.response);
+        }
+	});
+}
+
 
 exports.encrypt = function(user_name) {
     return(bcrypt.hashSync(user_name, 11));
