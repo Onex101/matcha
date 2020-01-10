@@ -91,12 +91,32 @@ User.prototype.linked_users = function(id, callback){
 }
 
 User.prototype.getUsersThatLikeCurrentUser = function(id, callback){
-	var query = `SELECT users.*, pictures.pic FROM users JOIN (SELECT user1_id AS id FROM likes WHERE user2_id = ${id} AND link_code = 1) AS lst ON lst.id = users.id INNER JOIN pictures ON users.profile_pic_id = pictures.id WHERE NOT EXISTS
-	(
-		SELECT  null 
-		FROM    blocks
-		WHERE   user1_id = ${id} AND user2_id = users.id
-	)`;
+	var query = `SELECT
+					users.*,
+					pictures.pic
+				FROM
+					likes
+				JOIN users ON users.id = user1_id
+				JOIN pictures ON users.profile_pic_id = pictures.id
+				JOIN(
+					SELECT
+						users.*
+					FROM
+						likes
+					JOIN users ON users.id = user2_id
+					WHERE
+						user1_id = ${id} AND likes.link_code = 1
+				) AS t
+				ON
+					t.id = users.id
+				WHERE
+					user2_id = ${id} AND link_code = 1 AND NOT EXISTS(
+					SELECT NULL
+				FROM
+					blocks
+				WHERE
+					user1_id = ${id} AND user2_id = users.id
+				);`;
 	db.query(query, function(err,result){
 		if (err) {callback(err, null);}
         else{

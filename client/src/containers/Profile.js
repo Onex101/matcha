@@ -449,11 +449,6 @@ export default class Profile extends Component {
         }
     }
 
-    // renderChoices() {
-    //     // this.getRelation();
-    //     // return ();
-    // }
-
     render() {
         // console.log("INFO 2:");
         // console.info(this.props)
