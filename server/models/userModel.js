@@ -329,12 +329,12 @@ User.prototype.login_user = function (user_name, callback){
 }
 
 User.prototype.like = function (user_id, target_id, callback){
-	var query = `SELECT count(*) AS count FROM likes WHERE (user1_id = ${user_id} AND user2_id = ${target_id}) OR (user2_id = ${user_id} AND user1_id = ${target_id})`;
+	var query = `SELECT count(*) AS count FROM likes WHERE (user1_id = ${user_id} AND user2_id = ${target_id})`;
 	db.query(query, function(err, results){
 		if(err){callback(err,null);}
 		else{
 			if (results[0].count > 0){
-				var query = `UPDATE likes SET link_code = 1 WHERE (user1_id = ${user_id} AND user2_id = ${target_id}) OR (user2_id = ${user_id} AND user1_id = ${target_id})`
+				var query = `UPDATE likes SET link_code = 1 WHERE (user1_id = ${user_id} AND user2_id = ${target_id})`
 				db.query(query, function(err, result){
 					if(err){callback(err,null);}
 					else{
@@ -343,11 +343,12 @@ User.prototype.like = function (user_id, target_id, callback){
 							if(err){callback(err,null);}
 							else{callback(null, result);}
 						})
+						
 					}
 				})
 			}
 			else{
-				var query = `INSERT INTO likes VALUES(${user_id},${target_id}, 0)`;
+				var query = `INSERT INTO likes VALUES(${user_id},${target_id}, 1)`;
 				db.query(query, function(err, result){
 					if(err){callback(err,null);}
 					else{
@@ -364,12 +365,12 @@ User.prototype.like = function (user_id, target_id, callback){
 }
 
 User.prototype.dislike = function (user_id, target_id, callback){
-	var query = `SELECT count(*) AS count FROM dislikes WHERE (user1_id = ${user_id} AND user2_id = ${target_id}) OR (user2_id = ${user_id} AND user1_id = ${target_id})`;
+	var query = `SELECT count(*) AS count FROM likes WHERE (user1_id = ${user_id} AND user2_id = ${target_id})`;
 	db.query(query, function(err, results){
 		if(err){callback(err,null);}
 		else{
 			if (results[0].count > 0){
-				var query = `UPDATE dislikes SET link_code = 1 WHERE (user1_id = ${user_id} AND user2_id = ${target_id}) OR (user2_id = ${user_id} AND user1_id = ${target_id})`
+				var query = `UPDATE likes SET link_code = 0 WHERE (user1_id = ${user_id} AND user2_id = ${target_id})`
 				db.query(query, function(err, result){
 					if(err){callback(err,null);}
 					else{
@@ -382,7 +383,7 @@ User.prototype.dislike = function (user_id, target_id, callback){
 				})
 			}
 			else{
-				var query = `INSERT INTO dislikes VALUES(${user_id},${target_id}, 0)`;
+				var query = `INSERT INTO likes VALUES(${user_id},${target_id}, 0)`;
 				db.query(query, function(err, result){
 					if(err){callback(err,null);}
 					else{
@@ -1091,7 +1092,7 @@ User.prototype.getUsersLikeCode = function(user1, user2, callback){
             likes
         WHERE
             user1_id = ${user1} AND user2_id = ${user2}
-    ) = 0,
+    ) = 1,
     'true',
     'false'
     ) AS user1_likes_user2,
@@ -1103,58 +1104,30 @@ User.prototype.getUsersLikeCode = function(user1, user2, callback){
             likes
         WHERE
             user1_id = ${user2} AND user2_id = ${user1}
-    ) = 0,
+    ) = 1,
     'true',
     'false'
     ) AS user2_likes_user1,
-    IF(
+    IFNULL(
         (
         SELECT
-            likes.link_code
+            IF(likes.link_code, 'false', 'true')
         FROM
             likes
         WHERE
-            user1_id = ${user1} AND user2_id = ${user2} OR user1_id = ${user2} AND user2_id = ${user1}
-    ) = 1,
-    'true',
-    'false'
-    ) AS users_like_eachother,
-    IF(
-        (
-        SELECT
-            dislikes.link_code
-        FROM
-            dislikes
-        WHERE
             user1_id = ${user1} AND user2_id = ${user2}
-    ) = 0,
-    'true',
-    'false'
-    ) AS user1_dislikes_user2,
-    IF(
+    ), 'true'
+    ) AS user1_no_relation_user2,
+    IFNULL(
         (
         SELECT
-            dislikes.link_code
+            IF(likes.link_code, 'false', 'true')
         FROM
-            dislikes
+            likes
         WHERE
             user1_id = ${user2} AND user2_id = ${user1}
-    ) = 0,
-    'true',
-    'false'
-    ) AS user2_dislikes_user1,
-    IF(
-        (
-        SELECT
-            dislikes.link_code
-        FROM
-            dislikes
-        WHERE
-            user1_id = ${user1} AND user2_id = ${user2} OR user1_id = ${user2} AND user2_id = ${user1}
-    ) = 1,
-    'true',
-    'false'
-    ) AS users_dislike_eachother;`;
+    ), 'true'
+    ) AS user2_no_relation_user1;`;
 	db.query(query, function(err, results){
 		if (err){
 			callback(err, null);
