@@ -39,6 +39,7 @@ export default class Profile extends Component {
             userDetails: null,
             showLike: null,
             choices: null,
+            relationSet: false,
         }
     }
 
@@ -223,7 +224,7 @@ export default class Profile extends Component {
         if (notify === true) {
             console.log("Notify that like has liked back")
             const socket = this.props.socket;
-            socket.emit(NOTIFICATION, "Psst! " +  localStorage.getItem('user') + " has liked you back!" , this.props.userInfo.user_name);
+            socket.emit(NOTIFICATION, "Psst! " + localStorage.getItem('user') + " has liked you back!", this.props.userInfo.user_name);
         }
     }
 
@@ -250,13 +251,17 @@ export default class Profile extends Component {
         if (notify === true) {
             console.log("Notify that match has disliked")
             const socket = this.props.socket;
-            socket.emit(NOTIFICATION, "Oh dear! Your Match " +  localStorage.getItem('user') + " has unliked you..." , this.props.userInfo.user_name);
+            socket.emit(NOTIFICATION, "Oh dear! Your Match " + localStorage.getItem('user') + " has unliked you...", this.props.userInfo.user_name);
         }
     }
 
     report(e) {
         e.preventDefault();
-
+        if (this.props.userInfo.user_name && this.props.userInfo.email) {
+            this.props.socket.emit('REPORT', this.props.userInfo.user_name, this.props.userInfo.email)
+        } else {
+            console.log("Invalid information: " + this.props.userInfo.user_name + ", " + this.props.userInfo.email)
+        }
     }
 
     block(e) {
@@ -330,7 +335,7 @@ export default class Profile extends Component {
             console.log("NO LIKE BUTTON")
         }
 
-        if (this.props.userInfo.id != localStorage.getItem('id')) {this.getRelation()}
+        if (this.props.userInfo.id != localStorage.getItem('id') && !this.state.relationSet) { this.getRelation() }
     }
 
     timeSince(date) {
@@ -384,6 +389,7 @@ export default class Profile extends Component {
                         console.log("RELATION TEST");
                         console.log(responseJSON);
                         console.log(responseJSON[0]);
+                        this.setState({relationSet: true})
                         if (responseJSON[0].user1_likes_user2 === "false") {
                             console.log("Show like button")
                             if (responseJSON[0].user2_likes_user1 === "true") {

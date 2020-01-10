@@ -3,6 +3,7 @@ const request = require('supertest');
 const { NOTIFICATION, VERIFY_USER, USER_CONNECTED, USER_DISCONNECTED, LOGOUT, COMMUNITY_CHAT, MESSAGE_RECEIVED, MESSAGE_SENT, TYPING, PRIVATE_MESSAGE } = require('../client/src/Events')
 const { createNotification, createUser, createMessage, createChat } = require('../client/src/Factories')
 var User = require('./models/userModel');
+var Mail = require('./mail');
 
 let connectedUsers = {}
 
@@ -178,6 +179,9 @@ module.exports = function (socket) {
 			});
 			console.log('Notification received and sending it to', receiver.user_name)
 		}
+	})
+	socket.on('REPORT', (user_name, email) => {
+		Mail.reportUser(user_name, email, socket);
 	})
 }
 
