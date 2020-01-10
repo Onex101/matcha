@@ -92,7 +92,7 @@ User.prototype.linked_users = function(id, callback){
 }
 
 User.prototype.getUsersThatLikeCurrentUser = function(id, callback){
-	var query = `SELECT users.*, pictures.pic FROM users JOIN (SELECT user1_id AS id FROM likes WHERE user2_id = ${id} AND link_code = 0) AS lst ON lst.id = users.id INNER JOIN pictures ON users.profile_pic_id = pictures.id WHERE NOT EXISTS
+	var query = `SELECT users.*, pictures.pic FROM users JOIN (SELECT user1_id AS id FROM likes WHERE user2_id = ${id} AND link_code = 1) AS lst ON lst.id = users.id INNER JOIN pictures ON users.profile_pic_id = pictures.id WHERE NOT EXISTS
 	(
 		SELECT  null 
 		FROM    blocks
@@ -107,7 +107,7 @@ User.prototype.getUsersThatLikeCurrentUser = function(id, callback){
 }
 
 User.prototype.getUsersThatCurrentUserLikes = function(id, callback){
-	var query = `SELECT users.*, pictures.pic FROM users JOIN (SELECT user2_id AS id FROM likes WHERE user1_id = ${id} AND link_code = 0) AS lst ON lst.id = users.id INNER JOIN pictures ON users.profile_pic_id = pictures.id WHERE NOT EXISTS
+	var query = `SELECT users.*, pictures.pic FROM users JOIN (SELECT user2_id AS id FROM likes WHERE user1_id = ${id} AND link_code = 1) AS lst ON lst.id = users.id INNER JOIN pictures ON users.profile_pic_id = pictures.id WHERE NOT EXISTS
 	(
 		SELECT  null 
 		FROM    blocks
@@ -429,14 +429,7 @@ User.prototype.match = function (id, callback){
 			FROM
 				likes
 			WHERE
-				user1_id = ${id}
-			UNION
-			SELECT
-				user1_id
-			FROM
-				likes
-			WHERE
-				user2_id = ${id} AND (link_code = 1 OR link_code = 2))
+				user1_id = ${id})
 	GROUP BY
 		user_name, id
 	ORDER BY
