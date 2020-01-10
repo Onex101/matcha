@@ -7,6 +7,9 @@ exports.sendVeriCode = function(user_name, email){
     var vericode_check = (this.encrypt(user_name));
 
     var vericode = vericode_check.replace("/", "_");
+    // queryString.replace(/\//g, '_');
+    // queryString.replaceAll('/', '_');
+
 
     var transporter = nodemailer.createTransport({
         service: 'gmail',

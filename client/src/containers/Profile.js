@@ -257,8 +257,10 @@ export default class Profile extends Component {
 
     report(e) {
         e.preventDefault();
+        this.props.closeModal();
         if (this.props.userInfo.user_name && this.props.userInfo.email) {
             this.props.socket.emit('REPORT', this.props.userInfo.user_name, this.props.userInfo.email)
+            this.props.getMatches();
         } else {
             console.log("Invalid information: " + this.props.userInfo.user_name + ", " + this.props.userInfo.email)
         }
@@ -390,17 +392,23 @@ export default class Profile extends Component {
                         console.log(responseJSON);
                         console.log(responseJSON[0]);
                         this.setState({relationSet: true})
-                        if (responseJSON[0].user1_likes_user2 === "false") {
-                            console.log("Show like button")
-                            if (responseJSON[0].user2_likes_user1 === "true") {
-                                console.log("Send likes likes notification")
+
+                        if ((responseJSON[0].user1_likes_user2 === "false" && responseJSON[0].user1_no_relation_user2 === "false") || (responseJSON[0].user1_likes_user2 === "false" && responseJSON[0].user1_no_relation_user2 === "true")) {
+                            console.log("You can like");
+
+                            if ((responseJSON[0].user2_likes_user1 === "true" && responseJSON[0].user2_no_relation_user1 === "false")) {
+                                console.log("Notify the user 2 of like like")
                                 choices.push(<img src={heart} key="Like" alt="Like" className="like" onClick={(e) => this.like(e, true)} />);
                             } else {
+                                console.log("Don't notify of like like")
                                 choices.push(<img src={heart} key="Like" alt="Like" className="like" onClick={(e) => this.like(e, false)} />)
                             }
                         }
-                        // if (responseJSON[0].user1_dislikes_user2 === "false") {
-                        if (true) {
+                        //  else if (responseJSON[0].user1_likes_user2 === "false" && responseJSON[0].user1_no_relation_user2 === "true") {
+                        //     //You have done nothing, you can do anything
+                        // }
+                        if ((responseJSON[0].user1_likes_user2 === "true" && responseJSON[0].user1_no_relation_user2 === "true") || (responseJSON[0].user1_likes_user2 === "false" && responseJSON[0].user1_no_relation_user2 === "true")) {
+                            console.log("You can dislike");
                             if (responseJSON[0].users_like_eachother === "true") {
                                 console.log("Send match unlikes notification")
                                 choices.push(<img src={x} key="Dislike" alt="Dislike" className="dislike" onClick={(e) => this.dislike(e, true)} />)
@@ -408,6 +416,25 @@ export default class Profile extends Component {
                                 choices.push(<img src={x} key="Dislike" alt="Dislike" className="dislike" onClick={(e) => this.dislike(e, false)} />)
                             }
                         }
+
+                        // if (responseJSON[0].user1_likes_user2 === "false") {
+                        //     console.log("Show like button")
+                        //     if (responseJSON[0].user2_likes_user1 === "true") {
+                        //         console.log("Send likes likes notification")
+                        //         choices.push(<img src={heart} key="Like" alt="Like" className="like" onClick={(e) => this.like(e, true)} />);
+                        //     } else {
+                        //         choices.push(<img src={heart} key="Like" alt="Like" className="like" onClick={(e) => this.like(e, false)} />)
+                        //     }
+                        // }
+                        // if (responseJSON[0].user1_dislikes_user2 === "false") {
+                        // if (true) {
+                        //     if (responseJSON[0].users_like_eachother === "true") {
+                        //         console.log("Send match unlikes notification")
+                        //         choices.push(<img src={x} key="Dislike" alt="Dislike" className="dislike" onClick={(e) => this.dislike(e, true)} />)
+                        //     } else {
+                        //         choices.push(<img src={x} key="Dislike" alt="Dislike" className="dislike" onClick={(e) => this.dislike(e, false)} />)
+                        //     }
+                        // }
 
                         choices.push(<img src={block} key="Block" alt="Block" className="report" onClick={(e) => this.block(e)} />);
                         choices.push(<img src={report} key="Report" alt="Report" className="report" onClick={(e) => this.report(e)} />);
