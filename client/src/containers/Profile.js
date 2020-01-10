@@ -224,7 +224,7 @@ export default class Profile extends Component {
         if (notify === true) {
             console.log("Notify that like has liked back")
             const socket = this.props.socket;
-            socket.emit(NOTIFICATION, "Psst! " + localStorage.getItem('user') + " has liked you back!", this.props.userInfo.user_name);
+            socket.emit(NOTIFICATION, "Psst! " + localStorage.getItem('user') + " has liked you back!", this.props.userInfo);
         }
     }
 
@@ -251,7 +251,7 @@ export default class Profile extends Component {
         if (notify === true) {
             console.log("Notify that match has disliked")
             const socket = this.props.socket;
-            socket.emit(NOTIFICATION, "Oh dear! Your Match " + localStorage.getItem('user') + " has unliked you...", this.props.userInfo.user_name);
+            socket.emit(NOTIFICATION, "Oh dear! Your Match " + localStorage.getItem('user') + " has unliked you...", this.props.userInfo);
         }
     }
 
@@ -407,9 +407,9 @@ export default class Profile extends Component {
                         //  else if (responseJSON[0].user1_likes_user2 === "false" && responseJSON[0].user1_no_relation_user2 === "true") {
                         //     //You have done nothing, you can do anything
                         // }
-                        if ((responseJSON[0].user1_likes_user2 === "true" && responseJSON[0].user1_no_relation_user2 === "true") || (responseJSON[0].user1_likes_user2 === "false" && responseJSON[0].user1_no_relation_user2 === "true")) {
+                        if ((responseJSON[0].user1_likes_user2 === "true" && responseJSON[0].user1_no_relation_user2 === "false") || (responseJSON[0].user1_likes_user2 === "false" && responseJSON[0].user1_no_relation_user2 === "true")) {
                             console.log("You can dislike");
-                            if (responseJSON[0].users_like_eachother === "true") {
+                            if (responseJSON[0].user1_likes_user2 === "true" && responseJSON[0].user2_likes_user1 === "true") {
                                 console.log("Send match unlikes notification")
                                 choices.push(<img src={x} key="Dislike" alt="Dislike" className="dislike" onClick={(e) => this.dislike(e, true)} />)
                             } else {
