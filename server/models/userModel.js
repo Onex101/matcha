@@ -76,21 +76,6 @@ User.prototype.getById = function (data, callback) {
 }
 
 User.prototype.linked_users = function(id, callback){
-	var query = `SELECT users.*, pictures.pic FROM users INNER JOIN (SELECT DISTINCT likes.user2_id AS id FROM likes RIGHT JOIN likes as t on t.user1_id = likes.user2_id WHERE likes.user1_id = ${id} AND likes.link_code = 1) AS lst ON lst.id = users.id INNER JOIN pictures ON users.profile_pic_id = pictures.id WHERE NOT EXISTS
-        (
-            SELECT  null 
-            FROM    blocks
-            WHERE   user1_id = ${id} AND user2_id = users.id
-        )`;
-	db.query(query, function(err,result){
-		if (err) {callback(err, null);}
-        else{
-			callback(null, result); 
-        }
-	})
-}
-
-User.prototype.getUsersThatLikeCurrentUser = function(id, callback){
 	var query = `SELECT
 					users.*,
 					pictures.pic
@@ -117,6 +102,21 @@ User.prototype.getUsersThatLikeCurrentUser = function(id, callback){
 				WHERE
 					user1_id = ${id} AND user2_id = users.id
 				);`;
+	db.query(query, function(err,result){
+		if (err) {callback(err, null);}
+        else{
+			callback(null, result); 
+        }
+	})
+}
+
+User.prototype.getUsersThatLikeCurrentUser = function(id, callback){
+	var query = `SELECT users.*, pictures.pic FROM users JOIN (SELECT user1_id AS id FROM likes WHERE user2_id = ${id} AND link_code = 1) AS lst ON lst.id = users.id INNER JOIN pictures ON users.profile_pic_id = pictures.id WHERE NOT EXISTS
+	(
+		SELECT  null 
+		FROM    blocks
+		WHERE   user1_id = ${id} AND user2_id = users.id
+	)`;
 	db.query(query, function(err,result){
 		if (err) {callback(err, null);}
         else{
