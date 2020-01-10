@@ -45,8 +45,8 @@ export default class Profile extends Component {
 
     // Gets user info
     getInfo() {
-        console.log("userINFO")
-        console.info(this.props)
+        // console.log("userINFO")
+        // console.info(this.props)
         this.setState({
             id: this.props.userInfo.id,
             user_name: this.props.userInfo.user_name,
@@ -59,7 +59,7 @@ export default class Profile extends Component {
             fame: this.props.userInfo.fame,
         });
         if (this.props.userInfo.gps_lat != null && this.props.userInfo.gps_lon != null) {
-            console.log("Lat: " + this.props.userInfo.gps_lat + " Long: " + this.props.userInfo.gps_lon);
+            // console.log("Lat: " + this.props.userInfo.gps_lat + " Long: " + this.props.userInfo.gps_lon);
             fetch('https://maps.googleapis.com/maps/api/geocode/json?address=' + this.props.userInfo.gps_lat + ',' + this.props.userInfo.gps_lon + '&key=' + "AIzaSyDKEXlzFbGtbXxHkUy6GSdFCofq5BI_oVo")
                 .then((response) => response.json())
                 .then((responseJson) => {
@@ -211,7 +211,10 @@ export default class Profile extends Component {
                 .then(response => response.json())
                 .then((responseJSON) => {
                     console.log(responseJSON)
-                    this.props.getMatches();
+                    if (this.props.getMatches) {
+                        this.props.getMatches();
+
+                    }
 
                 })
                 .catch(err => console.error(err))

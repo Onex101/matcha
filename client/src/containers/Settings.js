@@ -35,7 +35,7 @@ export default class Settings extends Component {
 	_handleSubmit(e) {
 		e.preventDefault();
 		// TODO: do something with -> this.state.file
-		console.log('handle uploading-', this.state.file);
+		// console.log('handle uploading-', this.state.file);
 	}
 
 	// Handles Image for preview
@@ -165,14 +165,14 @@ export default class Settings extends Component {
 	// Update geo location
 	geoFindMe = () => {
 		if (!navigator.geolocation) {
-			console.log("Geolocation is not supported by your browser");
+			// console.log("Geolocation is not supported by your browser");
 			return;
 		}
 		const success = (position) => {
 			var latitude = position.coords.latitude;
 			var longitude = position.coords.longitude;
 
-			console.log("Latitude is " + latitude + "° Longitude is " + longitude + "°");
+			// console.log("Latitude is " + latitude + "° Longitude is " + longitude + "°");
 			this.setState({ gps_lat: latitude });
 			this.setState({ gps_lon: longitude });
 			try {
@@ -194,7 +194,7 @@ export default class Settings extends Component {
 		function error() {
 			console.log("Unable to retrieve your location");
 		}
-		console.log("Locating…");
+		// console.log("Locating…");
 		navigator.geolocation.getCurrentPosition(success, error);
 	}
 
@@ -212,36 +212,36 @@ export default class Settings extends Component {
 			this.setState({ profile: this.state.imagePreviewUrl });
 			newPics = this.state.pictures;
 			newPics[0].pic = this.state.imagePreviewUrl;
-			console.log("New pics: ")
-			console.info(newPics)
+			// console.log("New pics: ")
+			// console.info(newPics)
 			this.setState({ pictures: newPics });
 		}
 		else if (param === 'img1') {
 			newPics = this.state.pictures;
 			newPics[1].pic = this.state.imagePreviewUrl;
-			console.log("New pics: ")
-			console.info(newPics)
+			// console.log("New pics: ")
+			// console.info(newPics)
 			this.setState({ pictures: newPics });
 		}
 		else if (param === 'img2') {
 			newPics = this.state.pictures;
 			newPics[2].pic = this.state.imagePreviewUrl;
-			console.log("New pics: ")
-			console.info(newPics)
+			// console.log("New pics: ")
+			// console.info(newPics)
 			this.setState({ pictures: newPics });
 		}
 		else if (param === 'img3') {
 			newPics = this.state.pictures;
 			newPics[3].pic = this.state.imagePreviewUrl;
-			console.log("New pics: ")
-			console.info(newPics)
+			// console.log("New pics: ")
+			// console.info(newPics)
 			this.setState({ pictures: newPics });
 		}
 		else if (param === 'img4') {
 			newPics = this.state.pictures;
 			newPics[4].pic = this.state.imagePreviewUrl;
-			console.log("New pics: ")
-			console.info(newPics)
+			// console.log("New pics: ")
+			// console.info(newPics)
 			this.setState({ pictures: newPics });
 		}
 	}
@@ -249,8 +249,8 @@ export default class Settings extends Component {
 	// Handle Delete of Tag
 	handleDelete(i) {
 		const tagDelete = this.state.tags[i]
-		console.log("Deleting tags: ")
-		console.info(tagDelete)
+		// console.log("Deleting tags: ")
+		// console.info(tagDelete)
 		const tags = this.state.tags.slice(0)
 		tags.splice(i, 1)
 		this.setState({ tags })
@@ -264,7 +264,7 @@ export default class Settings extends Component {
 			})
 				.then(response => response.json())
 				.then((responseJSON) => {
-					console.log(responseJSON);
+					// console.log(responseJSON);
 				})
 				.catch(err => console.error(err))
 		} catch (e) {
@@ -368,7 +368,7 @@ export default class Settings extends Component {
 
 		try {
 			//   const user = this.state;
-			console.log(this.state.firstname + "   " + this.state.lastname + "   " + this.state.email)
+			// console.log(this.state.firstname + "   " + this.state.lastname + "   " + this.state.email)
 			fetch(`/user/update`, {
 				method: "POST",
 				headers: {
@@ -386,8 +386,8 @@ export default class Settings extends Component {
 			})
 				.then(response => response.json())
 				.then((responseJSON) => {
-					console.log(responseJSON);
-					console.log(responseJSON.user.data);
+					// console.log(responseJSON);
+					// console.log(responseJSON.user.data);
 					//   if (responseJSON["success"]) {
 					// Successfully sent
 					window.location.reload();
@@ -403,13 +403,13 @@ export default class Settings extends Component {
 	}
 
 	getInterests() {
-		console.log("Getting interests 1")
+		// console.log("Getting interests 1")
 		if (this.state.tags !== null)
-			console.log(this.state.tags[0])
+			// console.log(this.state.tags[0])
 		if (localStorage.getItem('id') && this.state.tags !== null && !this.state.tags[0]) {
-			console.log("Getting interests 2")
+			// console.log("Getting interests 2")
 			try {
-				console.log("Getting interests 3")
+				// console.log("Getting interests 3")
 				fetch('/user/' + localStorage.getItem('id') + '/interests', {
 					method: "GET",
 					headers: {
@@ -418,8 +418,8 @@ export default class Settings extends Component {
 				})
 					.then(response => response.json())
 					.then((responseJSON) => {
-						console.log("Interests response: ")
-						console.info(responseJSON)
+						// console.log("Interests response: ")
+						// console.info(responseJSON)
 						if (responseJSON.length > 0)
 							this.setState({ tags: responseJSON })
 						else
@@ -488,7 +488,7 @@ export default class Settings extends Component {
 		for (var i = 0; i < pics.length; i++) {
 			if (i === 0 && pics[i].id === null && pics[i].pic) {
 				//profile pic new
-				console.log("HERE");
+				// console.log("HERE");
 				fetch(`/image/ProfilePic/new`, {
 					method: "POST",
 					headers: {
@@ -502,7 +502,7 @@ export default class Settings extends Component {
 					.catch(err => console.error(err))
 			}
 			else if (i !== 0 && pics[i].id === null && pics[i].pic) {
-				console.log("Making new image");
+				// console.log("Making new image");
 				//Send new image and user id
 				fetch(`/image/create`, {
 					method: "POST",
@@ -517,7 +517,7 @@ export default class Settings extends Component {
 					.catch(err => console.error(err))
 			}
 			else if (pics[i].id !== null && pics[i].pic !== null) {
-				console.log("Replacing old image");
+				// console.log("Replacing old image");
 				//Send replace image
 				fetch('/image/replace/', {
 					method: "POST",

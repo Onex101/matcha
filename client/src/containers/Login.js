@@ -39,7 +39,7 @@ export default class Login extends Component {
       })
         .then(response => response.json())
         .then((responseJSON) => {
-          console.log(responseJSON);
+          // console.log(responseJSON);
           if (responseJSON["success"]) {
             if (responseJSON["success"] === "login sucessfull") {
               this.props.userHasAuthenticated(true);

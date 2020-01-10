@@ -104,9 +104,9 @@ export default class SearchResults extends Component {
     render() {
         const results = this.state.results;
 
-        console.log("SEARCHRESULTS results:")
-        console.info(this.state.type)
-        console.info(results)
+        // console.log("SEARCHRESULTS results:")
+        // console.info(this.state.type)
+        // console.info(results)
 
         //Do a check if there's a result type, then either show that, or show loading
         return (this.props.results === null && this.props.resultType === null && this.props.userInfo && this.props.userInfo.id ? <Redirect push to="/" />

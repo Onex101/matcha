@@ -6,7 +6,7 @@ exports.sendVeriCode = function(user_name, email){
 
     var vericode_check = (this.encrypt(user_name));
 
-    var vericode = vericode_check.replace("/", "_");
+    var vericode = vericode_check.replace(/\//g, '_');
     // queryString.replace(/\//g, '_');
     // queryString.replaceAll('/', '_');
 

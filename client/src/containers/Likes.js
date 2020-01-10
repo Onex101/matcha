@@ -61,7 +61,7 @@ export default class Likes extends Component {
                 })
                 .then(response => response.json())
                 .then((responseJSON) => {
-                    console.log(responseJSON)
+                    // console.log(responseJSON)
                     this.setState({likes: responseJSON})
                 })
                 .catch(err => console.error(err))

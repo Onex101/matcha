@@ -25,7 +25,7 @@ export default class ForgotPasswordEmail extends Component {
     validateEmail(mail) {
         var re = /\S+@\S+\.\S+/;
         if (re.test(mail)) {
-            console.log(mail)
+            // console.log(mail)
             return (true)
         }
         alert("You have entered an invalid email address!")

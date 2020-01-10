@@ -62,7 +62,7 @@ export default class ChatContainer extends Component{
 
 		
 	getLikedPeople = (users) => {
-		console.log("Getting liked PEOPLE", users)
+		// console.log("Getting liked PEOPLE", users)
 		// Get Matches
 			var newList = {}
 			try {
@@ -99,7 +99,7 @@ export default class ChatContainer extends Component{
 		const {socket, user} = this.props
 		const {activeChat} = this.state
 		this.setState({receiver: receiver})
-		console.log("sending private message")
+		// console.log("sending private message")
 		// console.log(receiver, user)
 		socket.emit(PRIVATE_MESSAGE, {receiver, sender: user, activeChat})
 		socket.emit(NOTIFICATION, receiver.name + " has started a chat with you", receiver)
@@ -110,10 +110,10 @@ export default class ChatContainer extends Component{
 	}
 
 	containsObject = function (obj, list) {
-		console.log('Checking if object is in list')
+		// console.log('Checking if object is in list')
 		var x = 0;
 		while (list[x]){
-			console.log(list[x].id, obj.id)
+			// console.log(list[x].id, obj.id)
 			if (list[x].id == obj.id){
 				return (true)
 			}

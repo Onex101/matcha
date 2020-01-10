@@ -20,8 +20,8 @@ export default class ControlledTabs extends Component {
 	}
   
 	componentDidMount(){
-	  console.log("Tabs did mount props:")
-	  console.info(this.props)
+	//   console.log("Tabs did mount props:")
+	//   console.info(this.props)
 	  if (!this.state.userInfo){
 		if (this.props.userInfo && this.props.userInfo.id){
 		  this.setState({userInfo: this.props.userInfo})
@@ -43,8 +43,8 @@ export default class ControlledTabs extends Component {
 	}
 
 	componentDidUpdate(){
-	  console.log("Tabs will update props:")
-	  console.info(this.props)
+	//   console.log("Tabs will update props:")
+	//   console.info(this.props)
 	  if (!this.state.userInfo){
 		// console.log("WU State userinfo is empty")
 		if (this.props.userInfo && this.props.userInfo.id){

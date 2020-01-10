@@ -44,7 +44,7 @@ class App extends Component {
 	  })
 	  .then(response => response.json())
 	  .then((responseJSON) => {
-		console.log(responseJSON)
+		// console.log(responseJSON)
 		this.setState({notifications: responseJSON})
 	  })
 	  .catch(err => console.error(err))
@@ -77,8 +77,8 @@ class App extends Component {
   }
 
   showNotifications () {
-	console.log("Notifications")
-	console.log(this.state.notifications)
+	// console.log("Notifications")
+	// console.log(this.state.notifications)
 	  var rows = [];
 	  for (var elem in this.state.notifications) {
 		  if (this.state.notifications[elem].viewed_status == 0)
@@ -90,8 +90,8 @@ class App extends Component {
   componentDidMount () {
 	this.getNotifications();
 	// Get User
-	console.log("Local user:", localStorage.getItem('user'))
-	console.log("Local id:", localStorage.getItem('id'))
+	// console.log("Local user:", localStorage.getItem('user'))
+	// console.log("Local id:", localStorage.getItem('id'))
 	if (localStorage.getItem('user') && this.state.isAuthenticated === false)
 	  this.setState({isAuthenticated: true})
 	if (localStorage.getItem('user') && this.state.userInfo === null){
@@ -104,8 +104,8 @@ class App extends Component {
 		})
 		.then(response => response.json())
 		.then((responseJSON) => {
-		  console.log("response : ")
-		  console.info(responseJSON["data"])
+		//   console.log("response : ")
+		//   console.info(responseJSON["data"])
 		  this.setState({ userInfo: responseJSON["data"] }, this.initSocket());
 		  // console.log("User = " + JSON.stringify(this.state.userInfo));
 		})
@@ -123,18 +123,18 @@ class App extends Component {
 
   //Socket test
   initSocket = ()=>{
-		console.log('connecting user')
+		// console.log('connecting user')
 	const socket = io(socketUrl)
 	// const {userInfo} = this.state.userInfo
 		var name, id
 		name = localStorage.getItem('user');
 		id = localStorage.getItem('id');
-		console.log ('The socket will be initalized with:', name, id, this.state.userInfo)
+		// console.log ('The socket will be initalized with:', name, id, this.state.userInfo)
 		socket.on('connect', ()=>{
-			console.log("Connected " + name);
+			// console.log("Connected " + name);
 	})
 	socket.on(NOTIFICATION, (notification)=>{
-	  console.log('NOTIFICATION CAUGHT')
+	//   console.log('NOTIFICATION CAUGHT')
 	  let newNoti = {
 		id: this.state.notifications.length > 0 ? this.state.notifications[(this.state.notifications.length - 1)].id + 1 : 1,
 		user_id: -1,
@@ -142,7 +142,7 @@ class App extends Component {
 		viewed_status: 0,
 	  }
 	  this.setState({notifications: [...this.state.notifications, newNoti]})
-	  console.log(this.state.notifications)
+	//   console.log(this.state.notifications)
 	  
 	})
 		this.setState({socket: socket})
@@ -151,17 +151,17 @@ class App extends Component {
 
 	verifyUser = ({user, isUser}) => {
 		const {socket} = this.state
-		console.log("This is the user:")
-		console.log(user)
+		// console.log("This is the user:")
+		// console.log(user)
 		// socket.emit(USER_CONNECTED, user)
 		this.setState({socketUser: user})
-		console.log('user_connected')
+		// console.log('user_connected')
 		socket.emit(USER_CONNECTED, user);
 	}
 
   getMatches = () => {
 	// getMatches() {
-	console.log("Getting matches")
+	// console.log("Getting matches")
 	// Get Matches
 	try {
 	  fetch('/user/match/' + localStorage.getItem('id'), {
@@ -173,8 +173,8 @@ class App extends Component {
 	  .then(response => response.json())
 	  .then((responseJSON) => {
 		this.setState({ userMatches: responseJSON });
-		console.log("USERMATCHES")
-	  console.info(this.state.userMatches)
+	// 	console.log("USERMATCHES")
+	//   console.info(this.state.userMatches)
 	  })
 	  .catch(err => console.error(err))
 	  } catch (e) {
@@ -188,14 +188,14 @@ class App extends Component {
   }
 
   setUser = user => {
-	console.log("SetUser:")
-	console.info(user)
+	// console.log("SetUser:")
+	// console.info(user)
 	this.setState({ userInfo: user.data });
-	console.log("SetUser state:")
-	console.info(this.state)
+	// console.log("SetUser state:")
+	// console.info(this.state)
 	localStorage.setItem('user', user.data.user_name);
 	localStorage.setItem('id', user.data.id);
-	console.log("ID = " + localStorage.getItem('id'));
+	// console.log("ID = " + localStorage.getItem('id'));
 	// Get Matches
 	this.initSocket();
 	this.getMatches();
@@ -210,7 +210,7 @@ class App extends Component {
 	this.setState({ userInfo: null });
 	this.setState({ userMatches: null });
 	this.setState({ userProfile: null });
-	console.log("ID = " + localStorage.getItem('id'))
+	// console.log("ID = " + localStorage.getItem('id'))
 	// socket.emit(LOGOUT);
 
 
@@ -225,7 +225,7 @@ class App extends Component {
 	const session = localStorage.getItem('user');
 
 	if (session != null){
-	  console.log("Getting username = " + session);
+	//   console.log("Getting username = " + session);
 	
 	return(<Navbar.Collapse><Nav pullRight>
 			<Fragment>
@@ -265,9 +265,9 @@ class App extends Component {
   }
 
   getSearchResults = (results, type ) => {
-	console.log("RECEIVED RESULTS:")
-	console.info(type)
-	console.info(results)
+	// console.log("RECEIVED RESULTS:")
+	// console.info(type)
+	// console.info(results)
 
 	this.setState({results: results})
 	this.setState({resultType: type})
@@ -331,9 +331,9 @@ class App extends Component {
 				  
 			  }
 		</Navbar>
-		{console.log("Childprops: ")}
-		{console.log("Test for re-render")}
-		{console.info(childProps)}
+		{/* {console.log("Childprops: ")} */}
+		{/* {console.log("Test for re-render")} */}
+		{/* {console.info(childProps)} */}
 		{this.state.redirect ?
 		  <Redirect push to="/searchResults" /> : null}
 		<div className="App-content">

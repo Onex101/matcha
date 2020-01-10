@@ -21,18 +21,19 @@ export default class Home extends Component {
 	  this.setState({matches: this.props.userMatches});
 	}
 	else if (this.state.order !== false && this.state.matches !== null && this.props.userMatches !== null) {
-	  console.log("State matches length = ")
-	  console.info(this.state.matches.length)
-	  console.info(Object.keys(this.state.matches).length)
-	  console.log("Props matches length = ")
-	  console.info( Object.keys(this.props.userMatches).length)
+	//   console.log("State matches length = ")
+	//   console.info(this.state.matches.length)
+	//   console.info(Object.keys(this.state.matches).length)
+	//   console.log("Props matches length = ")
+	//   console.info( Object.keys(this.props.userMatches).length)
 	  if (this.state.matches.length && this.state.matches.length !== Object.keys(this.props.userMatches).length) {
 		// if ( this.state.order === false) {
-		console.log("Updating Matches")
-		console.log("Order: " + this.state.order)
+		// console.log("Updating Matches")
+		// console.log("Order: " + this.state.order)
 		this.setState({matches: this.props.userMatches},
-		console.log("State set:"),
-		console.info(this.state.matches),this.sortNewList()
+		// console.log("State set:"),
+		// console.info(this.state.matches),
+		this.sortNewList()
 		  );
 		// }
 	  }

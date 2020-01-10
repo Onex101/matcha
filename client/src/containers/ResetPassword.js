@@ -21,16 +21,16 @@ export default class ResetPassword extends Component {
   componentDidMount() {
     // const { user_name, vericode } = this.state
 
-    console.log(this.props.location.search) // "?filter=top&origin=im"
-    console.log(this.props.location.search.user) // "?filter=top&origin=im"
+    // console.log(this.props.location.search) // "?filter=top&origin=im"
+    // console.log(this.props.location.search.user) // "?filter=top&origin=im"
 
     var inputString = JSON.stringify(this.props.location.search);
-    console.log("TESTER")
+    // console.log("TESTER")
 
     const values = queryString.parse(this.props.location.search)
 
-    console.log(values.user) // "top"
-    console.log(values.origin) // "im"
+    // console.log(values.user) // "top"
+    // console.log(values.origin) // "im"
     this.setState({ user_name: values.user, veri_code: values.origin });
 
     try {
@@ -47,7 +47,7 @@ export default class ResetPassword extends Component {
           } else {
             this.setState({ isLoading: false })
           }
-          console.log(responseJSON);
+          // console.log(responseJSON);
         })
         .catch(err => console.error(err))
     } catch (e) {
@@ -75,7 +75,7 @@ export default class ResetPassword extends Component {
 
   updatePassword = e => {
     e.preventDefault();
-    console.log("PASSWORD: " + this.state.password)
+    // console.log("PASSWORD: " + this.state.password)
     if (this.validatePassword(this.state.password)) {
       // changeg password on submit
       fetch(`/user/update/password`, {
@@ -97,7 +97,7 @@ export default class ResetPassword extends Component {
           else {
             this.setState({ updated: true })
           }
-          console.log(responseJSON);
+          // console.log(responseJSON);
         })
         .catch(err => console.error(err))
     }

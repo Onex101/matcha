@@ -12,6 +12,8 @@ export default class Matches extends Component {
             open:       false,
             infoID:     null
         }
+
+        this.updateInfo = this.props.updateInfo.bind(this);
     }
 
     onOpenModal = (viewee_id) => {
@@ -50,7 +52,7 @@ export default class Matches extends Component {
 			})
 			.then(response => response.json())
 			.then((responseJSON) => {
-				console.log(responseJSON)
+				// console.log(responseJSON)
 			})
 			.catch(err => console.error(err))
 		} catch (e) {
@@ -61,6 +63,10 @@ export default class Matches extends Component {
     
     onCloseModal = () => {
         this.setState({ open: false });
+        if (this.updateInfo !== null) {
+            // console.log("CLOSE THE INFO")
+            this.updateInfo();
+        }
     };
 
     avatar(image, width, height) {
@@ -72,10 +78,6 @@ export default class Matches extends Component {
             }; 
         if (!avatarImage) return null;
         return (<img className="avatar" style={style} src={avatarImage} alt =""/>);
-    }
-     
-    onCloseModal = () => {
-		this.setState({ open: false });
     }
 
     componentDidUpdate() {
@@ -100,12 +102,14 @@ export default class Matches extends Component {
                                         userInfo={user.data}
                                         socket={this.props.socket} 
                                         closeModal={this.onCloseModal}
+                                        getMatches={this.updateInfo}
                                         showLike={false}
                                         />
                                 : <ControlledTabs 
                                         userInfo={user} 
                                         socket={this.props.socket} 
                                         closeModal={this.onCloseModal}
+                                        getMatches={this.updateInfo}
                                         showLike={false}
                                         />}
                     </Modal>
