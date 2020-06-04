@@ -46,7 +46,7 @@ export default class Signup extends Component {
             // 'fieldValues' is set at the top of this file. 
             // We are appending to and overriding keys in 'fieldValues' with the 'fields' with Object.assign
             fieldValues = Object.assign({}, fieldValues, field_value)
-        }.bind(this)()
+        }()
     }
 
     nextStep() {

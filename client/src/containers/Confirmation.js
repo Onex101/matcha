@@ -64,52 +64,52 @@ export default class Confirmation extends Component {
     //     .catch(err => console.error(err))
     //   }
     
-    handleConfirmationSubmit = async event => {
-        event.preventDefault();
+    // handleConfirmationSubmit = async event => {
+    //     event.preventDefault();
       
-        try {
-          const user = this.props.fieldValues;
-          console.log(user.user_name);
-            console.log(this.state.confirmationCode);
-          fetch(`/signup/verify`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json; charset=utf-8",
-            },
-            body: JSON.stringify({
-              user_name         :  user.user_name,
-              veri_code         :  this.state.confirmationCode,
-            })
-          })
-          .then(response => response.json())
-          .then((responseJSON) => {
-              console.log(responseJSON);
-              // console.log(responseJSON);
-            if (responseJSON["success"] || responseJSON["error"]) {
-                if (responseJSON["error"] === null && responseJSON["success"] === "veri-code is correct") {
-                    //Do the success things
-                    this.props.nextStep();
-                } else if (responseJSON["error"] === "verification update fail" && responseJSON["success"] === null){
-                    alert("Invalid Confirmation Code!");
-                    this.setState({ isLoading: false });
-                } 
-            }
-            else {
-                alert("Something went wrong :(");
-                this.setState({ isLoading: false });
-            }
-          })
-          .catch(err => console.error(err))
-          } catch (e) {
-            alert(e.message);
-          }
-        // 
-    }
+    //     try {
+    //       const user = this.props.fieldValues;
+    //       console.log(user.user_name);
+    //         console.log(this.state.confirmationCode);
+    //       fetch(`/signup/verify`, {
+    //         method: "POST",
+    //         headers: {
+    //             "Content-Type": "application/json; charset=utf-8",
+    //         },
+    //         body: JSON.stringify({
+    //           user_name         :  user.user_name,
+    //           veri_code         :  this.state.confirmationCode,
+    //         })
+    //       })
+    //       .then(response => response.json())
+    //       .then((responseJSON) => {
+    //           console.log(responseJSON);
+    //           // console.log(responseJSON);
+    //         if (responseJSON["success"] || responseJSON["error"]) {
+    //             if (responseJSON["error"] === null && responseJSON["success"] === "veri-code is correct") {
+    //                 //Do the success things
+    //                 this.props.nextStep();
+    //             } else if (responseJSON["error"] === "verification update fail" && responseJSON["success"] === null){
+    //                 alert("Invalid Confirmation Code!");
+    //                 this.setState({ isLoading: false });
+    //             } 
+    //         }
+    //         else {
+    //             alert("Something went wrong :(");
+    //             this.setState({ isLoading: false });
+    //         }
+    //       })
+    //       .catch(err => console.error(err))
+    //       } catch (e) {
+    //         alert(e.message);
+    //       }
+    //     // 
+    // }
 
     render() {
         return (
         <div>
-            <form onSubmit={this.handleConfirmationSubmit}>
+            {/* <form onSubmit={this.handleConfirmationSubmit}>
                 <FormGroup controlId="confirmationCode" bsSize="large">
                     <ControlLabel>Confirmation Code</ControlLabel>
                     <FormControl
@@ -117,9 +117,9 @@ export default class Confirmation extends Component {
                     type="tel"
                     defaultValue={this.state.confirmationCode}
                     onChange={this.handleChange}
-                />
-                <HelpBlock>Please check your email for the code.</HelpBlock>
-                </FormGroup>
+                /> */}
+                <HelpBlock>A verification code has been sent to you. Please check your email for the code.</HelpBlock>
+                {/* </FormGroup>
 
                 <LoaderButton
                 block
@@ -129,11 +129,11 @@ export default class Confirmation extends Component {
                 isLoading={this.state.isLoading}
                 text="Verify"
                 loadingText="Verifying…"
-                />
+                /> */}
 
 
                 {/* Temporary for test */}
-                <ButtonToolbar>
+                {/* <ButtonToolbar>
                     <ButtonGroup>
                         <Button
                             bsSize="large"
@@ -143,7 +143,7 @@ export default class Confirmation extends Component {
                         </Button>
                     </ButtonGroup>
                 </ButtonToolbar>
-                </form>
+                </form> */}
         </div>
         )
     }

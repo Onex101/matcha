@@ -104,21 +104,41 @@ router.get('/user/:id/history', user_controller.get_visits);
 //GET request that reutrns the people the user has liked (return the same stuff as getMatches
 router.get('/user/:id/liked', user_controller.linked_details);
 
+//GET request that reutrns the people that like the user
+router.get('/users/like/:id', user_controller.getUsersThatLikeCurrentUser);
+
+//GET request that reutrns the people that like the user
+router.get('/users/liked/:id', user_controller.getUsersThatCurrentUserLikes);
+
 //GET request for users with the same characters in their username
 router.get('/usersearch/:user_id/:search_name', user_controller.search_username);
 
 //GET request for users with the tag matching the search (using suggestion system like in normal tags creating)
-router.get('/tagsearch/:user_id/:interest', user_controller.search_tags);
+// router.get('/tagsearch/:user_id/:interest', user_controller.search_tags);
+
+router.post('/tagsearch', user_controller.tag_search);
+
+// router.get('/tagsearch', user_controller.tag_search);
 
 //GET request for users with a fame rating of at least x
 router.get('/famesearch/:user_id/:x', user_controller.search_minfame);
 
 //GET request to verify if the user and verification code are correct and allow the request to continue to change the password of the user
-router.get('/password_rest/:user_name/:veri_code', user_controller.check_password_reset)
+router.get('/password_reset/:user_name/:veri_code', user_controller.check_password_reset)
 
 //GET request for matching users with a maximum age gap of x
 router.get('/agesearch/:user_id/:x', user_controller.get_matches_age);
 
 router.get('/user/tmp/:user_name', user_controller.get_tmp);
+
+router.get('/locations', user_controller.get_locations);
+
+router.get('/locationsearch/:id/:gps_lat/:gps_lon', user_controller.get_users_by_location);
+
+//Get request user1 blocks user2
+router.get('/block/:user1/:user2', user_controller.get_block_user);
+
+router.get('/likecode/:user1/:user2', user_controller.get_users_like_Code);
+
 
 module.exports = router;

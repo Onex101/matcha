@@ -29,13 +29,13 @@ export default class SearchResults extends Component {
     };
 
     avatar(image, width, height) {
-        var image = image,
+        var avatarImage = image,
             style = {
               width: width || 50,
               height: height || 50
             }; 
-        if (!image) return null;
-        return (<img className="avatar" style={style} src={image} />);
+        if (!avatarImage) return null;
+        return (<img className="avatar" style={style} src={avatarImage} alt="" />);
     }
 
     componentDidMount() { 
@@ -93,7 +93,9 @@ export default class SearchResults extends Component {
 
         for (var elem = 0; results[elem]; elem++) {
             if (results[elem] && results[elem].pic && results[elem].user_name) {
-                resultUsers.push(<UserLabel user={results[elem]} key={elem}/>)
+                resultUsers.push(<UserLabel user={results[elem]}
+                   socket={this.props.socket}
+                   key={elem}/>)
             }
         }
         return resultUsers;
@@ -102,9 +104,9 @@ export default class SearchResults extends Component {
     render() {
         const results = this.state.results;
 
-        console.log("SEARCHRESULTS results:")
-        console.info(this.state.type)
-        console.info(results)
+        // console.log("SEARCHRESULTS results:")
+        // console.info(this.state.type)
+        // console.info(results)
 
         //Do a check if there's a result type, then either show that, or show loading
         return (this.props.results === null && this.props.resultType === null && this.props.userInfo && this.props.userInfo.id ? <Redirect push to="/" />

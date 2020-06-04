@@ -1,0 +1,122 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders 1`] = `
+<DocumentFragment>
+  <div
+    class="App-setup"
+  >
+    <div
+      class="App-container"
+    >
+      <nav
+        class="nav-top navbar navbar-default"
+      >
+        <div
+          class="container-fluid"
+        >
+          <div
+            class="navbar-header"
+          >
+            <a
+              class="App-logo navbar-brand"
+              href="/"
+            >
+              Matcha
+            </a>
+            <button
+              class="navbar-toggle collapsed"
+              type="button"
+            >
+              <span
+                class="sr-only"
+              >
+                Toggle navigation
+              </span>
+              <span
+                class="icon-bar"
+              />
+              <span
+                class="icon-bar"
+              />
+              <span
+                class="icon-bar"
+              />
+            </button>
+          </div>
+          <div
+            class="navbar-collapse collapse"
+          >
+            <ul
+              class="nav navbar-nav navbar-right"
+            >
+              <li
+                class=""
+                role="presentation"
+              >
+                <a
+                  href="/signup"
+                >
+                  Signup
+                </a>
+              </li>
+              <li
+                class=""
+                role="presentation"
+              >
+                <a
+                  href="/login"
+                >
+                  Login
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+      <div
+        class="App-content"
+      >
+        <div
+          class="Home"
+        >
+          <div
+            class="lander"
+          >
+            <div>
+              <h1>
+                Matcha
+              </h1>
+              <p>
+                Find your Match and let Sparks fly!
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="fixed-bottom"
+      >
+        <nav
+          class="nav-bottom navbar navbar-default"
+          color="dark"
+        >
+          <div
+            class="container"
+          >
+            <div
+              class="navbar-brand"
+            >
+              <img
+                alt=""
+                class="nav-icon"
+                id="Foot"
+                src="footer.png"
+              />
+            </div>
+          </div>
+        </nav>
+      </div>
+    </div>
+  </div>
+</DocumentFragment>
+`;

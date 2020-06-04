@@ -7,10 +7,11 @@ body {
 
 #profile {
   width: 95%;
+  max-height: 75vh;
   margin: 5px auto 5px;
   border-radius: 5px;
   text-align: center;
-  overflow: hidden;
+  overflow: scroll;
   box-shadow: 2px 2px 5px #000;
   border: 1px solid #000;
   background-color: #b1afaf;
@@ -92,7 +93,7 @@ body {
 
 @media screen and (max-width: 770px) {
   #profile{
-    min-width: 405px;
+    min-width: 80vw;
   }
   .top{
     align-content: center;
@@ -106,7 +107,7 @@ body {
   .top .right {
     width: 55%;
     float: none;
-    min-width: 329px;
+    min-width: 80% !important;
     margin: auto;
     /* padding-bottom: 10px; */
   }
@@ -148,9 +149,9 @@ body {
 
 .like {
   max-height: 100px;
-  width: 33.33%;
+  width: 25%;
   float: none;
-  padding:2% 15%;
+  padding:2% 11%;
   /* padding-top: 3%; */
   cursor: pointer;
   background: #cacaca;
@@ -160,9 +161,9 @@ body {
 
 .dislike {
   max-height: 100px;
-  width: 33.33%;
+  width: 25%;
   float: none;
-  padding:1.9% 15%;
+  padding:1.9% 11%;
   cursor: pointer;
   background: #cacaca;
   border: 1px solid rgb(143, 143, 143);
@@ -171,9 +172,9 @@ body {
 
 .report {
   max-height: 100px;
-  width: 33.33%;
+  width: 25%;
   float: none;
-  padding:2% 15%;
+  padding:2% 11%;
   padding-top: 2.2%;
   cursor: pointer;
   background: #cacaca;

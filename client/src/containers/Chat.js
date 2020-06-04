@@ -20,32 +20,21 @@ export default class Chat extends Component {
 	}
 
 	componentDidMount(){
-		// console.log("Did mount Props:")
-		// console.info(this.props)
 		if(!this.state.socket && this.props.socket){
-			// console.log("Test 2")
 			this.setState({socket: this.props.socket})
 		}
 		if (!this.state.user && this.props.socketUser) {
 			this.setState({user: this.props.socketUser})
-			// console.log("Did mount state:")
-			// console.info(this.state)
-			// this.initSocket();
 		}
 	}
 
 	componentWillMount(){
-		// console.log("Will mount Props:")
-		// console.info(this.props)
 		if(!this.state.socket && this.props.socket){
 			// console.log("Test 2")
 			this.setState({socket: this.props.socket})
 		}
 		if (!this.state.user && this.props.socketUser) {
 			this.setState({user: this.props.socketUser})
-			// console.log("Will mount state:")
-			// console.info(this.state)
-			// this.initSocket();
 		}
 	}
 
@@ -121,13 +110,13 @@ export default class Chat extends Component {
 	render(){
 		// console.log("PROPS and or localStorage")
 		// console.info(this.props)
-		console.info(this.props)
+		// console.info(this.props)
 		const {socket, user} = this.state
-		console.log("Does user exist: ")
-		console.log(this.state)
+		// console.log("Does user exist: ")
+		// console.log(this.state)
 		return(this.state.user && this.state.socket? 
 				<div className="chat">
-					{console.log("ENTERED chat layer1")}
+					{/* {console.log("ENTERED chat layer1")} */}
 					<div className="chat-container">
 						{(<ChatContainer socket={socket} user={user}/>)}
 					</div>

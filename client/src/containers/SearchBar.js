@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import "./SearchBar.css";
-import { Link, Redirect } from "react-router-dom";
 
 export default class SearchBar extends Component {
   constructor(props) {
@@ -81,7 +80,7 @@ export default class SearchBar extends Component {
   }
 
   saveAndContinue() {
-    console.log('test')
+    // console.log('test')
   }
 
   //////////Steps for listing suggestions//////////
@@ -101,8 +100,8 @@ export default class SearchBar extends Component {
 
   searchThis(item, e){
     e.preventDefault()
-    console.log("ITEMS TEST 1:")
-    console.info(item)
+    // console.log("ITEMS TEST 1:")
+    // console.info(item)
     if (item.name[0] === '@' || item.name[0] === '#' || item.name[0] === '$') {
       item.name = item.name.substring(1);
     }
@@ -123,8 +122,8 @@ export default class SearchBar extends Component {
         })
         .then(response => response.json())
         .then((responseJSON) => {
-          console.log("SEARCH TAGS RESULTS:")
-          console.info(responseJSON)
+          // console.log("SEARCH TAGS RESULTS:")
+          // console.info(responseJSON)
           results = responseJSON;
           type = 'These are the users who have the tag "' + item.name + '":'
           this.props.getSearchResults(results, type);

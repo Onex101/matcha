@@ -27,7 +27,7 @@ Notification.prototype.setNoti = function (user_id, msg, callback) {
 }
 
 Notification.prototype.setRead = function (id, callback) {
-	db.query(`UPDATE notifications SET viewed_status = 0 WHERE id = ${id}`, function (err, result){
+	db.query(`UPDATE notifications SET viewed_status = 1 WHERE id = ${id}`, function (err, result){
 		if (err){callback(err, null);}
 		else{
 			if (typeof callback === "function"){

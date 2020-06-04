@@ -1,4 +1,7 @@
 import React, { Component } from 'react';
+import { Button, FormGroup, FormControl, ControlLabel } from "react-bootstrap";
+import queryString from 'query-string'
+import "./ResetPassword.css";
 
 export default class ResetPassword extends Component {
   constructor() {
@@ -10,31 +13,47 @@ export default class ResetPassword extends Component {
       confirmPassword: '',
       updated: false,
       isLoading: true,
-	  error: false,
-	  errorMessage: '',
+      error: false,
+      errorMessage: '',
     };
   }
 
   componentDidMount() {
-	const {user_name, vericode} = this.state
-	fetch(`/password_reset/` + user_name + '/' + vericode, {
-		method: "GET",
-		headers: {
-			"Content-Type": "application/json; charset=utf-8",
-		},
-		body: JSON.stringify({
-		  email: this.state.email
-		})
-		})
-		.then(response => response.json())
-		.then((responseJSON) => {
-			if (responseJSON.error){
-				this.setState({error: true, errorMessage: error})
-			}
-			console.log(responseJSON);
-		})
-	  .catch(err => console.error(err))
-    // get user info from link sent - check if code is the same
+    // const { user_name, vericode } = this.state
+
+    // console.log(this.props.location.search) // "?filter=top&origin=im"
+    // console.log(this.props.location.search.user) // "?filter=top&origin=im"
+
+    var inputString = JSON.stringify(this.props.location.search);
+    // console.log("TESTER")
+
+    const values = queryString.parse(this.props.location.search)
+
+    // console.log(values.user) // "top"
+    // console.log(values.origin) // "im"
+    this.setState({ user_name: values.user, veri_code: values.origin });
+
+    try {
+      fetch(`/password_reset/` + values.user + '/' + values.origin, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json; charset=utf-8",
+        },
+      })
+        .then(response => response.json())
+        .then((responseJSON) => {
+          if (responseJSON["error"]) {
+            this.setState({ error: true, errorMessage: responseJSON["error"] })
+          } else {
+            this.setState({ isLoading: false })
+          }
+          // console.log(responseJSON);
+        })
+        .catch(err => console.error(err))
+    } catch (e) {
+      alert("Settings 4: " + e.message);
+    }
+
   }
 
   handleChange = name => event => {
@@ -43,35 +62,49 @@ export default class ResetPassword extends Component {
     });
   };
 
+  validatePassword(inputtxt) {
+    var passw = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*(\W|_)).{5,}$/;
+    if (passw.test(inputtxt)) {
+      return true;
+    }
+    else {
+      alert('Invalid password! Please use a password more than 4 characters long, with at least one uppercase letter, lowercase letter, one digit and one special symbol')
+      return false;
+    }
+  }
+
   updatePassword = e => {
     e.preventDefault();
-	// changeg password on submit
-	fetch(`/user/update/password`, {
-		method: "POST",
-		headers: {
-			"Content-Type": "application/json; charset=utf-8",
-		},
-		body: JSON.stringify({
-      user_name: this.state.user_name,
-      veri_code: this.state.veri_code,
-      password: this.state.password
-		})
-		})
-		.then(response => response.json())
-		.then((responseJSON) => {
-			if (responseJSON.error){
-				this.setState({error: true})
-			}
-			else{
-				this.setState({updated: true})
-			}
-			console.log(responseJSON);
-		})
-	  .catch(err => console.error(err))
+    // console.log("PASSWORD: " + this.state.password)
+    if (this.validatePassword(this.state.password)) {
+      // changeg password on submit
+      fetch(`/user/update/password`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json; charset=utf-8",
+        },
+        body: JSON.stringify({
+          user_name: this.state.user_name,
+          veri_code: this.state.veri_code,
+          password: this.state.password
+        })
+      })
+        .then(response => response.json())
+        .then((responseJSON) => {
+          if (responseJSON.error) {
+            this.setState({ error: true })
+          }
+          else {
+            this.setState({ updated: true })
+          }
+          // console.log(responseJSON);
+        })
+        .catch(err => console.error(err))
+    }
   };
 
   render() {
-    const { password, error, isLoading, updated, errorMessage} = this.state;
+    const { password, error, isLoading, updated, errorMessage } = this.state;
 
     if (error) {
       return (
@@ -91,18 +124,20 @@ export default class ResetPassword extends Component {
       return (
         <div>
           <form className="password-form" onSubmit={this.updatePassword}>
-            <TextField
-              style={inputStyle}
-              id="password"
-              label="password"
-              onChange={this.handleChange('password')}
-              value={password}
-              type="password"
-            />
-            <SubmitButton
-              buttonStyle={updateButton}
-              buttonText={'Update Password'}
-            />
+            <FormGroup controlId="password" bsSize="large">
+              <ControlLabel>New Password</ControlLabel>
+              <FormControl
+                autoFocus
+                type="password"
+                onChange={this.handleChange('password')}
+                value={password}
+              /></FormGroup>
+            <Button
+              block
+              bsSize="large"
+              // disabled={!this.validateForm()}
+              type="submit">
+              Reset Password</Button>
           </form>
 
           {updated && (

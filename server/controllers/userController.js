@@ -47,6 +47,7 @@ exports.user_detail = function(req, res) {
 					password: row.password,
 					interests: row.interests,
 					profile_pic_id: row.profile_pic_id,
+					online: row.online,
 					pic: row.pic,
 					age: Match.getAge(row.birth_date)}
             res.json(user);
@@ -84,7 +85,8 @@ exports.user_create_get = function(req, res) {
 
 exports.check_email = function(req,res){
 	let user = new User('');
-	user.checkEmail(req.body.data['email'], function(err,results){
+	console.log(req.body)
+	user.checkEmail(req.body['email'], function(err,results){
 		if (err){
 			res.send(err)
 		}
@@ -92,7 +94,7 @@ exports.check_email = function(req,res){
 			if (results.length){
 				user_name = results[0].user_name;
 				veri_code = results[0].veri_code;
-				mail.sendPasswordReset(user_name, veri_code, req.body.data['email'])
+				mail.sendPasswordReset(user_name, veri_code, req.body['email'])
 				res.send({error: null})
 			}
 			else{
@@ -124,8 +126,9 @@ exports.user_create_post = function(req, res) {
 
 exports.user_update_password = function(req,res){
 	let user = new User('');
-	hpass = bcrypt.hashSync(req.body.data['password'], 10);
-	user.update_pass(req.body.data['user_name'], req.body.data['veri_code'], hpass, function(err, results){
+	console.log(req.body)
+	let hpass = bcrypt.hashSync(req.body['password'], 10);
+	user.update_pass(req.body['user_name'], req.body['veri_code'], hpass, function(err, results){
 		if (err)
             res.send(err);
         else
@@ -165,7 +168,12 @@ exports.user_update_get = function(req, res) {
 // Handle User update on POST.
 exports.user_update_post = function(req, res) {
 	let user = new User(req.body);
-	user.update_data(user.data.bio, user.data.gender, user.data.pref, user.data.id, function (err, results){
+	// if (!user.data.bio || !user.data.gender || !user.data.pref || !user.data.id || !user.data.first_name || !user.data.last_name || !user.data.email){
+	// 	console.log(user)
+	// 	res.send({error: "Not all user values are present", user: user});
+	// 	return;
+	// }
+	user.update_data(user.data.bio, user.data.gender, user.data.pref, user.data.id, user.data.first_name, user.data.last_name, user.data.email, function (err, results){
 		if(err){res.send(err)}
 		else{
 			res.send({success: "Update sucessfull"});
@@ -193,6 +201,7 @@ exports.user_login_post = function(req, res) {
 					}
 					else{
 						row = results[0];
+						user.login_user(row.user_name);
 						if (row) 
 							user.data = {
 								id: row.id,
@@ -241,7 +250,7 @@ exports.user_match_get = function(req, res) {
         if (err)
             res.send(err);
         else{
-            row = result[0];
+			row = result[0];
             if (row){
                 user.data = {
                     id: row.id,
@@ -277,9 +286,11 @@ exports.user_match_get = function(req, res) {
                                 var matchC =  (dist) +  (ageCoff) +  (5*pref) + (like) //weightings can be adjusted as needed here
                                 let new_data = results[i]
                                 if(matchC > 4){ //4 is an arb number to exclude any matches that fall too far because of gender/pref differential
-									new_user = new User(new_data);
-									new_user.data.gps_lat = 0;
-									new_user.data.gps_lon = 0;
+									new_user = new User(new_data); 
+									new_user.data.online = results[i].online;
+									new_user.data.gps_lat = results[i].gps_lat;
+									new_user.data.gps_lon =  results[i].gps_lon;
+									new_user.data.email =  results[i].email;
                                     new_user.match = matchC;
                                     new_user.like = like  * 100;
                                     new_user.dist_raw = dist_raw;
@@ -296,7 +307,9 @@ exports.user_match_get = function(req, res) {
                             obj = {};
                             for (var key in array) {
                                 obj[key] = array[key]
-                            }
+							}
+							// console.log("RESULTS")
+							// console.log(obj)
                             res.json(obj);
                         }
                     })
@@ -487,6 +500,27 @@ exports.get_liked = function(req, res){
 	})
 }
 
+//Get list of people that like the current user
+exports.getUsersThatLikeCurrentUser = function(req, res){
+	let user = new User('');
+	user.getUsersThatLikeCurrentUser(req.params.id,function(err, results){
+		if(err){res.send(err);}
+		else{
+			res.send(results)
+		}
+	})
+}
+
+exports.getUsersThatCurrentUserLikes = function(req, res){
+	let user = new User('');
+	user.getUsersThatCurrentUserLikes(req.params.id,function(err, results){
+		if(err){res.send(err);}
+		else{
+			res.send(results)
+		}
+	})
+}
+
 exports.update_gps = function(req, res){
 	let user = new User('');
 	user.set_gps(req.params.id, req.params.lat, req.params.lon, function(err, results){
@@ -539,10 +573,33 @@ exports.get_user_details = function(req, res){
 
 exports.search_minfame = function(req, res){
 	let user = new User('');
-	user.search_fame(req.params.x, req.params.user_id, function(err, results){
-		if(err){res.send(err);}
-		else{
-			res.send(results)
+	user.getById(req.params.user_id, function(err, result){
+        if (err)
+            res.send(err);
+        else{
+			row = result[0];
+            if (row){
+                user.data = {
+                    id: row.id,
+                    first_name: row.first_name,
+                    last_name: row.last_name,
+                    user_name: row.user_name,
+                    birth_date: row.birth_date,
+                    gender: row.gender,
+                    pref: row.pref,
+                    gps_lat: row.gps_lat,
+                    gps_lon: row.gps_lat,
+                    bio: row.bio,
+					fame: row.fame,
+					interests: row.interests,
+					pic: row.pic}
+				}
+				user.search_fame(req.params.x, req.params.user_id, function(err, results){
+					if(err){res.send(err);}
+					else{
+						res.json(matchAlgo(user, results));
+					}
+				})
 		}
 	})
 }
@@ -595,27 +652,82 @@ exports.search_username = function(req,res){
 
 exports.search_tags = function(req,res){
 	let user = new User('');
-	user.tag_search(req.params.user_id, req.params.interest, function(err, results){
-		if (err){
-			res.send(err)
-		}
-		else{
-			res.send(results);
+	user.getById(req.params.user_id, function(err, result){
+        if (err)
+            res.send(err);
+        else{
+			row = result[0];
+            if (row){
+                user.data = {
+                    id: row.id,
+                    first_name: row.first_name,
+                    last_name: row.last_name,
+                    user_name: row.user_name,
+                    birth_date: row.birth_date,
+                    gender: row.gender,
+                    pref: row.pref,
+                    gps_lat: row.gps_lat,
+                    gps_lon: row.gps_lat,
+                    bio: row.bio,
+					fame: row.fame,
+					interests: row.interests,
+					pic: row.pic}
+				}
+				user.tag_search(req.params.user_id, req.params.interest, function(err, results){
+					if (err){
+						res.send(err)
+					}
+					else{
+						res.json(matchAlgo(user, results));
+					}
+				})
 		}
 	})
 }
 
-exports.get_matches_age = function(req,res){
+exports.tag_search = function (req, res){
 	let user = new User('');
-	user.getMaxAgeGapMatch(req.params.user_id, req.params.x, function(err, results){
-		if (err){
-			res.send(err)
-		}
-		else{
-			res.send(results);
+	let interests = [];
+	console.log(JSON.stringify(req.body))
+	req.body.interests.forEach(element => {
+		delete element.id
+		interests.push(element.name);
+	});
+	console.log(interests)
+	user.getById(req.body.user_id, function(err, result){
+        if (err)
+            res.send(err);
+        else{
+			row = result[0];
+            if (row){
+                user.data = {
+                    id: row.id,
+                    first_name: row.first_name,
+                    last_name: row.last_name,
+                    user_name: row.user_name,
+                    birth_date: row.birth_date,
+                    gender: row.gender,
+                    pref: row.pref,
+                    gps_lat: row.gps_lat,
+                    gps_lon: row.gps_lat,
+                    bio: row.bio,
+					fame: row.fame,
+					interests: row.interests,
+					pic: row.pic}
+				}
+				user.tag_search(req.body.user_id, interests, function(err, results){
+					if (err){
+						res.send(err)
+					}
+					else{
+						res.json(matchAlgo(user, results));
+					}
+				})
 		}
 	})
 }
+
+
 
 exports.get_tmp = function(req, res){
 	let user = new User('')
@@ -651,3 +763,145 @@ exports.check_password_reset = function(req, res){
     })
 }
 
+exports.get_matches_age = function(req,res){
+	let user = new User('');
+	user.getById(req.params.user_id, function(err, result){
+        if (err)
+            res.send(err);
+        else{
+			row = result[0];
+            if (row){
+                user.data = {
+                    id: row.id,
+                    first_name: row.first_name,
+                    last_name: row.last_name,
+                    user_name: row.user_name,
+                    birth_date: row.birth_date,
+                    gender: row.gender,
+                    pref: row.pref,
+                    gps_lat: row.gps_lat,
+                    gps_lon: row.gps_lat,
+                    bio: row.bio,
+					fame: row.fame,
+					interests: row.interests,
+					pic: row.pic}
+				}
+				user.getMaxAgeGapMatch(req.params.user_id, req.params.x, function(err, results){
+					if (err){
+						res.send(err)
+					}
+					else{
+						res.json(matchAlgo(user, results));
+						}
+					})
+		}
+	})
+}
+
+exports.get_locations = function(req, res){
+	let user = new User('');
+	user.getLocations(function(err, result){
+		if (err){
+            res.send(err);
+		}
+		else{
+			res.send(result)
+		}
+	})
+}
+
+exports.get_users_by_location = function(req, res){
+	let user = new User('');
+	user.getById(req.params.id, function(err, result){
+        if (err)
+            res.send(err);
+        else{
+			row = result[0];
+            if (row){
+                user.data = {
+                    id: row.id,
+                    first_name: row.first_name,
+                    last_name: row.last_name,
+                    user_name: row.user_name,
+                    birth_date: row.birth_date,
+                    gender: row.gender,
+                    pref: row.pref,
+                    gps_lat: row.gps_lat,
+                    gps_lon: row.gps_lat,
+                    bio: row.bio,
+					fame: row.fame,
+					interests: row.interests,
+					pic: row.pic}
+				}
+			user.getUsersByLocation(req.params.id, req.params.gps_lat, req.params.gps_lon, function(err, results){
+				if (err){
+					res.send(err);
+				}
+				else{
+					res.json(matchAlgo(user, results));
+				}
+			})
+		}
+	})
+}
+
+exports.get_block_user = function (req, res){
+	let user = new User('');
+	user.blockUserById(req.params.user1, req.params.user2, function(err, result){
+		if (err)
+			res.send(err);
+		else{
+			res.send({success: "Blocked succesfully"})
+		}
+	})
+}
+
+exports.get_users_like_Code = function (req, res){
+	let user = new User('');
+	user.getUsersLikeCode(req.params.user1, req.params.user2, function(err, result){
+		if (err)
+			res.send(err);
+		else{
+			res.send(result)
+		}
+	})
+}
+
+
+
+function matchAlgo(user, results){
+	var array = [];
+	var i = 0;
+	while(results[i]){
+		dist = Match.getD_coff(user.data.gps_lat, user.data.gps_lon, results[i].gps_lat, results[i].gps_lon)
+		dist_raw = Match.getDistance(user.data.gps_lat, user.data.gps_lon, results[i].gps_lat, results[i].gps_lon)
+		ageCoff = Match.getA_coff(user.data.birth_date, results[i].birth_date)
+		pref = Match.getP_coff(user.data.gender, user.data.pref, results[i].gender, results[i].pref)
+		like = Match.getL_coff(user.data.interests, results[i].interests);
+		var matchC =  (dist) +  (ageCoff) +  (5*pref) + (like) //weightings can be adjusted as needed here
+		let new_data = results[i]
+		if(matchC > 4){ //4 is an arb number to exclude any matches that fall too far because of gender/pref differential
+			new_user = new User(new_data); 
+			new_user.data.online = results[i].online
+			new_user.data.gps_lat = results[i].gps_lat;
+			new_user.data.gps_lon =  results[i].gps_lon;
+			new_user.data.email =  results[i].email;
+			new_user.match = matchC;
+			new_user.like = like  * 100;
+			new_user.dist_raw = dist_raw;
+			new_user.birth_date_diff = Math.abs(Match.getAge(user.data.birth_date) - Match.getAge(results[i].birth_date));
+			new_user.interests = results[i].interests;
+			new_user.pic = results[i].pic;
+			new_user.profile_pic_id = results[i].profile_pic_id;
+			new_user.tagMatch = like * 10;
+			array.push(new_user);
+		}
+		i++;
+	}
+	array.sort(sortFunction);
+	obj = {};
+	for (var key in array) {
+		obj[key] = array[key]
+	}
+	return obj;
+}

@@ -26,7 +26,7 @@ export default class SurveyFields extends Component {
         .then(data => this.setState({ gps_lat: data.latitude, gps_lon: data.longitude }));
 
         if (!navigator.geolocation){
-          console.log("Geolocation is not supported by your browser");          
+        //   console.log("Geolocation is not supported by your browser");          
           return;
         }
       
@@ -34,7 +34,7 @@ export default class SurveyFields extends Component {
           var latitude  = position.coords.latitude;
           var longitude = position.coords.longitude;
       
-          console.log("Latitude is " + latitude + "° Longitude is " + longitude + "°");
+        //   console.log("Latitude is " + latitude + "° Longitude is " + longitude + "°");
           this.setState({gps_lat: latitude});
           this.setState({gps_lon: longitude});
         }
@@ -44,7 +44,7 @@ export default class SurveyFields extends Component {
         //   output.innerHTML = "Unable to retrieve your location";
         }
       
-        console.log("Locating…");
+        // console.log("Locating…");
         navigator.geolocation.getCurrentPosition(success, error);
     }
 

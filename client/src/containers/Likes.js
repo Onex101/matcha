@@ -61,7 +61,7 @@ export default class Likes extends Component {
                 })
                 .then(response => response.json())
                 .then((responseJSON) => {
-                    console.log(responseJSON)
+                    // console.log(responseJSON)
                     this.setState({likes: responseJSON})
                 })
                 .catch(err => console.error(err))
@@ -113,7 +113,9 @@ export default class Likes extends Component {
         for (var elem = 0; elem < likes.length; elem++) {
             if (likes[elem] && likes[elem].pic && likes[elem].user_name) {
                 likedUsers.push(
-                   <UserLabel user={likes[elem]} key={elem} />
+                   <UserLabel user={likes[elem]} 
+                   socket={this.props.socket}
+                   key={elem} />
                 )
             }
         }

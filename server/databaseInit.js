@@ -33,6 +33,7 @@ connection.connect(function (err) {
 	connection.query('DROP TABLE IF EXISTS conversations');
 	connection.query('DROP TABLE IF EXISTS interests');
 	connection.query('DROP TABLE IF EXISTS user_interests');
+	connection.query('DROP TABLE IF EXISTS blocks');
 
 	console.log('Initiating tables...')
 	connection.query("CREATE TABLE `users`\
@@ -64,6 +65,11 @@ connection.connect(function (err) {
 	)`);
 
 	connection.query('CREATE TABLE likes\
+	(user1_id int NOT NULL,\
+	user2_id int NOT NULL,\
+	link_code int)');
+
+	connection.query('CREATE TABLE dislikes\
 	(user1_id int NOT NULL,\
 	user2_id int NOT NULL,\
 	link_code int)');
@@ -100,6 +106,12 @@ connection.connect(function (err) {
 	msg varchar(1000),\
 	timestamp DATETIME DEFAULT NOW(),\
 	viewed int DEFAULT 0,\
+	PRIMARY KEY (`id`))');
+
+	connection.query('CREATE TABLE blocks\
+	(id int NOT NULL AUTO_INCREMENT,\
+	user1_id int NOT NULL,\
+	user2_id int NOT NULL,\
 	PRIMARY KEY (`id`))');
 
 	console.log('Creating fake profiles...')
@@ -270,10 +282,13 @@ connection.connect(function (err) {
 	connection.query("\
 	INSERT INTO conversations (user1, user2) VALUES(1, 1)\
 	");
+	
+	connection.query(`UPDATE users SET online = NOW()`);
 
 	for (var i = 101; i <= 200; i++){
 		var fame = Math.floor(Math.random() * 21);
 		connection.query(`UPDATE users SET fame = ${fame} WHERE id = ${i}`);
+		
 		connection.query(`INSERT INTO history (viewer_id, viewed_id) VALUES (${i},${i})`);
 	}
 

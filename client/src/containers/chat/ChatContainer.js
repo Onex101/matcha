@@ -15,7 +15,8 @@ export default class ChatContainer extends Component{
 			users:[],
 			likedUsers: [],
 			activeChat:null,
-			receiver: null
+			receiver: null,
+			sidebarOpen: true
 		}
 	}
 
@@ -61,7 +62,7 @@ export default class ChatContainer extends Component{
 
 		
 	getLikedPeople = (users) => {
-		console.log("Getting liked PEOPLE", users)
+		// console.log("Getting liked PEOPLE", users)
 		// Get Matches
 			var newList = {}
 			try {
@@ -98,7 +99,7 @@ export default class ChatContainer extends Component{
 		const {socket, user} = this.props
 		const {activeChat} = this.state
 		this.setState({receiver: receiver})
-		console.log("sending private message")
+		// console.log("sending private message")
 		// console.log(receiver, user)
 		socket.emit(PRIVATE_MESSAGE, {receiver, sender: user, activeChat})
 		socket.emit(NOTIFICATION, receiver.name + " has started a chat with you", receiver)
@@ -109,10 +110,10 @@ export default class ChatContainer extends Component{
 	}
 
 	containsObject = function (obj, list) {
-		console.log('Checking if object is in list')
+		// console.log('Checking if object is in list')
 		var x = 0;
 		while (list[x]){
-			console.log(list[x].id, obj.id)
+			// console.log(list[x].id, obj.id)
 			if (list[x].id == obj.id){
 				return (true)
 			}
@@ -144,7 +145,7 @@ export default class ChatContainer extends Component{
 			// console.log("Message Recieved adding to chat")
 			const {chats} = this.state
 			let newChats = chats.map((chat)=>{
-				if(chat.id === chatId)
+				if(chat.id == chatId)
 					chat.messages.push(message)
 				return chat
 			})
@@ -155,16 +156,16 @@ export default class ChatContainer extends Component{
 	updateTypingInChat = (chatId)=>{
 		return ({isTyping, user})=>{
 			// console.log("Updating typing in chat-" + chatId)
-			if(user.name !== this.props.user.name){
+			if(user.name != this.props.user.name){
 
 				const { chats } = this.state
 
 				let newChats = chats.map((chat)=>{
-					if(chat.id === chatId){
+					if(chat.id == chatId){
 						if(isTyping && !chat.typingUsers.includes(user)){
 							chat.typingUsers.push(user)
 						}else if(!isTyping && chat.typingUsers.includes(user)){
-							chat.typingUsers = chat.typingUsers.filter(u => u !== user)
+							chat.typingUsers = chat.typingUsers.filter(u => u != user)
 						}
 					}
 					return chat
@@ -190,6 +191,10 @@ export default class ChatContainer extends Component{
 		this.setState({activeChat})
 	}
 
+	onSetSidebar(open) {
+		this.setState({ sidebarOpen: open });
+	}
+
 	render() {
 		const {user} = this.props;
 
@@ -204,11 +209,15 @@ export default class ChatContainer extends Component{
 					activeChat={activeChat}
 					setActiveChat={this.setActiveChat}
 					onSendPrivateMessage ={this.sendOpenPrivateMessage}
+					open={this.state.sidebarOpen}
+					onSetSidebar={this.onSetSidebar.bind(this)}
 				/>
 				<div className="chat-room-container">
 					{activeChat !== null ? (
 						<div className="chat-room">
-							<ChatHeading name={activeChat.name} />
+							<ChatHeading 
+								name={<>
+								<button onClick={() => this.onSetSidebar(!this.state.sidebarOpen)}>></button>{activeChat.name}</>} />
 							<Messages
 								messages={activeChat.messages}
 								user={user}
