@@ -70,16 +70,20 @@ export default class ForgotPasswordEmail extends Component {
         return (
             <div>
                 {!this.state.emailSent
-                    ? <div className="ForgotEmail">
+                    ? <div data-testid="notSent" className="ForgotEmail">
                         <form onSubmit={this.handleSubmit}>
                             <FormGroup controlId="email" bsSize="large">
                                 <ControlLabel>Email</ControlLabel>
                                 <FormControl
+                                    data-testid="emailInput"
                                     autoFocus
                                     type="text"
                                     value={this.state.email}
                                     onChange={this.handleChange}
-                                /></FormGroup>
+                                >
+                                </FormControl>
+                                
+                                </FormGroup>
                             <Button
                                 block
                                 bsSize="large"
@@ -88,7 +92,7 @@ export default class ForgotPasswordEmail extends Component {
                                 Send password reset email</Button>
                         </form>
                     </div>
-                    : <div id="emailSent">
+                    : <div data-testid="sent" id="emailSent">
                         <p>An email has been sent to set up a new password.</p>
                     </div>}
             </div>
