@@ -18,6 +18,7 @@ module.exports = function (socket) {
 
 	let getUsersChat;
 
+	//Check if incoming user is already connected or creates a user and passes the results to the callback
 	socket.on(VERIFY_USER, (id, name, callback) => {
 		if (isUser(connectedUsers, name)) {
 			callback({ isUser: true, user: null });
@@ -28,6 +29,7 @@ module.exports = function (socket) {
 		}
 	})
 
+	//Sets up  a new socket conenction and initates sub functions used to communicate information with ither users
 	socket.on(USER_CONNECTED, (user) => {
 		console.log('This user has connected: ')
 		console.log(user);
@@ -35,20 +37,21 @@ module.exports = function (socket) {
 			user.socketId = socket.id;
 			connectedUsers = addUser(connectedUsers, user)
 			socket.user = user
-			// console.log("Connected Users: " + JSON.stringify(connectedUsers));
+
+			//Sub functions - these will be different for all users based on their name and socket information
 			sendNotificationToUser = sendNotification(user.name)
 			sendMessageToChatFromUser = sendMessageToChat(user)
 			sendTypingFromUser = sendTypingToChat(user.name)
 			getUsersChat = getChat(user)
-			// console.log(getUsersChat)
-			// getUsersChat('Community', ()=>{})
 
+			//Emit a message to all sockects an updated list of users
 			socketIO.io.emit(USER_CONNECTED, connectedUsers)
-			// console.log(socket.user);
+
 			console.log("Connected Users: " + JSON.stringify(connectedUsers));
 		}
 	})
 
+	//When a socket disconencts all other connected sockets are informed and the socket ser information is removed form the list of connected sockets
 	socket.on('disconnect', () => {
 		if ("user" in socket) {
 			let user = new User();
@@ -72,20 +75,16 @@ module.exports = function (socket) {
 		}
 	})
 
-	//Get Community Chat
+	//Sets up the inital Community Chat
 	socket.on(COMMUNITY_CHAT, (callback) => {
-		// console.log(this.getUsersChat)
-		// getUsersChat('Community')
-		// getUsersChat()
+
 		var msgArray = [];
 		var user_test = getChat({ id: 1 })
 		user_test({ id: 1 }, (results) => {
 			// console.log(messages)
 			messages = results.body
 			messages.forEach(element => {
-				// console.log(element)
 				var date = new Date(element.timestamp);
-				// console.log(date)
 				var hours = date.getHours();
 				var minutes = "0" + date.getMinutes();
 				var formattedTime = hours + ':' + minutes.substr(-2);
@@ -96,23 +95,21 @@ module.exports = function (socket) {
 		})
 	})
 
+	//Sends the incoming message to the chatId
 	socket.on(MESSAGE_SENT, ({ chatId, message }) => {
-		// console.log("MESSAGE SENT " + message + " " + " " + chatId)
-		console.log(chatId)
-		if (message == 'paki')
-			message = 'Sorry your message was not sent'
 		if ((typeof sendMessageToChatFromUser) == "function") {
 			sendMessageToChatFromUser(chatId, message)
 		}
 	})
 
+	//Sends the message to the specifc chat when a user is typing
 	socket.on(TYPING, ({ chatId, isTyping }) => {
 		if ((typeof sendTypingFromUser) == "function") {
 			sendTypingFromUser(chatId, isTyping)
-			console.log("Is Typing")
 		}
 	})
 
+	//Creates a private chat between two users
 	socket.on(PRIVATE_MESSAGE, ({ receiver, sender, activeChat }) => {
 		console.log(receiver, sender)
 		var msgArray = [];
@@ -163,6 +160,7 @@ module.exports = function (socket) {
 		}
 	})
 
+	//Sends notifications to coneceted receivers
 	socket.on(NOTIFICATION, (message, receiver) => {
 		console.log(receiver)
 		let user = new User('');

@@ -337,7 +337,7 @@ class App extends Component {
 		{this.state.redirect ?
 		  <Redirect push to="/searchResults" /> : null}
 		<div className="App-content">
-		  <Routes childProps={childProps} />
+		  <Routes data-testid="childProps" childProps={childProps} />
 		</div>
 		<div className="fixed-bottom">  
             <Navbar color="dark"  className="nav-bottom">

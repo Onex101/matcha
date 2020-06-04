@@ -23,7 +23,7 @@ export default class Verification extends Component {
     // var inputString = JSON.stringify(this.props.location.search);
     // console.log("TESTER")
 
-    const values = queryString.parse(this.props.location.search)
+    const values = this.props.location ? queryString.parse(this.props.location.search) : {}
 
     // console.log(values.user) // "top"
     // console.log(values.origin) // "im"
@@ -82,7 +82,9 @@ export default class Verification extends Component {
     } else if (isLoading) {
       return (
         <div>
-          <div>Loading...</div>
+          <div>
+              Loading...
+          </div>
         </div>
       );
     } else {

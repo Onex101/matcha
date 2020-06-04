@@ -1,0 +1,11 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Testing Verification Screen has Loading... screen 1`] = `
+<DocumentFragment>
+  <div>
+    <div>
+      Loading...
+    </div>
+  </div>
+</DocumentFragment>
+`;
