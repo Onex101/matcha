@@ -24,9 +24,29 @@ export default class MessageInput extends Component {
 		if (receiver){
 			// console.log("IM GOING TO SEND A MESSAGE", receiver)
 			receiver.user_name = receiver.name;
-			this.props.socket.emit(NOTIFICATION, "You have been sent a message", receiver);
+			let message = "You have been sent a message"
+			this.props.socket.emit(NOTIFICATION, message, receiver);
+			try {
+				fetch('/notification/send', {
+				  method: "POST",
+				  headers: {
+				  "Content-Type": "application/json; charset=utf-8",
+				  },
+				  body: JSON.stringify({
+					id: localStorage.getItem('id'),
+					message: message,
+				  })
+				})
+				.then(response => response.json())
+				.then((responseJSON) => {
+				  console.log(responseJSON)
+				})
+				.catch(err => console.error(err))
+				} 
+				catch (e) {
+					alert(e.message);
+			}
 		}
-		
 	}
 
 	componentWillUnmount() {
