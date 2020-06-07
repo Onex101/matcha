@@ -59,4 +59,39 @@ Notification.prototype.insertNoti = function (user_id, message, callback) {
 	})
 }
 
+Notification.prototype.getNoti = function (callback) {
+	db.query(`SELECT * FROM notifications WHERE id =${this.data.id}`, function (err, result){
+		if (err){callback(err, null);}
+		else{
+			if (typeof callback === "function"){
+				callback(null, result);
+			}
+		}
+	})
+}
+
+Notification.prototype.deleteNoti = function (callback) {
+	db.query(`DELETE FROM notifications where id=${this.data.id}`, function (err, result){
+		if (err){callback(err, null);}
+		else{
+			if (typeof callback === "function"){
+				callback(null, result);
+			}
+		}
+	})
+}
+
+Notification.prototype.updateNoti = function (callback) {
+	db.query(`UPDATE notifications SET noti='${this.data.noti}' WHERE id=${this.data.id}`, function (err, result){
+		if (err){callback(err, null);}
+		else{
+			if (typeof callback === "function"){
+				callback(null, result);
+			}
+		}
+	})
+}
+
+
+
 module.exports = Notification;

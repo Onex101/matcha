@@ -14,6 +14,15 @@ router.get('/notification/:id/read', notification_controller.notification_read_g
 //Sends amount of unread notification for the given user id
 router.get('/notification/:user_id/unread', notification_controller.notification_unread_get);
 
-router.post('/notification/send', notification_controller.notification_insert_post);
+//get by id
+router.get('/notification/:id', notification_controller.notification_get_by_id);
+
+//delete by id
+router.get('/notification/:id/delete', notification_controller.notification_delete_by_id);
+
+//update by id
+router.post('/notification/update', notification_controller.notification_update_by_id);
+
+router.post('/notification/create', notification_controller.notification_insert_post)
 
 module.exports = router;
