@@ -24,9 +24,9 @@ describe("Testing Login Screen", ()=>{
 		const {getByText, queryByTestId} = render(<Login />);
 		fireEvent.click(getByText("Login"));
 		
-		await wait(() => {
+		await waitFor(() => {
 			expect(queryByTestId('error')).toBeTruthy()
-		}).catch(err=>{console.log(err)})
+		}).catch(err=>{})
 
 	});
 })
