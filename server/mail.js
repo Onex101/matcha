@@ -1,3 +1,4 @@
+var resources = require('./resources');
 var nodemailer = require('nodemailer');
 const bcrypt = require('bcrypt');
 const { NOTIFICATION } = require('../client/src/Events')
@@ -12,10 +13,10 @@ exports.sendVeriCode = function(user_name, email){
 
 
     var transporter = nodemailer.createTransport({
-        service: 'gmail',
+        service: resources.SERVICE,
         auth: {
-        user: 'samamander404@gmail.com',
-        pass: 'PineappleExpress1@'
+        user: resources.EMAIL_USER,
+        pass: resources.EMAIL_PASSWORD
         }
     });
     //db.query("INSERT INTO users (input value, input value, input value ...,{:vericode},...)");
