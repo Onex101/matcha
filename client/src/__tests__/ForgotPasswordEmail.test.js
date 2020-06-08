@@ -8,6 +8,7 @@ afterEach(cleanup);
 describe("Testing Forgot Password Email", ()=>{
 	it("Display Notifications", ()=>{
 		const { asFragment, getByText, getByTestId, getByLabelText } = render(<ForgotPasswordEmail />);
+		
 		expect(getByTestId("notSent")).toHaveTextContent("Send password reset email");
 
 		const contentInput = getByTestId("emailInput");

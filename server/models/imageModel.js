@@ -73,6 +73,16 @@ Image.prototype.getPicById = function (id, callback){
 	})
 }
 
+Image.prototype.getPicByPicId = function (id, callback){
+	id = mysql.escape(id);
+	db.query(`SELECT id, pic FROM pictures WHERE id = ${id}`, function (err, results) {
+		if (err)
+			callback(err, null);
+		else
+			callback(null, results);
+	})
+}
+
 Image.prototype.setProfilePic = function (user_name, pic_id, callback){
 	db.query(`UPDATE users SET profile_pic_id = ${pic_id} WHERE user_name = '${user_name}'`, function (err, results) {
 	if (err){callback(err, null);}
@@ -86,7 +96,7 @@ Image.prototype.replacePic = function(callback){
 	db.query(`UPDATE pictures SET pic = '${this.data.data}' WHERE id = '${this.data.id}'`, function (err, results) {
 		if (err){callback(err, null);}
 		else{
-				"Success";			}
+			callback(null,"Success")			}
 		})
 }
 

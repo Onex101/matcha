@@ -55,14 +55,22 @@ exports.sendPasswordReset = function(user_name, vericode, email){
         text: 'Hello '+user_name+'\nA password reset request has been made to this account.\nPlease follow this link to reset your password:\nhttp://localhost:3000/ResetPassword?user=' + user_name + '&origin=' + vericode
     };
     // A pawwsord reset request has been made to this account.\nPlease follow this link to reset your password:\nhttp://localhost:3000/ResetPassword
-    transporter.sendMail(mailOptions, function(error, info){
-        if (error) {
-			console.log(error);
-			return;
-        } else {
-            console.log('Password Reset sent: ' + info.response);
-        }
-	});
+    let sendEmailPromise = new Promise((resolve, reject) => {
+        transporter.sendMail(mailOptions, function(error, info){
+            if (error) {
+                // console.log(error);
+                resolve(false);
+            } else {
+                // console.log('Password Reset sent: ' + info.response);
+                resolve(true)
+            }
+        });
+    });
+
+    return sendEmailPromise.then((didEmailSendBool)=>{
+        return didEmailSendBool
+    })
+    
 }
 
 exports.reportUser = function(user_name, email, socket){

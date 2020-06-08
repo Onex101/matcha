@@ -8,7 +8,8 @@ export default class Login extends Component {
 
     this.state = {
       user_name: "",
-      password: ""
+      password: "",
+      error: "",
     };
   }
 
@@ -24,8 +25,8 @@ export default class Login extends Component {
 
   handleSubmit = async event => {
     event.preventDefault();
-
     try {
+
       const user = this.state;
       fetch(`/login`, {
         method: "POST",
@@ -42,22 +43,30 @@ export default class Login extends Component {
           // console.log(responseJSON);
           if (responseJSON["success"]) {
             if (responseJSON["success"] === "login sucessfull") {
+              this.setState({error:"Something went wrong"});
+
               this.props.userHasAuthenticated(true);
               this.props.setUser(responseJSON["user"]);
               this.props.history.push("/");
               window.location.reload();
 
             } else if (responseJSON["success"] === "Username and password does not match") {
+              this.setState({error: responseJSON["success"]});
               alert(responseJSON["success"]);
             } else if (responseJSON["success"] === "Username does not exist") {
+              this.setState({error: responseJSON["success"]});
               alert(responseJSON["success"]);
             }
           }
           else
+            this.setState({error:"Something went wrong"});
             alert("Something went wrong :(");
         })
-        .catch(err => console.error(err))
+        .catch(err => {            
+        this.setState({error:"Something went wrong"});
+        console.error(err)})
     } catch (e) {
+      this.setState({error:"Something went wrong"});
       alert(e.message);
     }
   }
@@ -66,6 +75,7 @@ export default class Login extends Component {
     event.preventDefault();
     this.props.history.push("/forgot");
   }
+
 
   render() {
     return (
@@ -96,6 +106,8 @@ export default class Login extends Component {
             Login
           </Button>
           <br /><a onClick={this.forgotPassword} id="forgot">Forgot Password?</a>
+          <br />
+          {this.state.error ? <p data-testid='error' id="error">{this.state.error }</p> : <div/>}
         </form>
       </div>
     );
