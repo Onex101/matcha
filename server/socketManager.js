@@ -24,15 +24,15 @@ module.exports = function (socket) {
 			callback({ isUser: true, user: null });
 		}
 		else {
-			console.log("Creating a user " + name)
+			//console.log("Creating a user " + name)
 			callback({ isUser: false, user: createUser({ id: id, name: name, socketId: socket.id }) })
 		}
 	})
 
-	//Sets up  a new socket conenction and initates sub functions used to communicate information with ither users
+	//Sets up  and initates sub functions used to communicate information with ither users
 	socket.on(USER_CONNECTED, (user) => {
-		console.log('This user has connected: ')
-		console.log(user);
+		//console.log('This user has connected: ')
+		//console.log(user);
 		if (user) {
 			user.socketId = socket.id;
 			connectedUsers = addUser(connectedUsers, user)
@@ -47,7 +47,7 @@ module.exports = function (socket) {
 			//Emit a message to all sockects an updated list of users
 			socketIO.io.emit(USER_CONNECTED, connectedUsers)
 
-			console.log("Connected Users: " + JSON.stringify(connectedUsers));
+			//console.log("Connected Users: " + JSON.stringify(connectedUsers));
 		}
 	})
 
@@ -56,12 +56,12 @@ module.exports = function (socket) {
 		if ("user" in socket) {
 			let user = new User();
 			user.logout(socket.user.name, () => { });
-			console.log("Socket user:")
-			console.log(socket.user)
+			//console.log("Socket user:")
+			//console.log(socket.user)
 			connectedUsers = removeUser(connectedUsers, socket.user.name)
 
 			socketIO.io.emit(USER_DISCONNECTED, connectedUsers)
-			console.log("Disconnect", connectedUsers);
+			//console.log("Disconnect", connectedUsers);
 		}
 	})
 
@@ -71,7 +71,7 @@ module.exports = function (socket) {
 			new User().logout(socket.user.id, () => { })
 			connectedUsers = removeUser(connectedUsers, socket.user.name)
 			socketIO.io.emit(USER_DISCONNECTED, connectedUsers)
-			console.log("Disconnect", connectedUsers);
+			//console.log("Disconnect", connectedUsers);
 		}
 	})
 
@@ -111,7 +111,7 @@ module.exports = function (socket) {
 
 	//Creates a private chat between two users
 	socket.on(PRIVATE_MESSAGE, ({ receiver, sender, activeChat }) => {
-		console.log(receiver, sender)
+		//console.log(receiver, sender)
 		var msgArray = [];
 		if (receiver.name in connectedUsers) {
 			const receiverSocket = connectedUsers[receiver.name].socketId
@@ -180,6 +180,10 @@ module.exports = function (socket) {
 	})
 	socket.on('REPORT', (user_name, email) => {
 		Mail.reportUser(user_name, email, socket);
+	})
+
+	socket.on('echo', (message, socket2)=>{
+		socket.to(socket2).emit('socket2', message)
 	})
 }
 
