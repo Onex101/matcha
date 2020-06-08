@@ -11,4 +11,4 @@ server/package-lock.json
 client/package.json
 client/package-lock.json
 client/package-lock.json
-server/resources.js
+./server/resources.js
