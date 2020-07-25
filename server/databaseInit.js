@@ -69,6 +69,11 @@ connection.connect(function (err) {
 	user2_id int NOT NULL,\
 	link_code int)');
 
+	connection.query('CREATE TABLE dislikes\
+	(user1_id int NOT NULL,\
+	user2_id int NOT NULL,\
+	link_code int)');
+
 	connection.query('CREATE TABLE user_interests\
 	(user_id int NOT NULL,\
 	interest_id int NOT NULL\

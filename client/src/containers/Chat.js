@@ -110,13 +110,13 @@ export default class Chat extends Component {
 	render(){
 		// console.log("PROPS and or localStorage")
 		// console.info(this.props)
-		console.info(this.props)
+		// console.info(this.props)
 		const {socket, user} = this.state
-		console.log("Does user exist: ")
-		console.log(this.state)
+		// console.log("Does user exist: ")
+		// console.log(this.state)
 		return(this.state.user && this.state.socket? 
 				<div className="chat">
-					{console.log("ENTERED chat layer1")}
+					{/* {console.log("ENTERED chat layer1")} */}
 					<div className="chat-container">
 						{(<ChatContainer socket={socket} user={user}/>)}
 					</div>

@@ -50,7 +50,7 @@ export default class ForgotPassword extends Component {
             this.setState({ messageFromServer: 'recovery email sent' })
             this.setState({emailSent: true})
           }
-          console.log(responseJSON);
+          // console.log(responseJSON);
         })
         .catch(err => console.error(err))
     }

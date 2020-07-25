@@ -12,16 +12,16 @@ class NotificationIcon extends Component {
     componentDidUpdate() {
         if (this.state.count !== this.props.count) {
             this.setState({count: this.props.count})
-            console.log("COUNT")
-            console.log(this.state.count)
+            // console.log("COUNT")
+            // console.log(this.state.count)
         }
     }
 
     componentDidMount() {
         if (this.props.count != null ) {
             this.setState({count: this.props.count})
-            console.log("COUNT")
-            console.log(this.props.count)
+            // console.log("COUNT")
+            // console.log(this.props.count)
         }
     }
     render() { 

@@ -15,6 +15,7 @@ export default class Matches extends Component {
             open: false,
             visits: null,
             liked: null,
+            updateLikes: true,
         }
     }
 
@@ -26,7 +27,8 @@ export default class Matches extends Component {
     };
 
     onCloseModal = () => {
-        this.setState({ open: false });
+        // console.log("CLOSE THE MODAL")
+        this.setState({ open: false, updateLikes: true });
     };
 
     // Gets user images
@@ -100,38 +102,46 @@ export default class Matches extends Component {
         }
     }
 
+    getMatches() {
+        try {
+            fetch('/user/' + this.state.userInfo.id + '/getliked', {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json; charset=utf-8",
+                },
+            })
+                .then(response => response.json())
+                .then((responseJSON) => {
+                    console.log(responseJSON)
+                    this.setState({ likes: responseJSON })
+                })
+                .catch(err => console.error(err))
+        } catch (e) {
+            alert(e.message);
+        }
+    }
+
     componentDidMount() {
         if (this.state.userInfo === null && this.props.userInfo && this.props.userInfo.id) {
             this.setState({ userInfo: this.props.userInfo, })
         }
-        if (this.state.userInfo && !this.state.visits) {
-            this.getVisits()
-        }
-
-        if (this.state.userInfo && !this.state.liked) {
-            this.getLikes()
-        }
-        // temporary fixs
-        // if (this.state.likes === null && this.props.userMatches !== null)
-        //     this.setState({likes: this.props.userMatches})
-        if (this.state.likes === null && this.state.userInfo && this.state.userInfo.id) {
-            try {
-                fetch('/user/' + this.state.userInfo.id + '/getliked', {
-                    method: "GET",
-                    headers: {
-                        "Content-Type": "application/json; charset=utf-8",
-                    },
-                })
-                    .then(response => response.json())
-                    .then((responseJSON) => {
-                        console.log(responseJSON)
-                        this.setState({ likes: responseJSON })
-                    })
-                    .catch(err => console.error(err))
-            } catch (e) {
-                alert(e.message);
+        // if (this.state.updateLikes) {
+            if (this.state.userInfo && !this.state.visits) {
+                this.getVisits()
             }
-        }
+
+            if (this.state.userInfo && !this.state.liked) {
+                this.getLikes()
+            }
+            // temporary fixs
+            // if (this.state.likes === null && this.props.userMatches !== null)
+            //     this.setState({likes: this.props.userMatches})
+            if (this.state.likes === null && this.state.userInfo && this.state.userInfo.id) {
+                this.getMatches();
+            }
+            // this.setState({ updateLikes: false })
+        // }
+
     }
 
     componentDidUpdate() {
@@ -149,36 +159,50 @@ export default class Matches extends Component {
         // if (this.state.likes === null && this.props.userMatches !== null)
         //     this.setState({likes: this.props.userMatches})
         if (this.state.likes === null && this.state.userInfo && this.state.userInfo.id) {
-            try {
-                fetch('/user/' + this.state.userInfo.id + '/getliked', {
-                    method: "GET",
-                    headers: {
-                        "Content-Type": "application/json; charset=utf-8",
-                    },
-                })
-                    .then(response => response.json())
-                    .then((responseJSON) => {
-                        this.setState({ likes: responseJSON })
-                    })
-                    .catch(err => console.error(err))
-            } catch (e) {
-                alert(e.message);
-            }
+            this.getMatches()
+        }
+
+        // console.log("Update LIKES test: " + this.state.updateLikes)
+
+        if (this.state.userInfo !== null && this.state.updateLikes === true) {
+            // console.log("Update the things!!!!!!")
+            this.getLikes()
+            this.getMatches()
+            this.getVisits()
+            this.setState({ updateLikes: false })
         }
     }
 
-    renderUsername(user) {
-        const { open } = this.state;
-        return (<div>
-            <div className="username"><p onClick={this.onOpenModal}>{user.data.user_name}</p></div>
-            <div>
-                <Modal open={open} onClose={this.onCloseModal} center>
-                    <ControlledTabs userInfo={user.data} />
-                </Modal>
-            </div></div>
-        )
+    componentWillUpdate() {
+        // console.log("Update LIKES test: " + this.state.updateLikes)
+
+        if (this.state.userInfo !== null && this.state.updateLikes === true) {
+            // console.log("Update the things!!!!!!")
+            this.getLikes()
+            this.getMatches()
+            this.getVisits()
+            this.setState({ updateLikes: false })
+        }
     }
-    
+    // renderUsername(user) {
+    //     const { open } = this.state;
+    //     return (<div>
+    //         <div className="username"><p onClick={this.onOpenModal}>{user.data.user_name}</p></div>
+    //         <div>
+    //             <Modal open={open} onClose={this.onCloseModal} center>
+    //                 <ControlledTabs userInfo={user.data} getMatches={this.onCloseModal} />
+    //             </Modal>
+    //         </div></div>
+    //     )
+    // }
+    updateInfo() {
+        // console.log("UPDATE THE TESTER")
+        this.setState({ updateLikes: true })
+        // console.log("UpLIKES test: " + this.state.updateLikes)
+        // this.getLikes()
+        // this.getMatches()
+        // this.getVisits()
+    }
     renderLikes(likes) {
         var likedUsers = []
         if (likes) {
@@ -187,6 +211,7 @@ export default class Matches extends Component {
                     likedUsers.push(
                         <UserLabel user={likes[elem]}
                             socket={this.props.socket}
+                            updateInfo={this.updateInfo}
                             key={elem} />
                     )
                 }
@@ -234,6 +259,7 @@ export default class Matches extends Component {
                         <div id="listLabel">
                             <UserLabel user={visits[elem]}
                                 socket={this.props.socket}
+                                updateInfo={() => {this.updateInfo()}}
                                 key={elem} /></div>
                         <p id='visitTime'>{time}</p></div>
                     )
@@ -244,19 +270,19 @@ export default class Matches extends Component {
     }
 
     render() {
-        const likes = this.state.likes;
-        const liked = this.state.liked;
+        // var likes = this.state.likes;
+        // var liked = this.state.liked;
         // return (this.state.likes && this.state.userInfo ?
         return (this.state.userInfo ?
             <div id="connections">
                 <ControlLabel>Matches</ControlLabel>
                 <div id="likes">
-                    <div className="list">{this.renderLikes(likes)}</div>
+                    <div className="list">{this.renderLikes(this.state.likes)}</div>
                 </div>
                 <br />
                 <ControlLabel>Liked by</ControlLabel>
                 <div id="likes">
-                    <div className="list">{this.renderLikes(liked)}</div>
+                    <div className="list">{this.renderLikes(this.state.liked)}</div>
                 </div>
                 <br />
                 <ControlLabel>Visits</ControlLabel>

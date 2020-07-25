@@ -290,6 +290,7 @@ exports.user_match_get = function(req, res) {
 									new_user.data.online = results[i].online;
 									new_user.data.gps_lat = results[i].gps_lat;
 									new_user.data.gps_lon =  results[i].gps_lon;
+									new_user.data.email =  results[i].email;
                                     new_user.match = matchC;
                                     new_user.like = like  * 100;
                                     new_user.dist_raw = dist_raw;
@@ -884,6 +885,7 @@ function matchAlgo(user, results){
 			new_user.data.online = results[i].online
 			new_user.data.gps_lat = results[i].gps_lat;
 			new_user.data.gps_lon =  results[i].gps_lon;
+			new_user.data.email =  results[i].email;
 			new_user.match = matchC;
 			new_user.like = like  * 100;
 			new_user.dist_raw = dist_raw;

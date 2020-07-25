@@ -138,7 +138,7 @@ router.get('/locationsearch/:id/:gps_lat/:gps_lon', user_controller.get_users_by
 //Get request user1 blocks user2
 router.get('/block/:user1/:user2', user_controller.get_block_user);
 
-
 router.get('/likecode/:user1/:user2', user_controller.get_users_like_Code);
+
 
 module.exports = router;

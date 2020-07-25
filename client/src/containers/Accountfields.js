@@ -20,11 +20,11 @@ export default class AccountFields extends Component {
     }
 
     onChange = (value, inputValue) => {
-        console.log(value.format('YYYY-MM-DD'))
+        // console.log(value.format('YYYY-MM-DD'))
         this.setState({ birth_date: value })
     }
     onOpenChange = (status) => {
-        console.log('open status: ' + status)
+        // console.log('open status: ' + status)
     }
     disabledDate = (currentDate, inputValue) => {
         return false

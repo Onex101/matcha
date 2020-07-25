@@ -6,7 +6,10 @@ exports.sendVeriCode = function(user_name, email){
 
     var vericode_check = (this.encrypt(user_name));
 
-    var vericode = vericode_check.replace("/", "_");
+    var vericode = vericode_check.replace(/\//g, '_');
+    // queryString.replace(/\//g, '_');
+    // queryString.replaceAll('/', '_');
+
 
     var transporter = nodemailer.createTransport({
         service: 'gmail',
@@ -75,7 +78,7 @@ exports.reportUser = function(user_name, email, socket){
         from: 'matchamailer@gmail.com',
         to: email,
         subject: 'Account has been reported',
-        text: 'Hello '+user_name+'\nYour account has bee reported by one of our users and will be investigated by our amazing Investigation Assitant (IA).\n If anything that goes against our policy is found by our IA, be warned that your account will be blocked.\n For any further information, we do not have any\n Thank you for your time and have a good day\n Your Friendly Neighbourhood Automated Emailer'
+        text: 'Hello '+user_name+'\nYour account has been reported by one of our users and will be investigated by our amazing Investigation Assistant (IA).\n If anything that goes against our policy is found by our IA, be warned that your account will be blocked.\n For any further information, we do not have any\n Thank you for your time and have a good day\n Your Friendly Neighbourhood Automated Emailer'
     };
     transporter.sendMail(mailOptions, function(error, info){
         if (error) {
