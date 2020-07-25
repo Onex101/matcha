@@ -14,7 +14,7 @@ exports.image_create_post = function(req, res){
 			throw err;
 		}
 		else{
-			res.send('Image saved');
+			res.send(result);
 		}
 	})
 }
@@ -60,6 +60,23 @@ exports.image_fetch_get = function(req, res){
 	id = req.params.id;
 	let image = new Image('');
 	image.getPicById(id, function(err, result){
+		if (err){
+			res.send({
+						error: 'failed to get pic',
+						sucess: null
+					})
+		}
+		else{
+			res.json(result)
+		}
+	})
+	// res.send('NOT IMPLEMENTED: image fetch get');
+}
+
+exports.image_by_id_get = function(req, res){
+	id = req.params.id;
+	let image = new Image('');
+	image.getPicByPicId(id, function(err, result){
 		if (err){
 			res.send({
 						error: 'failed to get pic',
@@ -132,7 +149,7 @@ exports.image_replace = function(req, res){
 			throw err;
 		}
 		else{
-			res.send('Image updated');
+			res.send({success: 'Image updated'});
 		}
 	})
 }

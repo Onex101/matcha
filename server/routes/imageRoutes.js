@@ -20,6 +20,8 @@ router.get('/images/:user_id', image_controller.images_fetch_get);
 // GET request for getting image by id. - working
 router.get('/image/:id', image_controller.image_fetch_get);
 
+router.get('/image/getby/:id', image_controller.image_by_id_get);
+
 // GET request for getting profile image by user_id. -working
 router.get('/image/:user_name/profilepic', image_controller.profile_image_get);
 

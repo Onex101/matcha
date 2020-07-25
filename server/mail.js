@@ -1,3 +1,4 @@
+var resources = require('./resources');
 var nodemailer = require('nodemailer');
 const bcrypt = require('bcrypt');
 const { NOTIFICATION } = require('../client/src/Events')
@@ -12,10 +13,10 @@ exports.sendVeriCode = function(user_name, email){
 
 
     var transporter = nodemailer.createTransport({
-        service: 'gmail',
+        service: resources.SERVICE,
         auth: {
-        user: 'samamander404@gmail.com',
-        pass: 'PineappleExpress1@'
+        user: resources.EMAIL_USER,
+        pass: resources.EMAIL_PASSWORD
         }
     });
     //db.query("INSERT INTO users (input value, input value, input value ...,{:vericode},...)");
@@ -42,8 +43,8 @@ exports.sendPasswordReset = function(user_name, vericode, email){
     var transporter = nodemailer.createTransport({
         service: 'gmail',
         auth: {
-            user: 'samamander404@gmail.com',
-            pass: 'PineappleExpress1@'
+            user: resources.EMAIL_USER,
+            pass: resources.EMAIL_PASSWORD
         }
     });
     //db.query("INSERT INTO users (input value, input value, input value ...,{:vericode},...)");
@@ -54,14 +55,22 @@ exports.sendPasswordReset = function(user_name, vericode, email){
         text: 'Hello '+user_name+'\nA password reset request has been made to this account.\nPlease follow this link to reset your password:\nhttp://localhost:3000/ResetPassword?user=' + user_name + '&origin=' + vericode
     };
     // A pawwsord reset request has been made to this account.\nPlease follow this link to reset your password:\nhttp://localhost:3000/ResetPassword
-    transporter.sendMail(mailOptions, function(error, info){
-        if (error) {
-			console.log(error);
-			return;
-        } else {
-            console.log('Password Reset sent: ' + info.response);
-        }
-	});
+    let sendEmailPromise = new Promise((resolve, reject) => {
+        transporter.sendMail(mailOptions, function(error, info){
+            if (error) {
+                // console.log(error);
+                resolve(false);
+            } else {
+                // console.log('Password Reset sent: ' + info.response);
+                resolve(true)
+            }
+        });
+    });
+
+    return sendEmailPromise.then((didEmailSendBool)=>{
+        return didEmailSendBool
+    })
+    
 }
 
 exports.reportUser = function(user_name, email, socket){
@@ -70,8 +79,8 @@ exports.reportUser = function(user_name, email, socket){
     var transporter = nodemailer.createTransport({
         service: 'gmail',
         auth: {
-            user: 'samamander404@gmail.com',
-            pass: 'PineappleExpress1@'
+            user: resources.EMAIL_USER,
+            pass: resources.EMAIL_PASSWORD
         }
     });
     var mailOptions = {

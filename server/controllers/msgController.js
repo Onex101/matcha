@@ -14,7 +14,7 @@ exports.sendMessage = function(req, res) {
 			res.send(err);
 		}
 		else{
-			res.send({success:'Message Sent'})
+			res.send({success:'Message Sent', ...results})
 		}
 	})
 }

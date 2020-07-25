@@ -1,15 +1,15 @@
+var resources = require('./resources');
+
 const mysql = require('mysql');
 
 //UPDATE mysql.user SET host='%' WHERE user='root';
 //FLUSH PRIVILEGES;
 
 const connection = mysql.createConnection({
-  host: 'localhost',
-  user: 'root',
-  password: 'admin1',
+	host: resources.HOST,
+    user: resources.USER,
+    password: resources.PASSWORD,
 });
-
-
 
 connection.connect(function (err) {
 	if (err) throw err;
