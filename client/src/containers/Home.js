@@ -47,7 +47,8 @@ export default class Home extends Component {
 		  return (<div><UserList 
 			matches={this.state.matches} 
 			socket={this.props.socket}
-			getMatches = {this.props.getMatches}/></div>)
+			getMatches = {this.props.getMatches}
+			userInfo={this.props.userInfo}/></div>)
 		} else {
 		  return (<div><h1>Hey stranger!</h1><p>Head over to your profile to add a profile picture so other users can see you!</p></div>)
 		}

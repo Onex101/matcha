@@ -25,4 +25,6 @@ router.post('/notification/update', notification_controller.notification_update_
 
 router.post('/notification/create', notification_controller.notification_insert_post)
 
+router.post('/notification/send', notification_controller.notification_insert_post);
+
 module.exports = router;
