@@ -51,8 +51,9 @@ class UserList extends Component {
 		}
 
 		if (this.state.locationCoordinates !== null &&
-			this.state.locationCoordinates.length > 0 && this.state.locationSuggestions === null) {
-			this.getLocationSuggestions()
+			this.state.locationCoordinates.length > 0 && this.state.locationSuggestions == null) {
+				console.log("Getting locations")
+				this.getLocationSuggestions()
 		}
 	}
 
@@ -267,7 +268,7 @@ class UserList extends Component {
 
 	async getLocationSuggestions() {
 		if (this.state.locationCoordinates && this.state.locationCoordinates.constructor === Array &&
-			this.state.locationCoordinates.length > 0) {
+			this.state.locationCoordinates.length > 0 && this.state.locationSuggestions === null) {
 			var locations = [];
 			for (var elem in this.state.locationCoordinates) {
 				var lat = this.state.locationCoordinates[elem].gps_lat;
@@ -300,6 +301,8 @@ class UserList extends Component {
 				}
 			}
 			var cleanLocations = this.removeDuplicates(locations, 'location');
+			console.log("Locations:")
+			console.info(locations)
 			this.setState({ locationSuggestions: cleanLocations })
 		}
 	}
@@ -408,7 +411,7 @@ class UserList extends Component {
 		event.preventDefault();
 		if (this.isInt(this.state.filterAgeInput) && this.props.userInfo.id) {			
 			try {
-				var matchArr = this.state.matches;
+				var matchArr = this.props.matches;
 				this.setState({matches: null});
 				
 				if (matchArr) {
@@ -438,7 +441,7 @@ class UserList extends Component {
 		if (this.isInt(this.state.filterFameInput) && this.props.userInfo.id) {
 			// TODO Not returning valid results
 			try {
-				var matchArr = this.state.matches;
+				var matchArr = this.props.matches;
 				this.setState({matches: null});
 				
 				if (matchArr) {
@@ -446,7 +449,7 @@ class UserList extends Component {
 					for(var i in matchArr){
 						console.info(matchArr[i])
 						console.log("comparing: " + matchArr[i].data.fame + " and " + this.state.filterFameInput)
-						if (matchArr[i].data.fame == this.state.filterFameInput || matchArr[i].data.fame === null) {
+						if (matchArr[i].data.fame == this.state.filterFameInput || ( this.state.filterFameInput == 0 && matchArr[i].data.fame == null)) {
 							result.push(matchArr[i]);
 						}
 					}
@@ -482,7 +485,7 @@ class UserList extends Component {
 			// console.log(location.gps_lat)
 			// console.log(location.gps_lon)
 			try {
-				fetch('/locationfilter/' + this.props.userInfo.id + '/' + location.gps_lat + '/' + location.gps_lon, {
+				fetch('/locationsearch/' + this.props.userInfo.id + '/' + location.gps_lat + '/' + location.gps_lon, {
 					method: "GET",
 					headers: {
 						"Content-Type": "application/json; charset=utf-8",
@@ -491,7 +494,9 @@ class UserList extends Component {
 					.then(response => response.json())
 					.then((responseJSON) => {
 						// console.log("Location filter response: ", responseJSON)
-						this.setState({ showResults: true, filterResults: responseJSON })
+						// this.setState({ showResults: true, filterResults: responseJSON })
+						this.setState({matches: this.compareUserList(this.props.matches, responseJSON)})
+
 					})
 					.catch(err => console.error(err))
 			} catch (e) {
@@ -500,17 +505,30 @@ class UserList extends Component {
 		}
 	}
 
+	compareUserList(userList1, userList2) {
+		var results = [];
+		for (var user1 in userList1) {
+			for (var user2 in userList2) {
+				// console.log("Comparing users:");
+				// console.info(userList1[user1]);
+				// console.log(userList2[user2]);
+				if (userList2[user2].data.user_name === userList1[user1].data.user_name) {
+					results.push(userList2[user2]);
+				}
+			}
+
+		}
+		return results;
+	}
+
 	filterTags = async event => {
 		event.preventDefault();
 		// console.log(this.state.filterTagsInput)
 		if (this.state.filterTagsInput.length > 0 && this.props.userInfo.id) {
-
-			
-
 			// TODO Not returning valid results
 
 			try {
-				fetch('/tagfilter', {
+				fetch('/tagsearch', {
 					method: "POST",
 					headers: {
 						"Content-Type": "application/json; charset=utf-8",
@@ -523,7 +541,7 @@ class UserList extends Component {
 					.then(response => response.json())
 					.then((responseJSON) => {
 						console.log("TAGS filter response: ", responseJSON)
-						// this.setState({ showResults: true, filterResults: responseJSON })
+						this.setState({matches: this.compareUserList(this.props.matches, responseJSON)})
 					})
 					.catch(err => console.error(err))
 			} catch (e) {
