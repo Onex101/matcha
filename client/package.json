@@ -7,7 +7,7 @@
     "ciqu-react-calendar": "^1.0.2",
     "google-maps-react": "^2.0.2",
     "lodash": "^4.17.15",
-    "nodemailer": "^4.7.0",
+    "nodemailer": "^6.4.16",
     "query-string": "^6.9.0",
     "react": "^16.12.0",
     "react-bootstrap": "^0.32.4",
